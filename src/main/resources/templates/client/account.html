@@ -1,0 +1,174 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Account - ShopLap</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" integrity="sha512-8D+M+7Y6jVsEa7RD6Kv/Z7EImSpNpQllgaEIQAtqHcI0H6F4iZknRj0Nx1DCdB+TwBaS+702BGWYC0Ze2hpExQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/client/css/reset.css" />
+    <link rel="stylesheet" href="/client/css/style.css" />
+    <link rel="stylesheet" href="/client/css/layout.css" />
+    <link rel="stylesheet" href="/client/css/options_sidebar.css" />
+    <link rel="stylesheet" href="/client/css/account.css" />
+</head>
+<body>
+
+<!-- header -->
+<div th:replace="/client/layout/header"></div>
+
+<!-- sidebar -->
+<div th:replace="/client/layout/sidebar"></div>
+
+<!-- overlay -->
+<div class="overlay"></div>
+
+<!-- main -->
+<main>
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li>Account</li>
+        </ul>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                <!-- sidebar options -->
+                <div th:replace="/client/layout/options_sidebar"></div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <form method="post" th:action="@{/account/update}" th:object="${updateAccountDto}">
+                    <div class="account-wrapper">
+                        <h1 class="title">Account</h1>
+                        <div class="input-group">
+                            <label for="image">Avatar (JPG, PNG, JPEG, GIF, WebP):</label>
+                            <div class="image-input-group">
+                                <div class="image-upload-wrapper avatar">
+                                    <div class="image-preview">
+                                        <div class="image-preview-item">
+                                            <label for="image" class="image-edit-button"><i class="fa-solid fa-pen-to-square"></i></label>
+                                            <img src="/images/default-avatar.png" alt="avatar" />
+                                        </div>
+                                    </div>
+                                    <div class="image-upload-control">
+                                        <label for="image"
+                                        ><i class="fa-solid fa-plus"></i
+                                        ></label>
+                                        <input
+                                                class="image-upload"
+                                                name="avatar"
+                                                id="image"
+                                                type="file"
+                                                accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"
+                                        />
+                                    </div>
+                                </div>
+                                <span id="imageError" class="error-message"></span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="firstName">First name: </label>
+                            <div class="input-group-control">
+                                <input
+                                        type="text"
+                                        name="firstName"
+                                        id="firstName"
+                                        placeholder="First name"
+                                        required
+                                        th:value="${updateAccountDto.firstName}"
+                                        th:classappend="${#fields.hasErrors('firstName') ? 'error' : ''}"
+                                        th:field="${updateAccountDto.firstName}"
+                                />
+                                <span class="error-message" th:if="${#fields.hasErrors('firstName')}" th:errors="${updateAccountDto.firstName}"></span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="lastName">Last name: </label>
+                            <div class="input-group-control">
+                                <input
+                                        type="text"
+                                        name="lastName"
+                                        id="lastName"
+                                        placeholder="Last name"
+                                        required
+                                        th:value="${updateAccountDto.lastName}"
+                                        th:classappend="${#fields.hasErrors('lastName') ? 'error' : ''}"
+                                        th:field="${updateAccountDto.lastName}"
+                                />
+                                <span class="error-message" th:if="${#fields.hasErrors('lastName')}" th:errors="${updateAccountDto.lastName}"></span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="email">Email: </label>
+                            <input
+                                    type="text"
+                                    name="email"
+                                    id="email"
+                                    placeholder="Email"
+                                    required
+                                    disabled
+                                    th:value="${session.username}"
+                            />
+                        </div>
+                        <div class="input-group">
+                            <label for="phone">Phone: </label>
+                            <div class="input-group-control">
+                                <input
+                                        type="text"
+                                        name="phone"
+                                        id="phone"
+                                        placeholder="Phone"
+                                        required
+                                        th:value="${updateAccountDto.phone}"
+                                        th:classappend="${#fields.hasErrors('phone') ? 'error' : ''}"
+                                        th:field="${updateAccountDto.phone}"
+                                />
+                                <span class="error-message" th:if="${#fields.hasErrors('phone')}" th:errors="${updateAccountDto.phone}"></span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="address">Address: </label>
+                            <div class="input-group-control">
+                                <input
+                                        type="text"
+                                        name="address"
+                                        id="address"
+                                        placeholder="address"
+                                        required
+                                        th:value="${updateAccountDto.address}"
+                                        th:classappend="${#fields.hasErrors('address') ? 'error' : ''}"
+                                        th:field="${updateAccountDto.address}"
+                                />
+                                <span class="error-message" th:if="${#fields.hasErrors('address')}" th:errors="${updateAccountDto.address}"></span>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <div class="empty"></div>
+                            <button type="submit" class="save-button">Save</button>
+                            <a href="/shop" class="back-button">Back</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js" integrity="sha512-Y+cHVeYzi7pamIOGBwYHrynWWTKImI9G78i53+azDb1uPmU1Dz9/r2BLxGXWgOC7FhwAGsy3/9YpNYaoBy7Kzg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/client/js/main.js"></script>
+<script src="/client/js/account.js"></script>
+</html>

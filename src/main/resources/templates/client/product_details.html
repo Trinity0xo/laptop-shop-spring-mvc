@@ -1,0 +1,133 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Details - ShopLap</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="/libraries/owlcarousel/assets/owl.carousel.min.css" />
+    <link
+            rel="stylesheet"
+            href="/libraries/owlcarousel/assets/owl.theme.default.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" integrity="sha512-8D+M+7Y6jVsEa7RD6Kv/Z7EImSpNpQllgaEIQAtqHcI0H6F4iZknRj0Nx1DCdB+TwBaS+702BGWYC0Ze2hpExQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/client/css/reset.css" />
+    <link rel="stylesheet" href="/client/css/style.css" />
+    <link rel="stylesheet" href="/client/css/layout.css" />
+    <link rel="stylesheet" href="/client/css/product_details.css" />
+</head>
+<body>
+
+<!-- header -->
+<div th:replace="/client/layout/header"></div>
+
+<!-- sidebar -->
+<div th:replace="/client/layout/sidebar"></div>
+
+<!-- overlay -->
+<div class="overlay"></div>
+
+<main>
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/shop">Shop</a></li>
+            <li th:text="${product.name}"></li>
+        </ul>
+        <div class="product-details-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                    <div class="product-images-wrapper">
+                        <div class="image-wrapper">
+                            <img
+                                    class="image"
+                                    th:src="@{/uploads/product_pictures/{imageName}(imageName=${product.productImages.size() > 0 ? product.productImages[0].imageName : ''})}"
+                                    alt="product image"
+                            />
+                        </div>
+                        <div class="thumbnails-list" th:if="${product.productImages.size() > 0}">
+                            <div class="owl-carousel owl-theme thumbnails">
+                                <div class="thumbnails-item" th:each="productIamge : ${product.productImages}">
+                                    <img
+                                            th:src="@{/uploads/product_pictures/{imageName}(imageName=${productIamge.imageName})}"
+                                            alt="product thumbnail"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                        <div class="product-summary-wrapper">
+                            <a th:href="${'/shop?categoryNames=' + (product.category != null ? product.category.name : '')}" class="product-category" th:text="${product.category != null ? product.category.name : 'Other' }"></a>
+                            <h1 class="product-name" th:text="${product.name}"></h1>
+                            <a th:href="${'/shop?brandNames=' + (product.brand != null ? product.brand.name : '')}" class="product-brand" th:text="${product.brand != null ? product.brand.name : 'No brand'}"></a>
+                            <p class="product-status">
+                                Status: <span class="stock-status" th:classappend="${product.quantity > 0 ? 'in-stock' : 'out-stock'}" th:text="${product.quantity > 0 ? 'In stock' : 'Out of stock'}"></span>
+                            </p>
+                            <div class="product-price-wrapper">
+                                <p class="discount-price" th:text="${#numbers.formatDecimal(product.discountPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                                <div class="discount-price-ratio" th:if="${product.discount > 0}">
+                                    <p class="old-price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                                    <span class="discount-ratio-value" th:text="'-' + ${product.discount} + '%'"></span>
+                                </div>
+                            </div>
+                            <p class="product-short-description" th:text="${product.shortDescription}">
+                            </p>
+                            <div class="product-quantity-wrapper">
+                                <button type="button" class="product-quantity-minus">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <input
+                                        type="number"
+                                        name="quantity"
+                                        class="product-quantity-input"
+                                        value="1"
+                                        min="1" max="99"
+                                        disabled
+                                />
+                                <button type="button" class="product-quantity-plus">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="actions">
+                                <form class="buy-now-form" th:action="@{/cart/buy-now/{id}(id=${product.id})}" method="post">
+                                    <input type="hidden" name="quantity" class="product-quantity-input" value="1" min="1" max="99" />
+                                    <button type="submit" class="buy-now-button">
+                                        Buy now
+                                    </button>
+                                </form>
+                                <form class="add-to-cart-form" th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                                    <input type="hidden" name="quantity" class="product-quantity-input" value="1" min="1" max="99" />
+                                    <button type="submit" class="add-to-cart-button">
+                                        <i class="fa-solid fa-cart-shopping"></i>Add to cart
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+></script>
+<script src="/libraries/owlcarousel/owl.carousel.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js" integrity="sha512-Y+cHVeYzi7pamIOGBwYHrynWWTKImI9G78i53+azDb1uPmU1Dz9/r2BLxGXWgOC7FhwAGsy3/9YpNYaoBy7Kzg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/client/js/main.js"></script>
+<script src="/client/js/product_details.js"></script>
+</html>

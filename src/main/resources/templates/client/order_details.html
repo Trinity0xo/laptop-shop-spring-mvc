@@ -1,0 +1,177 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order details - ShopLap</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" integrity="sha512-8D+M+7Y6jVsEa7RD6Kv/Z7EImSpNpQllgaEIQAtqHcI0H6F4iZknRj0Nx1DCdB+TwBaS+702BGWYC0Ze2hpExQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/client/css/reset.css" />
+    <link rel="stylesheet" href="/client/css/style.css" />
+    <link rel="stylesheet" href="/client/css/layout.css" />
+    <link rel="stylesheet" href="/client/css/options_sidebar.css" />
+    <link rel="stylesheet" href="/client/css/order_details.css" />
+</head>
+<body>
+
+<!-- header -->
+<div th:replace="/client/layout/header"></div>
+
+<!-- sidebar -->
+<div th:replace="/client/layout/sidebar"></div>
+
+<!-- overlay -->
+<div class="overlay"></div>
+
+<!-- main -->
+<main>
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/shop">Shop</a></li>
+            <li><a href="/order-history">Order history</a></li>
+            <li>Details</li>
+        </ul>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                <!-- sidebar options -->
+                <div th:replace="/client/layout/options_sidebar"></div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <div class="order-details-wrapper">
+                    <h1 class="title">Order #<span th:text="${order.id}"></span></h1>
+                    <div class="order-details">
+                        <div class="info receiver-info">
+                            <h2 class="title">Receiver information</h2>
+                            <div class="divider"></div>
+                            <div class="info-group">
+                                <p class="label">Full name:</p>
+                                <p class="value" th:text="${order.receiverFirstName + ' ' + order.receiverLastName}"></p>
+                            </div>
+                            <div class="info-group">
+                                <p class="label">Email:</p>
+                                <p class="value" th:text="${order.receiverEmail}"></p>
+                            </div>
+                            <div class="info-group">
+                                <p class="label">Phone:</p>
+                                <p class="value" th:text="${order.receiverPhone}"></p>
+                            </div>
+                            <div class="info-group">
+                                <p class="label">Address:</p>
+                                <p class="value" th:text="${order.receiverAddress}"></p>
+                            </div>
+                        </div>
+                        <div class="info order-info">
+                            <h2 class="title">Order information</h2>
+                            <div class="divider"></div>
+                            <div class="info-group">
+                                <p class="label">Order ID:</p>
+                                <p class="value" th:text="${order.id}"></p>
+                            </div>
+                            <div class="info-group">
+                                <p class="label">Date:</p>
+                                <p class="value" th:text="${#temporals.format(order.createdAt, 'dd-MM-yyyy')}"></p>
+                            </div>
+                            <div class="info-group">
+                                <p class="label">Total price:</p>
+                                <p class="value" th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                            </div>
+                            <div class="info-group">
+                                <p class="label">Payment method:</p>
+                                <p class="value" th:text="${order.paymentMethod}"></p>
+                            </div>
+                            <div class="info-group">
+                                <p class="label">Status:</p>
+                                <p class="value order-status"
+                                   th:text="${order.orderStatus}"
+                                   th:classappend="${order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).PENDING ? 'pending-status' :
+                                                                           (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CONFIRMED ? 'confirmed-status' :
+                                                                            (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).SHIPPING ? 'shipping-status' :
+                                                                             (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).DELIVERED ? 'delivered-status' :
+                                                                              (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CANCELLED ? 'cancelled-status' :  ''))))}">
+
+                                >
+                                    PENDING
+                                </p>
+                            </div>
+                            <div class="actions" th:if="${order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).PENDING}">
+                                <a th:href="@{/order-history/cancel/{id}(id=${order.id})}" class="cancel-button">Cancel Order</a>
+                            </div>
+                        </div>
+                        <div class="info extra-info" th:if="${order.receiverNote != null and !order.receiverNote.isEmpty() or order.cancelledReason != null and !order.cancelledReason.isEmpty()}">
+                          <h2 class="title">Extra information</h2>
+                          <div class="divider"></div>
+                          <div class="info-group" th:if="${order.receiverNote != null and !order.receiverNote.isEmpty()}">
+                            <p class="label">Note:</p>
+                            <p class="value" th:text="${order.receiverNote}"></p>
+                          </div>
+                          <div class="info-group" th:if="${order.cancelledReason != null and !order.cancelledReason.isEmpty()}">
+                            <p class="label">Cancelled reason:</p>
+                            <p class="value" th:text="${order.cancelledReason}"></p>
+                          </div>
+                        </div>
+                        <div class="info table-wrapper">
+                            <table>
+                                <thead>
+                                <tr class="table-row">
+                                    <th class="col-width-1">ID</th>
+                                    <th class="col-width-2">Image</th>
+                                    <th class="col-width-3">Name</th>
+                                    <th class="col-width-2">Quantity</th>
+                                    <th class="col-width-2">Price</th>
+                                    <th class="col-width-2">Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="orderDetail : ${order.orderDetails}">
+                                    <td>
+                                        <span th:text="${orderDetail.product.id}"></span>
+                                    </td>
+                                    <td>
+                                        <div class="image-wrapper">
+                                            <img th:src="@{/uploads/product_pictures/{image}(image=${orderDetail.product.productImages != null and orderDetail.product.productImages.size() > 0 ? orderDetail.product.productImages[0].imageName : ''})}" alt="product image" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/shop/product/{id}(id=${orderDetail.product.id})}">
+                                            <span th:text="${orderDetail.product.name}"></span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span th:text="${orderDetail.quantity}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${#numbers.formatDecimal(orderDetail.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${#numbers.formatDecimal(orderDetail.price * orderDetail.quantity, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js" integrity="sha512-Y+cHVeYzi7pamIOGBwYHrynWWTKImI9G78i53+azDb1uPmU1Dz9/r2BLxGXWgOC7FhwAGsy3/9YpNYaoBy7Kzg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/client/js/main.js"></script>
+</html>

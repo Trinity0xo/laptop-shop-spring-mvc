@@ -1,0 +1,150 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+  <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
+  <title>Product - ShopLap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/admin/css/reset.css" />
+  <link rel="stylesheet" href="/admin/css/style.css" />
+  <link rel="stylesheet" href="/admin/css/layout.css" />
+  <link rel="stylesheet" href="/admin/css/content.css" />
+</head>
+
+<body>
+  <div class="main-wrapper">
+    <!-- overlay -->
+    <div class="overlay"></div>
+
+    <!-- sidebar -->
+    <div th:replace="/admin/layout/sidebar"></div>
+
+    <div class="main-content">
+      <!-- header -->
+      <div th:replace="/admin/layout/header"></div>
+
+      <main>
+        <div class="container-fluid">
+          <ul class="breadcrumb">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/product">Product</a></li>
+            <li>Create</li>
+          </ul>
+          <div class="content">
+            <h3>Create new product</h3>
+            <form id="createProductForm" class="create-product-form">
+              <div class="info images">
+                <h4>Images:</h4>
+                <div class="input-group">
+                  <label for="images" class="image-add-new-button">Images (JPG, PNG, JPEG, GIF, WebP):</label>
+                  <div class="images-input-group">
+                    <div class="images-upload-wrapper">
+                      <div class="images-preview"></div>
+                      <div class="images-upload-control">
+                        <label for="images" class="image-add-new-button"><i class="fa-solid fa-plus"></i></label>
+                        <input class="images-upload" name="tempImagesInput" id="images" type="file" multiple
+                               accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"/>
+                      </div>
+                    </div>
+                    <span id="imagesError" class="error-message"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="info general-info">
+                <h4>General Information:</h4>
+                <div class="input-group">
+                  <label for="name">Name: </label>
+                  <div class="input-group-control">
+                    <input type="text" name="name" id="name" placeholder="Name" required />
+                    <span id="nameError" class="error-message"></span>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="brand">Brand: </label>
+                  <div class="input-group-control">
+                    <select name="brand" id="brand">
+                      <option selected value="">Select brand</option>
+                      <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+                    </select>
+                    <span id="brandError" class="error-message"></span>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="category">Category: </label>
+                  <div class="input-group-control">
+                    <select name="category" id="category">
+                      <option selected value="">Select category</option>
+                      <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
+                      </option>
+                    </select>
+                    <span id="categoryError" class="error-message"></span>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="shortDescription">Short description: </label>
+                  <div class="input-group-control">
+                    <textarea name="shortDescription" id="shortDescription" rows="3" placeholder="Short description"
+                      required></textarea>
+                    <span id="shortDescriptionError" class="error-message"></span>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="description">Description: </label>
+                  <div class="input-group-control">
+                    <textarea name="description" id="description" rows="5" placeholder="Description" required></textarea>
+                    <span id="descriptionError" class="error-message"></span>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="price">Price: </label>
+                  <div class="input-group-control">
+                    <input type="text" name="price" id="price" placeholder="Price" required />
+                    <span id="priceError" class="error-message"></span>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="discount">Discount(%): </label>
+                  <div class="input-group-control">
+                    <input type="number" name="discount" id="discount" value="0" required />
+                    <span id="discountError" class="error-message"></span>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="quantity">Quantity: </label>
+                  <div class="input-group-control">
+                    <input type="number" name="quantity" id="quantity" value="0" required />
+                    <span id="quantityError" class="error-message"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <div class="empty"></div>
+                <button type="submit" class="save-button">Save</button>
+                <a href="/dashboard/product" class="back-button">Back</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+
+      <!-- footer -->
+      <div th:replace="/admin/layout/footer"></div>
+    </div>
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+  integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/admin/js/main.js"></script>
+<script src="/admin/js/product.js"></script>
+
+</html>

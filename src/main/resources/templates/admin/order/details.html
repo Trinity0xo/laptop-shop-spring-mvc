@@ -1,0 +1,178 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Order - ShopLap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/admin/css/reset.css" />
+    <link rel="stylesheet" href="/admin/css/style.css" />
+    <link rel="stylesheet" href="/admin/css/layout.css" />
+    <link rel="stylesheet" href="/admin/css/content.css" />
+</head>
+
+<body>
+<div class="main-wrapper">
+    <!-- overlay -->
+    <div class="overlay"></div>
+
+    <!-- sidebar -->
+    <div th:replace="/admin/layout/sidebar"></div>
+
+    <div class="main-content">
+        <!-- header -->
+        <div th:replace="/admin/layout/header"></div>
+
+        <main>
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/dashboard/order">Order</a></li>
+                    <li>Details</li>
+                </ul>
+
+                <div class="content">
+                    <h3>Order #<span th:text="${order.id}"></span></h3>
+
+                    <div class="description-list-wrapper">
+                        <div class="info general-info">
+                            <h4>General Information:</h4>
+                            <dl class="row">
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Order date:
+                                </dt>
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.createdAt}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Order ID:
+                                </dt>
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.id}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Email:
+                                </dt>
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.receiverEmail}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Phone:
+                                </dt>
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.receiverPhone}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    First name:
+                                </dt>
+
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.receiverFirstName}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Last name:
+                                </dt>
+
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.receiverLastName}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Address:
+                                </dt>
+
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.receiverAddress}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Total:
+                                </dt>
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.totalPrice}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Payment method:
+                                </dt>
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.paymentMethod}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Cancelled reason:
+                                </dt>
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.cancelledReason}">
+                                </dd>
+
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    Status:
+                                </dt>
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.orderStatus}">
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="description-list-actions">
+                            <a th:href="@{/dashboard/order/edit/{id}(id=${order.id})}" class="edit-button">Edit</a>
+                            <a href="/dashboard/order" class="back-button">Back</a>
+                        </div>
+                        <div class="info product-list">
+                            <h4>Products:</h4>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                    <tr class="table-row">
+                                        <th class="col-width-1">ID</th>
+                                        <th class="col-width-1">Picture</th>
+                                        <th class="col-width-4">Name</th>
+                                        <th class="col-width-2">Quantity</th>
+                                        <th class="col-width-2">Price</th>
+                                        <th class="col-width-2">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="orderDetail: ${order.orderDetails}">
+                                            <td>
+                                                <span th:text="${orderDetail.product.id}"></span>
+                                            </td>
+                                            <td>
+                                                <div class="image-wrapper">
+                                                    <img src="" alt="picture" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                              <a th:href="@{/dashboard/product/details/{id}(id=${orderDetail.product.id})}" th:text="${orderDetail.product.name}"></a>
+                                            </td>
+                                            <td>
+                                                <span th:text="${orderDetail.quantity}"></span>
+                                            </td>
+                                            <td>
+                                                <span th:text="${orderDetail.price}"></span>
+                                            </td>
+                                            <td>
+                                                <span th:text="${orderDetail.quantity * orderDetail.price}"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- footer -->
+        <div th:replace="/admin/layout/footer"></div>
+    </div>
+</div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/admin/js/main.js"></script>
+
+</html>

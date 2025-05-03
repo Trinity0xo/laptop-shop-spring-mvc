@@ -1,0 +1,241 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout - ShopLap</title>
+  <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet"
+  />
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" integrity="sha512-8D+M+7Y6jVsEa7RD6Kv/Z7EImSpNpQllgaEIQAtqHcI0H6F4iZknRj0Nx1DCdB+TwBaS+702BGWYC0Ze2hpExQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/client/css/reset.css" />
+  <link rel="stylesheet" href="/client/css/style.css" />
+  <link rel="stylesheet" href="/client/css/layout.css" />
+  <link rel="stylesheet" href="/client/css/checkout.css" />
+</head>
+<body>
+
+<!-- header -->
+<div th:replace="/client/layout/header"></div>
+
+<!-- sidebar -->
+<div th:replace="/client/layout/sidebar"></div>
+
+<!-- overlay -->
+<div class="overlay"></div>
+
+<!-- main -->
+<main>
+  <div class="container">
+    <ul class="breadcrumb">
+      <li><a href="/">Home</a></li>
+      <li><a href="/shop">Shop</a></li>
+      <li><a href="/cart">Cart</a></li>
+      <li>Checkout</li>
+    </ul>
+    <h1 class="title">Checkout</h1>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+        <form method="post" th:action="@{/cart/checkout}" th:object="${checkOutDto}">
+          <div class="order-info-wrapper">
+            <div class="shipping-info-wrapper">
+              <h2 class="title">Order information</h2>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <div class="input-group">
+                    <label for="receiverFirstName">First name:</label>
+                    <div class="input-group-control">
+                      <input
+                              type="text"
+                              name="receiverFirstName"
+                              id="receiverFirstName"
+                              th:value="${checkOutDto.receiverFirstName}"
+                              placeholder="First name"
+                              th:classappend="${#fields.hasErrors('receiverFirstName') ? 'error' : ''}"
+                              th:field="${checkOutDto.receiverFirstName}"
+                      />
+                      <span class="error-message" th:if="${#fields.hasErrors('receiverFirstName')}" th:errors="${checkOutDto.receiverFirstName}"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <div class="input-group">
+                    <label for="receiverLastName">Last name:</label>
+                    <div class="input-group-control">
+                      <input
+                              type="text"
+                              name="receiverLastName"
+                              id="receiverLastName"
+                              th:value="${checkOutDto.receiverLastName}"
+                              placeholder="Last name"
+                              th:classappend="${#fields.hasErrors('receiverLastName') ? 'error' : ''}"
+                              th:field="${checkOutDto.receiverLastName}"
+                      />
+                      <span class="error-message" th:if="${#fields.hasErrors('receiverLastName')}" th:errors="${checkOutDto.receiverLastName}"></span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                        class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
+                >
+                  <div class="input-group">
+                    <label for="receiverEmail">Email:</label>
+                    <div class="input-group-control">
+                      <input
+                              type="text"
+                              name="receiverEmail"
+                              id="receiverEmail"
+                              th:value="${checkOutDto.receiverEmail}"
+                              placeholder="Email"
+                              th:classappend="${#fields.hasErrors('receiverEmail') ? 'error' : ''}"
+                              th:field="${checkOutDto.receiverEmail}"
+                      />
+                      <span class="error-message" th:if="${#fields.hasErrors('receiverEmail')}" th:errors="${checkOutDto.receiverEmail}"></span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                        class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
+                >
+                  <div class="input-group">
+                    <label for="receiverPhone">Phone:</label>
+                    <div class="input-group-control">
+                      <input
+                              type="text"
+                              name="receiverPhone"
+                              id="receiverPhone"
+                              th:value="${checkOutDto.receiverPhone}"
+                              placeholder="Phone"
+                              th:classappend="${#fields.hasErrors('receiverPhone') ? 'error' : ''}"
+                              th:field="${checkOutDto.receiverPhone}"
+                      />
+                      <span class="error-message" th:if="${#fields.hasErrors('receiverPhone')}" th:errors="${checkOutDto.receiverPhone}"></span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                        class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
+                >
+                  <div class="input-group">
+                    <label for="receiverAddress">Address:</label>
+                    <div class="input-group-control">
+                      <input
+                              type="text"
+                              name="receiverAddress"
+                              id="receiverAddress"
+                              th:value="${checkOutDto.receiverAddress}"
+                              placeholder="Address"
+                              th:classappend="${#fields.hasErrors('receiverAddress') ? 'error' : ''}"
+                              th:field="${checkOutDto.receiverAddress}"
+                      />
+                      <span class="error-message" th:if="${#fields.hasErrors('receiverAddress')}" th:errors="${checkOutDto.receiverAddress}"></span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                        class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
+                >
+                  <div class="input-group">
+                    <label for="receiverNote">Note:</label>
+                    <div class="input-group-control">
+                       <textarea
+                               name="receiverNote"
+                               id="receiverNote"
+                               rows="4"
+                               th:value="${checkOutDto.receiverNote}"
+                               placeholder="Note"
+                               th:classappend="${#fields.hasErrors('receiverNote') ? 'error' : ''}"
+                               th:field="${checkOutDto.receiverNote}"
+                       ></textarea>
+                      <span class="error-message" th:if="${#fields.hasErrors('receiverNote')}" th:errors="${checkOutDto.receiverNote}"></span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                        class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
+                >
+                  <div class="input-group">
+                    <label for="">Payment methods:</label>
+                    <div class="radio-options">
+                      <div class="radio-group">
+                        <input type="radio" name="paymentMethod" id="cod" checked/>
+                        <label for="cod">COD</label>
+                      </div>
+<!--                      <div class="radio-group">-->
+<!--                        <input type="radio" name="paymentMethod" id="momo" />-->
+<!--                        <label for="momo">MOMO</label>-->
+<!--                      </div>-->
+<!--                      <div class="radio-group">-->
+<!--                        <input type="radio" name="paymentMethod" id="vnpay" />-->
+<!--                        <label for="vnpay">VNPAY</label>-->
+<!--                      </div>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="order-summary-wrapper">
+              <h2 class="title">Order Summary</h2>
+              <div class="price-group">
+                <p class="label">Total:</p>
+                <p class="price" th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+              </div>
+              <div class="price-group">
+                <p class="label">Shipping:</p>
+                <p class="price">Free</p>
+              </div>
+              <div class="divider"></div>
+              <div class="price-group">
+                <p class="label">Grand Total:</p>
+                <p class="price" th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="submit" class="create-order-button">
+                Confirm order
+              </button>
+              <a href="/cart" class="back-button">Back to cart</a>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+        <div class="order-items-wrapper">
+          <h2 class="title">Order items</h2>
+          <ul class="order-item-list">
+            <li class="order-item" th:each="checkOutProduct : ${checkOutProducts}">
+              <div class="product-wrapper">
+                <div class="image-wrapper">
+                  <img th:src="@{/uploads/product_pictures/{image}(image=${checkOutProduct.product.productImages != null and checkOutProduct.product.productImages.size() > 0 ? checkOutProduct.product.productImages[0].imageName : ''})}" alt="product image" />
+                </div>
+                <div class="details-wrapper">
+                  <p class="name" th:text="${checkOutProduct.product.name}"></p>
+                  <p class="quantity" th:text="'x' + ${checkOutProduct.quantity}"></p>
+                  <p class="price"  th:text="${#numbers.formatDecimal(checkOutProduct.product.discountPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js" integrity="sha512-Y+cHVeYzi7pamIOGBwYHrynWWTKImI9G78i53+azDb1uPmU1Dz9/r2BLxGXWgOC7FhwAGsy3/9YpNYaoBy7Kzg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/client/js/main.js"></script>
+<script src="/client/js/checkout.js"></script>
+</html>

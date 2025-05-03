@@ -1,0 +1,124 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Register - ShopLap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" integrity="sha512-8D+M+7Y6jVsEa7RD6Kv/Z7EImSpNpQllgaEIQAtqHcI0H6F4iZknRj0Nx1DCdB+TwBaS+702BGWYC0Ze2hpExQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/client/css/reset.css"/>
+    <link rel="stylesheet" href="/client/css/style.css"/>
+    <link rel="stylesheet" href="/client/css/authentication.css">
+</head>
+
+<body>
+
+<!-- main -->
+<main>
+    <div class="form-wrapper">
+        <form class="register-form" th:action="@{/auth/register}" method="post" th:object="${registerDto}">
+            <h1 class="title">REGISTER</h1>
+
+            <div class="input-group">
+                <label for="firstName">First name:</label>
+                <div class="input-group-control">
+                    <input
+                            type="text"
+                            name="firstName"
+                            id="firstName"
+                            placeholder="First name"
+                            required
+                            th:classappend="${#fields.hasErrors('firstName') ? 'error' : ''}"
+                            th:field="${registerDto.firstName}"
+                    />
+                    <span class="error-message" th:if="${#fields.hasErrors('firstName')}" th:errors="${registerDto.firstName}"></span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="lastName">Last name:</label>
+                <div class="input-group-control">
+                    <input
+                            type="text"
+                            name="lastName"
+                            id="lastName"
+                            placeholder="Last name"
+                            required
+                            th:classappend="${#fields.hasErrors('lastName') ? 'error' : ''}"
+                            th:field="${registerDto.lastName}"
+                    />
+                    <span class="error-message" th:if="${#fields.hasErrors('lastName')}" th:errors="${registerDto.lastName}"></span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <div class="input-group-control">
+                    <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="Email"
+                            required
+                            th:classappend="${#fields.hasErrors('email') ? 'error' : ''}"
+                            th:field="${registerDto.email}"
+                    />
+                    <span class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="${registerDto.email}"></span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <div class="input-group-control">
+                    <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="Password"
+                            required
+                            th:classappend="${#fields.hasErrors('password') ? 'error' : ''}"
+                            th:field="${registerDto.password}"
+                    />
+                    <span class="error-message" th:if="${#fields.hasErrors('password')}" th:errors="${registerDto.password}"></span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="confirmPassword">Confirm password:</label>
+                <div class="input-group-control">
+                    <input
+                            type="password"
+                            name="confirmPassword"
+                            id="confirmPassword"
+                            placeholder="Confirm password"
+                            required
+                            th:classappend="${#fields.hasErrors('confirmPassword') ? 'error' : ''}"
+                            th:field="${registerDto.confirmPassword}"
+                    />
+                    <span class="error-message" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="${registerDto.confirmPassword}"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="register-button">Register</button>
+
+            <div class="form-link-wrapper">
+                <p>Already have an account ? <a href="/auth/login">Login</a></p>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js" integrity="sha512-Y+cHVeYzi7pamIOGBwYHrynWWTKImI9G78i53+azDb1uPmU1Dz9/r2BLxGXWgOC7FhwAGsy3/9YpNYaoBy7Kzg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/admin/js/main.js"></script>
+
+</html>

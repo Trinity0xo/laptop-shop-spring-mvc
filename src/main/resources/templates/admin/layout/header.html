@@ -1,0 +1,22 @@
+<header>
+    <div class="container-fluid">
+        <button id="btnSidebarToggle" class="sidebar-toggle-button">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="account">
+            <div class="account-avatar">
+                <img th:if="${session.avatar != null}"
+                     th:src="@{/uploads/avatar/{fileName}(fileName=${session.avatar})}"
+                     alt="avatar"
+                />
+                <img th:if="${#authentication.principal.avatar == null}"
+                     th:src="@{/images/default-avatar.png}"
+                     alt="avatar">
+            </div>
+            <div class="account-info">
+                <p th:text="${session.fullName}"></p>
+                <p th:text="${session.username}"></p>
+            </div>
+        </div>
+    </div>
+</header>

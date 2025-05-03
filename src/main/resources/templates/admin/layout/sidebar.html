@@ -1,0 +1,40 @@
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h2>ShopLap</h2>
+    </div>
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/dashboard/product"
+            ><i class="fa-solid fa-cubes"></i>Product</a
+            >
+        </li>
+        <li>
+            <a href="/dashboard/brand"
+            ><i class="fa-solid fa-layer-group"></i>Brand</a
+            >
+        </li>
+        <li>
+            <a href="/dashboard/category"
+            ><i class="fa-solid fa-layer-group"></i>Category</a
+            >
+        </li>
+        <li>
+            <a href="/dashboard/order"
+            ><i class="fa-solid fa-cart-shopping"></i>Order</a
+            >
+        </li>
+        <li>
+            <a href="/dashboard/user"
+            ><i class="fa-solid fa-users"></i>User</a
+            >
+        </li>
+        <li>
+            <a href="/dashboard/role"
+            ><i class="fa-solid fa-user-plus"></i>Role</a
+            >
+        </li>
+    </ul>
+    <form method="post" th:action="@{/logout}" class="logout-form">
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+</div>

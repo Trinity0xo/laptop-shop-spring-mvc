@@ -1,0 +1,96 @@
+@charset "UTF-8";
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+html {
+  font-size: 10px;
+}
+
+.container-fluid {
+  margin: 0px 16px;
+}
+
+body {
+  background-color: rgb(245, 245, 247);
+}
+
+.breadcrumb {
+  margin-top: 16px;
+  list-style: none;
+}
+.breadcrumb li {
+  display: inline;
+  font-size: 1.5rem;
+}
+.breadcrumb li::before {
+  padding: 8px;
+  color: #9fa6b2;
+  content: "/ ";
+}
+.breadcrumb li:first-child::before {
+  padding: 0;
+  content: "";
+}
+.breadcrumb li a {
+  color: #3b71ca;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pagination li {
+  padding: 4px;
+}
+.pagination li a {
+  background-color: #fff;
+  color: #333;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pagination li a:hover {
+  background-color: #3b71ca;
+  color: white;
+}
+.pagination li a.active {
+  background-color: #3b71ca;
+  color: white;
+}
+.pagination li .previous.disabled,
+.pagination li .next.disabled {
+  background-color: #9fa6b2;
+  color: white;
+  pointer-events: none;
+  cursor: default;
+}
+
+.popover {
+  position: relative;
+  display: inline-block;
+}
+.popover .popover-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  color: #333;
+  padding: 16px;
+  top: 100%;
+  transform: translateY(10px);
+}
+.popover .popover-menu .popover-pointer {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  top: 0;
+  transform: translateY(-50%) rotate(45deg);
+}/*# sourceMappingURL=style.css.map */

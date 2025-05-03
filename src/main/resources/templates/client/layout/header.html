@@ -1,0 +1,124 @@
+<header>
+    <!-- container -->
+    <div class="container">
+        <!-- header top -->
+        <div class="header-top">
+            <div class="header-top-left">
+                <h1 class="logo">SHOPLAP</h1>
+            </div>
+            <div class="header-top-right">
+                <a href="#">
+                    <i class="fa-solid fa-headphones-simple"></i>
+                    24/7 Support Centre
+                </a>
+                <div class="social-media">
+                    <p>Follow Us:</p>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- divider -->
+        <div class="divider"></div>
+
+        <!-- header bottom -->
+        <nav class="header-bottom">
+            <button id="sideBarToggle" class="sidebar-toggle-button">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="nav-actions mobile">
+                <a href="./cart.html" class="cart">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <div class="cart-count">
+                        <p>10</p>
+                    </div>
+                </a>
+                <div class="auth-dropdown dropdown" th:if="${not #authorization.expression('isAuthenticated()')}">
+                    <a href="#" class="auth-button dropdown-toggle">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                    <ul class="auth-dropdown-menu dropdown-menu">
+                        <li>
+                            <a th:href="@{/auth/login}">Login</a>
+                            <a th:href="@{/auth/register}">Register</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="account-dropdown dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a href="#" class="account-button dropdown-toggle">
+                        <img th:src="@{/images/default-avatar.png}" alt="avatar">
+                    </a>
+                    <ul class="account-dropdown-menu dropdown-menu">
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="#">Orders</a></li>
+                        <li><a href="#">Wishlist</a></li>
+                        <li>
+                            <form method="post" th:action="@{/logout}">
+                                <button class="logout" type="submit">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="hot-deals"
+                ><i class="fa-solid fa-percent"></i>Hot Deals</a
+                >
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/shop">Shop</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="nav-actions">
+                <button id="btnOpenSearch" class="open-search-button">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <form method="get" th:action="@{/shop}" class="input-with-icon">
+                    <input
+                            type="text"
+                            class="search-box"
+                            name="name"
+                            placeholder="Search here..."
+                    />
+                    <button type="submit" class="search-button">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+                <a href="/cart" class="cart" th:if="${#authorization.expression('isAuthenticated()')}">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <div class="cart-count">
+                        <p class="cart-count-value" th:text="${session.cartItemCount}"></p>
+                    </div>
+                </a>
+                <div class="auth-dropdown dropdown" th:if="${not #authorization.expression('isAuthenticated()')}">
+                    <a href="#" class="auth-button dropdown-toggle">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                    <ul class="auth-dropdown-menu dropdown-menu">
+                        <li>
+                            <a th:href="@{/auth/login}">Login</a>
+                            <a th:href="@{/auth/register}">Register</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="account-dropdown dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
+                  <a href="#" class="account-button dropdown-toggle">
+                      <img th:src="@{/images/default-avatar.png}" alt="avatar">
+                  </a>
+                  <ul class="account-dropdown-menu dropdown-menu">
+                    <li><a href="/account">My Account</a></li>
+                    <li><a href="/order-history">Order history</a></li>
+                    <li>
+                        <form method="post" th:action="@{/logout}">
+                            <button class="logout" type="submit">Logout</button>
+                        </form>
+                    </li>
+                  </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
