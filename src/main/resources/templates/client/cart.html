@@ -45,7 +45,10 @@
                 <div class="cart-item-list">
                     <div class="cart-item" th:each="cartItem : ${cart.cartDetails}">
                         <div class="image-wrapper">
-                            <img th:src="@{/uploads/product_pictures/{image}(image=${cartItem.product.productImages != null and cartItem.product.productImages.size() > 0 ? cartItem.product.productImages[0].imageName : ''})}" alt="product image" />
+                            <img
+                                    th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (cartItem.product.productImages != null and cartItem.product.productImages.size() > 0 ? cartItem.product.productImages[0].imageName : '')}"
+                                    alt="product image"
+                            />
                         </div>
                         <div class="details-wrapper">
                             <p class="name" th:text="${cartItem.product.name}"></p>

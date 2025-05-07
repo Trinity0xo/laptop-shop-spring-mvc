@@ -1,4 +1,4 @@
-package com.laptopstore.ecommerce.util.anotaion.validation.auth.forgotpassoword;
+package com.laptopstore.ecommerce.util.anotaion.validation.auth.forgotpassword;
 
 import com.laptopstore.ecommerce.dto.auth.ForgotPasswordDto;
 import com.laptopstore.ecommerce.service.UserService;

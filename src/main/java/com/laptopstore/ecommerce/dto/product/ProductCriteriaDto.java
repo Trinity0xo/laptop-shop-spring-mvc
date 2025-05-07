@@ -2,28 +2,34 @@ package com.laptopstore.ecommerce.dto.product;
 
 import com.laptopstore.ecommerce.dto.PageableCriteriaDto;
 
+import com.laptopstore.ecommerce.util.constant.StockStatusEnum;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Getter
 @Setter
 public class ProductCriteriaDto extends PageableCriteriaDto {
 
-    public int getFilterCount(){
+    public int getFilterCount() {
         int count = 0;
 
         if (categoryNames != null && !categoryNames.isEmpty()) count++;
         if (brandNames != null && !brandNames.isEmpty()) count++;
-        if (getDoubleMinPrice() != null && getDoubleMaxPrice() != null && getDoubleMinPrice() <= getDoubleMaxPrice()) count++;
-        if (getDoubleMinDiscountPrice() != null && getDoubleMaxDiscountPrice() != null && getDoubleMinDiscountPrice() <= getDoubleMaxDiscountPrice()) count++;
-//        if (getBooleanStockStatus() != null) count++;
+        if (getDoubleMinPrice() != null && getDoubleMaxPrice() != null && getDoubleMinPrice() <= getDoubleMaxPrice())
+            count++;
+        if (getDoubleMinDiscountPrice() != null && getDoubleMaxDiscountPrice() != null && getDoubleMinDiscountPrice() <= getDoubleMaxDiscountPrice())
+            count++;
+        if (getEnumStockStatus() != null) count++;
 
         return count;
     }
 
-    public String toQuery(){
+    public String toQuery() {
         StringBuilder stringBuilder = new StringBuilder();
 
         if (name != null && !name.isEmpty()) {
@@ -42,6 +48,10 @@ public class ProductCriteriaDto extends PageableCriteriaDto {
             }
         }
 
+        if(getInstantMonthLimit() != null && getInstantMonthLimit().isBefore(Instant.now())){
+            stringBuilder.append("&monthLimit=").append(monthLimit);
+        }
+
         if (getDoubleMinPrice() != null && getDoubleMinPrice() > 0) {
             stringBuilder.append("&minPrice=").append(minPrice);
         }
@@ -58,15 +68,15 @@ public class ProductCriteriaDto extends PageableCriteriaDto {
             stringBuilder.append("&maxDiscountPrice=").append(maxDiscountPrice);
         }
 
-//        if (getBooleanStockStatus() != null) {
-//            stringBuilder.append("&stockStatus=").append(getBooleanStockStatus());
-//        }
+        if (getEnumStockStatus() != null) {
+            stringBuilder.append("&stockStatus=").append(stockStatus);
+        }
 
-        if(getIntegerPage() != null && getIntegerPage() > 0){
+        if (getIntegerPage() != null && getIntegerPage() > 0) {
             stringBuilder.append("&page=").append(getPage());
         }
 
-        if(getIntegerLimit() != null && getIntegerLimit()  > 0){
+        if (getIntegerLimit() != null && getIntegerLimit() > 0) {
             stringBuilder.append("&limit=").append(getLimit());
         }
 
@@ -85,46 +95,56 @@ public class ProductCriteriaDto extends PageableCriteriaDto {
         return stringBuilder.toString();
     }
 
-    public Double getDoubleMinPrice(){
-        try{
+    public Double getDoubleMinPrice() {
+        try {
             return Double.parseDouble(minPrice);
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public Double getDoubleMaxPrice(){
-        try{
+    public Double getDoubleMaxPrice() {
+        try {
             return Double.parseDouble(maxPrice);
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public Double getDoubleMinDiscountPrice(){
-        try{
+    public Double getDoubleMinDiscountPrice() {
+        try {
             return Double.parseDouble(minDiscountPrice);
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public Double getDoubleMaxDiscountPrice(){
-        try{
+    public Double getDoubleMaxDiscountPrice() {
+        try {
             return Double.parseDouble(maxDiscountPrice);
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-//    public Boolean getBooleanStockStatus(){
-//        try{
-//            return Boolean.parseBoolean(stockStatus);
-//        }catch (Exception e){
-//            return null;
-//        }
-//    }
+    public StockStatusEnum getEnumStockStatus() {
+        try {
+            return StockStatusEnum.valueOf(stockStatus.toUpperCase());
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
+    public Instant getInstantMonthLimit() {
+        try {
+            int month = Integer.parseInt(monthLimit);
+            return ZonedDateTime.now().minusMonths(month).toInstant();
+        } catch (Exception e) {
+            return ZonedDateTime.now().minusMonths(3).toInstant();
+        }
+    }
+
+    private String monthLimit = "1";
     private String name;
     private List<String> categoryNames;
     private List<String> brandNames;
@@ -132,5 +152,5 @@ public class ProductCriteriaDto extends PageableCriteriaDto {
     private String maxPrice;
     private String minDiscountPrice;
     private String maxDiscountPrice;
-//    private String stockStatus;
+    private String stockStatus;
 }

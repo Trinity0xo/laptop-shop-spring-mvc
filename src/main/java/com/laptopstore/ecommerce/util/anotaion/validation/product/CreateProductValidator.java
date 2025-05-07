@@ -44,7 +44,7 @@ public class CreateProductValidator implements ConstraintValidator<CreateProduct
         }
 
         if(value.getImages() == null || value.getImages().isEmpty()){
-            context.buildConstraintViolationWithTemplate("Images must not be empty")
+            context.buildConstraintViolationWithTemplate("At least one image must be provided")
                     .addPropertyNode("images")
                     .addConstraintViolation();
             isValid = false;

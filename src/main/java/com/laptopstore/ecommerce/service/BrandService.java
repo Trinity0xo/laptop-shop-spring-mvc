@@ -1,7 +1,9 @@
 package com.laptopstore.ecommerce.service;
 
+import java.util.Arrays;
 import java.util.List;
 
+import com.laptopstore.ecommerce.util.SortFields;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -54,9 +56,11 @@ public class BrandService {
     public Page<Brand> handleGetAllBrands(BrandCriteriaDto brandCriteriaDto) {
         Specification<Brand> specification = Specification.where(null);
 
+        List<String> validSortBy = SortFields.getValidSortFields(Brand.class);
+
         Pageable pageable = pageableService.handleCreatePageable(brandCriteriaDto.getIntegerPage(),
                 brandCriteriaDto.getIntegerLimit(), brandCriteriaDto.getSortBy(),
-                brandCriteriaDto.getEnumSortDirection());
+                brandCriteriaDto.getEnumSortDirection(), validSortBy);
 
         if (brandCriteriaDto.getName() != null &&
                 !brandCriteriaDto.getName().isEmpty()) {

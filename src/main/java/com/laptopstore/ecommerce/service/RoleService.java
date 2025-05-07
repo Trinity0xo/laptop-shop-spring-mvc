@@ -2,6 +2,7 @@ package com.laptopstore.ecommerce.service;
 
 import com.laptopstore.ecommerce.dto.role.RoleCriteriaDto;
 import com.laptopstore.ecommerce.specification.RoleSpecification;
+import com.laptopstore.ecommerce.util.SortFields;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,11 +38,14 @@ public class RoleService {
     public Page<Role> handleGetAllRoles(RoleCriteriaDto roleCriteriaDto){
         Specification<Role> specification = Specification.where(null);
 
+        List<String> validSortBy = SortFields.getValidSortFields(Role.class);
+
         Pageable pageable = pageableService.handleCreatePageable(
                 roleCriteriaDto.getIntegerPage(),
                 roleCriteriaDto.getIntegerLimit(),
                 roleCriteriaDto.getSortBy(),
-                roleCriteriaDto.getEnumSortDirection()
+                roleCriteriaDto.getEnumSortDirection(),
+                validSortBy
         );
 
         if (roleCriteriaDto.getName() != null &&

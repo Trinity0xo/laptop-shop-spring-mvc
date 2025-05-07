@@ -5,11 +5,11 @@
         </button>
         <div class="account">
             <div class="account-avatar">
-                <img th:if="${session.avatar != null}"
-                     th:src="@{/uploads/avatar/{fileName}(fileName=${session.avatar})}"
+                <img th:if="${session.avatar != null and not session.avatar.isEmpty()}"
+                     th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + session.avatar}"
                      alt="avatar"
                 />
-                <img th:if="${#authentication.principal.avatar == null}"
+                <img th:if="${session.avatar == null or session.avatar.isEmpty()}"
                      th:src="@{/images/default-avatar.png}"
                      alt="avatar">
             </div>

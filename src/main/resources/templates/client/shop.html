@@ -203,7 +203,7 @@
           <a th:href="@{/shop/product/{id}(id=${product.id})}" class="product-card">
             <input type="hidden" name="quantity" value="1" />
             <div class="product-image-wrapper">
-              <img th:src="@{/uploads/product_pictures/{image}(image=${product.productImages != null and product.productImages.size() > 0 ? product.productImages[0].imageName : ''})}" alt="product image" />
+              <img th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (product.productImages != null and product.productImages.size() > 0 ? product.productImages[0].imageName : '')}" alt="product image" />
             </div>
             <p class="product-name" th:text="${product.name}">
             </p>

@@ -1,6 +1,5 @@
 package com.laptopstore.ecommerce.util.anotaion.validation.auth.resetpassword;
 
-import com.laptopstore.ecommerce.util.anotaion.validation.auth.forgotpassoword.ForgotPasswordValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

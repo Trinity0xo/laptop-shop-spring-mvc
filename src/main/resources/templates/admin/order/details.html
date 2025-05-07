@@ -12,10 +12,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
           integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/libraries/jquery-toast-plugin/jquery.toast.css" />
     <link rel="stylesheet" href="/admin/css/reset.css" />
     <link rel="stylesheet" href="/admin/css/style.css" />
     <link rel="stylesheet" href="/admin/css/layout.css" />
-    <link rel="stylesheet" href="/admin/css/content.css" />
+    <link rel="stylesheet" href="/admin/css/order.css" />
 </head>
 
 <body>
@@ -30,33 +31,34 @@
         <!-- header -->
         <div th:replace="/admin/layout/header"></div>
 
+        <!-- main -->
         <main>
             <div class="container-fluid">
+                <!-- breadcrumb -->
                 <ul class="breadcrumb">
                     <li><a href="/dashboard">Dashboard</a></li>
                     <li><a href="/dashboard/order">Order</a></li>
                     <li>Details</li>
                 </ul>
 
-                <div class="content">
-                    <h3>Order #<span th:text="${order.id}"></span></h3>
+                <div class="order-wrapper">
+                    <h1 class="title">Order #<span th:text="${order.id}"></span></h1>
 
                     <div class="description-list-wrapper">
                         <div class="info general-info">
-                            <h4>General Information:</h4>
+                            <h2 class="title">General Information:</h2>
+
                             <dl class="row">
                                 <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                     Order date:
                                 </dt>
-                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.createdAt}">
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(order.createdAt, 'dd-MM-yyyy HH:mm')}">
                                 </dd>
-
                                 <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                     Order ID:
                                 </dt>
                                 <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.id}">
                                 </dd>
-
                                 <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                     Email:
                                 </dt>
@@ -68,92 +70,108 @@
                                 </dt>
                                 <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.receiverPhone}">
                                 </dd>
-
                                 <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                     First name:
                                 </dt>
-
                                 <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.receiverFirstName}">
                                 </dd>
-
                                 <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                     Last name:
                                 </dt>
-
                                 <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.receiverLastName}">
                                 </dd>
-
                                 <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                     Address:
                                 </dt>
-
                                 <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.receiverAddress}">
                                 </dd>
-
                                 <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                     Total:
                                 </dt>
-                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.totalPrice}">
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'">
                                 </dd>
-
                                 <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                     Payment method:
                                 </dt>
                                 <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.paymentMethod}">
                                 </dd>
-
-                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" th:if="${order.cancelledReason != null and !order.cancelledReason.isEmpty()}">
                                     Cancelled reason:
                                 </dt>
-                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.cancelledReason}">
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:if="${order.cancelledReason != null and !order.cancelledReason.isEmpty()}" th:text="${order.cancelledReason}">
                                 </dd>
-
                                 <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                     Status:
                                 </dt>
-                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${order.orderStatus}">
+                                <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8  order-status"
+                                    th:text="${order.orderStatus}"
+                                    th:classappend="${order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).PENDING ? 'pending-status' :
+                                                                           (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CONFIRMED ? 'confirmed-status' :
+                                                                            (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).SHIPPING ? 'shipping-status' :
+                                                                             (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).DELIVERED ? 'delivered-status' :
+                                                                              (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CANCELLED ? 'cancelled-status' :  ''))))}"
+                                >
                                 </dd>
                             </dl>
                         </div>
-                        <div class="description-list-actions">
+
+                        <div class="actions">
                             <a th:href="@{/dashboard/order/edit/{id}(id=${order.id})}" class="edit-button">Edit</a>
                             <a href="/dashboard/order" class="back-button">Back</a>
                         </div>
+
                         <div class="info product-list">
-                            <h4>Products:</h4>
+                            <h2 class="title">Product list:</h2>
+
+                            <!-- table -->
                             <div class="table-wrapper">
                                 <table>
                                     <thead>
                                     <tr class="table-row">
                                         <th class="col-width-1">ID</th>
                                         <th class="col-width-1">Picture</th>
-                                        <th class="col-width-4">Name</th>
+                                        <th class="col-width-3">Name</th>
                                         <th class="col-width-2">Quantity</th>
                                         <th class="col-width-2">Price</th>
                                         <th class="col-width-2">Total</th>
+                                        <th class="col-width-1"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                         <tr th:each="orderDetail: ${order.orderDetails}">
                                             <td>
-                                                <span th:text="${orderDetail.product.id}"></span>
+                                                <span th:text="${orderDetail.product != null ? orderDetail.product.id : '-'}"></span>
                                             </td>
                                             <td>
-                                                <div class="image-wrapper">
-                                                    <img src="" alt="picture" />
+                                                <div class="image-wrapper" th:if="${orderDetail.product != null}">
+                                                    <img th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (orderDetail.product.productImages != null and orderDetail.product.productImages.size() > 0 ? orderDetail.product.productImages[0].imageName : '')}" alt="product image" />
+                                                </div>
+                                                <div class="image-wrapper" th:if="${orderDetail.product == null}">
+                                                    <img src="/images/default-thumbnail.jpg" alt="product image" />
                                                 </div>
                                             </td>
                                             <td>
-                                              <a th:href="@{/dashboard/product/details/{id}(id=${orderDetail.product.id})}" th:text="${orderDetail.product.name}"></a>
+                                                <a th:if="${orderDetail.product != null}">
+                                                    <span th:text="${orderDetail.product.name}"></span>
+                                                </a>
+                                                <span th:if="${orderDetail.product == null}">-</span>
                                             </td>
                                             <td>
                                                 <span th:text="${orderDetail.quantity}"></span>
                                             </td>
                                             <td>
-                                                <span th:text="${orderDetail.price}"></span>
+                                                <span th:text="${#numbers.formatDecimal(orderDetail.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
                                             </td>
                                             <td>
-                                                <span th:text="${orderDetail.quantity * orderDetail.price}"></span>
+                                                <span th:text="${#numbers.formatDecimal(orderDetail.price * orderDetail.quantity, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                                            </td>
+                                            <td>
+                                                <div class="actions" th:if="${orderDetail.product != null}">
+                                                    <a th:href="@{/dashboard/product/details/{id}(id=${orderDetail.product.id})}" class="view-button">View</a>
+                                                </div>
+                                                <div class="actions" th:if="${orderDetail.product == null}">
+                                                    -
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -170,9 +188,8 @@
     </div>
 </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/libraries/jquery/jquery.js"></script>
+<script src="/libraries/jquery-toast-plugin/jquery.toast.js"></script>
 <script src="/admin/js/main.js"></script>
 
 </html>

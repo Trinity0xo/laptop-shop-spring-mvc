@@ -157,7 +157,8 @@
                                                                                .replace('sortBy=' + query.sortBy, 'sortBy=createdAt')
                                                                                .replace('page=' + query.getIntegerPage(), 'page=1')
                                                                                .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                                                               }">
+                                                                               }"
+                                        >
                                             Date
                                             <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
                                                class="fa-solid fa-arrow-down"></i>

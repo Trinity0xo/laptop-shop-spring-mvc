@@ -349,7 +349,7 @@
   display: flex;
   align-items: center;
 }
-.sidebar .sidebar-header h2 {
+.sidebar .sidebar-header .logo {
   font-size: 3.5rem;
   color: white;
 }
@@ -401,6 +401,7 @@
 .main-content {
   display: flex;
   flex-direction: column;
+  gap: 16px;
   min-height: 100vh;
 }
 @media (max-width: 576px) {
@@ -468,7 +469,7 @@
   height: 100%;
   width: 100%;
   -o-object-fit: contain;
-  object-fit: contain;
+     object-fit: contain;
 }
 .main-content main .container-fluid {
   display: flex;

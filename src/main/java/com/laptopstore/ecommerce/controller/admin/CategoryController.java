@@ -1,6 +1,7 @@
 package com.laptopstore.ecommerce.controller.admin;
 
 import com.laptopstore.ecommerce.service.FileService;
+import com.laptopstore.ecommerce.service.UploadFoldersService;
 import com.laptopstore.ecommerce.util.error.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -22,14 +23,19 @@ public class CategoryController {
 
     private final CategoryService categoryService;
     private final FileService fileService;
+    private final UploadFoldersService uploadFoldersService;
 
-    public CategoryController(CategoryService categoryService, FileService fileService) {
+    public CategoryController(CategoryService categoryService, FileService fileService, UploadFoldersService uploadFoldersService) {
         this.categoryService = categoryService;
         this.fileService = fileService;
+        this.uploadFoldersService = uploadFoldersService;
     }
 
     @GetMapping("")
-    public String showCategoryPage(Model model, CategoryCriteriaDto categoryCriteriaDto) {
+    public String showCategoryPage(
+            Model model,
+            CategoryCriteriaDto categoryCriteriaDto
+    ) throws Exception {
         Page<Category> categories = this.categoryService.handleGetAllCategories(categoryCriteriaDto);
         model.addAttribute("categoryList", categories.getContent());
         model.addAttribute("totalPages", categories.getTotalPages());
@@ -42,7 +48,8 @@ public class CategoryController {
 
     @GetMapping("/create")
     public String showCreateCategoryPage(
-            Model model) {
+            Model model
+    ) throws Exception {
 
         model.addAttribute("createCategoryDto", new CreateCategoryDto());
 
@@ -53,12 +60,14 @@ public class CategoryController {
     public String createCategory(
             @Valid CreateCategoryDto createCategoryDto,
             BindingResult bindingResult
-            ) {
+    ) throws Exception {
         if (bindingResult.hasErrors()) {
             return "/admin/category/create";
         }
 
-        String imageName = this.fileService.handleUploadFile(createCategoryDto.getImage(), "category_pictures");
+        String categoryPicturesFolderName = this.uploadFoldersService.handleGetCategoryPicturesFolderName();
+
+        String imageName = this.fileService.handleUploadFile(createCategoryDto.getImage(), categoryPicturesFolderName);
 
         this.categoryService.handleCreateCategory(createCategoryDto, imageName);
 
@@ -69,8 +78,9 @@ public class CategoryController {
 
     @GetMapping("/edit/{id}")
     public String showEditCategoryPage(
-            @PathVariable Long id, Model model)
-            throws Exception {
+            @PathVariable Long id,
+            Model model
+    ) throws Exception {
 
         Category category = categoryService.handleGetCategoryById(id);
         if (category == null) {
@@ -94,8 +104,7 @@ public class CategoryController {
             @Valid UpdateCategoryDto updateCategoryDto,
             BindingResult bindingResult,
             @RequestParam(value = "deleteImageName", required = false) String deleteImageName
-    )
-            throws Exception {
+    ) throws Exception {
 
         if (bindingResult.hasErrors()) {
             return "/admin/category/edit";
@@ -106,12 +115,14 @@ public class CategoryController {
             throw new NotFoundException("Category not found");
         }
 
-        if(deleteImageName != null && !deleteImageName.isEmpty() && updateCategoryDto.getImage() != null && !updateCategoryDto.getImage().isEmpty()) {
-            this.fileService.handleDeleteFile(deleteImageName, "category_pictures");
+        String categoryPicturesFolderName = this.uploadFoldersService.handleGetCategoryPicturesFolderName();
+
+        if (deleteImageName != null && !deleteImageName.isEmpty() && updateCategoryDto.getImage() != null && !updateCategoryDto.getImage().isEmpty()) {
+            this.fileService.handleDeleteFile(deleteImageName, categoryPicturesFolderName);
         }
 
-        if(updateCategoryDto.getImage() != null && !updateCategoryDto.getImage().isEmpty()) {
-            String updatedProductImage = this.fileService.handleUploadFile(updateCategoryDto.getImage(), "category_pictures");
+        if (updateCategoryDto.getImage() != null && !updateCategoryDto.getImage().isEmpty()) {
+            String updatedProductImage = this.fileService.handleUploadFile(updateCategoryDto.getImage(), categoryPicturesFolderName);
             category.setImage(updatedProductImage);
         }
 
@@ -123,9 +134,10 @@ public class CategoryController {
     }
 
     @GetMapping("/delete/{id}")
-    public String showDeleteCategoryPage(@PathVariable Long id,
-            Model model)
-            throws Exception {
+    public String showDeleteCategoryPage(
+            @PathVariable Long id,
+            Model model
+    ) throws Exception {
         Category category = categoryService.handleGetCategoryById(id);
         if (category == null) {
             throw new NotFoundException("Category not found");
@@ -144,7 +156,9 @@ public class CategoryController {
             throw new NotFoundException("Category not found");
         }
 
-        this.fileService.handleDeleteFile(category.getImage(), "category_pictures");
+        String categoryPicturesFolderName = this.uploadFoldersService.handleGetCategoryPicturesFolderName();
+
+        this.fileService.handleDeleteFile(category.getImage(), categoryPicturesFolderName);
 
         this.categoryService.handleDeleteCategoryById(id);
 
@@ -157,9 +171,9 @@ public class CategoryController {
     public String showDetailsCategoryPage(
             @PathVariable Long id,
             Model model
-    ) throws Exception{
+    ) throws Exception {
         Category category = this.categoryService.handleGetCategoryById(id);
-        if(category == null){
+        if (category == null) {
             throw new NotFoundException("Category not found");
         }
 

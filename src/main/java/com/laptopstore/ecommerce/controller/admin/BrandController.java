@@ -28,7 +28,10 @@ public class BrandController {
     }
 
     @GetMapping("")
-    public String showBrandPage(Model model, BrandCriteriaDto brandCriteriaDto) {
+    public String showBrandPage(
+            Model model,
+            BrandCriteriaDto brandCriteriaDto
+    ) throws Exception {
         Page<Brand> brands = this.brandService.handleGetAllBrands(brandCriteriaDto);
         model.addAttribute("brandList", brands.getContent());
         model.addAttribute("totalPages", brands.getTotalPages());
@@ -41,7 +44,8 @@ public class BrandController {
 
     @GetMapping("/create")
     public String showCreateBrandPage(
-            Model model) {
+            Model model
+    ) throws Exception {
 
         model.addAttribute("createBrandDto", new CreateBrandDto());
 
@@ -50,7 +54,9 @@ public class BrandController {
 
     @PostMapping("/create")
     public String createBrand(
-            @Valid CreateBrandDto createBrandDto, BindingResult bindingResult) {
+            @Valid CreateBrandDto createBrandDto,
+            BindingResult bindingResult
+    ) throws Exception {
         if (bindingResult.hasErrors()) {
             return "/admin/brand/create";
         }
@@ -64,9 +70,9 @@ public class BrandController {
 
     @GetMapping("/edit/{id}")
     public String showEditPage(
-            @PathVariable Long id, Model model)
-            throws Exception {
-
+            @PathVariable Long id,
+            Model model
+    ) throws Exception {
         Brand brand = brandService.handleGetBrandById(id);
         if (brand == null) {
             throw new NotFoundException("Brand not found");
@@ -86,8 +92,8 @@ public class BrandController {
     public String editBrand(
             @PathVariable Long id,
             @Valid UpdateBrandDto updateBrandDto,
-            BindingResult bindingResult)
-            throws Exception {
+            BindingResult bindingResult
+    ) throws Exception {
 
         if (bindingResult.hasErrors()) {
             return "/admin/brand/edit";
@@ -106,9 +112,10 @@ public class BrandController {
     }
 
     @GetMapping("/delete/{id}")
-    public String showDeleteBrandPage(@PathVariable Long id,
-            Model model)
-            throws Exception {
+    public String showDeleteBrandPage(
+            @PathVariable Long id,
+            Model model
+    ) throws Exception {
         Brand brand = brandService.handleGetBrandById(id);
         if (brand == null) {
             throw new NotFoundException("Brand not found");
@@ -119,7 +126,9 @@ public class BrandController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteBrand(@PathVariable Long id) {
+    public String deleteBrand(
+            @PathVariable Long id
+    ) throws Exception {
         this.brandService.handleDeleteBrandById(id);
 
         String successMessage = "Brand deleted successfully";
@@ -128,9 +137,12 @@ public class BrandController {
     }
 
     @GetMapping("/details/{id}")
-    public String showDetailsPage(@PathVariable Long id, Model model){
+    public String showDetailsPage(
+            @PathVariable Long id,
+            Model model
+    ) throws Exception {
         Brand brand = this.brandService.handleGetBrandById(id);
-        if(brand == null){
+        if (brand == null) {
             throw new NotFoundException("Brand not found");
         }
 

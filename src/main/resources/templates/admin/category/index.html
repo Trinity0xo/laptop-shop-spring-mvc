@@ -12,11 +12,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" integrity="sha512-8D+M+7Y6jVsEa7RD6Kv/Z7EImSpNpQllgaEIQAtqHcI0H6F4iZknRj0Nx1DCdB+TwBaS+702BGWYC0Ze2hpExQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/libraries/jquery-toast-plugin/jquery.toast.css" />
   <link rel="stylesheet" href="/admin/css/reset.css" />
   <link rel="stylesheet" href="/admin/css/style.css" />
   <link rel="stylesheet" href="/admin/css/layout.css" />
-  <link rel="stylesheet" href="/admin/css/content.css" />
+  <link rel="stylesheet" href="/admin/css/category.css" />
 </head>
 
 <body>
@@ -31,100 +31,163 @@
     <!-- header -->
     <div th:replace="/admin/layout/header"></div>
 
-
+    <!-- main -->
     <main>
       <form method="get"  th:action="@{/dashboard/category}">
         <div class="container-fluid">
+          <!-- breadcrumb -->
           <ul class="breadcrumb">
             <li><a href="/dashboard">Dashboard</a></li>
             <li>Category</li>
           </ul>
-          <div class="content">
-            <h3>Category</h3>
+
+          <div class="category-wrapper">
+            <h1 class="title">Category</h1>
+
+            <!-- header -->
             <div class="header">
-              <div class="filter">
-                <div class="input-group">
+              <div class="filters-wrapper">
+                <div class="limit">
                   <label for="limit">Limit: </label>
                   <select class="limit-select" name="limit" id="limit" onchange="this.form.submit()">
-                    <option th:value="10" th:selected="${query.limit == '10'}">10</option>
-                    <option th:value="20" th:selected="${query.limit == '20'}">20</option>
-                    <option th:value="40" th:selected="${query.limit == '40'}">40</option>
-                    <option th:value="80" th:selected="${query.limit == '80'}">80</option>
+                    <option th:value="10" th:selected="${query.getIntegerLimit() == 10}">10</option>
+                    <option th:value="20" th:selected="${query.getIntegerLimit() == 20}">20</option>
+                    <option th:value="40" th:selected="${query.getIntegerLimit() == 40}">40</option>
+                    <option th:value="80" th:selected="${query.getIntegerLimit() == 80}">80</option>
                   </select>
                 </div>
-                <div class="input-group">
-                  <input class="search-box" type="text" name="name" id="name" th:value="${query.name}" placeholder="Search here..." />
+
+                <div class="search">
+                  <input class="search-box" type="text" name="name" id="name" th:value="${query.name}" placeholder="Search name..." />
                   <button type="submit"  class="search-button">Search</button>
                 </div>
+
                 <input type="hidden" name="sortBy" th:value="${query.sortBy}" />
                 <input type="hidden" name="sortDirection" th:value="${query.sortDirection}" />
               </div>
-              <a class="create-button" href="/dashboard/category/create"><i class="fa-solid fa-plus"></i>Add</a>
+
+              <a class="create-new-button" href="/dashboard/category/create"><i class="fa-solid fa-plus"></i>Add</a>
             </div>
-            <div th:if="${query.name != null and query.name != ''}" class="search-results-message">
-              <h4>
-                <span class="result-count" th:text="${resultCount}"></span> results for "<span class="result-query" th:text="${query.name}"></span>"
-              </h4>
-              <a th:href="@{'/dashboard/category'(name='', limit=${query.limit}, page=1, sortBy='id', sortDirection=${query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC ? 'ASC' : 'DESC'})}" class="reset-search">reset</a>
+
+            <!-- search result -->
+            <div class="search-result-wrapper"
+                 th:if="${query.name != null and query.name != ''}"
+            >
+              <p class="search-result-message">
+                <span
+                        class="result-count"
+                        th:text="${resultCount}"
+                >
+                </span> results for "
+                <span
+                        class="result-query"
+                        th:text="${query.name}">
+                </span>"
+              </p>
+              <a
+                      class="search-result-reset"
+                      th:href="${'/dashboard/category' + query.toQuery()
+                                              .replace('name=' + query.name , '')
+                                              .replace('&page=' + query.getIntegerPage(), 'page=1')}"
+              >
+                reset
+              </a>
             </div>
+
+            <!-- table -->
             <div class="table-wrapper">
               <table>
                 <thead>
                 <tr class="table-row">
-                  <th class="col-width-1">
-                    <a th:href="@{'/dashboard/category'(name=${query.name}, limit=${query.limit}, page=1, sortBy='id', sortDirection=${query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC ? 'ASC' : 'DESC'})}">
+                  <th class="col-width-1"
+                      th:with="sortDirection=${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                  >
+                    <a th:href="${'/dashboard/category' + query.toQuery()
+                                                           .replace('sortBy=' + query.sortBy, 'sortBy=id')
+                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                           }"
+                    >
                       ID
-                      <i th:if="${query.sortBy == 'id' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                      <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
                          class="fa-solid fa-arrow-down"></i>
 
-                      <i th:if="${query.sortBy == 'id' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                      <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
                          class="fa-solid fa-arrow-up"></i>
                     </a>
                   </th>
                   <th class="col-width-1">
-                    Picture
+                    Image
                   </th>
-                  <th class="col-width-2">
-                    <a th:href="@{'/dashboard/category'(name=${query.name}, limit=${query.limit}, page=1, sortBy='name', sortDirection=${query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC ? 'ASC' : 'DESC'})}">
+                  <th class="col-width-2"
+                      th:with="sortDirection=${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                  >
+                    <a th:href="${'/dashboard/category' + query.toQuery()
+                                                           .replace('sortBy=' + query.sortBy, 'sortBy=name')
+                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                           }"
+                    >
                       Name
-                      <i th:if="${query.sortBy == 'name' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                      <i th:if="${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
                          class="fa-solid fa-arrow-down"></i>
 
-                      <i th:if="${query.sortBy == 'name' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                      <i th:if="${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
                          class="fa-solid fa-arrow-up"></i>
                     </a>
                   </th>
-                  <th class="col-width-2">
-                    <a th:href="@{'/dashboard/category'(name=${query.name}, limit=${query.limit}, page=1, sortBy='description', sortDirection=${query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC ? 'ASC' : 'DESC'})}">
+                  <th class="col-width-2"
+                      th:with="sortDirection=${query.sortBy == 'description' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                  >
+                    <a th:href="${'/dashboard/category' + query.toQuery()
+                                                           .replace('sortBy=' + query.sortBy, 'sortBy=description')
+                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                           }"
+                    >
                       Description
-                      <i th:if="${query.sortBy == 'description' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                      <i th:if="${query.sortBy == 'description' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
                          class="fa-solid fa-arrow-down"></i>
 
-                      <i th:if="${query.sortBy == 'description' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                      <i th:if="${query.sortBy == 'description' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
                          class="fa-solid fa-arrow-up"></i>
                     </a>
                   </th>
-                  <th class="col-width-2">
-                    <a th:href="@{'/dashboard/category'(name=${query.name}, limit=${query.limit}, page=1, sortBy='createdAt', sortDirection=${query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC ? 'ASC' : 'DESC'})}">
+                  <th class="col-width-2"
+                      th:with="sortDirection=${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                  >
+                    <a th:href="${'/dashboard/category' + query.toQuery()
+                                                           .replace('sortBy=' + query.sortBy, 'sortBy=createdAt')
+                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                           }"
+                    >
                       Created at
-                      <i th:if="${query.sortBy == 'createdAt' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                      <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
                          class="fa-solid fa-arrow-down"></i>
 
-                      <i th:if="${query.sortBy == 'createdAt' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                      <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
                          class="fa-solid fa-arrow-up"></i>
                     </a>
                   </th>
-                  <th class="col-width-2">
-                    <a th:href="@{'/dashboard/category'(name=${query.name}, limit=${query.limit}, page=1, sortBy='updatedAt', sortDirection=${query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC ? 'ASC' : 'DESC'})}">
+                  <th class="col-width-2"
+                      th:with="sortDirection=${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                  >
+                    <a th:href="${'/dashboard/category' + query.toQuery()
+                                                           .replace('sortBy=' + query.sortBy, 'sortBy=updatedAt')
+                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                           }"
+                    >
                       Updated at
-                      <i th:if="${query.sortBy == 'updatedAt' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                      <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
                          class="fa-solid fa-arrow-down"></i>
 
-                      <i th:if="${query.sortBy == 'updatedAt' and query.sortDirection == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                      <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
                          class="fa-solid fa-arrow-up"></i>
                     </a>
                   </th>
-                  <th class="col-width-2">Actions</th>
+                  <th class="col-width-2"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -133,8 +196,8 @@
                     <span th:text="${category.id}"></span>
                   </td>
                   <td>
-                    <div class="image-wrapper picture">
-                      <img th:src="@{/uploads/category_pictures/{image}(image=${category.image})}" alt="category picture" />
+                    <div class="image-wrapper">
+                      <img th:src="${'/' + resourcesMappingFolder + '/' + categoryPicturesFolder + '/' + category.image}" alt="category image" />
                     </div>
                   </td>
                   <td>
@@ -149,28 +212,41 @@
                   <td>
                     <span th:text="${#temporals.format(category.updatedAt, 'dd-MM-yyyy HH:mm')}"></span>
                   </td>
-                  <td class="table-actions">
-                    <a class="view-button" th:href="@{/dashboard/category/details/{id}(id=${category.id})}">View</a>
-                    <a class="edit-button" th:href="@{/dashboard/category/edit/{id}(id=${category.id})}">Edit</a>
-                    <a class="delete-button" th:href="@{/dashboard/category/delete/{id}(id=${category.id})}">Delete</a>
+                  <td>
+                    <div class="actions">
+                      <a class="view-button" th:href="@{/dashboard/category/details/{id}(id=${category.id})}">View</a>
+                      <a class="edit-button" th:href="@{/dashboard/category/edit/{id}(id=${category.id})}">Edit</a>
+                      <a class="delete-button" th:href="@{/dashboard/category/delete/{id}(id=${category.id})}">Delete</a>
+                    </div>
                   </td>
                 </tr>
                 </tbody>
               </table>
             </div>
+
+            <!-- pagination -->
             <ul class="pagination" th:if="${totalPages > 0}">
               <li>
-                <a  th:href="@{'/dashboard/category'(name=${query.name}, limit=${query.limit}, page=${currentPage - 1}, sortBy=${query.sortBy}, sortDirection=${query.sortDirection})}" class="previous" th:classappend="${currentPage == 1 ? 'disabled' : ''}"><i class="fa-solid fa-chevron-left"></i></a>
+                <a class="previous"
+                   th:href="${'/dashboard/category' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage - 1))}"
+                   th:classappend="${currentPage == 1 ? 'disabled' : ''}"
+                >
+                  <i class="fa-solid fa-chevron-left"></i>
+                </a>
               </li>
               <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
-                <a
-                        th:href="@{'/dashboard/category'(name=${query.name}, limit=${query.limit}, page=${pageNumber + 1}, sortBy=${query.sortBy}, sortDirection=${query.sortDirection})}"
-                        th:class="${currentPage == pageNumber + 1 ? 'active' : ''}"
-                        th:text="${pageNumber + 1}">
+                <a th:href="${'/dashboard/category' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (pageNumber + 1))}"
+                   th:class="${currentPage == pageNumber + 1 ? 'active' : ''}"
+                   th:text="${pageNumber + 1}">
                 </a>
               </li>
               <li>
-                <a  th:href="@{'/dashboard/category'(name=${query.name}, limit=${query.limit}, page=${currentPage + 1}, sortBy=${query.sortBy}, sortDirection=${query.sortDirection})}" class="next" th:classappend="${currentPage + 1 > totalPages ? 'disabled' : ''}"><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="next"
+                   th:href="${'/dashboard/category' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage + 1))}"
+                   th:classappend="${currentPage + 1 > totalPages ? 'disabled' : ''}"
+                >
+                  <i class="fa-solid fa-chevron-right"></i>
+                </a>
               </li>
             </ul>
             <ul class="pagination" th:if="${totalPages == 0}">
@@ -194,10 +270,8 @@
   </div>
 </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js" integrity="sha512-Y+cHVeYzi7pamIOGBwYHrynWWTKImI9G78i53+azDb1uPmU1Dz9/r2BLxGXWgOC7FhwAGsy3/9YpNYaoBy7Kzg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/libraries/jquery/jquery.js"></script>
+<script src="/libraries/jquery-toast-plugin/jquery.toast.js"></script>
 <script src="/admin/js/main.js"></script>
 
 </html>

@@ -2,6 +2,8 @@ package com.laptopstore.ecommerce.service;
 
 import java.util.List;
 
+import com.laptopstore.ecommerce.model.Brand;
+import com.laptopstore.ecommerce.util.SortFields;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,6 +24,10 @@ public class CategoryService {
     public CategoryService(CategoryRepository categoryRepository, PageableService pageableService) {
         this.categoryRepository = categoryRepository;
         this.pageableService = pageableService;
+    }
+
+    public long handleCountCategory(){
+        return categoryRepository.count();
     }
 
     public void handleCreateCategory(CreateCategoryDto createCategoryDto, String imageName) {
@@ -55,9 +61,11 @@ public class CategoryService {
     public Page<Category> handleGetAllCategories(CategoryCriteriaDto categoryCriteriaDto) {
         Specification<Category> specification = Specification.where(null);
 
+        List<String> validSortBy = SortFields.getValidSortFields(Category.class);
+
         Pageable pageable = pageableService.handleCreatePageable(categoryCriteriaDto.getIntegerPage(),
                 categoryCriteriaDto.getIntegerLimit(), categoryCriteriaDto.getSortBy(),
-                categoryCriteriaDto.getEnumSortDirection());
+                categoryCriteriaDto.getEnumSortDirection(),validSortBy);
 
         if (categoryCriteriaDto.getName() != null &&
                 !categoryCriteriaDto.getName().isEmpty()) {

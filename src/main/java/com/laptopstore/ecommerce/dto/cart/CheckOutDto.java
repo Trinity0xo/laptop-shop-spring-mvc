@@ -17,4 +17,6 @@ public class CheckOutDto {
     private String receiverPhone;
     private String receiverAddress;
     private String receiverNote;
+    private Double totalPrice;
+    private List<CartDetails> validCheckOutProducts;
 }

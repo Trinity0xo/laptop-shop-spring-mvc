@@ -185,7 +185,7 @@
               <h2 class="title">Order Summary</h2>
               <div class="price-group">
                 <p class="label">Total:</p>
-                <p class="price" th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                <p class="price" th:text="${#numbers.formatDecimal(checkOutDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
               </div>
               <div class="price-group">
                 <p class="label">Shipping:</p>
@@ -194,7 +194,7 @@
               <div class="divider"></div>
               <div class="price-group">
                 <p class="label">Grand Total:</p>
-                <p class="price" th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                <p class="price" th:text="${#numbers.formatDecimal(checkOutDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
               </div>
             </div>
             <div class="actions">
@@ -210,10 +210,13 @@
         <div class="order-items-wrapper">
           <h2 class="title">Order items</h2>
           <ul class="order-item-list">
-            <li class="order-item" th:each="checkOutProduct : ${checkOutProducts}">
+            <li class="order-item" th:each="checkOutProduct : ${checkOutDto.validCheckOutProducts}">
               <div class="product-wrapper">
                 <div class="image-wrapper">
-                  <img th:src="@{/uploads/product_pictures/{image}(image=${checkOutProduct.product.productImages != null and checkOutProduct.product.productImages.size() > 0 ? checkOutProduct.product.productImages[0].imageName : ''})}" alt="product image" />
+                  <img
+                          th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (checkOutProduct.product.productImages != null and checkOutProduct.product.productImages.size() > 0 ? checkOutProduct.product.productImages[0].imageName : '')}"
+                          alt="product image"
+                  />
                 </div>
                 <div class="details-wrapper">
                   <p class="name" th:text="${checkOutProduct.product.name}"></p>

@@ -22,7 +22,9 @@ public class RoleController {
 
     @GetMapping("")
     public String showRolePage(
-            RoleCriteriaDto roleCriteriaDto, Model model) {
+            RoleCriteriaDto roleCriteriaDto,
+            Model model
+    ) throws Exception {
         Page<Role> roles = this.roleService.handleGetAllRoles(roleCriteriaDto);
         model.addAttribute("roleList", roles.getContent());
         model.addAttribute("totalPages", roles.getTotalPages());
@@ -36,7 +38,8 @@ public class RoleController {
     @GetMapping("/details/{id}")
     public String showRoleDetailsPage(
             @PathVariable Long id,
-            Model model) {
+            Model model
+    ) throws Exception {
         Role role = this.roleService.handleGetRoleById(id);
         if (role == null) {
             throw new NotFoundException("Role not found");

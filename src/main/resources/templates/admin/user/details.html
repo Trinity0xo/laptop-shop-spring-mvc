@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/admin/css/reset.css" />
   <link rel="stylesheet" href="/admin/css/style.css" />
   <link rel="stylesheet" href="/admin/css/layout.css" />
-  <link rel="stylesheet" href="/admin/css/content.css" />
+  <link rel="stylesheet" href="/admin/css/user.css" />
 </head>
 
 <body>
@@ -30,16 +30,18 @@
     <!-- header -->
     <div th:replace="/admin/layout/header"></div>
 
+    <!-- main -->
     <main>
       <div class="container-fluid">
+        <!-- breadcrumb -->
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/user">User</a></li>
           <li>Details</li>
         </ul>
 
-        <div class="content">
-          <h3>User "<span th:text="${user.firstName + ' ' + user.lastName}"></span>"</h3>
+        <div class="user-wrapper">
+          <h1 class="title">User "<span th:text="${user.firstName + ' ' + user.lastName}"></span>"</h1>
 
           <div class="description-list-wrapper">
             <dl class="row">
@@ -47,8 +49,11 @@
                 Avatar:
               </dt>
               <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                <div class="image-wrapper avatar">
+                <div class="avatar-wrapper" th:if="${user.avatar == null or user.avatar.isEmpty()}">
                   <img th:src="@{/images/default-avatar.png}" alt="avatar">
+                </div>
+                <div class="avatar-wrapper" th:if="${user.avatar != null and !user.avatar.isEmpty()}">
+                  <img th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + user.avatar}" alt="avatar" />
                 </div>
               </dd>
               <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
@@ -103,7 +108,7 @@
               <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(user.updatedAt, 'dd-MM-yyyy HH:mm')}">
               </dd>
             </dl>
-            <div class="description-list-actions">
+            <div class="actions">
               <a href="/dashboard/user" class="back-button">Back</a>
             </div>
           </div>
@@ -116,9 +121,7 @@
   </div>
 </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/libraries/jquery/jquery.js"></script>
 <script src="/admin/js/main.js"></script>
 
 </html>

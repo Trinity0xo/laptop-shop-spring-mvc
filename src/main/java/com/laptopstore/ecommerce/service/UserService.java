@@ -9,10 +9,13 @@ import com.laptopstore.ecommerce.model.User;
 import com.laptopstore.ecommerce.repository.RoleRepository;
 import com.laptopstore.ecommerce.repository.UserRepository;
 import com.laptopstore.ecommerce.specification.UserSpecification;
+import com.laptopstore.ecommerce.util.SortFields;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -26,6 +29,10 @@ public class UserService {
         this.pageableService = pageableService;
     }
 
+    public long handleCountUserByRole(Role role) {
+        return userRepository.countUserByRole(role);
+    }
+
     public boolean handleCheckIfUserExistsByEmail(String email){
         return this.userRepository.existsUserByEmail(email);
     }
@@ -34,14 +41,13 @@ public class UserService {
         return this.userRepository.findByEmail(email).orElse(null);
     }
 
-    public void handleUpdateAccountInfo(User user, UpdateAccountDto updateAccountDto) {
+    public User handleUpdateAccountInfo(User user, UpdateAccountDto updateAccountDto) {
         user.setFirstName(updateAccountDto.getFirstName());
         user.setLastName(updateAccountDto.getLastName());
         user.setAddress(updateAccountDto.getAddress());
-//        user.setAvatar(accountDto.getAvatar());
         user.setPhone(updateAccountDto.getPhone());
 
-        this.userRepository.save(user);
+       return this.userRepository.save(user);
     }
 
     public User handleCreateNewUser(RegisterDto registerDto) {
@@ -60,13 +66,17 @@ public class UserService {
     }
 
     public Page<User> handleGetAllUsers(UserCriteriaDto userCriteriaDto) {
-        Specification<User> specification = Specification.where(null);
+        Specification<User> specification = Specification.where(
+                (root, query, criteriaBuilder) -> criteriaBuilder.notEqual(root.get("role").get("name"), "ADMIN")
+        );
+
+        List<String> validSortBy = SortFields.getValidSortFields(User.class);
 
         Pageable pageable = pageableService.handleCreatePageable(
                 userCriteriaDto.getIntegerPage(),
                 userCriteriaDto.getIntegerLimit(),
                 userCriteriaDto.getSortBy(),
-                userCriteriaDto.getEnumSortDirection());
+                userCriteriaDto.getEnumSortDirection(),validSortBy);
 
         if (userCriteriaDto.getEmail() != null &&
                 !userCriteriaDto.getEmail().isEmpty()) {

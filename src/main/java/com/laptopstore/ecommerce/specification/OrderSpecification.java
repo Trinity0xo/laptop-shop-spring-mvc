@@ -2,6 +2,8 @@ package com.laptopstore.ecommerce.specification;
 
 import com.laptopstore.ecommerce.model.Order;
 import com.laptopstore.ecommerce.model.User;
+import com.laptopstore.ecommerce.util.constant.OrderStatusEnum;
+import com.laptopstore.ecommerce.util.constant.PaymentMethodEnum;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
@@ -21,11 +23,11 @@ public class OrderSpecification {
                 "%" + receiverEmail + "%");
     }
 
-    public static Specification<Order> paymentMethodIn(List<String> paymentMethods) {
+    public static Specification<Order> paymentMethodIn(List<PaymentMethodEnum> paymentMethods) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.in(root.get("paymentMethod")).value(paymentMethods);
     }
 
-    public static Specification<Order> orderStatusIn(List<String> orderStatus) {
+    public static Specification<Order> orderStatusIn(List<OrderStatusEnum> orderStatus) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.in(root.get("orderStatus")).value(orderStatus);
     }
 

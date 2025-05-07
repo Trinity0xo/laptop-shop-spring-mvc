@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/admin/css/reset.css" />
   <link rel="stylesheet" href="/admin/css/style.css" />
   <link rel="stylesheet" href="/admin/css/layout.css" />
-  <link rel="stylesheet" href="/admin/css/content.css" />
+  <link rel="stylesheet" href="/admin/css/category.css" />
 </head>
 
 <body>
@@ -30,16 +30,18 @@
     <!-- header -->
     <div th:replace="/admin/layout/header"></div>
 
+    <!-- main -->
     <main>
       <div class="container-fluid">
+        <!-- breadcrumb -->
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/role">Category</a></li>
           <li>Details</li>
         </ul>
 
-        <div class="content">
-          <h3>Category "<span th:text="${category.name}"></span>"</h3>
+        <div class="category-wrapper">
+          <h1 class="title">Category "<span th:text="${category.name}"></span>"</h1>
 
           <div class="description-list-wrapper">
             <dl class="row">
@@ -48,7 +50,7 @@
               </dt>
               <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
                 <div class="image-wrapper">
-                  <img th:src="@{/uploads/category_pictures/{image}(image=${category.image})}" alt="category image">
+                  <img th:src="${'/' + resourcesMappingFolder + '/' + categoryPicturesFolder + '/' + category.image}" alt="category image" />
                 </div>
               </dd>
               <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
@@ -62,27 +64,23 @@
               </dt>
               <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${category.name}">
               </dd>
-
               <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                 Description:
               </dt>
-
               <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${category.description}">
               </dd>
-
               <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                 Created at:
               </dt>
               <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(category.updatedAt, 'dd-MM-yyyy HH:mm')}">
               </dd>
-
               <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                 Updated at:
               </dt>
               <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(category.updatedAt, 'dd-MM-yyyy HH:mm')}">
               </dd>
             </dl>
-            <div class="description-list-actions">
+            <div class="actions">
               <a th:href="@{/dashboard/category/edit/{id}(id=${category.id})}" class="edit-button">Edit</a>
               <a href="/dashboard/category" class="back-button">Back</a>
             </div>
@@ -96,9 +94,7 @@
   </div>
 </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/libraries/jquery/jquery.js"></script>
 <script src="/admin/js/main.js"></script>
 
 </html>

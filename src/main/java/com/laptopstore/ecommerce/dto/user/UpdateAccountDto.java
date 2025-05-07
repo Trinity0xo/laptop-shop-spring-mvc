@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @UpdateAccountConstraint
 public class UpdateAccountDto {
-//    private MultipartFile avatar;
+    private MultipartFile avatar;
     private String firstName;
     private String lastName;
     private String phone;

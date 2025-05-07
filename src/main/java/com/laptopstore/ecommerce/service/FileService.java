@@ -15,6 +15,9 @@ public class FileService {
     @Value("${files.path}")
     private String filesPath;
 
+    @Value("${static.resources.mapping.folder}")
+    private String resourcesMappingFolder;
+
     public String handleUploadFile(MultipartFile file, String targetFolder) {
         try {
             byte[] bytes = file.getBytes();
@@ -22,7 +25,7 @@ public class FileService {
             String fileType = Objects.requireNonNull(file.getContentType()).split("/")[1];
             String newFileName = targetFolder + "-" + System.currentTimeMillis() + "." + fileType;
 
-            Path basePath = Paths.get(filesPath);
+            Path basePath = Paths.get(filesPath).resolve(resourcesMappingFolder);
             Path targetPath = basePath.resolve(targetFolder);
 
             if (Files.notExists(targetPath)) {
@@ -46,7 +49,7 @@ public class FileService {
 
     public void handleDeleteFile(String fileName, String targetFolder) {
         try {
-            Path basePath = Paths.get(filesPath);
+            Path basePath = Paths.get(filesPath).resolve(resourcesMappingFolder);
             Path targetPath = basePath.resolve(targetFolder);
             Path filePath = targetPath.resolve(fileName);
 

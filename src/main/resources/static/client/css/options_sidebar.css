@@ -309,9 +309,14 @@
     width: 100%;
     font-size: 1.5rem;
     color: #333;
-    border-radius: 10px;
+    border-radius: 50px;
+    transition: 0.3s;
 }
 .sidebar-options-wrapper .option-list .option-item a:hover {
+    background-color: #3b71ca;
+    color: white;
+}
+.sidebar-options-wrapper .option-list .option-item a.active {
     background-color: #3b71ca;
     color: white;
 }/*# sourceMappingURL=options_sidebar.css.map */

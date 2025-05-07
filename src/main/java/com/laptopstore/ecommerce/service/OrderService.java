@@ -2,8 +2,11 @@ package com.laptopstore.ecommerce.service;
 
 import java.util.List;
 
+import com.laptopstore.ecommerce.dto.PageableCriteriaDto;
 import com.laptopstore.ecommerce.model.*;
 import com.laptopstore.ecommerce.specification.OrderSpecification;
+import com.laptopstore.ecommerce.util.SortFields;
+import com.laptopstore.ecommerce.util.constant.SortDirectionEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,10 +26,14 @@ public class OrderService {
     private final OrderDetailsRepository orderDetailsRepository;
 
     public OrderService(OrderRepository orderRepository, PageableService pageableService,
-            OrderDetailsRepository orderDetailsRepository) {
+                        OrderDetailsRepository orderDetailsRepository) {
         this.orderRepository = orderRepository;
         this.pageableService = pageableService;
         this.orderDetailsRepository = orderDetailsRepository;
+    }
+
+    public long handleCountOrder() {
+        return orderRepository.count();
     }
 
     public Order handleGetOrderById(Long id) {
@@ -37,28 +44,41 @@ public class OrderService {
         return this.orderRepository.findByIdAndUser(id, user).orElse(null);
     }
 
+    public Page<Order> handleGetRecentOrders(PageableCriteriaDto pageableCriteriaDto){
+        Pageable pageable = pageableService.handleCreatePageable(
+                pageableCriteriaDto.getIntegerPage(),
+                pageableCriteriaDto.getIntegerLimit(),
+                pageableCriteriaDto.getSortBy(),
+                pageableCriteriaDto.getEnumSortDirection()
+        );
+
+        return this.orderRepository.findAll(pageable);
+    }
+
     public Page<Order> handleGetAllOrders(OrderCriteriaDto orderCriteriaDto) {
         Specification<Order> specification = Specification.where(null);
 
+        List<String> validSortBy = SortFields.getValidSortFields(Order.class);
+
         Pageable pageable = pageableService.handleCreatePageable(orderCriteriaDto.getIntegerPage(),
                 orderCriteriaDto.getIntegerLimit(), orderCriteriaDto.getSortBy(),
-                orderCriteriaDto.getEnumSortDirection());
+                orderCriteriaDto.getEnumSortDirection(), validSortBy);
 
-        if (orderCriteriaDto.getReceiverEmail() != null && !orderCriteriaDto.getReceiverEmail().isEmpty()) {
+//        if (orderCriteriaDto.getReceiverEmail() != null && !orderCriteriaDto.getReceiverEmail().isEmpty()) {
+//            Specification<Order> currentSpecification = OrderSpecification
+//                    .emailLike(orderCriteriaDto.getReceiverEmail());
+//            specification = specification.and(currentSpecification);
+//        }
+
+        if (orderCriteriaDto.getEnumOrderStatus() != null && !orderCriteriaDto.getEnumOrderStatus().isEmpty()) {
             Specification<Order> currentSpecification = OrderSpecification
-                    .emailLike(orderCriteriaDto.getReceiverEmail());
+                    .orderStatusIn(orderCriteriaDto.getEnumOrderStatus());
             specification = specification.and(currentSpecification);
         }
 
-        if (orderCriteriaDto.getOrderStatus() != null && !orderCriteriaDto.getOrderStatus().isEmpty()) {
+        if (orderCriteriaDto.getEnumPaymentMethods() != null && !orderCriteriaDto.getEnumPaymentMethods().isEmpty()) {
             Specification<Order> currentSpecification = OrderSpecification
-                    .orderStatusIn(orderCriteriaDto.getOrderStatus());
-            specification = specification.and(currentSpecification);
-        }
-
-        if (orderCriteriaDto.getPaymentMethods() != null && !orderCriteriaDto.getPaymentMethods().isEmpty()) {
-            Specification<Order> currentSpecification = OrderSpecification
-                    .paymentMethodIn(orderCriteriaDto.getPaymentMethods());
+                    .paymentMethodIn(orderCriteriaDto.getEnumPaymentMethods());
             specification = specification.and(currentSpecification);
         }
 
@@ -66,6 +86,11 @@ public class OrderService {
                 && orderCriteriaDto.getDoubleMaxTotalPrice() >= orderCriteriaDto.getDoubleMinTotalPrice()) {
             Specification<Order> currentSpecification = OrderSpecification
                     .totalPriceBetween(orderCriteriaDto.getDoubleMinTotalPrice(), orderCriteriaDto.getDoubleMaxTotalPrice());
+            specification = specification.and(currentSpecification);
+        }
+
+        if (orderCriteriaDto.getLongOrderId() != null && orderCriteriaDto.getLongOrderId() > 0) {
+            Specification<Order> currentSpecification = OrderSpecification.equalId(orderCriteriaDto.getLongOrderId());
             specification = specification.and(currentSpecification);
         }
 
@@ -77,25 +102,27 @@ public class OrderService {
                 (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("user"), user)
         );
 
+        List<String> validSortBy = SortFields.getValidSortFields(Order.class);
+
         Pageable pageable = pageableService.handleCreatePageable(orderCriteriaDto.getIntegerPage(),
                 orderCriteriaDto.getIntegerLimit(), orderCriteriaDto.getSortBy(),
-                orderCriteriaDto.getEnumSortDirection());
+                orderCriteriaDto.getEnumSortDirection(), validSortBy);
 
-        if (orderCriteriaDto.getReceiverEmail() != null && !orderCriteriaDto.getReceiverEmail().isEmpty()) {
+//        if (orderCriteriaDto.getReceiverEmail() != null && !orderCriteriaDto.getReceiverEmail().isEmpty()) {
+//            Specification<Order> currentSpecification = OrderSpecification
+//                    .emailLike(orderCriteriaDto.getReceiverEmail());
+//            specification = specification.and(currentSpecification);
+//        }
+
+        if (orderCriteriaDto.getEnumOrderStatus() != null && !orderCriteriaDto.getEnumOrderStatus().isEmpty()) {
             Specification<Order> currentSpecification = OrderSpecification
-                    .emailLike(orderCriteriaDto.getReceiverEmail());
+                    .orderStatusIn(orderCriteriaDto.getEnumOrderStatus());
             specification = specification.and(currentSpecification);
         }
 
-        if (orderCriteriaDto.getOrderStatus() != null && !orderCriteriaDto.getOrderStatus().isEmpty()) {
+        if (orderCriteriaDto.getEnumPaymentMethods() != null && !orderCriteriaDto.getEnumPaymentMethods().isEmpty()) {
             Specification<Order> currentSpecification = OrderSpecification
-                    .orderStatusIn(orderCriteriaDto.getOrderStatus());
-            specification = specification.and(currentSpecification);
-        }
-
-        if (orderCriteriaDto.getPaymentMethods() != null && !orderCriteriaDto.getPaymentMethods().isEmpty()) {
-            Specification<Order> currentSpecification = OrderSpecification
-                    .paymentMethodIn(orderCriteriaDto.getPaymentMethods());
+                    .paymentMethodIn(orderCriteriaDto.getEnumPaymentMethods());
             specification = specification.and(currentSpecification);
         }
 
@@ -106,7 +133,7 @@ public class OrderService {
             specification = specification.and(currentSpecification);
         }
 
-        if(orderCriteriaDto.getLongOrderId() != null && orderCriteriaDto.getLongOrderId() > 0) {
+        if (orderCriteriaDto.getLongOrderId() != null && orderCriteriaDto.getLongOrderId() > 0) {
             Specification<Order> currentSpecification = OrderSpecification.equalId(orderCriteriaDto.getLongOrderId());
             specification = specification.and(currentSpecification);
         }

@@ -1,5 +1,6 @@
 package com.laptopstore.ecommerce.specification;
 
+import com.laptopstore.ecommerce.util.constant.StockStatusEnum;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.laptopstore.ecommerce.model.Product;
@@ -39,12 +40,14 @@ public class ProductSpecification {
                 criteriaBuilder.le(root.get("discountPrice"), maxDiscountPrice));
     }
 
-    public static Specification<Product> stockStatus(Boolean inStock) {
+    public static Specification<Product> stockStatus(StockStatusEnum stockStatus) {
         return (root, query, criteriaBuilder) -> {
-            if (!inStock) {
+            if (stockStatus.equals(StockStatusEnum.OUT_OF_STOCK)) {
                 return criteriaBuilder.le(root.get("quantity"), 0);
-            } else {
+            } else if(stockStatus.equals(StockStatusEnum.IN_STOCK)) {
                 return criteriaBuilder.gt(root.get("quantity"), 0);
+            }else{
+                return null;
             }
         };
     }

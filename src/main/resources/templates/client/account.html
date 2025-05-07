@@ -45,7 +45,7 @@
                 <div th:replace="/client/layout/options_sidebar"></div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                <form method="post" th:action="@{/account/update}" th:object="${updateAccountDto}">
+                <form method="post" th:action="@{/account/update}" th:object="${updateAccountDto}" enctype="multipart/form-data">
                     <div class="account-wrapper">
                         <h1 class="title">Account</h1>
                         <div class="input-group">
@@ -53,9 +53,16 @@
                             <div class="image-input-group">
                                 <div class="image-upload-wrapper avatar">
                                     <div class="image-preview">
-                                        <div class="image-preview-item">
+                                        <div class="image-preview-item" th:if="${userAvatar == null or userAvatar.isEmpty()}">
                                             <label for="image" class="image-edit-button"><i class="fa-solid fa-pen-to-square"></i></label>
                                             <img src="/images/default-avatar.png" alt="avatar" />
+                                        </div>
+                                        <div class="image-preview-item" th:if="${userAvatar != null and !userAvatar.isEmpty()}">
+                                            <label for="image" class="image-edit-button"><i class="fa-solid fa-pen-to-square"></i></label>
+                                            <img
+                                                    th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + userAvatar}"
+                                                    alt="avatar"
+                                            />
                                         </div>
                                     </div>
                                     <div class="image-upload-control">
@@ -70,6 +77,7 @@
                                                 accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"
                                         />
                                     </div>
+                                    <input type="hidden" name="deleteAvatarName" id="deleteAvatarName">
                                 </div>
                                 <span id="imageError" class="error-message"></span>
                             </div>

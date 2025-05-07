@@ -30,7 +30,10 @@ public class OrderController {
     }
 
     @GetMapping("")
-    public String showOrderPage(OrderCriteriaDto orderCriteriaDto, Model model) {
+    public String showOrderPage(
+            OrderCriteriaDto orderCriteriaDto,
+            Model model
+    ) throws Exception {
         Page<Order> orders = this.orderService.handleGetAllOrders(orderCriteriaDto);
         model.addAttribute("orderList", orders.getContent());
         model.addAttribute("totalPages", orders.getTotalPages());
@@ -46,8 +49,8 @@ public class OrderController {
     @GetMapping("/details/{id}")
     public String showOrderDetailsPage(
             @PathVariable Long id,
-            Model model)
-            throws Exception {
+            Model model
+    ) throws Exception {
         Order order = this.orderService.handleGetOrderById(id);
         if (order == null) {
             throw new NotFoundException("Order not found");
@@ -65,9 +68,9 @@ public class OrderController {
     public String showEditOrderPage(
             @PathVariable Long id,
             Model model
-    )throws Exception{
+    ) throws Exception {
         Order order = this.orderService.handleGetOrderById(id);
-        if(order == null){
+        if (order == null) {
             throw new NotFoundException("Order not found");
         }
 
@@ -85,8 +88,8 @@ public class OrderController {
     @PostMapping("/edit/{id}")
     public String editOrder(
             @PathVariable Long id,
-            UpdateOrderStatusDto updateOrderStatusDto)
-            throws Exception {
+            UpdateOrderStatusDto updateOrderStatusDto
+    ) throws Exception {
 
         Order order = this.orderService.handleGetOrderById(id);
         if (order == null) {
@@ -95,6 +98,8 @@ public class OrderController {
 
         this.orderService.handleUpdateOrderStatus(order, updateOrderStatusDto);
 
-        return "redirect:/dashboard/order/details/" + id;
+        String successMessage = "Order successfully updated";
+
+        return "redirect:/dashboard/order/details/" + id + "?successMessage=" + successMessage;
     }
 }

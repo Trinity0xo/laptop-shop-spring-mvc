@@ -50,8 +50,8 @@ public class ProductController {
     @GetMapping("")
     public String showProductPage(
             ProductCriteriaDto productCriteriaDto,
-            Model model) {
-
+            Model model
+    ) throws Exception {
         Page<Product> products = this.productService.handleGetAllProducts(productCriteriaDto);
         List<Category> categories = this.categoryService.handleGetAllCategories();
         List<Brand> brands = this.brandService.handleGetAllBrands();
@@ -67,7 +67,9 @@ public class ProductController {
     }
 
     @GetMapping("/create")
-    public String showCreateProductPage(Model model) {
+    public String showCreateProductPage(
+            Model model
+    ) throws Exception {
         List<Category> categories = this.categoryService.handleGetAllCategories();
         List<Brand> brands = this.brandService.handleGetAllBrands();
         model.addAttribute("createProductDto", new CreateProductDto());
@@ -122,8 +124,8 @@ public class ProductController {
     @GetMapping("/edit/{id}")
     public String showEditProductPage(
             @PathVariable Long id,
-            Model model) throws Exception {
-
+            Model model
+    ) throws Exception {
         Product product = this.productService.handleGetProductById(id);
         if (product == null) {
             throw new NotFoundException("Product not found");
@@ -213,9 +215,10 @@ public class ProductController {
     }
 
     @GetMapping("/delete/{id}")
-    public String showDeleteProductPage(@PathVariable Long id,
-            Model model)
-            throws Exception {
+    public String showDeleteProductPage(
+            @PathVariable Long id,
+            Model model
+    ) throws Exception {
         Product product = this.productService.handleGetProductById(id);
         if (product == null) {
             throw new NotFoundException("Product not found");
@@ -227,7 +230,9 @@ public class ProductController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable Long id) {
+    public String deleteCategory(
+            @PathVariable Long id
+    ) throws Exception {
         Product product = this.productService.handleGetProductById(id);
         if (product == null) {
             throw new NotFoundException("Product not found");
@@ -248,7 +253,10 @@ public class ProductController {
     }
 
     @GetMapping("/details/{id}")
-    public String showDetailsProductPage(@PathVariable Long id, Model model) {
+    public String showDetailsProductPage(
+            @PathVariable Long id,
+            Model model
+    ) throws Exception {
         Product product = this.productService.handleGetProductById(id);
         if (product == null) {
             throw new NotFoundException("Product not found");

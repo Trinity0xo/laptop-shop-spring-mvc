@@ -328,21 +328,23 @@
   min-width: 1500px;
 }
 
-main {
-  margin: 16px 0px;
+main .container-fluid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 main .container-fluid section {
   background-color: #fff;
   padding: 16px;
   box-shadow: rgba(108, 111, 115, 0.1) 0px 2px 4px 0px;
 }
-main .container-fluid .dashboard-cards {
+main .container-fluid section.dashboard-cards {
   margin: -5px;
   background-color: transparent;
   padding: 0;
   box-shadow: none;
 }
-main .container-fluid .dashboard-cards .dashboard-card {
+main .container-fluid section.dashboard-cards .dashboard-card {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -351,37 +353,94 @@ main .container-fluid .dashboard-cards .dashboard-card {
   padding: 16px 32px;
   text-align: center;
 }
-main .container-fluid .dashboard-cards .dashboard-card i {
+main .container-fluid section.dashboard-cards .dashboard-card i {
   font-size: 2rem;
+  color: #333;
 }
-main .container-fluid .dashboard-cards .dashboard-card .dashboard-card-title {
+main .container-fluid section.dashboard-cards .dashboard-card .dashboard-card-title {
   font-size: 1.5rem;
-  color: rgb(87, 88, 100);
+  color: #333;
 }
-main .container-fluid .dashboard-cards .dashboard-card .dashboard-card-value {
+main .container-fluid section.dashboard-cards .dashboard-card .dashboard-card-value {
   font-size: 2.5rem;
   color: #333;
 }
-main .container-fluid .dashboard-cards .dashboard-card .dashboard-card-separator {
-  opacity: 0.3;
-}
-main .container-fluid .dashboard-cards .dashboard-card .dashboard-card-link {
+main .container-fluid section.dashboard-cards .dashboard-card .dashboard-card-link {
   font-size: 1.5rem;
 }
-main .container-fluid h3 {
+main .container-fluid section.top-sale-products {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+main .container-fluid section.top-sale-products .header {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+@media (max-width: 576px) {
+  main .container-fluid section.top-sale-products .header {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+@media (min-width: 576px) {
+  main .container-fluid section.top-sale-products .header {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+@media (min-width: 768px) {
+  main .container-fluid section.top-sale-products .header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+@media (min-width: 992px) {
+  main .container-fluid section.top-sale-products .header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+@media (min-width: 1200px) {
+  main .container-fluid section.top-sale-products .header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+main .container-fluid section.top-sale-products .header .title {
   font-size: 2rem;
   color: #333;
-  margin-bottom: 16px;
 }
-main .container-fluid .table-wrapper {
+main .container-fluid section.top-sale-products .header .time-limit .time-limit-toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #333;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+main .container-fluid section.top-sale-products .header .time-limit .time-limit-toggle i {
+  font-size: 1.5rem;
+  color: #333;
+}
+main .container-fluid section.top-sale-products .header .time-limit .time-limit-toggle:hover {
+  background-color: #3b71ca;
+  color: white;
+}
+main .container-fluid section.top-sale-products .header .time-limit .time-limit-toggle:hover i {
+  color: white;
+}
+main .container-fluid section.top-sale-products .table-wrapper {
   overflow-x: auto;
 }
-main .container-fluid .table-wrapper table {
+main .container-fluid section.top-sale-products .table-wrapper table {
   border-collapse: collapse;
   width: 100%;
 }
-main .container-fluid .table-wrapper table th,
-main .container-fluid .table-wrapper table td {
+main .container-fluid section.top-sale-products .table-wrapper table th,
+main .container-fluid section.top-sale-products .table-wrapper table td {
   padding-top: 12px;
   padding-bottom: 12px;
   padding-right: 12px;
@@ -389,27 +448,147 @@ main .container-fluid .table-wrapper table td {
   text-align: start;
   color: #333;
 }
-main .container-fluid .table-wrapper table th span,
-main .container-fluid .table-wrapper table td span {
+main .container-fluid section.top-sale-products .table-wrapper table th span,
+main .container-fluid section.top-sale-products .table-wrapper table td span {
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-main .container-fluid .table-wrapper table tHead tr {
+main .container-fluid section.top-sale-products .table-wrapper table tHead tr {
   border-bottom: 1px solid rgba(87, 88, 100, 0.2);
 }
-main .container-fluid .table-wrapper table tBody tr:not(:last-child) {
+main .container-fluid section.top-sale-products .table-wrapper table tBody tr:not(:last-child) {
   border-bottom: 1px solid rgba(87, 88, 100, 0.2);
 }
-main .container-fluid .table-wrapper .image-wrapper {
-  width: 80px;
-  height: 80px;
+main .container-fluid section.top-sale-products .table-wrapper table .image-wrapper {
+  width: 64px;
+  height: 64px;
 }
-main .container-fluid .table-wrapper .image-wrapper img {
+main .container-fluid section.top-sale-products .table-wrapper table .image-wrapper img {
   width: 100%;
   height: 100%;
   -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
+}
+main .container-fluid section.top-sale-products .table-wrapper table .actions {
+  display: flex;
+  gap: 8px;
+}
+main .container-fluid section.top-sale-products .table-wrapper table .actions .view-button {
+  display: inline-block;
+  background-color: #14a44d;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+}
+main .container-fluid section.recent-orders {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+main .container-fluid section.recent-orders .header {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+@media (max-width: 576px) {
+  main .container-fluid section.recent-orders .header {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+@media (min-width: 576px) {
+  main .container-fluid section.recent-orders .header {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+@media (min-width: 768px) {
+  main .container-fluid section.recent-orders .header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+@media (min-width: 992px) {
+  main .container-fluid section.recent-orders .header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+@media (min-width: 1200px) {
+  main .container-fluid section.recent-orders .header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+main .container-fluid section.recent-orders .header .title {
+  font-size: 2rem;
+  color: #333;
+}
+main .container-fluid section.recent-orders .header .view-all-button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #333;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+main .container-fluid section.recent-orders .header .view-all-button i {
+  font-size: 1.5rem;
+  color: #333;
+}
+main .container-fluid section.recent-orders .header .view-all-button:hover {
+  background-color: #3b71ca;
+  color: white;
+}
+main .container-fluid section.recent-orders .header .view-all-button:hover i {
+  color: white;
+}
+main .container-fluid section.recent-orders .table-wrapper {
+  overflow-x: auto;
+}
+main .container-fluid section.recent-orders .table-wrapper table {
+  border-collapse: collapse;
+  width: 100%;
+}
+main .container-fluid section.recent-orders .table-wrapper table th,
+main .container-fluid section.recent-orders .table-wrapper table td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-right: 12px;
+  font-size: 1.5rem;
+  text-align: start;
+  color: #333;
+}
+main .container-fluid section.recent-orders .table-wrapper table th span,
+main .container-fluid section.recent-orders .table-wrapper table td span {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+main .container-fluid section.recent-orders .table-wrapper table tHead tr {
+  border-bottom: 1px solid rgba(87, 88, 100, 0.2);
+}
+main .container-fluid section.recent-orders .table-wrapper table tBody tr:not(:last-child) {
+  border-bottom: 1px solid rgba(87, 88, 100, 0.2);
+}
+main .container-fluid section.recent-orders .table-wrapper table .actions {
+  display: flex;
+  gap: 8px;
+}
+main .container-fluid section.recent-orders .table-wrapper table .actions .view-button {
+  display: inline-block;
+  background-color: #14a44d;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  cursor: pointer;
 }/*# sourceMappingURL=dashboard.css.map */

@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/admin/css/reset.css" />
   <link rel="stylesheet" href="/admin/css/style.css" />
   <link rel="stylesheet" href="/admin/css/layout.css" />
-  <link rel="stylesheet" href="/admin/css/content.css" />
+  <link rel="stylesheet" href="/admin/css/category.css" />
 </head>
 
 <body>
@@ -30,16 +30,18 @@
     <!-- header -->
     <div th:replace="/admin/layout/header"></div>
 
-
+    <!-- main -->
     <main>
         <div class="container-fluid">
+          <!-- breadcrumb -->
           <ul class="breadcrumb">
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/dashboard/category">Category</a></li>
             <li>Create</li>
           </ul>
-          <div class="content">
-            <h3>Create new category</h3>
+
+          <div class="category-wrapper">
+            <h1 class="title">Create new category</h1>
             <form id="createCategoryForm" method="post" th:action="@{/dashboard/category/create}" class="create-category-form" th:object="${createCategoryDto}" enctype="multipart/form-data">
               <div class="input-group">
                 <label for="image">Image (JPG, PNG, JPEG, GIF, WebP):</label>
@@ -58,7 +60,7 @@
                       />
                     </div>
                   </div>
-                  <span class="error-message" th:if="${#fields.hasErrors('image')}" th:errors="${createCategoryDto.image}"></span>
+                  <span id="imageError" class="error-message" th:if="${#fields.hasErrors('image')}" th:errors="${createCategoryDto.image}"></span>
                 </div>
               </div>
               <div class="input-group">
@@ -73,7 +75,7 @@
                           th:classappend="${#fields.hasErrors('name') ? 'error' : ''}"
                           th:field="${createCategoryDto.name}"
                   />
-                  <span class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="${createCategoryDto.name}"></span>
+                  <span id="nameError" class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="${createCategoryDto.name}"></span>
                 </div>
               </div>
               <div class="input-group">
@@ -87,10 +89,10 @@
                          th:classappend="${#fields.hasErrors('description') ? 'error' : ''}"
                          th:field="${createCategoryDto.description}"
                  ></textarea>
-                  <span class="error-message" th:if="${#fields.hasErrors('description')}" th:errors="${createCategoryDto.description}"></span>
+                  <span id="descriptionError" class="error-message" th:if="${#fields.hasErrors('description')}" th:errors="${createCategoryDto.description}"></span>
                 </div>
               </div>
-              <div class="form-actions">
+              <div class="actions">
                 <div class="empty"></div>
                 <button type="submit" class="save-button">Save</button>
                 <a href="/dashboard/category" class="back-button">Back</a>
@@ -105,9 +107,7 @@
   </div>
 </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/libraries/jquery/jquery.js"></script>
 <script src="/admin/js/category.js"></script>
 <script src="/admin/js/main.js"></script>
 

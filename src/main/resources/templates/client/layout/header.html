@@ -47,7 +47,11 @@
                 </div>
                 <div class="account-dropdown dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
                     <a href="#" class="account-button dropdown-toggle">
-                        <img th:src="@{/images/default-avatar.png}" alt="avatar">
+                        <img th:if="${session.avatar == null or session.avatar.isEmpty()}" src="/images/default-avatar.png" alt="avatar">
+                        <img
+                                th:if="${session.avatar != null and not session.avatar.isEmpty()}"
+                                th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + session.avatar}"
+                                alt="avatar">
                     </a>
                     <ul class="account-dropdown-menu dropdown-menu">
                         <li><a href="#">My Account</a></li>
@@ -106,7 +110,11 @@
                 </div>
                 <div class="account-dropdown dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
                   <a href="#" class="account-button dropdown-toggle">
-                      <img th:src="@{/images/default-avatar.png}" alt="avatar">
+                      <img th:if="${session.avatar == null or session.avatar.isEmpty()}" src="/images/default-avatar.png" alt="avatar">
+                      <img
+                              th:if="${session.avatar != null and not session.avatar.isEmpty()}"
+                              th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + session.avatar}"
+                              alt="avatar">
                   </a>
                   <ul class="account-dropdown-menu dropdown-menu">
                     <li><a href="/account">My Account</a></li>

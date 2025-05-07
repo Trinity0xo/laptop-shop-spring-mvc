@@ -232,8 +232,7 @@ public class CartController {
     @GetMapping("/checkout")
     public String showCheckOutPage(
             Model model, HttpSession session
-    )
-            throws Exception {
+    ) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user = this.userService.handleGetUserByEmail(email);
@@ -261,17 +260,20 @@ public class CartController {
             throw new BadRequestException("No valid products available for checkout due to insufficient stock");
         }
 
+        double totalPrice = this.cartService.handleCalculateCartTotalPrice(cart);
+
         CheckOutDto checkoutDto = new CheckOutDto();
         checkoutDto.setReceiverFirstName(user.getFirstName());
         checkoutDto.setReceiverLastName(user.getLastName());
         checkoutDto.setReceiverEmail(user.getEmail());
         checkoutDto.setReceiverAddress(user.getAddress());
         checkoutDto.setReceiverPhone(user.getPhone());
+        checkoutDto.setTotalPrice(totalPrice);
+        checkoutDto.setValidCheckOutProducts(validCheckOutProducts);
 
-        double totalPrice = this.cartService.handleCalculateCartTotalPrice(cart);
         model.addAttribute("checkOutDto", checkoutDto);
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("checkOutProducts", validCheckOutProducts);
+//        model.addAttribute("totalPrice", totalPrice);
+//        model.addAttribute("checkOutProducts", validCheckOutProducts);
 
         session.setAttribute("checkOutProductIds", validProductIds);
 
@@ -282,12 +284,9 @@ public class CartController {
     public String checkOut(
             @Valid CheckOutDto checkOutDto,
             BindingResult bindingResult,
-            HttpSession session)
-            throws Exception {
-        if (bindingResult.hasErrors()) {
-            return "/client/checkout";
-        }
-
+            Model model,
+            HttpSession session
+    ) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user = this.userService.handleGetUserByEmail(email);
@@ -318,6 +317,15 @@ public class CartController {
             if(productIds.contains(cartDetail.getProduct().getId()) && cartDetail.getQuantity() <= cartDetail.getProduct().getQuantity()){
                validCheckOutProducts.add(cartDetail);
             }
+        }
+
+        if (bindingResult.hasErrors()) {
+            double totalPrice = this.cartService.handleCalculateCartTotalPrice(cart);
+            checkOutDto.setTotalPrice(totalPrice);
+            checkOutDto.setValidCheckOutProducts(validCheckOutProducts);
+
+            model.addAttribute("checkOutDto", checkOutDto);
+            return "/client/checkout";
         }
 
         if(validCheckOutProducts.isEmpty()){

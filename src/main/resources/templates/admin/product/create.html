@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="/admin/css/reset.css" />
   <link rel="stylesheet" href="/admin/css/style.css" />
   <link rel="stylesheet" href="/admin/css/layout.css" />
-  <link rel="stylesheet" href="/admin/css/content.css" />
+  <link rel="stylesheet" href="/admin/css/product.css" />
 </head>
 
 <body>
@@ -32,18 +32,21 @@
       <!-- header -->
       <div th:replace="/admin/layout/header"></div>
 
+      <!-- main -->
       <main>
         <div class="container-fluid">
+          <!-- breadcrumb -->
           <ul class="breadcrumb">
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/dashboard/product">Product</a></li>
             <li>Create</li>
           </ul>
-          <div class="content">
-            <h3>Create new product</h3>
+
+          <div class="product-wrapper">
+            <h1 class="title">Create new product</h1>
             <form id="createProductForm" class="create-product-form">
               <div class="info images">
-                <h4>Images:</h4>
+                <h2 class="title">Images:</h2>
                 <div class="input-group">
                   <label for="images" class="image-add-new-button">Images (JPG, PNG, JPEG, GIF, WebP):</label>
                   <div class="images-input-group">
@@ -51,20 +54,26 @@
                       <div class="images-preview"></div>
                       <div class="images-upload-control">
                         <label for="images" class="image-add-new-button"><i class="fa-solid fa-plus"></i></label>
-                        <input class="images-upload" name="tempImagesInput" id="images" type="file" multiple
-                               accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"/>
+                        <input class="images-upload"
+                               name="tempImagesInput"
+                               id="images"
+                               type="file"
+                               multiple
+                               accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"
+                        />
                       </div>
                     </div>
                     <span id="imagesError" class="error-message"></span>
                   </div>
                 </div>
               </div>
+
               <div class="info general-info">
-                <h4>General Information:</h4>
+                <h2 class="title">General Information:</h2>
                 <div class="input-group">
                   <label for="name">Name: </label>
                   <div class="input-group-control">
-                    <input type="text" name="name" id="name" placeholder="Name" required />
+                    <input type="text" name="name" id="name" placeholder="Product name" required />
                     <span id="nameError" class="error-message"></span>
                   </div>
                 </div>
@@ -92,7 +101,7 @@
                 <div class="input-group">
                   <label for="shortDescription">Short description: </label>
                   <div class="input-group-control">
-                    <textarea name="shortDescription" id="shortDescription" rows="3" placeholder="Short description"
+                    <textarea name="shortDescription" id="shortDescription" rows="3" placeholder=" Product short description"
                       required></textarea>
                     <span id="shortDescriptionError" class="error-message"></span>
                   </div>
@@ -100,14 +109,14 @@
                 <div class="input-group">
                   <label for="description">Description: </label>
                   <div class="input-group-control">
-                    <textarea name="description" id="description" rows="5" placeholder="Description" required></textarea>
+                    <textarea name="description" id="description" rows="5" placeholder="Product description" required></textarea>
                     <span id="descriptionError" class="error-message"></span>
                   </div>
                 </div>
                 <div class="input-group">
                   <label for="price">Price: </label>
                   <div class="input-group-control">
-                    <input type="text" name="price" id="price" placeholder="Price" required />
+                    <input type="number" name="price" id="price" value="0" required />
                     <span id="priceError" class="error-message"></span>
                   </div>
                 </div>
@@ -126,7 +135,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-actions">
+              <div class="actions">
                 <div class="empty"></div>
                 <button type="submit" class="save-button">Save</button>
                 <a href="/dashboard/product" class="back-button">Back</a>
@@ -141,9 +150,7 @@
     </div>
   </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-  integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/libraries/jquery/jquery.js"></script>
 <script src="/admin/js/main.js"></script>
 <script src="/admin/js/product.js"></script>
 

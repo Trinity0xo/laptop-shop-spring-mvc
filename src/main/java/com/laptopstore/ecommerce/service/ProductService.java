@@ -1,5 +1,7 @@
 package com.laptopstore.ecommerce.service;
 
+import com.laptopstore.ecommerce.dto.PageableCriteriaDto;
+import com.laptopstore.ecommerce.util.SortFields;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -12,6 +14,9 @@ import com.laptopstore.ecommerce.model.Product;
 import com.laptopstore.ecommerce.repository.ProductRepository;
 import com.laptopstore.ecommerce.specification.ProductSpecification;
 
+import java.time.Instant;
+import java.util.List;
+
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
@@ -20,6 +25,16 @@ public class ProductService {
     public ProductService(ProductRepository productRepository, PageableService pageableService) {
         this.productRepository = productRepository;
         this.pageableService = pageableService;
+    }
+
+    public long handleCountProduct(){
+        return this.productRepository.count();
+    }
+
+    public Page<Product> handleGetTopSaleProducts(ProductCriteriaDto productCriteriaDto, PageableCriteriaDto pageableCriteriaDto){
+        Pageable pageable = this.pageableService.handleCreatePageable(pageableCriteriaDto.getIntegerPage(), pageableCriteriaDto.getIntegerLimit());
+
+        return this.productRepository.findTopSaleProducts(productCriteriaDto.getInstantMonthLimit(), pageable);
     }
 
     public Product handleCreateProduct(CreateProductDto createProductDto) {
@@ -65,9 +80,11 @@ public class ProductService {
     public Page<Product> handleGetAllProducts(ProductCriteriaDto productCriteriaDto) {
         Specification<Product> specification = Specification.where(null);
 
-        Pageable pageable = pageableService.handleCreatePageable(productCriteriaDto.getIntegerPage(),
+        List<String> validSortBy = SortFields.getValidSortFields(Product.class);
+
+        Pageable pageable = this.pageableService.handleCreatePageable(productCriteriaDto.getIntegerPage(),
                 productCriteriaDto.getIntegerLimit(), productCriteriaDto.getSortBy(),
-                productCriteriaDto.getEnumSortDirection());
+                productCriteriaDto.getEnumSortDirection(),validSortBy);
 
         if (productCriteriaDto.getName() != null && !productCriteriaDto.getName().isEmpty()) {
             Specification<Product> currentSpecification = ProductSpecification.nameLike(productCriteriaDto.getName());
@@ -102,12 +119,11 @@ public class ProductService {
             specification = specification.and(currentSpecification);
         }
 
-//        if (productCriteriaDto.getBooleanStockStatus() != null) {
-//            Specification<Product> currentSpecification = ProductSpecification.stockStatus(productCriteriaDto.getBooleanStockStatus());
-//            specification = specification.and(currentSpecification);
-//        }
+        if (productCriteriaDto.getEnumStockStatus() != null) {
+            Specification<Product> currentSpecification = ProductSpecification.stockStatus(productCriteriaDto.getEnumStockStatus());
+            specification = specification.and(currentSpecification);
+        }
 
         return this.productRepository.findAll(specification, pageable);
     }
-
 }
