@@ -1,54 +1,44 @@
-// $(document).ready(function () {
-//     $(".banners").owlCarousel({
-//         items: 1,
-//         loop: true,
-//         autoplay: true,
-//         autoplayTimeout: 5000,
-//         autoplayHoverPause: true,
-//         nav: false,
-//         dots: false,
-//     });
-// });
-
 // show message
 function showMessage(){
-    const urlParams = new URLSearchParams(window.location.search);
-    let urlChanged  = false;
+    const messageWrapper = $(".message-wrapper");
 
-    if(urlParams.has("successMessage")){
-        const successMessage = urlParams.get("successMessage");
-        $.toast({
-            heading: 'Success',
-            text: successMessage,
-            showHideTransition: 'slide',
-            icon: 'success',
-            hideAfter: 5000,
-            position: 'top-right',
-        })
-        urlParams.delete("successMessage");
-        urlChanged = true;
-    }
+    if(messageWrapper.length > 0){
+        const successMessage = messageWrapper.find(".success-message");
+        const errorMessage = messageWrapper.find(".error-message");
+        const successMessageText = successMessage.text();
+        const errorMessageText = errorMessage.text();
 
-    if(urlParams.has("failureMessage")){
-        const failureMessage = urlParams.get("failureMessage");
-        $.toast({
-            heading: 'Error',
-            text: failureMessage,
-            showHideTransition: 'slide',
-            icon: 'Error',
-            hideAfter: 5000,
-            position: 'top-right',
-        })
-        urlParams.delete("failureMessage");
-        urlChanged = true;
-    }
+        let showMessage = false;
 
-    if (urlChanged) {
-        const queryString = urlParams.toString();
-        const newUrl = queryString
-            ? `${window.location.pathname}?${queryString}`
-            : window.location.pathname;
-        history.replaceState(null, '', newUrl);
+        if(successMessageText){
+            $.toast({
+                heading: 'Success',
+                text: successMessageText,
+                showHideTransition: 'slide',
+                icon: 'success',
+                hideAfter: 5000,
+                position: 'top-right',
+            })
+            showMessage = true;
+        }
+
+        if(errorMessageText){
+            $.toast({
+                heading: 'Error',
+                text: errorMessageText,
+                showHideTransition: 'slide',
+                icon: 'Error',
+                hideAfter: 5000,
+                position: 'top-right',
+            })
+            showMessage = true;
+
+        }
+
+        if(showMessage){
+            successMessage.text("");
+            errorMessage.text("");
+        }
     }
 }
 

@@ -1,0 +1,372 @@
+@import "../variables";
+@import "../table";
+@import "../button";
+@import "../media_advanced";
+@import "../input";
+@import "../description_list";
+@import "../table_col_width";
+@import "../lines_base_overflow";
+
+main {
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .category-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background-color: $backgroundColor02;
+      padding: 16px;
+      box-shadow: $boxShadow01;
+
+      .title {
+        font-size: 3rem;
+        color: $textColor01;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+
+        @include media(xs, sm) {
+          flex-direction: column;
+        }
+
+        @include media(md, lg, xl) {
+          flex-direction: row;
+        }
+
+        .filters-container {
+          display: flex;
+          gap: 16px;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+          }
+
+          .limit {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            label {
+              font-size: 1.5rem;
+              color: $textColor01;
+            }
+
+            select {
+              @include input() {
+              }
+            }
+          }
+
+          .search {
+            display: flex;
+
+            .search-box {
+              @include input() {
+                width: 100%;
+              }
+            }
+
+            .search-button {
+              @include button();
+            }
+          }
+        }
+
+        .create-new-button {
+          @include button($display: flex) {
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+
+            i {
+              color: $textColor02;
+              font-size: 1.5rem;
+            }
+          }
+        }
+      }
+
+      .table-container {
+        overflow-x: auto;
+
+        table {
+          @include table() {
+            .image-container {
+              display: inline-block;
+
+              img {
+                width: 64px;
+                height: 64px;
+                object-fit: contain;
+              }
+            }
+
+            .actions {
+              display: flex;
+              gap: 8px;
+
+              .view-button {
+                @include button($backgroundColor: $successColor);
+              }
+
+              .edit-button {
+                @include button($backgroundColor: $warningColor);
+              }
+
+              .delete-button {
+                @include button($backgroundColor: $dangerColor);
+              }
+            }
+          }
+
+          @include generate-col-widths(1500px);
+        }
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .input-group {
+          display: flex;
+
+          .image-input-group {
+            .image-upload-container {
+              &.error {
+                border: 1px solid $dangerColor;
+              }
+
+              .image-upload-control {
+                width: 120px;
+                height: 120px;
+
+                &.hide {
+                  display: none;
+                }
+
+                label {
+                  width: 100%;
+                  height: 100%;
+                  border: 1px solid rgba($textColor01, 0.25);
+                  font-size: 3rem;
+                  color: $textColor01;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background-color: $backgroundColor01;
+                  cursor: pointer;
+                }
+
+                input {
+                  display: none;
+                }
+              }
+
+              .image-preview {
+                display: flex;
+
+                .image-preview-item {
+                  position: relative;
+                  border: 1px solid rgba($textColor01, 0.25);
+                  width: 120px;
+                  height: 120px;
+
+                  .image-edit-button {
+                    position: absolute;
+                    width: 30px;
+                    height: 30px;
+                    background-color: $warningColor;
+                    border-radius: 50%;
+                    color: $textColor02;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    top: 0;
+                    right: 0;
+                    transform: translateX(15px) translateY(-10px);
+                    cursor: pointer;
+
+                    i {
+                      font-size: 1.25rem;
+                      color: $textColor02;
+                    }
+                  }
+
+                  .image-remove-button {
+                    position: absolute;
+                    width: 24px;
+                    height: 24px;
+                    background-color: $dangerColor;
+                    border-radius: 50%;
+                    color: $textColor02;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    top: 0;
+                    right: 0;
+                    transform: translateX(10px) translateY(-10px);
+                    cursor: pointer;
+
+                    i {
+                      font-size: 1.5rem;
+                      color: $textColor02;
+                    }
+                  }
+
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                  }
+                }
+              }
+            }
+          }
+
+          .input-group-control {
+            width: 100%;
+          }
+
+          @include media(xs, sm) {
+            flex-wrap: wrap;
+            gap: 10px;
+          }
+
+          @include media(md, lg, xl) {
+            flex-wrap: nowrap;
+            gap: 0;
+          }
+
+          label {
+            font-size: 1.5rem;
+            color: $textColor01;
+            width: 100%;
+            max-width: 300px;
+          }
+
+          input:not([type="file"]),
+          textarea,
+          select {
+            @include input() {
+              width: 100%;
+
+              &.error {
+                border: 1px solid $dangerColor;
+              }
+            }
+          }
+        }
+
+        .warning-message {
+          font-size: 2.5rem;
+          color: $textColor01;
+        }
+
+        .actions {
+          display: flex;
+          justify-content: start;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+            gap: 10px;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+            gap: 0;
+          }
+
+          .empty {
+            width: 100%;
+            max-width: 300px;
+          }
+
+          .save-button {
+            @include button() {
+              @include media(xs, sm) {
+                margin-right: 0;
+              }
+
+              @include media(md, lg, xl) {
+                margin-right: 10px;
+              }
+            }
+          }
+
+          .confirm-button {
+            @include button($backgroundColor: $dangerColor) {
+              @include media(xs, sm) {
+                margin-right: 0;
+              }
+
+              @include media(md, lg, xl) {
+                margin-right: 10px;
+              }
+            }
+          }
+
+          .back-button {
+            @include button($backgroundColor: $secondaryColor);
+          }
+
+          .cancel-button {
+            @include button();
+          }
+        }
+      }
+
+      .description-list-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        dl {
+          @include descriptionList() {
+            .image-container {
+              width: 160px;
+              height: 160px;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+              }
+            }
+          }
+        }
+
+        .actions {
+          display: flex;
+          gap: 10px;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+          }
+
+          .edit-button {
+            @include button($backgroundColor: $warningColor);
+          }
+
+          .back-button {
+            @include button($backgroundColor: $secondaryColor);
+          }
+        }
+      }
+    }
+  }
+}

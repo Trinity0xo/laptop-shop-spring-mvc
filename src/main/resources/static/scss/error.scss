@@ -1,0 +1,38 @@
+@import "button";
+@import "variables";
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+
+  .status-code {
+    font-size: 20rem;
+    font-weight: 600;
+    color: $primaryColor;
+  }
+
+  h1 {
+    font-size: 5rem;
+    font-weight: 600;
+    color: $textColor01;
+  }
+
+  p {
+    font-size: 2.5rem;
+    color: $textColor01;
+  }
+
+  a {
+    @include button($fontSize: 2rem, $borderRadius: 50px, $padding: 10px 20px) {
+      transition: 0.3s;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}

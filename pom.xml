@@ -97,6 +97,11 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>nz.net.ultraq.thymeleaf</groupId>
+			<artifactId>thymeleaf-layout-dialect</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -133,6 +138,29 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>us.hebi.sass</groupId>
+				<artifactId>sass-cli-maven-plugin</artifactId>
+				<version>1.0.4</version>
+				<configuration>
+					<sassVersion>1.87.0</sassVersion>
+					<args> <!-- Any argument that should be forwarded to the sass cli -->
+						<arg>${project.basedir}/src/main/resources/static/scss:${project.basedir}/src/main/resources/static/css</arg>
+<!--						<arg>${project.basedir}/src/main/resources/static/scss/admin:${project.basedir}/src/main/resources/static/css/admin</arg>-->
+<!--						<arg>${project.basedir}/src/main/resources/static/scss/client:${project.basedir}/src/main/resources/static/css/client</arg>-->
+						<arg>--no-source-map</arg>
+					</args>
+				</configuration>
+				<executions>
+					<execution>
+						<id>sass-exec</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 <!--			<plugin>-->
 <!--				<groupId>org.flywaydb</groupId>-->

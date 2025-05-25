@@ -16,6 +16,7 @@ import com.laptopstore.ecommerce.model.Category;
 import com.laptopstore.ecommerce.service.CategoryService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/dashboard/category")
@@ -25,7 +26,9 @@ public class CategoryController {
     private final FileService fileService;
     private final UploadFoldersService uploadFoldersService;
 
-    public CategoryController(CategoryService categoryService, FileService fileService, UploadFoldersService uploadFoldersService) {
+    public CategoryController(CategoryService categoryService,
+                              FileService fileService,
+                              UploadFoldersService uploadFoldersService) {
         this.categoryService = categoryService;
         this.fileService = fileService;
         this.uploadFoldersService = uploadFoldersService;
@@ -59,7 +62,8 @@ public class CategoryController {
     @PostMapping("/create")
     public String createCategory(
             @Valid CreateCategoryDto createCategoryDto,
-            BindingResult bindingResult
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
     ) throws Exception {
         if (bindingResult.hasErrors()) {
             return "/admin/category/create";
@@ -71,9 +75,9 @@ public class CategoryController {
 
         this.categoryService.handleCreateCategory(createCategoryDto, imageName);
 
-        String successMessage = "Category created successfully";
+        redirectAttributes.addFlashAttribute("successMessage", "Category created successfully");
 
-        return "redirect:/dashboard/category?successMessage=" + successMessage;
+        return "redirect:/dashboard/category";
     }
 
     @GetMapping("/edit/{id}")
@@ -103,6 +107,7 @@ public class CategoryController {
             @PathVariable Long id,
             @Valid UpdateCategoryDto updateCategoryDto,
             BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
             @RequestParam(value = "deleteImageName", required = false) String deleteImageName
     ) throws Exception {
 
@@ -128,9 +133,9 @@ public class CategoryController {
 
         this.categoryService.handleUpdateCategory(updateCategoryDto, category);
 
-        String successMessage = "Category updated successfully";
+        redirectAttributes.addFlashAttribute("successMessage", "Category updated successfully");
 
-        return "redirect:/dashboard/category?successMessage=" + successMessage;
+        return "redirect:/dashboard/category";
     }
 
     @GetMapping("/delete/{id}")
@@ -149,7 +154,8 @@ public class CategoryController {
 
     @PostMapping("/delete/{id}")
     public String deleteCategory(
-            @PathVariable Long id
+            @PathVariable Long id,
+            RedirectAttributes redirectAttributes
     ) throws Exception {
         Category category = categoryService.handleGetCategoryById(id);
         if (category == null) {
@@ -162,9 +168,9 @@ public class CategoryController {
 
         this.categoryService.handleDeleteCategoryById(id);
 
-        String successMessage = "Category deleted successfully";
+        redirectAttributes.addFlashAttribute("successMessage", "Category deleted successfully");
 
-        return "redirect:/dashboard/category?successMessage=" + successMessage;
+        return "redirect:/dashboard/category";
     }
 
     @GetMapping("/details/{id}")

@@ -1,7 +1,6 @@
 package com.laptopstore.ecommerce.util.error;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.context.WebContext;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @ControllerAdvice
@@ -25,9 +23,9 @@ public class GlobalExceptionHandler {
             Exception.class
     )
     public String handleInternalException(Exception exception, Model model) {
-        model.addAttribute("code", HttpStatus.INTERNAL_SERVER_ERROR);
+        model.addAttribute("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
         model.addAttribute("message", exception.getMessage());
-        model.addAttribute("error", "Exception occurs...");
+        model.addAttribute("error", "Internal Server Error");
         return "/error";
     }
 
@@ -36,9 +34,9 @@ public class GlobalExceptionHandler {
             NotFoundException.class
     })
     public Object handleNoResourceFoundException(Exception exception, HttpServletRequest request, Model model) {
-        model.addAttribute("code", HttpStatus.NOT_FOUND);
+        model.addAttribute("code", HttpStatus.NOT_FOUND.value());
         model.addAttribute("message", exception.getMessage());
-        model.addAttribute("error", "Not found");
+        model.addAttribute("error", "Not Found");
 
         if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
             Context context = new Context();
@@ -55,7 +53,7 @@ public class GlobalExceptionHandler {
             ConflictException.class
     })
     public Object handleConflictException(Exception exception, HttpServletRequest request, Model model) {
-        model.addAttribute("code", HttpStatus.CONFLICT);
+        model.addAttribute("code", HttpStatus.CONFLICT.value());
         model.addAttribute("message", exception.getMessage());
         model.addAttribute("error", "Conflict");
 
@@ -74,9 +72,9 @@ public class GlobalExceptionHandler {
             BadRequestException.class
     })
     public String handleBadRequestException(Exception exception, Model model) {
-        model.addAttribute("code", HttpStatus.BAD_REQUEST);
+        model.addAttribute("code", HttpStatus.BAD_REQUEST.value());
         model.addAttribute("message", exception.getMessage());
-        model.addAttribute("error", "Bad request");
+        model.addAttribute("error", "Bad Request");
         return "/error";
     }
 }

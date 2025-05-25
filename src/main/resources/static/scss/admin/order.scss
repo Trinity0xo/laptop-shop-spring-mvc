@@ -1,0 +1,487 @@
+@import "../variables";
+@import "../table";
+@import "../button";
+@import "../media_advanced";
+@import "../input";
+@import "../description_list";
+@import "../table_col_width";
+@import "../lines_base_overflow";
+
+main {
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .order-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background-color: $backgroundColor02;
+      padding: 16px;
+      box-shadow: $boxShadow01;
+
+      .title {
+        font-size: 3rem;
+        color: $textColor01;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+
+        @include media(xs, sm) {
+          flex-direction: column;
+        }
+
+        @include media(md, lg, xl) {
+          flex-direction: row;
+        }
+
+        .filters-container {
+          display: flex;
+          gap: 16px;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+          }
+
+          .limit {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            label {
+              font-size: 1.5rem;
+              color: $textColor01;
+            }
+
+            select {
+              @include input() {
+              }
+            }
+          }
+
+          .search {
+            display: flex;
+
+            .search-box {
+              @include input() {
+                width: 100%;
+              }
+            }
+
+            .search-button {
+              @include button();
+            }
+          }
+
+          .filter {
+            @include media(xs, sm) {
+              position: unset;
+            }
+
+            @include media(md, lg, xl) {
+              position: relative;
+            }
+
+            .filter-toggle {
+              @include button($display: flex) {
+                position: relative;
+                align-items: center;
+                gap: 6px;
+
+                i {
+                  font-size: 1.5rem;
+                  color: $textColor02;
+                }
+              }
+
+              .filter-number {
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                width: 24px;
+                height: 24px;
+                background-color: $warningColor;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: $textColor02;
+                font-size: 1.5rem;
+                font-weight: 600;
+              }
+            }
+
+            .filter-menu {
+              z-index: 999;
+              transition: 0.3s;
+
+              @include media(xs, sm) {
+                display: flex;
+                flex-direction: column;
+                top: 16px;
+                bottom: 16px;
+                left: 16px;
+                right: 16px;
+                transform: translateY(-110%);
+
+                &.show {
+                  transform: translateY(0);
+                }
+              }
+
+              @include media(md) {
+                display: none;
+                width: 600px;
+                top: 100%;
+                bottom: auto;
+                left: auto;
+                right: auto;
+                transform: unset;
+
+                &.show {
+                  display: block;
+                  transform: translateY(10px);
+                }
+              }
+
+              @include media(lg) {
+                display: none;
+                width: 700px;
+                top: 100%;
+                bottom: auto;
+                left: auto;
+                right: auto;
+                transform: unset;
+
+                &.show {
+                  display: block;
+                  transform: translateY(10px);
+                }
+              }
+
+              @include media(xl) {
+                display: none;
+                width: 800px;
+                top: 100%;
+                bottom: auto;
+                left: auto;
+                right: auto;
+                transform: unset;
+
+                &.show {
+                  display: block;
+                  transform: translateY(10px);
+                }
+              }
+
+              .popover-pointer {
+                @include media(xs, sm) {
+                  display: none;
+                }
+
+                @include media(md, lg, xl) {
+                  display: block;
+                }
+              }
+
+              .header {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+                width: 100%;
+
+                .title {
+                  font-size: 2rem;
+                }
+
+                .close-filter-button {
+                  @include button(
+                    $backgroundColor: $secondaryColor,
+                    $textColor: $textColor02,
+                    $padding: 10px,
+                    $display: flex
+                  ) {
+                    width: 32px;
+                    height: 32px;
+                    justify-content: center;
+                    align-items: center;
+
+                    i {
+                      font-size: 1.5rem;
+                      color: $textColor02;
+                    }
+                  }
+                }
+              }
+
+              .body {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 10px;
+                width: 100%;
+                overflow-y: auto;
+
+                .filter-title {
+                  font-size: 1.5rem;
+                  color: $textColor01;
+                }
+
+                .filter-section {
+                  display: flex;
+                  gap: 10px;
+                  flex-wrap: wrap;
+
+                  label {
+                    font-size: 1.5rem;
+                    color: $textColor01;
+                  }
+
+                  input {
+                    @include input($padding: 6px 12px);
+                  }
+
+                  .filter-option {
+                    input {
+                      display: none;
+                    }
+
+                    label {
+                      display: inline-block;
+                      border: 1px solid rgba($textColor01, 0.15);
+                      padding: 6px 12px;
+                      font-size: 1.5rem;
+                      color: $textColor01;
+                      cursor: pointer;
+
+                      &:hover {
+                        border: 1px solid $primaryColor;
+                        color: $primaryColor;
+                      }
+                    }
+
+                    input:checked + label {
+                      border: 1px solid $primaryColor;
+                      color: $primaryColor;
+                    }
+                  }
+                }
+              }
+
+              .footer {
+                display: flex;
+                justify-content: end;
+                align-items: center;
+                gap: 10px;
+                margin-top: auto;
+                width: 100%;
+
+                .reset-button {
+                  @include button(
+                    $backgroundColor: $dangerColor,
+                    $textColor: $textColor02
+                  );
+                }
+
+                .apply-button {
+                  @include button(
+                    $backgroundColor: $primaryColor,
+                    $textColor: $textColor02
+                  );
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .table-container {
+        overflow-x: auto;
+
+        table {
+          @include table() {
+            .actions {
+              display: flex;
+              gap: 8px;
+
+              .view-button {
+                @include button($backgroundColor: $successColor);
+              }
+            }
+          }
+          @include generate-col-widths(1500px);
+        }
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .input-group {
+          display: flex;
+
+          &.cancelled-reason-input {
+            display: none;
+
+            &.show {
+              display: flex;
+            }
+          }
+
+          .input-group-control {
+            width: 100%;
+          }
+
+          @include media(xs, sm) {
+            flex-wrap: wrap;
+            gap: 10px;
+          }
+
+          @include media(md, lg, xl) {
+            flex-wrap: nowrap;
+            gap: 0;
+          }
+
+          label {
+            font-size: 1.5rem;
+            color: $textColor01;
+            width: 100%;
+            max-width: 300px;
+          }
+
+          input:not([type="file"]),
+          textarea,
+          select {
+            @include input() {
+              width: 100%;
+
+              &.error {
+                border: 1px solid $dangerColor;
+              }
+            }
+          }
+        }
+
+        .warning-message {
+          font-size: 2.5rem;
+          color: $textColor01;
+        }
+
+        .actions {
+          display: flex;
+          justify-content: start;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+            gap: 10px;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+            gap: 0;
+          }
+
+          .empty {
+            width: 100%;
+            max-width: 300px;
+          }
+
+          .save-button {
+            @include button() {
+              @include media(xs, sm) {
+                margin-right: 0;
+              }
+
+              @include media(md, lg, xl) {
+                margin-right: 10px;
+              }
+            }
+          }
+
+          .confirm-button {
+            @include button($backgroundColor: $dangerColor) {
+              @include media(xs, sm) {
+                margin-right: 0;
+              }
+
+              @include media(md, lg, xl) {
+                margin-right: 10px;
+              }
+            }
+          }
+
+          .back-button {
+            @include button($backgroundColor: $secondaryColor);
+          }
+
+          .cancel-button {
+            @include button();
+          }
+        }
+      }
+
+      .description-list-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        @include descriptionList() {
+          .info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            .title {
+              font-size: 2.5rem;
+              color: $textColor01;
+            }
+
+            &.product-list {
+              .image-container {
+                display: inline-block;
+
+                img {
+                  width: 64px;
+                  height: 64px;
+                  object-fit: contain;
+                }
+              }
+            }
+          }
+        }
+
+        .actions {
+          display: flex;
+          gap: 10px;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+          }
+
+          .edit-button {
+            @include button($backgroundColor: $warningColor);
+          }
+
+          .back-button {
+            @include button($backgroundColor: $secondaryColor);
+          }
+        }
+      }
+    }
+  }
+}

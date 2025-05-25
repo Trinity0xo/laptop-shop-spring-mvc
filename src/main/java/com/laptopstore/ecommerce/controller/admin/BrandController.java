@@ -17,6 +17,7 @@ import com.laptopstore.ecommerce.model.Brand;
 import com.laptopstore.ecommerce.service.BrandService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/dashboard/brand")
@@ -55,7 +56,8 @@ public class BrandController {
     @PostMapping("/create")
     public String createBrand(
             @Valid CreateBrandDto createBrandDto,
-            BindingResult bindingResult
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
     ) throws Exception {
         if (bindingResult.hasErrors()) {
             return "/admin/brand/create";
@@ -63,9 +65,9 @@ public class BrandController {
 
         this.brandService.handleCreateBrand(createBrandDto);
 
-        String successMessage = "Brand created successfully";
+        redirectAttributes.addFlashAttribute("successMessage", "Brand created successfully");
 
-        return "redirect:/dashboard/brand?successMessage=" + successMessage;
+        return "redirect:/dashboard/brand";
     }
 
     @GetMapping("/edit/{id}")
@@ -92,7 +94,8 @@ public class BrandController {
     public String editBrand(
             @PathVariable Long id,
             @Valid UpdateBrandDto updateBrandDto,
-            BindingResult bindingResult
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
     ) throws Exception {
 
         if (bindingResult.hasErrors()) {
@@ -106,9 +109,9 @@ public class BrandController {
 
         this.brandService.handleUpdateBrand(updateBrandDto, brand);
 
-        String successMessage = "Brand updated successfully";
+        redirectAttributes.addFlashAttribute("successMessage", "Brand updated successfully");
 
-        return "redirect:/dashboard/brand?successMessage=" + successMessage;
+        return "redirect:/dashboard/brand";
     }
 
     @GetMapping("/delete/{id}")
@@ -127,13 +130,14 @@ public class BrandController {
 
     @PostMapping("/delete/{id}")
     public String deleteBrand(
-            @PathVariable Long id
+            @PathVariable Long id,
+            RedirectAttributes redirectAttributes
     ) throws Exception {
         this.brandService.handleDeleteBrandById(id);
 
-        String successMessage = "Brand deleted successfully";
+        redirectAttributes.addFlashAttribute("successMessage", "Brand deleted successfully");
 
-        return "redirect:/dashboard/brand?successMessage=" + successMessage;
+        return "redirect:/dashboard/brand";
     }
 
     @GetMapping("/details/{id}")

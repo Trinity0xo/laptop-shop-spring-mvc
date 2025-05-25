@@ -1,0 +1,490 @@
+main .container-fluid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+main .container-fluid .brand-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #fff;
+  padding: 16px;
+  box-shadow: rgba(108, 111, 115, 0.1) 0px 2px 4px 0px;
+}
+main .container-fluid .brand-container .title {
+  font-size: 3rem;
+  color: #333;
+}
+main .container-fluid .brand-container .header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+@media (max-width: 576px) {
+  main .container-fluid .brand-container .header {
+    flex-direction: column;
+  }
+}
+@media (min-width: 576px) {
+  main .container-fluid .brand-container .header {
+    flex-direction: column;
+  }
+}
+@media (min-width: 768px) {
+  main .container-fluid .brand-container .header {
+    flex-direction: row;
+  }
+}
+@media (min-width: 992px) {
+  main .container-fluid .brand-container .header {
+    flex-direction: row;
+  }
+}
+@media (min-width: 1200px) {
+  main .container-fluid .brand-container .header {
+    flex-direction: row;
+  }
+}
+main .container-fluid .brand-container .header .filters-container {
+  display: flex;
+  gap: 16px;
+}
+@media (max-width: 576px) {
+  main .container-fluid .brand-container .header .filters-container {
+    flex-direction: column;
+  }
+}
+@media (min-width: 576px) {
+  main .container-fluid .brand-container .header .filters-container {
+    flex-direction: column;
+  }
+}
+@media (min-width: 768px) {
+  main .container-fluid .brand-container .header .filters-container {
+    flex-direction: row;
+  }
+}
+@media (min-width: 992px) {
+  main .container-fluid .brand-container .header .filters-container {
+    flex-direction: row;
+  }
+}
+@media (min-width: 1200px) {
+  main .container-fluid .brand-container .header .filters-container {
+    flex-direction: row;
+  }
+}
+main .container-fluid .brand-container .header .filters-container .limit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+main .container-fluid .brand-container .header .filters-container .limit label {
+  font-size: 1.5rem;
+  color: #333;
+}
+main .container-fluid .brand-container .header .filters-container .limit select {
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  border: 1px solid rgba(51, 51, 51, 0.15);
+  color: #333;
+}
+main .container-fluid .brand-container .header .filters-container .search {
+  display: flex;
+}
+main .container-fluid .brand-container .header .filters-container .search .search-box {
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  border: 1px solid rgba(51, 51, 51, 0.15);
+  color: #333;
+  width: 100%;
+}
+main .container-fluid .brand-container .header .filters-container .search .search-button {
+  display: inline-block;
+  background-color: #3b71ca;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}
+main .container-fluid .brand-container .header .create-new-button {
+  display: flex;
+  background-color: #3b71ca;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+main .container-fluid .brand-container .header .create-new-button i {
+  color: white;
+  font-size: 1.5rem;
+}
+main .container-fluid .brand-container .table-container {
+  overflow-x: auto;
+}
+main .container-fluid .brand-container .table-container table {
+  border-collapse: collapse;
+  width: 100%;
+}
+main .container-fluid .brand-container .table-container table th,
+main .container-fluid .brand-container .table-container table td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-right: 12px;
+  font-size: 1.5rem;
+  text-align: start;
+  color: #333;
+}
+main .container-fluid .brand-container .table-container table th span,
+main .container-fluid .brand-container .table-container table td span {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+main .container-fluid .brand-container .table-container table tHead tr {
+  border-bottom: 1px solid rgba(87, 88, 100, 0.2);
+}
+main .container-fluid .brand-container .table-container table tBody tr:not(:last-child) {
+  border-bottom: 1px solid rgba(87, 88, 100, 0.2);
+}
+main .container-fluid .brand-container .table-container table .actions {
+  display: flex;
+  gap: 8px;
+}
+main .container-fluid .brand-container .table-container table .actions .view-button {
+  display: inline-block;
+  background-color: #14a44d;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}
+main .container-fluid .brand-container .table-container table .actions .edit-button {
+  display: inline-block;
+  background-color: #e4a11b;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}
+main .container-fluid .brand-container .table-container table .actions .delete-button {
+  display: inline-block;
+  background-color: #dc4c64;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}
+main .container-fluid .brand-container .table-container table .col-width-1 {
+  min-width: 125px;
+}
+main .container-fluid .brand-container .table-container table .col-width-2 {
+  min-width: 250px;
+}
+main .container-fluid .brand-container .table-container table .col-width-3 {
+  min-width: 375px;
+}
+main .container-fluid .brand-container .table-container table .col-width-4 {
+  min-width: 500px;
+}
+main .container-fluid .brand-container .table-container table .col-width-5 {
+  min-width: 625px;
+}
+main .container-fluid .brand-container .table-container table .col-width-6 {
+  min-width: 750px;
+}
+main .container-fluid .brand-container .table-container table .col-width-7 {
+  min-width: 875px;
+}
+main .container-fluid .brand-container .table-container table .col-width-8 {
+  min-width: 1000px;
+}
+main .container-fluid .brand-container .table-container table .col-width-9 {
+  min-width: 1125px;
+}
+main .container-fluid .brand-container .table-container table .col-width-10 {
+  min-width: 1250px;
+}
+main .container-fluid .brand-container .table-container table .col-width-11 {
+  min-width: 1375px;
+}
+main .container-fluid .brand-container .table-container table .col-width-12 {
+  min-width: 1500px;
+}
+main .container-fluid .brand-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+main .container-fluid .brand-container form .input-group {
+  display: flex;
+}
+main .container-fluid .brand-container form .input-group .input-group-control {
+  width: 100%;
+}
+@media (max-width: 576px) {
+  main .container-fluid .brand-container form .input-group {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+@media (min-width: 576px) {
+  main .container-fluid .brand-container form .input-group {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+@media (min-width: 768px) {
+  main .container-fluid .brand-container form .input-group {
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+}
+@media (min-width: 992px) {
+  main .container-fluid .brand-container form .input-group {
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+}
+@media (min-width: 1200px) {
+  main .container-fluid .brand-container form .input-group {
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+}
+main .container-fluid .brand-container form .input-group label {
+  font-size: 1.5rem;
+  color: #333;
+  width: 100%;
+  max-width: 300px;
+}
+main .container-fluid .brand-container form .input-group input:not([type=file]),
+main .container-fluid .brand-container form .input-group textarea,
+main .container-fluid .brand-container form .input-group select {
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  border: 1px solid rgba(51, 51, 51, 0.15);
+  color: #333;
+  width: 100%;
+}
+main .container-fluid .brand-container form .input-group input:not([type=file]).error,
+main .container-fluid .brand-container form .input-group textarea.error,
+main .container-fluid .brand-container form .input-group select.error {
+  border: 1px solid #dc4c64;
+}
+main .container-fluid .brand-container form .warning-message {
+  font-size: 2.5rem;
+  color: #333;
+}
+main .container-fluid .brand-container form .actions {
+  display: flex;
+  justify-content: start;
+}
+@media (max-width: 576px) {
+  main .container-fluid .brand-container form .actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+@media (min-width: 576px) {
+  main .container-fluid .brand-container form .actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+@media (min-width: 768px) {
+  main .container-fluid .brand-container form .actions {
+    flex-direction: row;
+    gap: 0;
+  }
+}
+@media (min-width: 992px) {
+  main .container-fluid .brand-container form .actions {
+    flex-direction: row;
+    gap: 0;
+  }
+}
+@media (min-width: 1200px) {
+  main .container-fluid .brand-container form .actions {
+    flex-direction: row;
+    gap: 0;
+  }
+}
+main .container-fluid .brand-container form .actions .empty {
+  width: 100%;
+  max-width: 300px;
+}
+main .container-fluid .brand-container form .actions .save-button {
+  display: inline-block;
+  background-color: #3b71ca;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}
+@media (max-width: 576px) {
+  main .container-fluid .brand-container form .actions .save-button {
+    margin-right: 0;
+  }
+}
+@media (min-width: 576px) {
+  main .container-fluid .brand-container form .actions .save-button {
+    margin-right: 0;
+  }
+}
+@media (min-width: 768px) {
+  main .container-fluid .brand-container form .actions .save-button {
+    margin-right: 10px;
+  }
+}
+@media (min-width: 992px) {
+  main .container-fluid .brand-container form .actions .save-button {
+    margin-right: 10px;
+  }
+}
+@media (min-width: 1200px) {
+  main .container-fluid .brand-container form .actions .save-button {
+    margin-right: 10px;
+  }
+}
+main .container-fluid .brand-container form .actions .confirm-button {
+  display: inline-block;
+  background-color: #dc4c64;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}
+@media (max-width: 576px) {
+  main .container-fluid .brand-container form .actions .confirm-button {
+    margin-right: 0;
+  }
+}
+@media (min-width: 576px) {
+  main .container-fluid .brand-container form .actions .confirm-button {
+    margin-right: 0;
+  }
+}
+@media (min-width: 768px) {
+  main .container-fluid .brand-container form .actions .confirm-button {
+    margin-right: 10px;
+  }
+}
+@media (min-width: 992px) {
+  main .container-fluid .brand-container form .actions .confirm-button {
+    margin-right: 10px;
+  }
+}
+@media (min-width: 1200px) {
+  main .container-fluid .brand-container form .actions .confirm-button {
+    margin-right: 10px;
+  }
+}
+main .container-fluid .brand-container form .actions .back-button {
+  display: inline-block;
+  background-color: #9fa6b2;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}
+main .container-fluid .brand-container form .actions .cancel-button {
+  display: inline-block;
+  background-color: #3b71ca;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}
+main .container-fluid .brand-container .description-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+main .container-fluid .brand-container .description-list-container dl {
+  border-collapse: collapse;
+  width: 100%;
+}
+main .container-fluid .brand-container .description-list-container dl dt,
+main .container-fluid .brand-container .description-list-container dl dd {
+  padding: 12px 0px;
+  font-size: 1.5rem;
+  text-align: start;
+  color: #333;
+  border-bottom: 1px solid rgba(87, 88, 100, 0.2);
+}
+main .container-fluid .brand-container .description-list-container dl dt {
+  font-weight: 600;
+}
+main .container-fluid .brand-container .description-list-container .actions {
+  display: flex;
+  gap: 10px;
+}
+@media (max-width: 576px) {
+  main .container-fluid .brand-container .description-list-container .actions {
+    flex-direction: column;
+  }
+}
+@media (min-width: 576px) {
+  main .container-fluid .brand-container .description-list-container .actions {
+    flex-direction: column;
+  }
+}
+@media (min-width: 768px) {
+  main .container-fluid .brand-container .description-list-container .actions {
+    flex-direction: row;
+  }
+}
+@media (min-width: 992px) {
+  main .container-fluid .brand-container .description-list-container .actions {
+    flex-direction: row;
+  }
+}
+@media (min-width: 1200px) {
+  main .container-fluid .brand-container .description-list-container .actions {
+    flex-direction: row;
+  }
+}
+main .container-fluid .brand-container .description-list-container .actions .edit-button {
+  display: inline-block;
+  background-color: #e4a11b;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}
+main .container-fluid .brand-container .description-list-container .actions .back-button {
+  display: inline-block;
+  background-color: #9fa6b2;
+  color: white;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: none;
+  cursor: pointer;
+}

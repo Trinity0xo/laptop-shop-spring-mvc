@@ -1,0 +1,36 @@
+.error-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+.error-container .status-code {
+  font-size: 20rem;
+  font-weight: 600;
+  color: #3b71ca;
+}
+.error-container h1 {
+  font-size: 5rem;
+  font-weight: 600;
+  color: #333;
+}
+.error-container p {
+  font-size: 2.5rem;
+  color: #333;
+}
+.error-container a {
+  display: inline-block;
+  background-color: #3b71ca;
+  color: white;
+  padding: 10px 20px;
+  font-size: 2rem;
+  text-align: center;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.error-container a:hover {
+  transform: scale(1.05);
+}

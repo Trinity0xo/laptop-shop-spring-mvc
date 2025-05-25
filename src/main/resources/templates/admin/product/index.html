@@ -1,375 +1,321 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/admin/layout/layout"
+>
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Product - ShopLap</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="/libraries/jquery-toast-plugin/jquery.toast.css" />
-  <link rel="stylesheet" href="/admin/css/reset.css" />
-  <link rel="stylesheet" href="/admin/css/style.css" />
-  <link rel="stylesheet" href="/admin/css/layout.css" />
-  <link rel="stylesheet" href="/admin/css/product.css" />
+  <title>Product</title>
 </head>
 
 <body>
-  <div class="main-wrapper">
-    <!-- overlay -->
-    <div class="overlay"></div>
+  <form method="get" layout:fragment="content" th:action="@{/dashboard/product}">
+    <div class="container-fluid">
+      <!-- breadcrumb -->
+      <ul class="breadcrumb">
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li>Product</li>
+      </ul>
 
-    <!-- sidebar -->
-    <div th:replace="/admin/layout/sidebar"></div>
+      <div class="product-container">
+        <h1 class="title">Product</h1>
 
-    <div class="main-content">
-      <!-- header -->
-      <div th:replace="/admin/layout/header"></div>
+        <!-- header -->
+        <div class="header">
+          <div class="filters-container">
+            <div class="popover filter">
+              <button type="button" id="btnFilterToggle" class="filter-toggle popover-toggle">
+                <i class="fa-solid fa-filter"></i>
+                Filter
+                <span class="filter-number" th:if="${query.getFilterCount() > 0}"
+                  th:text="${query.getFilterCount()}"></span>
+              </button>
 
-      <!-- main -->
-      <main>
-        <form method="get" th:action="@{/dashboard/product}">
-          <div class="container-fluid">
-            <!-- breadcrumb -->
-            <ul class="breadcrumb">
-              <li><a href="/dashboard">Dashboard</a></li>
-              <li>Product</li>
-            </ul>
+              <div class="popover-menu filter-menu">
+                <div class="popover-pointer"></div>
 
-            <div class="product-wrapper">
-              <h1 class="title">Product</h1>
+                <div class="header">
+                  <h2 class="title">Filter menu</h2>
+                  <button type="button" class="close-filter-button"><i class="fa-solid fa-xmark"></i></button>
+                </div>
 
-              <!-- header -->
-              <div class="header">
-                <div class="filters-wrapper">
-                  <div class="popover filter">
-                    <button type="button" id="btnFilterToggle" class="filter-toggle popover-toggle">
-                      <i class="fa-solid fa-filter"></i>
-                      Filter
-                      <span class="filter-number" th:if="${query.getFilterCount() > 0}"
-                        th:text="${query.getFilterCount()}"></span>
-                    </button>
-
-                    <div class="popover-menu filter-menu">
-                      <div class="popover-pointer"></div>
-
-                      <div class="header">
-                        <h2 class="title">Filter menu</h2>
-                        <button type="button" class="close-filter-button"><i class="fa-solid fa-xmark"></i></button>
-                      </div>
-
-                      <div class="body">
-                        <h3 class="filter-title">Categories: </h3>
-                        <div class="filter-section">
-                          <div class="filter-option" th:each="category: ${categories}">
-                            <input type="checkbox" th:id="${'category#' + category.id}" name="categoryNames"
-                              th:value="${category.name}" th:checked="${query?.categoryNames?.contains(category.name)}">
-                            <label th:for="${'category#' + category.id}" th:text="${category.name}"></label>
-                          </div>
-                        </div>
-
-                        <h3 class="filter-title">Brands: </h3>
-                        <div class="filter-section">
-                          <div class="filter-option" th:each="brand: ${brands}">
-                            <input type="checkbox" th:id="${'brand#' + brand.id}" name="brandNames"
-                              th:value="${brand.name}" th:checked="${query?.brandNames?.contains(brand.name)}">
-                            <label th:for="${'brand#' + brand.id}" th:text="${brand.name}"></label>
-                          </div>
-                        </div>
-
-                        <h3 class="filter-title">Price: </h3>
-                        <div class="filter-section">
-                          <input type="number" name="minPrice" id="minPrice" placeholder="Min price"
-                            th:value="${query.minPrice}">
-                          <input type="number" name="maxPrice" id="maxPrice" placeholder="Max price"
-                            th:value="${query.maxPrice}">
-                        </div>
-
-                        <h3 class="filter-title">Stock status (select one): </h3>
-                        <div class="filter-section">
-                          <div class="filter-option">
-                            <input type="radio" id="inStock" name="stockStatus" th:value="IN_STOCK"
-                              th:checked="${query.getStockStatus() != null and query.getStockStatus() == T(com.laptopstore.ecommerce.util.constant.StockStatusEnum).IN_STOCK}">
-                            <label for="inStock">In stock</label>
-                          </div>
-
-                          <div class="filter-option">
-                            <input type="radio" id="outOfStock" name="stockStatus" th:value="OUT_OF_STOCK"
-                              th:checked="${query.getStockStatus() != null and query.getStockStatus() == T(com.laptopstore.ecommerce.util.constant.StockStatusEnum).OUT_OF_STOCK}">
-                            <label for="outOfStock">Out of stock</label>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="footer">
-                        <a class="reset-button"
-                           th:href="${'/dashboard/product' + query.toQuery()
-                                          .replaceAll('categoryNames=[^&]*&?', '')
-                                          .replaceAll('brandNames=[^&]*&?', '')
-                                          .replaceAll('minDiscountPrice=[^&]*&?', '')
-                                          .replaceAll('maxDiscountPrice=[^&]*&?', '')
-                                          .replaceAll('stockStatus=[^&]*&?', '')
-                                          .replace('page=' + query.getIntegerPage(), 'page=1')}"
-                        >
-                          Reset
-                        </a>
-                        <button class="apply-button">Apply</button>
-                      </div>
+                <div class="body">
+                  <h3 class="filter-title">Categories: </h3>
+                  <div class="filter-section">
+                    <div class="filter-option" th:each="category: ${categories}">
+                      <input type="checkbox" th:id="${'category#' + category.id}" name="categoryNames"
+                        th:value="${category.name}" th:checked="${query?.categoryNames?.contains(category.name)}">
+                      <label th:for="${'category#' + category.id}" th:text="${category.name}"></label>
                     </div>
                   </div>
 
-                  <div class="limit">
-                    <label for="limit">Limit: </label>
-                    <select class="limit-select" name="limit" id="limit" onchange="this.form.submit()">
-                      <option th:value="10" th:selected="${query.getIntegerLimit() == 10}">10</option>
-                      <option th:value="20" th:selected="${query.getIntegerLimit() == 20}">20</option>
-                      <option th:value="40" th:selected="${query.getIntegerLimit() == 40}">40</option>
-                      <option th:value="80" th:selected="${query.getIntegerLimit() == 80}">80</option>
-                    </select>
+                  <h3 class="filter-title">Brands: </h3>
+                  <div class="filter-section">
+                    <div class="filter-option" th:each="brand: ${brands}">
+                      <input type="checkbox" th:id="${'brand#' + brand.id}" name="brandNames"
+                        th:value="${brand.name}" th:checked="${query?.brandNames?.contains(brand.name)}">
+                      <label th:for="${'brand#' + brand.id}" th:text="${brand.name}"></label>
+                    </div>
                   </div>
 
-                  <div class="search">
-                    <input class="search-box" type="text" name="name" id="name" th:value="${query.name}" placeholder="Search name..." />
-                    <button type="submit" class="search-button">Search</button>
+                  <h3 class="filter-title">Price: </h3>
+                  <div class="filter-section">
+                    <input type="number" name="minPrice" id="minPrice" placeholder="Min price"
+                      th:value="${query.minPrice}">
+                    <input type="number" name="maxPrice" id="maxPrice" placeholder="Max price"
+                      th:value="${query.maxPrice}">
                   </div>
 
-                  <input type="hidden" name="sortBy" th:value="${query.sortBy}" />
-                  <input type="hidden" name="sortDirection" th:value="${query.sortDirection}" />
+                  <h3 class="filter-title">Stock status (select one): </h3>
+                  <div class="filter-section">
+                    <div class="filter-option">
+                      <input type="radio" id="inStock" name="stockStatus" th:value="IN_STOCK"
+                        th:checked="${query.getStockStatus() != null and query.getStockStatus() == T(com.laptopstore.ecommerce.util.constant.StockStatusEnum).IN_STOCK}">
+                      <label for="inStock">In stock</label>
+                    </div>
+
+                    <div class="filter-option">
+                      <input type="radio" id="outOfStock" name="stockStatus" th:value="OUT_OF_STOCK"
+                        th:checked="${query.getStockStatus() != null and query.getStockStatus() == T(com.laptopstore.ecommerce.util.constant.StockStatusEnum).OUT_OF_STOCK}">
+                      <label for="outOfStock">Out of stock</label>
+                    </div>
+                  </div>
                 </div>
 
-                <a class="create-new-button" href="/dashboard/product/create"><i class="fa-solid fa-plus"></i>Add</a>
-              </div>
-
-              <!-- search result -->
-              <div class="search-result-wrapper"
-                   th:if="${query.name != null and query.name != ''}"
-              >
-                <p class="search-result-message">
-                                <span
-                                        class="result-count"
-                                        th:text="${resultCount}"
-                                >
-                                </span> results for "
-                  <span
-                          class="result-query"
-                          th:text="${query.name}">
-
-                                 </span>"
-                </p>
-                <a
-                        class="search-result-reset"
-                        th:href="${'/dashboard/product' + query.toQuery()
-                                              .replace('name=' + query.name , '')
-                                              .replace('&page=' + query.getIntegerPage(), 'page=1')}"
-                >
-                  reset
-                </a>
-              </div>
-
-              <!-- table -->
-              <div class="table-wrapper">
-                <table>
-                  <thead>
-                    <tr class="table-row">
-                      <th class="col-width-1"
-                          th:with="sortDirection=${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
-                      >
-                        <a th:href="${'/dashboard/product' + query.toQuery()
-                                                           .replace('sortBy=' + query.sortBy, 'sortBy=id')
-                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
-                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                                           }"
-                        >
-                          ID
-                          <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                             class="fa-solid fa-arrow-down"></i>
-
-                          <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                             class="fa-solid fa-arrow-up"></i>
-                        </a>
-                      </th>
-                      <th class="col-width-1">
-                        Image
-                      </th>
-                      <th class="col-width-2"
-                          th:with="sortDirection=${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
-                      >
-                        <a th:href="${'/dashboard/product' + query.toQuery()
-                                                           .replace('sortBy=' + query.sortBy, 'sortBy=name')
-                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
-                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                                           }"
-                          >
-                          Name
-                          <i th:if="${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                             class="fa-solid fa-arrow-down"></i>
-
-                          <i th:if="${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                             class="fa-solid fa-arrow-up"></i>
-                        </a>
-                      </th>
-                      <th class="col-width-1"
-                          th:with="sortDirection=${query.sortBy == 'quantity' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
-                      >
-                        <a th:href="${'/dashboard/product' + query.toQuery()
-                                                           .replace('sortBy=' + query.sortBy, 'sortBy=quantity')
-                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
-                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                                           }"
-                          >
-                          Quantity
-                          <i th:if="${query.sortBy == 'quantity' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                             class="fa-solid fa-arrow-down"></i>
-
-                          <i th:if="${query.sortBy == 'quantity' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                             class="fa-solid fa-arrow-up"></i>
-                        </a>
-                      </th>
-                      <th class="col-width-1"
-                          th:with="sortDirection=${query.sortBy == 'price' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
-                      >
-                        <a th:href="${'/dashboard/product' + query.toQuery()
-                                                           .replace('sortBy=' + query.sortBy, 'sortBy=price')
-                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
-                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                                           }"
-                          >
-                          Price
-                          <i th:if="${query.sortBy == 'price' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                             class="fa-solid fa-arrow-down"></i>
-
-                          <i th:if="${query.sortBy == 'price' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                             class="fa-solid fa-arrow-up"></i>
-                        </a>
-                      </th>
-                      <th class="col-width-2"
-                          th:with="sortDirection=${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
-                      >
-                        <a th:href="${'/dashboard/product' + query.toQuery()
-                                                           .replace('sortBy=' + query.sortBy, 'sortBy=createdAt')
-                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
-                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                                           }"
-                          >
-                          Created at
-                          <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                             class="fa-solid fa-arrow-down"></i>
-
-                          <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                             class="fa-solid fa-arrow-up"></i>
-                        </a>
-                      </th>
-                      <th class="col-width-2"
-                          th:with="sortDirection=${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
-                      >
-                        <a th:href="${'/dashboard/product' + query.toQuery()
-                                                           .replace('sortBy=' + query.sortBy, 'sortBy=updatedAt')
-                                                           .replace('page=' + query.getIntegerPage(), 'page=1')
-                                                           .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                                           }"
-                          >
-                          Updated at
-                          <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                             class="fa-solid fa-arrow-down"></i>
-
-                          <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                             class="fa-solid fa-arrow-up"></i>
-                        </a>
-                      </th>
-                      <th class="col-width-2"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="product: ${productList}">
-                      <td>
-                        <span th:text="${product.id}"></span>
-                      </td>
-                      <td>
-                        <div class="image-wrapper">
-                          <img th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (product.productImages != null and product.productImages.size() > 0 ? product.productImages[0].imageName : '')}" alt="product image" />
-                        </div>
-                      </td>
-                      <td>
-                        <span th:text="${product.name}"></span>
-                      </td>
-                      <td>
-                        <span th:text="${product.quantity}"></span>
-                      </td>
-                      <td>
-                        <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
-                      </td>
-                      <td>
-                        <span th:text="${#temporals.format(product.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
-                      </td>
-                      <td>
-                        <span th:text="${#temporals.format(product.updatedAt, 'dd-MM-yyyy HH:mm')}"></span>
-                      </td>
-                      <td>
-                        <div class="actions">
-                          <a class="view-button" th:href="@{/dashboard/product/details/{id}(id=${product.id})}">View</a>
-                          <a class="edit-button" th:href="@{/dashboard/product/edit/{id}(id=${product.id})}">Edit</a>
-                          <a class="delete-button"
-                             th:href="@{/dashboard/product/delete/{id}(id=${product.id})}">Delete</a>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- pagination -->
-              <ul class="pagination" th:if="${totalPages > 0}">
-                <li>
-                  <a class="previous"
-                     th:href="${'/dashboard/product' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage - 1))}"
-                     th:classappend="${currentPage == 1 ? 'disabled' : ''}"
+                <div class="footer">
+                  <a class="reset-button"
+                     th:href="${'/dashboard/product' + query.toQuery()
+                                    .replaceAll('categoryNames=[^&]*&?', '')
+                                    .replaceAll('brandNames=[^&]*&?', '')
+                                    .replaceAll('minDiscountPrice=[^&]*&?', '')
+                                    .replaceAll('maxDiscountPrice=[^&]*&?', '')
+                                    .replaceAll('stockStatus=[^&]*&?', '')
+                                    .replace('page=' + query.getIntegerPage(), 'page=1')}"
                   >
-                    <i class="fa-solid fa-chevron-left"></i>
+                    Reset
                   </a>
-                </li>
-                <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
-                  <a th:href="${'/dashboard/product' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (pageNumber + 1))}"
-                     th:class="${currentPage == pageNumber + 1 ? 'active' : ''}"
-                     th:text="${pageNumber + 1}">
-                  </a>
-                </li>
-                <li>
-                  <a class="next"
-                     th:href="${'/dashboard/product' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage + 1))}"
-                     th:classappend="${currentPage + 1 > totalPages ? 'disabled' : ''}"
-                  >
-                    <i class="fa-solid fa-chevron-right"></i>
-                  </a>
-                </li>
-              </ul>
-              <ul class="pagination" th:if="${totalPages == 0}">
-                <li>
-                  <a class="previous disabled"><i class="fa-solid fa-chevron-left"></i></a>
-                </li>
-                <li>
-                  <a th:class="active" th:text="1"></a>
-                </li>
-                <li>
-                  <a class="next disabled"><i class="fa-solid fa-chevron-right"></i></a>
-                </li>
-              </ul>
+                  <button class="apply-button">Apply</button>
+                </div>
+              </div>
             </div>
+
+            <div class="limit">
+              <label for="limit">Limit: </label>
+              <select class="limit-select" name="limit" id="limit" onchange="this.form.submit()">
+                <option th:value="10" th:selected="${query.getIntegerLimit() == 10}">10</option>
+                <option th:value="20" th:selected="${query.getIntegerLimit() == 20}">20</option>
+                <option th:value="40" th:selected="${query.getIntegerLimit() == 40}">40</option>
+                <option th:value="80" th:selected="${query.getIntegerLimit() == 80}">80</option>
+              </select>
+            </div>
+
+            <div class="search">
+              <input class="search-box" type="text" name="name" id="name" th:value="${query.name}" placeholder="Search name..." />
+              <button type="submit" class="search-button">Search</button>
+            </div>
+
+            <input type="hidden" name="sortBy" th:value="${query.sortBy}" />
+            <input type="hidden" name="sortDirection" th:value="${query.sortDirection}" />
           </div>
-        </form>
-      </main>
 
-      <!-- footer -->
-      <div th:replace="/admin/layout/footer"></div>
+          <a class="create-new-button" href="/dashboard/product/create"><i class="fa-solid fa-plus"></i>Add</a>
+        </div>
+
+        <!-- search result -->
+        <div class="search-result-container"
+             th:if="${query.name != null and query.name != ''}"
+        >
+          <p class="search-result-message">
+          <span
+                  class="result-count"
+                  th:text="${resultCount}"
+          >
+          </span> results for "<span
+            class="result-query"
+            th:text="${query.name}">
+          </span>"
+          </p>
+          <a
+                  class="search-result-reset"
+                  th:href="${'/dashboard/product' + query.toQuery()
+                                        .replace('name=' + query.name , '')
+                                        .replace('&page=' + query.getIntegerPage(), 'page=1')}"
+          >
+            reset
+          </a>
+        </div>
+
+        <!-- table -->
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr class="table-row">
+                <th class="col-width-1"
+                    th:with="sortDirection=${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                >
+                  <a th:href="${'/dashboard/product' + query.toQuery()
+                                                     .replace('sortBy=' + query.sortBy, 'sortBy=id')
+                                                     .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                     .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                     }"
+                  >
+                    ID
+                    <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                       class="fa-solid fa-arrow-down"></i>
+
+                    <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                       class="fa-solid fa-arrow-up"></i>
+                  </a>
+                </th>
+                <th class="col-width-1">
+                  Image
+                </th>
+                <th class="col-width-3"
+                    th:with="sortDirection=${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                >
+                  <a th:href="${'/dashboard/product' + query.toQuery()
+                                                     .replace('sortBy=' + query.sortBy, 'sortBy=name')
+                                                     .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                     .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                     }"
+                    >
+                    Name
+                    <i th:if="${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                       class="fa-solid fa-arrow-down"></i>
+
+                    <i th:if="${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                       class="fa-solid fa-arrow-up"></i>
+                  </a>
+                </th>
+                <th class="col-width-1"
+                    th:with="sortDirection=${query.sortBy == 'quantity' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                >
+                  <a th:href="${'/dashboard/product' + query.toQuery()
+                                                     .replace('sortBy=' + query.sortBy, 'sortBy=quantity')
+                                                     .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                     .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                     }"
+                    >
+                    Quantity
+                    <i th:if="${query.sortBy == 'quantity' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                       class="fa-solid fa-arrow-down"></i>
+
+                    <i th:if="${query.sortBy == 'quantity' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                       class="fa-solid fa-arrow-up"></i>
+                  </a>
+                </th>
+                <th class="col-width-2"
+                    th:with="sortDirection=${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                >
+                  <a th:href="${'/dashboard/product' + query.toQuery()
+                                                     .replace('sortBy=' + query.sortBy, 'sortBy=createdAt')
+                                                     .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                     .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                     }"
+                    >
+                    Created at
+                    <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                       class="fa-solid fa-arrow-down"></i>
+
+                    <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                       class="fa-solid fa-arrow-up"></i>
+                  </a>
+                </th>
+                <th class="col-width-2"
+                    th:with="sortDirection=${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
+                >
+                  <a th:href="${'/dashboard/product' + query.toQuery()
+                                                     .replace('sortBy=' + query.sortBy, 'sortBy=updatedAt')
+                                                     .replace('page=' + query.getIntegerPage(), 'page=1')
+                                                     .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
+                                                     }"
+                    >
+                    Updated at
+                    <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
+                       class="fa-solid fa-arrow-down"></i>
+
+                    <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
+                       class="fa-solid fa-arrow-up"></i>
+                  </a>
+                </th>
+                <th class="col-width-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="product: ${productList}">
+                <td>
+                  <span th:text="${product.id}"></span>
+                </td>
+                <td>
+                  <div class="image-container">
+                    <img th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (product.productImages != null and product.productImages.size() > 0 ? product.productImages[0].imageName : '')}" alt="product image" />
+                  </div>
+                </td>
+                <td>
+                  <span th:text="${product.name}"></span>
+                </td>
+                <td>
+                  <span th:text="${product.quantity}"></span>
+                </td>
+                <td>
+                  <span th:text="${#temporals.format(product.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
+                </td>
+                <td>
+                  <span th:text="${#temporals.format(product.updatedAt, 'dd-MM-yyyy HH:mm')}"></span>
+                </td>
+                <td>
+                  <div class="actions">
+                    <a class="view-button" th:href="@{/dashboard/product/details/{id}(id=${product.id})}">View</a>
+                    <a class="edit-button" th:href="@{/dashboard/product/edit/{id}(id=${product.id})}">Edit</a>
+                    <a class="delete-button"
+                       th:href="@{/dashboard/product/delete/{id}(id=${product.id})}">Delete</a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- pagination -->
+        <ul class="pagination" th:if="${totalPages > 0}">
+          <li>
+            <a class="previous"
+               th:href="${'/dashboard/product' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage - 1))}"
+               th:classappend="${currentPage == 1 ? 'disabled' : ''}"
+            >
+              <i class="fa-solid fa-chevron-left"></i>
+            </a>
+          </li>
+          <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="${'/dashboard/product' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (pageNumber + 1))}"
+               th:class="${currentPage == pageNumber + 1 ? 'active' : ''}"
+               th:text="${pageNumber + 1}">
+            </a>
+          </li>
+          <li>
+            <a class="next"
+               th:href="${'/dashboard/product' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage + 1))}"
+               th:classappend="${currentPage + 1 > totalPages ? 'disabled' : ''}"
+            >
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </li>
+        </ul>
+        <ul class="pagination" th:if="${totalPages == 0}">
+          <li>
+            <a class="previous disabled"><i class="fa-solid fa-chevron-left"></i></a>
+          </li>
+          <li>
+            <a th:class="active" th:text="1"></a>
+          </li>
+          <li>
+            <a class="next disabled"><i class="fa-solid fa-chevron-right"></i></a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
+  </form>
 </body>
-<script src="/libraries/jquery/jquery.js"></script>
-<script src="/libraries/jquery-toast-plugin/jquery.toast.js"></script>
-<script src="/admin/js/main.js"></script>
-
 </html>

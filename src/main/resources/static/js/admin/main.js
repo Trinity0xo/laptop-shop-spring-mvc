@@ -61,43 +61,67 @@ overlay.click(function () {
 });
 
 function showMessage(){
-  const urlParams = new URLSearchParams(window.location.search);
-  let urlChanged  = false;
+  const messageWrapper = $(".message-wrapper");
 
-  if(urlParams.has("successMessage")){
-    const successMessage = urlParams.get("successMessage");
-    $.toast({
-      heading: 'Success',
-      text: successMessage,
-      showHideTransition: 'slide',
-      icon: 'success',
-      hideAfter: 5000,
-      position: 'top-right',
-    })
-    urlParams.delete("successMessage");
-    urlChanged = true;
-  }
+  if(messageWrapper.length > 0){
+    const successMessage = messageWrapper.find(".success-message");
+    const errorMessage = messageWrapper.find(".error-message");
 
-  if(urlParams.has("failureMessage")){
-    const failureMessage = urlParams.get("failureMessage");
-    $.toast({
-      heading: 'Error',
-      text: failureMessage,
-      showHideTransition: 'slide',
-      icon: 'Error',
-      hideAfter: 5000,
-      position: 'top-right',
-    })
-    urlParams.delete("failureMessage");
-    urlChanged = true;
-  }
+    const urlParams = new URLSearchParams(window.location.search);
+    const successMessageParam = urlParams.get("successMessage");
 
-  if (urlChanged) {
-    const queryString = urlParams.toString();
-    const newUrl = queryString
-        ? `${window.location.pathname}?${queryString}`
-        : window.location.pathname;
-    history.replaceState(null, '', newUrl);
+    let showMessage = false;
+
+    if(successMessageParam){
+      $.toast({
+        heading: 'Success',
+        text: successMessageParam,
+        showHideTransition: 'slide',
+        icon: 'success',
+        hideAfter: 5000,
+        position: 'top-right',
+      })
+      showMessage = true;
+    }
+
+    if(successMessage.length > 0){
+      const successMessageText = successMessage.text();
+      $.toast({
+        heading: 'Success',
+        text: successMessageText,
+        showHideTransition: 'slide',
+        icon: 'success',
+        hideAfter: 5000,
+        position: 'top-right',
+      })
+      showMessage = true;
+    }
+
+    if(errorMessage.length > 0){
+      const errorMessageText = errorMessage.text();
+
+      $.toast({
+        heading: 'Error',
+        text: errorMessageText,
+        showHideTransition: 'slide',
+        icon: 'Error',
+        hideAfter: 5000,
+        position: 'top-right',
+      })
+      showMessage = true;
+
+    }
+
+    if(showMessage){
+      successMessage.text("");
+      errorMessage.text("");
+      urlParams.delete("successMessage");
+      const queryString = urlParams.toString();
+      const newUrl = queryString
+          ? `${window.location.pathname}?${queryString}`
+          : window.location.pathname;
+      history.replaceState(null, '', newUrl);
+    }
   }
 }
 

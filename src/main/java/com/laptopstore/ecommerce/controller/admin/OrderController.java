@@ -19,6 +19,7 @@ import com.laptopstore.ecommerce.service.OrderService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/dashboard/order")
@@ -88,7 +89,8 @@ public class OrderController {
     @PostMapping("/edit/{id}")
     public String editOrder(
             @PathVariable Long id,
-            UpdateOrderStatusDto updateOrderStatusDto
+            UpdateOrderStatusDto updateOrderStatusDto,
+            RedirectAttributes redirectAttributes
     ) throws Exception {
 
         Order order = this.orderService.handleGetOrderById(id);
@@ -98,8 +100,8 @@ public class OrderController {
 
         this.orderService.handleUpdateOrderStatus(order, updateOrderStatusDto);
 
-        String successMessage = "Order successfully updated";
+        redirectAttributes.addFlashAttribute("successMessage", "Order successfully updated");
 
-        return "redirect:/dashboard/order/details/" + id + "?successMessage=" + successMessage;
+        return "redirect:/dashboard/order/details/" + id;
     }
 }

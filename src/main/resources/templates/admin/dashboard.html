@@ -1,257 +1,222 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/admin/layout/layout">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dashboard - ShopLap</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="stylesheet" href="/admin/css/reset.css" />
-    <link rel="stylesheet" href="/admin/css/style.css" />
-    <link rel="stylesheet" href="/admin/css/layout.css" />
-    <link rel="stylesheet" href="/admin/css/dashboard.css" />
+    <title>Dashboard</title>
   </head>
+
   <body>
-    <div class="main-wrapper">
-      <!--overlay-->
-      <div class="overlay"></div>
-
-      <!-- sidebar -->
-      <div th:replace="/admin/layout/sidebar"></div>
-
-      <!-- main content -->
-      <div class="main-content">
-        <!-- header -->
-        <div th:replace="/admin/layout/header"></div>
-
-        <!-- main -->
-        <main>
-          <div class="container-fluid">
-
-            <section class="dashboard-cards">
-              <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                  <div class="dashboard-card">
-                    <i class="fa-solid fa-cubes"></i>
-                    <p class="dashboard-card-title">Products</p>
-                    <h3 class="dashboard-card-value" th:text="${productCount}"></h3>
-                    <div class="divider"></div>
-                    <a href="/dashboard/product" class="dashboard-card-link">View details</a>
-                  </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                  <div class="dashboard-card">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <p class="dashboard-card-title">Orders</p>
-                    <h3 class="dashboard-card-value" th:text="${orderCount}"></h3>
-                    <div class="divider"></div>
-                    <a href="/dashboard/order" class="dashboard-card-link">View details</a>
-                  </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                  <div class="dashboard-card">
-                    <i class="fa-solid fa-users"></i>
-                    <p class="dashboard-card-title">Users</p>
-                    <h3 class="dashboard-card-value" th:text="${userCount}"></h3>
-                    <div class="divider"></div>
-                    <a href="/dashboard/user" class="dashboard-card-link">View details</a>
-                  </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                  <div class="dashboard-card">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <p class="dashboard-card-title">Categories</p>
-                    <h3 class="dashboard-card-value" th:text="${categoryCount}"></h3>
-                    <div class="divider"></div>
-                    <a href="/dashboard/category" class="dashboard-card-link">View details</a>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section class="top-sale-products">
-              <!-- header -->
-              <div class="header">
-                <h1 class="title">Top sale products</h1>
-
-                <div class="time-limit dropdown">
-                  <button class="time-limit-toggle dropdown-toggle">
-                    <i class="fa-solid fa-caret-down"></i>Time:
-                    <span class="sort-selected" th:if="${query.monthLimit == '1'}">1 month</span>
-                    <span class="sort-selected" th:if="${query.monthLimit == '3'}">3 month</span>
-                    <span class="sort-selected" th:if="${query.monthLimit == '6'}">6 month</span>
-                    <span class="sort-selected" th:if="${query.monthLimit == '12'}">12 month</span>
-                  </button>
-                  <ul class="time-limit-dropdown-menu dropdown-menu">
-                    <li>
-                      <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=1')}"
-                         th:classappend="${query.monthLimit == '1' ? 'active' : ''}"
-                      >
-                        1 month
-                      </a>
-                    </li>
-                    <li>
-                      <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=3')}"
-                         th:classappend="${query.monthLimit == '3' ? 'active' : ''}"
-                      >
-                        3 month
-                      </a>
-                    </li>
-                    <li>
-                      <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=6')}"
-                         th:classappend="${query.monthLimit == '6' ? 'active' : ''}"
-                      >
-                        6 month
-                      </a>
-                    </li>
-                    <li>
-                      <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=12')}"
-                         th:classappend="${query.monthLimit == '12' ? 'active' : ''}"
-                      >
-                        12 month
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <!-- table -->
-              <div class="table-wrapper">
-                <table>
-                  <thead>
-                  <tr class="table-row">
-                    <th class="col-width-1">ID</th>
-                    <th class="col-width-1">Image</th>
-                    <th class="col-width-3">Name</th>
-                    <th class="col-width-2">Category</th>
-                    <th class="col-width-2">Brand</th>
-                    <th class="col-width-2">Price</th>
-                    <th class="col-width-1"></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr th:each="product : ${productList}">
-                    <td>
-                      <span th:text="${product.id}"></span>
-                    </td>
-                    <td>
-                      <div class="image-wrapper">
-                        <img th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (product.productImages != null and product.productImages.size() > 0 ? product.productImages[0].imageName : '')}" alt="product image" />
-                      </div>
-                    </td>
-                    <td>
-                        <span th:text="${product.name}"></span>
-                    </td>
-                    <td>
-                      <span th:text="${product.category?.name}"></span>
-                    </td>
-                    <td>
-                      <span th:text="${product.brand?.name}">Apple</span>
-                    </td>
-                    <td>
-                      <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
-                    </td>
-                    <td>
-                      <div class="actions">
-                        <a
-                                th:href="@{/dashboard/product/details/{id}(id=${product.id})}"
-                                class="view-button"
-                        >
-                          View
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            <section class="recent-orders">
-              <!-- header -->
-              <div class="header">
-                <h1 class="title">Recent orders</h1>
-
-                <a th:href="@{/dashboard/order}" class="view-all-button">
-                  <i class="fa-solid fa-arrow-right"></i>
-                  View all
-                </a>
-              </div>
-
-              <!-- table -->
-              <div class="table-wrapper">
-                <table>
-                  <thead>
-                    <tr class="table-row">
-                      <th class="col-width-2">Date</th>
-                      <th class="col-width-1">Order ID</th>
-                      <th class="col-width-3">Email</th>
-                      <th class="col-width-2">Total</th>
-                      <th class="col-width-2">Payment method</th>
-                      <th class="col-width-1">Status</th>
-                      <th class="col-width-1"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="order : ${orderList}">
-                      <th>
-                        <span th:text="${#temporals.format(order.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
-                      </th>
-                      <td>
-                        <span th:text="${order.id}"></span>
-                      </td>
-                      <td>
-                        <span th:text="${order.receiverEmail}"></span>
-                      </td>
-                      <td>
-                        <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
-                      </td>
-                      <td>
-                        <span th:text="${order.paymentMethod}"></span>
-                      </td>
-                      <td>
-                          <span class="order-status"
-                                th:text="${order.orderStatus}"
-                                th:classappend="${order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).PENDING ? 'pending-status' :
-                                                                             (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CONFIRMED ? 'confirmed-status' :
-                                                                              (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).SHIPPING ? 'shipping-status' :
-                                                                               (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).DELIVERED ? 'delivered-status' :
-                                                                                (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CANCELLED ? 'cancelled-status' :  ''))))}"
-                          >
-                          </span>
-                      </td>
-                      <td>
-                        <div class="actions">
-                          <a
-                                  th:href="@{/dashboard/order/details/{id}(id=${order.id})}"
-                                  class="view-button"
-                          >View</a
-                          >
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
+    <div class="container-fluid" layout:fragment="content">
+      <section class="dashboard-cards">
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="dashboard-card">
+              <i class="fa-solid fa-cubes"></i>
+              <p class="dashboard-card-title">Products</p>
+              <h3 class="dashboard-card-value" th:text="${productCount}"></h3>
+              <div class="divider"></div>
+              <a href="/dashboard/product" class="dashboard-card-link">View details</a>
+            </div>
           </div>
-        </main>
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="dashboard-card">
+              <i class="fa-solid fa-cart-shopping"></i>
+              <p class="dashboard-card-title">Orders</p>
+              <h3 class="dashboard-card-value" th:text="${orderCount}"></h3>
+              <div class="divider"></div>
+              <a href="/dashboard/order" class="dashboard-card-link">View details</a>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="dashboard-card">
+              <i class="fa-solid fa-users"></i>
+              <p class="dashboard-card-title">Users</p>
+              <h3 class="dashboard-card-value" th:text="${userCount}"></h3>
+              <div class="divider"></div>
+              <a href="/dashboard/user" class="dashboard-card-link">View details</a>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="dashboard-card">
+              <i class="fa-solid fa-layer-group"></i>
+              <p class="dashboard-card-title">Categories</p>
+              <h3 class="dashboard-card-value" th:text="${categoryCount}"></h3>
+              <div class="divider"></div>
+              <a href="/dashboard/category" class="dashboard-card-link">View details</a>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- footer -->
-        <div th:replace="/admin/layout/footer"></div>
-      </div>
+      <section class="top-sale-products">
+        <!-- header -->
+        <div class="header">
+          <h1 class="title">Top sale products</h1>
+
+          <div class="time-limit dropdown">
+            <button class="time-limit-toggle dropdown-toggle">
+              <i class="fa-solid fa-caret-down"></i>Time:
+              <span class="sort-selected" th:if="${query.monthLimit == '1'}">1 month</span>
+              <span class="sort-selected" th:if="${query.monthLimit == '3'}">3 month</span>
+              <span class="sort-selected" th:if="${query.monthLimit == '6'}">6 month</span>
+              <span class="sort-selected" th:if="${query.monthLimit == '12'}">12 month</span>
+            </button>
+            <ul class="time-limit-dropdown-menu dropdown-menu">
+              <li>
+                <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=1')}"
+                   th:classappend="${query.monthLimit == '1' ? 'active' : ''}"
+                >
+                  1 month
+                </a>
+              </li>
+              <li>
+                <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=3')}"
+                   th:classappend="${query.monthLimit == '3' ? 'active' : ''}"
+                >
+                  3 month
+                </a>
+              </li>
+              <li>
+                <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=6')}"
+                   th:classappend="${query.monthLimit == '6' ? 'active' : ''}"
+                >
+                  6 month
+                </a>
+              </li>
+              <li>
+                <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=12')}"
+                   th:classappend="${query.monthLimit == '12' ? 'active' : ''}"
+                >
+                  12 month
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- table -->
+        <div class="table-container">
+          <table>
+            <thead>
+            <tr>
+              <th class="col-width-1">ID</th>
+              <th class="col-width-1">Image</th>
+              <th class="col-width-3">Name</th>
+              <th class="col-width-2">Category</th>
+              <th class="col-width-2">Brand</th>
+              <th class="col-width-2">Price</th>
+              <th class="col-width-1"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${productList}">
+              <td>
+                <span th:text="${product.id}"></span>
+              </td>
+              <td>
+                <div class="image-container">
+                  <img th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (product.productImages != null and product.productImages.size() > 0 ? product.productImages[0].imageName : '')}" alt="product image" />
+                </div>
+              </td>
+              <td>
+                <span th:text="${product.name}"></span>
+              </td>
+              <td>
+                <span th:text="${product.category?.name}"></span>
+              </td>
+              <td>
+                <span th:text="${product.brand?.name}">Apple</span>
+              </td>
+              <td>
+                <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+              </td>
+              <td>
+                <div class="actions">
+                  <a
+                          th:href="@{/dashboard/product/details/{id}(id=${product.id})}"
+                          class="view-button"
+                  >
+                    View
+                  </a>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="recent-orders">
+        <!-- header -->
+        <div class="header">
+          <h1 class="title">Recent orders</h1>
+
+          <a th:href="@{/dashboard/order}" class="view-all-button">
+            <i class="fa-solid fa-arrow-right"></i>
+            View all
+          </a>
+        </div>
+
+        <!-- table -->
+        <div class="table-container">
+          <table>
+            <thead>
+            <tr class="table-row">
+              <th class="col-width-1">Date</th>
+              <th class="col-width-1">Order ID</th>
+              <th class="col-width-3">Email</th>
+              <th class="col-width-2">Total</th>
+              <th class="col-width-2">Payment method</th>
+              <th class="col-width-2">Status</th>
+              <th class="col-width-1"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orderList}">
+              <th>
+                <span th:text="${#temporals.format(order.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
+              </th>
+              <td>
+                <span th:text="${order.id}"></span>
+              </td>
+              <td>
+                <span th:text="${order.receiverEmail}"></span>
+              </td>
+              <td>
+                <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+              </td>
+              <td>
+                <span th:text="${order.paymentMethod}"></span>
+              </td>
+              <td>
+                            <span class="order-status"
+                                  th:text="${order.orderStatus}"
+                                  th:classappend="${order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).PENDING ? 'pending-status' :
+                                                                               (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CONFIRMED ? 'confirmed-status' :
+                                                                                (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).SHIPPING ? 'shipping-status' :
+                                                                                 (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).DELIVERED ? 'delivered-status' :
+                                                                                  (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CANCELLED ? 'cancelled-status' :  ''))))}"
+                            >
+                            </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <a
+                          th:href="@{/dashboard/order/details/{id}(id=${order.id})}"
+                          class="view-button"
+                  >View</a
+                  >
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   </body>
-  <script src="/libraries/jquery/jquery.js"></script>
-  <script src="/admin/js/main.js"></script>
+
 </html>

@@ -21,7 +21,11 @@ public class DashBoardController {
     private final OrderService orderService;
     private final RoleService roleService;
 
-    public DashBoardController(ProductService productService, UserService userService, CategoryService categoryService, OrderService orderService, RoleService roleService) {
+    public DashBoardController(ProductService productService,
+                               UserService userService,
+                               CategoryService categoryService,
+                               OrderService orderService,
+                               RoleService roleService) {
         this.productService = productService;
         this.userService = userService;
         this.categoryService = categoryService;

@@ -47,16 +47,6 @@ public class Product {
     private long quantity;
     private double discountPrice;
 
-    @PrePersist
-    public void prePersist() {
-        discountPrice = price - ((price * discount) / 100);
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        discountPrice = price - (price * discount) / 100;
-    }
-
     @Column(columnDefinition = "MEDIUMTEXT")
     private String description;
 
@@ -67,4 +57,15 @@ public class Product {
 
     @UpdateTimestamp
     private Instant updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        discountPrice = price - ((price * discount) / 100);
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        discountPrice = price - ((price * discount) / 100);
+    }
+
 }

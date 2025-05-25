@@ -1,0 +1,217 @@
+@import "../variables";
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.container-fluid {
+  margin: 0px 16px;
+}
+
+body {
+  background-color: $backgroundColor01;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+// divider
+.divider {
+  height: 1px;
+  width: 100%;
+  background-color: rgba($textColor01, 0.25);
+}
+
+// breadcrumb
+.breadcrumb {
+  // margin-top: 16px;
+  list-style: none;
+
+  li {
+    display: inline;
+    font-size: 1.5rem;
+
+    &::before {
+      padding: 8px;
+      color: $secondaryColor;
+      content: "/\00a0";
+    }
+
+    &:first-child::before {
+      padding: 0;
+      content: "";
+    }
+
+    a {
+      color: $primaryColor;
+    }
+  }
+}
+
+// pagination
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  li {
+    padding: 4px;
+
+    a {
+      background-color: $backgroundColor02;
+      color: $textColor01;
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: $primaryColor;
+        color: $textColor02;
+      }
+
+      &.active {
+        background-color: $primaryColor;
+        color: $textColor02;
+      }
+    }
+
+    .previous,
+    .next {
+      &.disabled {
+        background-color: $secondaryColor;
+        color: $textColor02;
+        pointer-events: none;
+        cursor: default;
+      }
+    }
+  }
+}
+
+// popover
+.popover {
+  position: relative;
+  display: inline-block;
+
+  .popover-menu {
+    display: none;
+    position: absolute;
+    background-color: $backgroundColor02;
+    color: $textColor01;
+    padding: 16px;
+    top: 100%;
+    transform: translateY(10px);
+
+    .popover-pointer {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: $backgroundColor02;
+      top: 0;
+      transform: translateY(-50%) rotate(45deg);
+    }
+  }
+}
+
+// search result
+.search-result-container {
+  .search-result-message {
+    display: inline-block;
+    font-size: 1.75rem;
+    color: $textColor01;
+    margin-right: 10px;
+
+    span {
+      color: $primaryColor;
+    }
+  }
+
+  .search-result-reset {
+    font-size: 1.75rem;
+    color: $dangerColor;
+  }
+}
+
+// order status
+.order-status {
+  font-weight: 500;
+
+  &.pending-status {
+    color: $warningColor !important;
+  }
+
+  &.confirmed-status {
+    color: $infoColor !important;
+  }
+
+  &.shipping-status {
+    color: $primaryColor !important;
+  }
+
+  &.delivered-status {
+    color: $successColor !important;
+  }
+
+  &.cancelled-status {
+    color: $dangerColor !important;
+  }
+}
+
+// error input message
+.error-message {
+  color: $dangerColor;
+  font-size: 1.5rem;
+}
+
+// dropdown
+.dropdown {
+  position: relative;
+
+  .dropdown-menu {
+    display: none;
+    right: 0;
+    top: 100%;
+    transform: translateY(10px);
+    min-width: 160px;
+    position: absolute;
+    overflow: hidden;
+    box-shadow: $boxShadow02;
+    background-color: $backgroundColor02;
+
+    li {
+      a {
+        display: inline-block;
+        padding: 8px 10px;
+        width: 100%;
+        color: $textColor01;
+        font-size: 1.5rem;
+        transition: 0.3s;
+
+        &:hover {
+          background: $primaryColor;
+          color: $textColor02;
+        }
+
+        &.active {
+          background: $primaryColor;
+          color: $textColor02;
+        }
+      }
+    }
+  }
+}
+
+// message container
+.message-container{
+  display: none;
+}

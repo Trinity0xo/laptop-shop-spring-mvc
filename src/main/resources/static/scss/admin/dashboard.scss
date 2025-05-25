@@ -1,0 +1,209 @@
+@import "../media_advanced";
+@import "../variables";
+@import "../responsive_grid";
+@import "../table";
+@import "../table_col_width";
+@import "../button";
+@import "../input";
+
+main {
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    section {
+      background-color: $backgroundColor02;
+      padding: 16px;
+      box-shadow: $boxShadow01;
+
+      &.dashboard-cards {
+        margin: -5px;
+        background-color: transparent;
+        padding: 0;
+        box-shadow: none;
+
+        .dashboard-card {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          background-color: $backgroundColor02;
+          box-shadow: $boxShadow01;
+          padding: 16px 32px;
+          text-align: center;
+
+          i {
+            font-size: 2rem;
+            color: $textColor01;
+          }
+
+          .dashboard-card-title {
+            font-size: 1.5rem;
+            color: $textColor01;
+          }
+
+          .dashboard-card-value {
+            font-size: 2.5rem;
+            color: $textColor01;
+          }
+
+          .dashboard-card-link {
+            font-size: 1.5rem;
+          }
+        }
+      }
+
+      &.top-sale-products {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .header {
+          display: flex;
+          gap: 16px;
+          justify-content: space-between;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+            align-items: start;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+            align-items: center;
+          }
+
+          .title {
+            font-size: 2rem;
+            color: $textColor01;
+          }
+
+          .time-limit {
+            .time-limit-toggle {
+              display: flex;
+              gap: 8px;
+              align-items: center;
+              font-size: 1.5rem;
+              color: $textColor01;
+              padding: 5px 10px;
+              cursor: pointer;
+
+              i {
+                font-size: 1.5rem;
+                color: $textColor01;
+              }
+
+              &:hover {
+                background-color: $primaryColor;
+                color: $textColor02;
+
+                i {
+                  color: $textColor02;
+                }
+              }
+            }
+          }
+        }
+
+        .table-container {
+          overflow-x: auto;
+
+          table {
+            @include table() {
+              .image-container {
+                width: 64px;
+                height: 64px;
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
+              }
+              .actions {
+                display: flex;
+                gap: 8px;
+
+                .view-button {
+                  @include button($backgroundColor: $successColor);
+                }
+              }
+            }
+
+            @include generate-col-widths(1500px)
+          }
+        }
+      }
+
+      &.recent-orders {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .header {
+          display: flex;
+          gap: 16px;
+          justify-content: space-between;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+            align-items: start;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+            align-items: center;
+          }
+
+          .title {
+            font-size: 2rem;
+            color: $textColor01;
+          }
+
+          .view-all-button {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-size: 1.5rem;
+            color: $textColor01;
+            padding: 5px 10px;
+            cursor: pointer;
+
+            i {
+              font-size: 1.5rem;
+              color: $textColor01;
+            }
+
+            &:hover {
+              background-color: $primaryColor;
+              color: $textColor02;
+
+              i {
+                color: $textColor02;
+              }
+            }
+          }
+        }
+
+        .table-container {
+          overflow-x: auto;
+
+          table {
+            @include table() {
+              .actions {
+                display: flex;
+                gap: 8px;
+
+                .view-button {
+                  @include button($backgroundColor: $successColor);
+                }
+              }
+            }
+
+            @include generate-col-widths(1500px)
+          }
+        }
+      }
+    }
+  }
+}

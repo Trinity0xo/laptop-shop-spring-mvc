@@ -1,0 +1,7 @@
+@mixin linesBaseOverflow($number: 1) {
+  display: -webkit-box;
+  -webkit-line-clamp: $number;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

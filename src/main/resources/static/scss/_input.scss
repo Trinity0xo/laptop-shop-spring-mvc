@@ -1,0 +1,15 @@
+@import "variables";
+
+@mixin input(
+  $borderColor: rgba($textColor01, 0.15),
+  $textColor: $textColor01,
+  $fontSize: 1.5rem,
+  $padding: 8px 16px
+) {
+  padding: $padding;
+  font-size: $fontSize;
+  border: 1px solid $borderColor;
+  color: $textColor;
+
+  @content;
+}

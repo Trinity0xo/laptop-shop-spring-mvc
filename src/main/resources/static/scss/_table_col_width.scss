@@ -1,0 +1,11 @@
+@import "variables";
+
+$cols: 12;
+
+@mixin generate-col-widths($maxWidth) {
+  @for $i from 1 through $cols {
+    .col-width-#{$i} {
+      min-width: ($maxWidth / $cols) * $i;
+    }
+  }
+}

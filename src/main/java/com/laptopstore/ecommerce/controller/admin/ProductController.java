@@ -28,6 +28,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/dashboard/product")
@@ -38,8 +39,11 @@ public class ProductController {
     private final FileService fileService;
     private final ProductImageService productImageService;
 
-    public ProductController(ProductService productService, CategoryService categoryService,
-            BrandService brandService, FileService fileService, ProductImageService productImageService) {
+    public ProductController(ProductService productService,
+                             CategoryService categoryService,
+                             BrandService brandService,
+                             FileService fileService,
+                             ProductImageService productImageService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.brandService = brandService;
@@ -83,7 +87,8 @@ public class ProductController {
     @ResponseBody
     public ResponseEntity<AjaxResponse<Object>> createProduct(
             @Valid CreateProductDto createProductDto,
-            BindingResult bindingResult) {
+            BindingResult bindingResult
+    ) throws Exception {
 
         AjaxResponse<Object> ajaxResponse = new AjaxResponse<>();
 
@@ -159,8 +164,7 @@ public class ProductController {
             @PathVariable Long id,
             @Valid UpdateProductDto updateProductDto,
             BindingResult bindingResult
-    )
-            throws Exception {
+    ) throws Exception {
 
         AjaxResponse<Object> ajaxResponse = new AjaxResponse<>();
 
@@ -231,7 +235,8 @@ public class ProductController {
 
     @PostMapping("/delete/{id}")
     public String deleteCategory(
-            @PathVariable Long id
+            @PathVariable Long id,
+            RedirectAttributes redirectAttributes
     ) throws Exception {
         Product product = this.productService.handleGetProductById(id);
         if (product == null) {
@@ -247,9 +252,9 @@ public class ProductController {
 
         this.productService.handleDeleteProductById(id);
 
-        String successMessage = "Delete product success";
+        redirectAttributes.addFlashAttribute("successMessage", "Delete product success");
 
-        return "redirect:/dashboard/product?successMessage=" + successMessage;
+        return "redirect:/dashboard/product";
     }
 
     @GetMapping("/details/{id}")

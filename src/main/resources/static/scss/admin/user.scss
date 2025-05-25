@@ -1,0 +1,157 @@
+@import "../variables";
+@import "../table";
+@import "../button";
+@import "../media_advanced";
+@import "../input";
+@import "../description_list";
+@import "../table_col_width";
+@import "../lines_base_overflow";
+
+main {
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .user-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background-color: $backgroundColor02;
+      padding: 16px;
+      box-shadow: $boxShadow01;
+
+      .title {
+        font-size: 3rem;
+        color: $textColor01;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+
+        @include media(xs, sm) {
+          flex-direction: column;
+        }
+
+        @include media(md, lg, xl) {
+          flex-direction: row;
+        }
+
+        .filters-container {
+          display: flex;
+          gap: 16px;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+          }
+
+          .limit {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            label {
+              font-size: 1.5rem;
+              color: $textColor01;
+            }
+
+            select {
+              @include input() {
+              }
+            }
+          }
+
+          .search {
+            display: flex;
+
+            .search-box {
+              @include input() {
+                width: 100%;
+              }
+            }
+
+            .search-button {
+              @include button();
+            }
+          }
+        }
+      }
+
+      .table-container {
+        overflow-x: auto;
+
+        table {
+          @include table() {
+            .avatar-container {
+              display: inline-block;
+              border-radius: 50%;
+              overflow: hidden;
+
+              img {
+                width: 64px;
+                height: 64px;
+                object-fit: contain;
+              }
+            }
+
+            .actions {
+              display: flex;
+              gap: 8px;
+
+              .view-button {
+                @include button($backgroundColor: $successColor);
+              }
+            }
+          }
+          @include generate-col-widths(1500px);
+        }
+      }
+
+      .description-list-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        dl {
+          @include descriptionList() {
+            .avatar-container {
+              width: 160px;
+              height: 160px;
+              border-radius: 50%;
+              overflow: hidden;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+              }
+            }
+          }
+        }
+
+        .actions {
+          display: flex;
+          gap: 10px;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+          }
+
+          .back-button {
+            @include button($backgroundColor: $secondaryColor);
+          }
+        }
+      }
+    }
+  }
+}
