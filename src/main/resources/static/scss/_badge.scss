@@ -1,0 +1,21 @@
+@import "variables";
+
+@mixin badge(
+  $fontSize: 1.6rem,
+  $fontWeight: 500,
+  $color: $text-inverse,
+  $padding: 0rem 0.8rem,
+  $borderRadius: 1rem,
+  $backgroundColor: $color-primary
+) {
+  display: inline-block;
+  height: 2.4rem;
+  line-height: 2.4rem;
+  text-align: center;
+  font-size: $fontSize;
+  font-weight: $fontWeight;
+  color: $color;
+  padding: $padding;
+  border-radius: $borderRadius;
+  background-color: $backgroundColor;
+}

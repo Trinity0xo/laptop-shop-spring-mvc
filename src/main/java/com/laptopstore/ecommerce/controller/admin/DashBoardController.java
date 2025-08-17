@@ -1,12 +1,12 @@
 package com.laptopstore.ecommerce.controller.admin;
 
-import com.laptopstore.ecommerce.dto.PageableCriteriaDto;
-import com.laptopstore.ecommerce.dto.product.ProductCriteriaDto;
-import com.laptopstore.ecommerce.model.Order;
-import com.laptopstore.ecommerce.model.Product;
-import com.laptopstore.ecommerce.model.Role;
+import com.laptopstore.ecommerce.dto.DashboardContentDto;
+import com.laptopstore.ecommerce.dto.product.CustomProductListDto;
+import com.laptopstore.ecommerce.dto.product.CustomProductRatingDto;
+import com.laptopstore.ecommerce.dto.product.CustomProductSoldDto;
+import com.laptopstore.ecommerce.dto.product.ProductFilterDto;
+import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.service.*;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,43 +15,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/dashboard")
 public class DashBoardController {
+    private final ContentService contentService;
     private final ProductService productService;
-    private final UserService userService;
-    private final CategoryService categoryService;
-    private final OrderService orderService;
-    private final RoleService roleService;
 
-    public DashBoardController(ProductService productService,
-                               UserService userService,
-                               CategoryService categoryService,
-                               OrderService orderService,
-                               RoleService roleService) {
+    public DashBoardController(ContentService contentService, ProductService productService) {
+        this.contentService = contentService;
         this.productService = productService;
-        this.userService = userService;
-        this.categoryService = categoryService;
-        this.orderService = orderService;
-        this.roleService = roleService;
     }
 
     @GetMapping("")
     public String showDashboard(
-            ProductCriteriaDto productCriteriaDto,
             Model model
-    ) throws Exception {
-        PageableCriteriaDto pageableCriteriaDto = new PageableCriteriaDto();
-
-        Page<Product> products = this.productService.handleGetTopSaleProducts(productCriteriaDto, pageableCriteriaDto);
-        Page<Order> orders = this.orderService.handleGetRecentOrders(pageableCriteriaDto);
-        Role userRole = this.roleService.handleGetRoleByName("USER");
-
-        model.addAttribute("productList", products.getContent());
-        model.addAttribute("orderList", orders.getContent());
-        model.addAttribute("orderCount", this.orderService.handleCountOrder());
-        model.addAttribute("categoryCount", this.categoryService.handleCountCategory());
-        model.addAttribute("userCount", this.userService.handleCountUserByRole(userRole));
-        model.addAttribute("productCount", this.productService.handleCountProduct());
-        model.addAttribute("query", productCriteriaDto);
+    )  {
+        DashboardContentDto dashboardContent = this.contentService.getDashboardContent();
+        model.addAttribute("dashboardContent", dashboardContent);
 
         return "admin/dashboard";
+    }
+
+    @GetMapping("/top-selling")
+    public String showTopSellingProductsPage(
+            ProductFilterDto productFilterDto,
+            Model model
+    )  {
+        PageResponse<CustomProductListDto<CustomProductSoldDto>> response = this.productService.getTopSellingProducts(productFilterDto);
+        model.addAttribute("response", response);
+        model.addAttribute("productFilterDto", productFilterDto);
+
+        return "/admin/top-selling";
+    }
+
+    @GetMapping("/top-rated")
+    public String showTopRatedProductsPage(
+            ProductFilterDto productFilterDto,
+            Model model
+    )  {
+        PageResponse<CustomProductListDto<CustomProductRatingDto>> response = this.productService.getTopRatedProducts(productFilterDto);
+        model.addAttribute("response", response);
+        model.addAttribute("productFilterDto", productFilterDto);
+
+        return "/admin/top-rated";
     }
 }

@@ -1,6 +1,7 @@
 package com.laptopstore.ecommerce.util.error;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jdk.jshell.spi.ExecutionControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,42 @@ public class GlobalExceptionHandler {
         this.templateEngine = templateEngine;
     }
 
-    @ExceptionHandler(
+    @ExceptionHandler( value = {
             Exception.class
+        }
     )
-    public String handleInternalException(Exception exception, Model model) {
+    public Object handleInternalException(Exception exception, HttpServletRequest request, Model model) {
         model.addAttribute("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        model.addAttribute("message", exception.getMessage());
+        model.addAttribute("message", "Có lỗi xảy ra, vui lòng thử lại sau");
         model.addAttribute("error", "Internal Server Error");
+
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
+            Context context = new Context();
+            context.setVariables(model.asMap());
+            String html = templateEngine.process("error", context);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.TEXT_HTML).body(html);
+        }
+
+        return "/error";
+    }
+
+    @ExceptionHandler(ExecutionControl.NotImplementedException.class)
+    public Object handleNotImplementedException(ExecutionControl.NotImplementedException exception, HttpServletRequest request, Model model) {
+        model.addAttribute("code", HttpStatus.NOT_IMPLEMENTED.value());
+        model.addAttribute("message", exception.getMessage());
+        model.addAttribute("error", "Not Implemented");
+
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+            Context context = new Context();
+            context.setVariables(model.asMap());
+            String html = templateEngine.process("error", context);
+
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+                    .contentType(MediaType.TEXT_HTML)
+                    .body(html);
+        }
+
         return "/error";
     }
 
@@ -46,7 +76,26 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.TEXT_HTML).body(html);
         }
 
-        return "error";
+        return "/error";
+    }
+
+    @ExceptionHandler(value = {
+            NotImplementException.class
+    })
+    public Object handleNotImplementedException(Exception exception, HttpServletRequest request, Model model) {
+        model.addAttribute("code", HttpStatus.NOT_IMPLEMENTED.value());
+        model.addAttribute("message", exception.getMessage());
+        model.addAttribute("error", "Not Implemented");
+
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
+            Context context = new Context();
+            context.setVariables(model.asMap());
+            String html = templateEngine.process("error", context);
+
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).contentType(MediaType.TEXT_HTML).body(html);
+        }
+
+        return "/error";
     }
 
     @ExceptionHandler(value = {
@@ -57,24 +106,34 @@ public class GlobalExceptionHandler {
         model.addAttribute("message", exception.getMessage());
         model.addAttribute("error", "Conflict");
 
-//        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
-//            Context context = new Context();
-//            context.setVariables(model.asMap());
-//            String html = templateEngine.process("error", context);
-//
-//            return ResponseEntity.status(HttpStatus.CONFLICT).contentType(MediaType.TEXT_HTML).body(html);
-//        }
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
+            Context context = new Context();
+            context.setVariables(model.asMap());
+            String html = templateEngine.process("error", context);
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).contentType(MediaType.TEXT_HTML).body(html);
+        }
 
         return "/error";
     }
 
     @ExceptionHandler(value = {
-            BadRequestException.class
+            BadRequestException.class,
+            FileUploadException.class
     })
-    public String handleBadRequestException(Exception exception, Model model) {
+    public Object handleBadRequestException(Exception exception, HttpServletRequest request, Model model) {
         model.addAttribute("code", HttpStatus.BAD_REQUEST.value());
         model.addAttribute("message", exception.getMessage());
         model.addAttribute("error", "Bad Request");
+
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
+            Context context = new Context();
+            context.setVariables(model.asMap());
+            String html = templateEngine.process("error", context);
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).contentType(MediaType.TEXT_HTML).body(html);
+        }
+
         return "/error";
     }
 }

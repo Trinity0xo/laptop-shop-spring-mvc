@@ -1,97 +1,174 @@
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/admin/layout/layout"
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
 >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Người dùng</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>User</title>
-</head>
-
-<body>
-  <div class="container-fluid" layout:fragment="content">
+  <body>
+    <div class="user user-details" layout:fragment="content">
+      <div class="container-fluid">
         <!-- breadcrumb -->
-    <ul class="breadcrumb">
-      <li><a href="/dashboard">Dashboard</a></li>
-      <li><a href="/dashboard/user">User</a></li>
-      <li>Details</li>
-    </ul>
+        <ul class="breadcrumb">
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/dashboard/user">Người dùng</a></li>
+          <li th:text="${user.id}"></li>
+        </ul>
 
-    <div class="user-container">
-      <h1 class="title">User "<span th:text="${user.firstName + ' ' + user.lastName}"></span>"</h1>
+        <div
+          class="user-details-content user-content"
+          th:with="roleEnum=${T(com.laptopstore.ecommerce.util.constant.RoleEnum)}"
+        >
+          <h1 class="content-title">
+            Người dùng "<span th:text="${user.email}"></span>"
+          </h1>
 
-      <div class="description-list-container">
-        <dl class="row">
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Avatar:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-            <div class="avatar-container" th:if="${user.avatar == null or user.avatar.isEmpty()}">
-              <img th:src="@{/images/default-avatar.png}" alt="avatar">
-            </div>
-            <div class="avatar-container" th:if="${user.avatar != null and !user.avatar.isEmpty()}">
-              <img th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + user.avatar}" alt="avatar" />
-            </div>
-          </dd>
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            ID:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${user.id}">
-          </dd>
+          <div class="content-description-list">
+            <dl class="description-list row">
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Avatar:
+              </dt>
 
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            First name:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${user.firstName}">
-          </dd>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+              >
+                <a
+                  class="user-avatar"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  th:if="${!#strings.isEmpty(user.avatar)}"
+                  th:href="@{'/' + ${resourcesMappingFolder} + '/' + ${avatarsFolder} + '/' + ${user.avatar}}"
+                >
+                  <img
+                    th:src="@{'/' + ${resourcesMappingFolder} + '/' + ${avatarsFolder} + '/' + ${user.avatar}}"
+                    alt="avatar"
+                  />
+                </a>
 
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Last name:
-          </dt>
+                <a
+                  class="user-avatar"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  th:if="${#strings.isEmpty(user.avatar)}"
+                  href="/images/default-avatar.png"
+                >
+                  <img src="/images/default-avatar.png" alt="avatar" />
+                </a>
+              </dd>
 
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${user.lastName}">
-          </dd>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Mã:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${user.id}"
+              ></dd>
 
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Email:
-          </dt>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Tên:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(user.firstName) ? 'N/A' : user.firstName}"
+              ></dd>
 
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${user.email}">
-          </dd>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Họ:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(user.lastName) ? 'N/A' : user.lastName}"
+              ></dd>
 
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Phone:
-          </dt>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Email:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(user.email) ? 'N/A' : user.email}"
+              ></dd>
 
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${user.phone}">
-          </dd>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Số điện thoại:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(user.phone) ? 'N/A' : user.phone}"
+              ></dd>
 
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Role:
-          </dt>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Địa chỉ:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(user.address) ? 'N/A' : user.address}"
+              ></dd>
 
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${user.role?.name}">
-          </dd>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Vai trò:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${user.role != null ? user.role.name : 'N/A'}"
+              ></dd>
 
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Created at:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}">
-          </dd>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Ngày tham gia:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${user.createdAt != null ? #temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+              ></dd>
 
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Updated at:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(user.updatedAt, 'dd-MM-yyyy HH:mm')}">
-          </dd>
-        </dl>
-        <div class="actions">
-          <a href="/dashboard/user" class="back-button">Back</a>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Ngày cập nhật:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${user.updatedAt != null ? #temporals.format(user.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+              ></dd>
+            </dl>
+          </div>
+
+          <div class="content-actions">
+            <a
+              th:if="${authenticatedInformation.roleSlug.equals(roleEnum.ADMIN.name())}"
+              th:href="@{/dashboard/user/update-role/{id}(id=${user.id})}"
+              class="back-button warning-button"
+              >Cập nhật</a
+            >
+            <a href="/dashboard/user" class="back-button secondary-button"
+              >Quay lại</a
+            >
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

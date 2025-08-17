@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<div class="account-aside">
+  <ul class="aside-option-list">
+    <li class="item">
+      <a
+        class="link account-info-link"
+        href="/account/information"
+        th:classappend="${currentPath.contains('/information')} ? 'active'"
+        >Tài khoản</a
+      >
+    </li>
+
+    <li class="item">
+      <a
+        class="link order-history-link"
+        href="/account/order-history"
+        th:classappend="${currentPath.contains('/order-history')} ? 'active'"
+        >Lịch sử đơn hàng</a
+      >
+    </li>
+
+    <li class="item">
+      <a
+        class="link change-password-link"
+        href="/account/change-password"
+        th:classappend="${currentPath.contains('/change-password')} ? 'active'"
+        >Đổi mật khẩu</a
+      >
+    </li>
+  </ul>
+</div>

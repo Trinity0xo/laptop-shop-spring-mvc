@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Người dùng</title>
+  </head>
+
+  <body>
+    <div
+      class="user user-create"
+      layout:fragment="content"
+      th:with="roleEnum=${T(com.laptopstore.ecommerce.util.constant.RoleEnum)}"
+    >
+      <div class="container-fluid">
+        <!-- breadcrumb -->
+        <ul class="breadcrumb">
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/dashboard/user">Người dùng</a></li>
+          <li>Tạo</li>
+        </ul>
+
+        <!-- create user form -->
+        <form
+          class="create-user-form user-form"
+          method="post"
+          th:action="@{/dashboard/user/create}"
+          th:object="${createUserDto}"
+        >
+          <h1 class="form-title">Tạo người dùng mới</h1>
+
+          <div class="form-content">
+            <div class="input-group">
+              <label for="firstName">Tên:</label>
+              <div class="input-group-control">
+                <input
+                  type="text"
+                  name="firstName"
+                  id="firstName"
+                  placeholder="Tên"
+                  required
+                  th:classappend="${#fields.hasErrors('firstName') ? 'error' : ''}"
+                  th:field="${createUserDto.firstName}"
+                />
+                <span
+                  class="input-error-message"
+                  th:if="${#fields.hasErrors('firstName')}"
+                  th:errors="${createUserDto.firstName}"
+                ></span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="lastName">Họ:</label>
+              <div class="input-group-control">
+                <input
+                  type="text"
+                  name="lastName"
+                  id="lastName"
+                  placeholder="Họ"
+                  required
+                  th:classappend="${#fields.hasErrors('lastName') ? 'error' : ''}"
+                  th:field="${createUserDto.lastName}"
+                />
+                <span
+                  class="input-error-message"
+                  th:if="${#fields.hasErrors('lastName')}"
+                  th:errors="${createUserDto.lastName}"
+                ></span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="name">Email:</label>
+              <div class="input-group-control">
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  placeholder="Email"
+                  required
+                  th:classappend="${#fields.hasErrors('email') ? 'error' : ''}"
+                  th:field="${createUserDto.email}"
+                />
+                <span
+                  class="input-error-message"
+                  th:if="${#fields.hasErrors('email')}"
+                  th:errors="${createUserDto.email}"
+                ></span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="password">Mật khẩu:</label>
+              <div class="input-group-control">
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="Mật khẩu"
+                  required
+                  th:classappend="${#fields.hasErrors('password') ? 'error' : ''}"
+                  th:field="${createUserDto.password}"
+                />
+                <span
+                  class="input-error-message"
+                  th:if="${#fields.hasErrors('password')}"
+                  th:errors="${createUserDto.password}"
+                ></span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="confirmPassword">Xác nhận mật khẩu:</label>
+              <div class="input-group-control">
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  placeholder="Xác nhận mật khẩu"
+                  required
+                  th:classappend="${#fields.hasErrors('confirmPassword') ? 'error' : ''}"
+                  th:field="${createUserDto.confirmPassword}"
+                />
+                <span
+                  class="input-error-message"
+                  th:if="${#fields.hasErrors('confirmPassword')}"
+                  th:errors="${createUserDto.confirmPassword}"
+                ></span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="role">Vai trò:</label>
+              <div class="input-group-control">
+                <select name="role" id="role">
+                  <option value="">Chọn vai trò</option>
+                  <option
+                    th:each="role : ${roleEnum.values()}"
+                    th:value="${role}"
+                    th:text="${role.displayName}"
+                  ></option>
+                </select>
+                <span
+                  class="input-error-message"
+                  th:if="${#fields.hasErrors('role')}"
+                  th:errors="${createUserDto.role}"
+                ></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <div class="spacer"></div>
+            <button type="submit" class="save-button primary-button">
+              Lưu
+            </button>
+            <a href="/dashboard/user" class="back-button secondary-button"
+              >Quay lại</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

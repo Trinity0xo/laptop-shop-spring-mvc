@@ -1,122 +1,266 @@
-// show message
-function showMessage(){
-    const messageWrapper = $(".message-wrapper");
+const overlay = $(".overlay");
 
-    if(messageWrapper.length > 0){
-        const successMessage = messageWrapper.find(".success-message");
-        const errorMessage = messageWrapper.find(".error-message");
-        const successMessageText = successMessage.text();
-        const errorMessageText = errorMessage.text();
+// sidebar left
+const sideBarLeft = $(".sidebar");
+const btnShowSideBar = $("#btnShowSideBar");
+const btnHideSideBar = $("#btnHideSideBar");
+const btnShowAuthenticationLinks = $("#btnShowAuthenticationLinks");
+const btnShowAccountLinks = $("#btnShowAccountLinks");
 
-        let showMessage = false;
+// show sidebar left
+btnShowSideBar.click(function (e) {
+  e.stopPropagation();
+  overlay.addClass("show");
+  sideBarLeft.addClass("show");
+});
 
-        if(successMessageText){
-            $.toast({
-                heading: 'Success',
-                text: successMessageText,
-                showHideTransition: 'slide',
-                icon: 'success',
-                hideAfter: 5000,
-                position: 'top-right',
-            })
-            showMessage = true;
-        }
+btnShowAuthenticationLinks.click(function (e) {
+  e.stopPropagation();
+  overlay.addClass("show");
+  sideBarLeft.addClass("show");
+});
 
-        if(errorMessageText){
-            $.toast({
-                heading: 'Error',
-                text: errorMessageText,
-                showHideTransition: 'slide',
-                icon: 'Error',
-                hideAfter: 5000,
-                position: 'top-right',
-            })
-            showMessage = true;
+btnShowAccountLinks.click(function (e) {
+  e.stopPropagation();
+  overlay.addClass("show");
+  sideBarLeft.addClass("show");
+});
 
-        }
+// hide sidebar left
+btnHideSideBar.click(function (e) {
+  e.stopPropagation();
+  overlay.removeClass("show");
+  sideBarLeft.removeClass("show");
+});
 
-        if(showMessage){
-            successMessage.text("");
-            errorMessage.text("");
-        }
-    }
-}
+// Hide sidebar on click outside
+$(document).click(function (e) {
+  if (
+    !sideBarLeft.is(e.target) &&
+    sideBarLeft.has(e.target).length === 0 &&
+    !btnShowSideBar.is(e.target) &&
+    !btnShowAuthenticationLinks.is(e.target) &&
+    !btnShowAccountLinks.is(e.target)
+  ) {
+    sideBarLeft.removeClass("show");
+  }
+});
 
-showMessage();
-
+// dropdown
 const dropDownToggle = $(".dropdown-toggle");
 const dropDownMenu = $(".dropdown-menu");
 
 dropDownToggle.click(function () {
-    dropDownMenu.not($(this).next()).hide();
-    $(this).next().toggle();
+  dropDownMenu.not($(this).next()).hide();
+  $(this).next().toggle();
 });
 
 $(document).on("click", function (e) {
-    if (
-        !$(e.target).closest(".dropdown-menu").length &&
-        !$(e.target).closest(".dropdown-toggle").length
-    ) {
-        dropDownMenu.hide();
-    }
+  if (
+    !$(e.target).closest(".dropdown-menu").length &&
+    !$(e.target).closest(".dropdown-toggle").length
+  ) {
+    dropDownMenu.hide();
+  }
 });
 
-const sideBar = $("#sidebar");
-const body = $("body");
-const sideBarToggle = $("#sideBarToggle");
-const btnCloseSideBar = $("#btnCloseSideBar");
-const overlay = $(".overlay");
-
-sideBarToggle.click(function () {
-    sideBar.addClass("show");
-    body.css("overflow", "hidden");
-    overlay.toggleClass("show");
+// show modal
+$(".show-modal-button").click(function () {
+  const modalName = $(this).data("show");
+  $(`#${modalName}`).addClass("show");
+  overlay.addClass("show");
 });
 
-btnCloseSideBar.click(function () {
-    sideBar.removeClass("show");
-    body.css("overflow", "auto");
-    overlay.removeClass("show");
+// hide modal
+$(document).on("click", ".hide-modal-button", function () {
+  const modalName = $(this).data("hide");
+  $(`#${modalName}`).removeClass("show");
+  overlay.removeClass("show");
 });
 
-const btnOpenSearch = $("#btnOpenSearch");
-const searchModal = $(".search-modal");
-
-btnOpenSearch.click(function () {
-    searchModal.addClass("show");
-    body.css("overflow", "hidden");
-    overlay.toggleClass("show");
+// overlay click
+overlay.click(function () {
+  $(".modal").removeClass("show");
+  $(this).removeClass("show");
 });
 
-const popoverToggle = $(".popover-toggle");
-const popoverButtonWidth = popoverToggle.outerWidth();
-const pointerWidth = $(".popover-menu .popover-pointer").outerWidth();
-const popoverMenu = $(".popover-menu");
-const closeFilterButton = $(".close-filter-button");
+// show message
+function showMessage() {
+  const successMessage = $(".success-message");
+  const errorMessage = $(".error-message");
 
-function centerPopoverPointer() {
-    const leftPosition = (popoverButtonWidth - pointerWidth) / 2;
-    $(".popover-menu .popover-pointer").css("left", `${leftPosition}px`);
+  const localStorageSuccessMessage = localStorage.getItem("successMessage");
+  const localStorageErrorMessage = localStorage.getItem("errorMessage");
+
+  let showMessage = false;
+
+  if (successMessage.length > 0) {
+    const successMessageText = successMessage.text();
+    $.toast({
+      heading: "Success",
+      text: successMessageText,
+      showHideTransition: "slide",
+      icon: "success",
+      hideAfter: 5000,
+      position: "top-right",
+    });
+
+    showMessage = true;
+  }
+
+  if (localStorageSuccessMessage) {
+    $.toast({
+      heading: "Success",
+      text: localStorageSuccessMessage,
+      showHideTransition: "slide",
+      icon: "success",
+      hideAfter: 5000,
+      position: "top-right",
+    });
+
+    showMessage = true;
+  }
+
+  if (errorMessage.length > 0) {
+    const errorMessageText = errorMessage.text();
+
+    $.toast({
+      heading: "Error",
+      text: errorMessageText,
+      showHideTransition: "slide",
+      icon: "Error",
+      hideAfter: 5000,
+      position: "top-right",
+    });
+
+    showMessage = true;
+  }
+
+  if (localStorageErrorMessage) {
+    $.toast({
+      heading: "Error",
+      text: localStorageErrorMessage,
+      showHideTransition: "slide",
+      icon: "Error",
+      hideAfter: 5000,
+      position: "top-right",
+    });
+
+    showMessage = true;
+  }
+
+  if (showMessage) {
+    successMessage.text("");
+    errorMessage.text("");
+    localStorage.removeItem("successMessage");
+    localStorage.removeItem("errorMessage");
+  }
 }
 
-centerPopoverPointer();
+showMessage();
 
-popoverToggle.click(function () {
-    $(this).next().toggleClass("show");
-    body.css("overflow", "hidden");
-    overlay.addClass("show");
+// single image upload
+const imageUploadInput = $(".image-upload-input");
+const imageUploadPreview = $(".image-upload-preview");
+const imageUploadControl = $(".image-upload-control");
+const imagePreview = $(".image-preview");
+const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+const deleteImageName = $("#deleteImageName");
+
+if (imagePreview.length > 0) {
+  imageUploadControl.addClass("hide");
+} else {
+  imageUploadPreview.addClass("hide");
+}
+
+function checkFileType(file, allowedExtensions) {
+  let isValid = true;
+
+  const fileExtension = file.name.split(".").pop().toLowerCase();
+  if (!allowedExtensions.includes(fileExtension)) {
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+imageUploadInput.change(function () {
+  const file = $(this)[0].files[0];
+
+  if (checkFileType(file, allowedExtensions)) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const imagePreview = $(`
+                <div class="image-preview">
+                </div>
+            `);
+
+      const imagePreviewEditButton = $(
+        `<label for="image" class="image-preview-edit-button">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </label>`
+      );
+
+      const img = $("<img>");
+      img.attr("src", e.target.result);
+      img.attr("class", "image-preview-image");
+
+      imagePreview.append(imagePreviewEditButton);
+      imagePreview.append(img);
+      imageUploadPreview.empty();
+      imageUploadPreview.append(imagePreview);
+    };
+
+    reader.readAsDataURL(file);
+
+    imageUploadControl.addClass("hide");
+    imageUploadPreview.removeClass("hide");
+  }
 });
 
-closeFilterButton.click(function () {
-    popoverMenu.removeClass("show");
-    body.css("overflow", "auto");
-    overlay.removeClass("show");
+// price input format
+const formatCurrency = new Intl.NumberFormat("vi-VN", {
+  style: "currency",
+  currency: "VND",
+  minimumFractionDigits: 0,
 });
 
-overlay.click(function () {
-    $(this).removeClass("show");
-    sideBar.removeClass("show");
-    searchModal.removeClass("show");
-    popoverMenu.removeClass("show");
-    body.css("overflow", "auto");
+function unFormatCurrency(currencyValue) {
+  const numericString = currencyValue.replace(/[^\d]/g, "");
+  return Number(numericString);
+}
+
+function setTypeNumberAndUnFormatCurrency(jqueryElement) {
+  const unFormattedValue = unFormatCurrency(jqueryElement.val());
+  jqueryElement.attr("type", "number");
+  jqueryElement.val(unFormattedValue);
+}
+
+function setTypeTextAndFormatCurrency(jqueryElement) {
+  const formattedValue = formatCurrency.format(jqueryElement.val());
+  jqueryElement.attr("type", "text");
+  jqueryElement.val(formattedValue);
+}
+
+const priceInputs = $(".price-input");
+
+priceInputs.each(function () {
+  const input = $(this);
+  input.val(formatCurrency.format(input.val()));
+
+  input.on("focus", function () {
+    setTypeNumberAndUnFormatCurrency(input);
+  });
+
+  input.on("blur", function () {
+    setTypeTextAndFormatCurrency(input);
+  });
+});
+
+const controlPanelForm = $(".control-panel-form");
+
+controlPanelForm.on("submit", function () {
+  priceInputs.each(function () {
+    setTypeNumberAndUnFormatCurrency($(this));
+  });
 });

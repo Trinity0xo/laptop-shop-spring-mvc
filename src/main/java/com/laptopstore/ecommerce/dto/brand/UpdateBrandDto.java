@@ -1,14 +1,20 @@
 package com.laptopstore.ecommerce.dto.brand;
 
-import com.laptopstore.ecommerce.util.anotaion.validation.brand.EditBrandConstraint;
+import com.laptopstore.ecommerce.util.validation.brand.UpdateBrandConstraint;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@EditBrandConstraint
-public class UpdateBrandDto {
+@NoArgsConstructor
+@UpdateBrandConstraint
+public class UpdateBrandDto extends BaseBrandDto {
     private Long id;
-    private String name;
-    private String description;
+
+    public UpdateBrandDto(long id, String name, String description){
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 }

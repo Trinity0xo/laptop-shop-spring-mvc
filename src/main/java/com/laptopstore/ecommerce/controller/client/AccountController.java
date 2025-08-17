@@ -1,87 +1,138 @@
 package com.laptopstore.ecommerce.controller.client;
 
-import com.laptopstore.ecommerce.dto.user.UpdateAccountDto;
-import com.laptopstore.ecommerce.model.User;
-import com.laptopstore.ecommerce.service.FileService;
-import com.laptopstore.ecommerce.service.UploadFoldersService;
+import com.laptopstore.ecommerce.dto.order.CancelOrderInformationDto;
+import com.laptopstore.ecommerce.dto.order.OrderFilterDto;
+import com.laptopstore.ecommerce.dto.response.PageResponse;
+import com.laptopstore.ecommerce.dto.user.UserInformationDto;
+import com.laptopstore.ecommerce.dto.user.UpdateUserInformationDto;
+import com.laptopstore.ecommerce.model.Order;
+import com.laptopstore.ecommerce.service.OrderService;
 import com.laptopstore.ecommerce.service.UserService;
-import jakarta.servlet.http.HttpSession;
+import com.laptopstore.ecommerce.util.AuthenticationUtils;
+import com.laptopstore.ecommerce.util.error.NotImplementException;
 import jakarta.validation.Valid;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/account")
 public class AccountController {
     private final UserService userService;
-    private final UploadFoldersService uploadFoldersService;
-    private final FileService fileService;
+    private final OrderService orderService;
 
-    public AccountController(UserService userService, UploadFoldersService uploadFoldersService, FileService fileService) {
+    public AccountController(UserService userService, OrderService orderService) {
         this.userService = userService;
-        this.uploadFoldersService = uploadFoldersService;
-        this.fileService = fileService;
+        this.orderService = orderService;
     }
 
-    @GetMapping("")
-    public String showAccountPage(
+    @GetMapping("/information")
+    public String showAccountInformationPage(
+            Model model
+    )  {
+        String email = AuthenticationUtils.getAuthenticatedName();
+
+        UserInformationDto accountInfo = this.userService.getUserAccountInformation(email);
+        model.addAttribute("accountInfo", accountInfo);
+
+        return "/client/account/account_info";
+    }
+
+    @GetMapping("/information/update")
+    public String showAccountInformationUpdatePage(
+            Model model
+    )  {
+        String email = AuthenticationUtils.getAuthenticatedName();
+
+        UpdateUserInformationDto updateAccountInfo = this.userService.getUserAccountInformationForUpdate(email);
+        model.addAttribute("updateAccountInfo", updateAccountInfo);
+
+        return "/client/account/update_account_info";
+    }
+
+    @PostMapping("/information/update")
+    public String updateAccountInformation(
+            @Valid UpdateUserInformationDto updateAccountInfoDto,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
+    )  {
+        if (bindingResult.hasErrors()) {
+            return "/client/account/update_account_info";
+        }
+
+        String email = AuthenticationUtils.getAuthenticatedName();
+
+        this.userService.updateUserAccountInformation(email, updateAccountInfoDto);
+        redirectAttributes.addFlashAttribute("successMessage", "Thông tin tài khoản đã được cập nhật thành công.");
+
+        return "redirect:/account/information";
+    }
+
+    @GetMapping("/order-history")
+    public String showOrderHistoryPage(
+            OrderFilterDto orderFilterDto,
             Model model
     ) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User user = this.userService.handleGetUserByEmail(email);
+        String email = AuthenticationUtils.getAuthenticatedName();
 
-        UpdateAccountDto updateAccountDto = new UpdateAccountDto();
-        updateAccountDto.setFirstName(user.getFirstName());
-        updateAccountDto.setLastName(user.getLastName());
-        updateAccountDto.setPhone(user.getPhone());
-        updateAccountDto.setAddress(user.getAddress());
+        PageResponse<List<Order>> response = this.orderService.getUserOrderHistory(email, orderFilterDto);
+        model.addAttribute("response", response);
+        model.addAttribute("orderCriteriaDto", orderFilterDto);
 
-        model.addAttribute("updateAccountDto", updateAccountDto);
-        model.addAttribute("userAvatar", user.getAvatar());
-
-        return "/client/account";
+        return "/client/account/order_history";
     }
 
-    @PostMapping("/update")
-    public String updateAccountInfo(
-            @Valid UpdateAccountDto updateAccountDto,
+    @GetMapping("/order-history/details/{orderId}")
+    public String showUserOrderDetailsPage(
+            @PathVariable Long orderId,
+            Model model
+    ) {
+        String email = AuthenticationUtils.getAuthenticatedName();
+
+        Order order = this.orderService.getUserOrderItems(email, orderId);
+        model.addAttribute("order", order);
+
+        return "/client/account/order_details";
+    }
+
+    @GetMapping("/order-history/cancel/{orderId}")
+    public String showCancelOrderPage(
+            @PathVariable Long orderId,
+            Model model
+    ) {
+        String email = AuthenticationUtils.getAuthenticatedName();
+
+        CancelOrderInformationDto cancelOrderInfo = this.orderService.getInformationForUserCancelOrder(email, orderId);
+        model.addAttribute("cancelOrderInfo", cancelOrderInfo);
+
+        return "/client/account/cancel_order";
+    }
+
+    @PostMapping("/order-history/cancel")
+    public String cancelOrder(
+            @Valid CancelOrderInformationDto cancelOrderInformationDto,
             BindingResult bindingResult,
-            @RequestParam(value = "deleteAvatarName", required = false) String deleteAvatarName,
-            HttpSession session
-    ){
-        if (bindingResult.hasErrors()) {
-            return "/client/account";
+            RedirectAttributes redirectAttributes
+    )  {
+        if(bindingResult.hasErrors()){
+            return "/client/account/cancel_order";
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User user = this.userService.handleGetUserByEmail(email);
+        String email = AuthenticationUtils.getAuthenticatedName();
 
-        String avatarsFolderName = this.uploadFoldersService.handleGetAvatarsFolderName();
+        this.orderService.userCancelOrder(email, cancelOrderInformationDto);
+        redirectAttributes.addFlashAttribute("successMessage", "Hủy đơn hàng thành công");
 
-        if(deleteAvatarName != null && !deleteAvatarName.isEmpty() && updateAccountDto.getAvatar() != null && !updateAccountDto.getAvatar().isEmpty()) {
-            this.fileService.handleDeleteFile(deleteAvatarName, avatarsFolderName);
-        }
+        return "redirect:/account/order-history/details/" + cancelOrderInformationDto.getId();
+    }
 
-        if(updateAccountDto.getAvatar() != null && !updateAccountDto.getAvatar().isEmpty()) {
-            String updatedAvatar = this.fileService.handleUploadFile(updateAccountDto.getAvatar(), avatarsFolderName);
-            user.setAvatar(updatedAvatar);
-        }
-
-        user = this.userService.handleUpdateAccountInfo(user, updateAccountDto);
-
-        session.setAttribute("avatar", user.getAvatar());
-
-        String successMessage = "Account updated successfully";
-
-        return "redirect:/account?successMessage=" + successMessage;
+    @GetMapping("/change-password")
+    public String showChangePasswordPage(
+    )  {
+        throw new NotImplementException("Chức năng này chưa hoàn thành");
     }
 }

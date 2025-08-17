@@ -1,64 +1,70 @@
 package com.laptopstore.ecommerce.controller.client;
 
-import com.laptopstore.ecommerce.dto.product.ProductCriteriaDto;
-import com.laptopstore.ecommerce.model.Brand;
-import com.laptopstore.ecommerce.model.Category;
-import com.laptopstore.ecommerce.model.Product;
-import com.laptopstore.ecommerce.service.BrandService;
-import com.laptopstore.ecommerce.service.CategoryService;
+import com.laptopstore.ecommerce.dto.product.*;
+import com.laptopstore.ecommerce.dto.response.PageResponse;
+import com.laptopstore.ecommerce.dto.review.ReviewFilterDto;
 import com.laptopstore.ecommerce.service.ProductService;
-import com.laptopstore.ecommerce.util.error.NotFoundException;
-import org.springframework.data.domain.Page;
+import com.laptopstore.ecommerce.service.ReviewService;
+import com.laptopstore.ecommerce.util.AuthenticationUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/shop")
 public class ShopController {
     private final ProductService productService;
-    private final CategoryService categoryService;
-    private final BrandService brandService;
+    private final ReviewService reviewService;
 
-    public ShopController(ProductService productService, CategoryService categoryService, BrandService brandService) {
+    public ShopController(ProductService productService, ReviewService reviewService) {
         this.productService = productService;
-        this.categoryService = categoryService;
-        this.brandService = brandService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping("")
     public String showShopPage(
-            ProductCriteriaDto productCriteriaDto,
+            ProductFilterDto productFilterDto,
             Model model
-    ) throws Exception {
-        Page<Product> products = this.productService.handleGetAllProducts(productCriteriaDto);
-        List<Category> categories = this.categoryService.handleGetAllCategories();
-        List<Brand> brands = this.brandService.handleGetAllBrands();
-        model.addAttribute("productList", products.getContent());
-        model.addAttribute("categories", categories);
-        model.addAttribute("brands", brands);
-        model.addAttribute("totalPages", products.getTotalPages());
-        model.addAttribute("currentPage", products.getPageable().getPageNumber() + 1);
-        model.addAttribute("resultCount", products.getTotalElements());
-        model.addAttribute("query", productCriteriaDto);
+    )  {
+        PageResponse<CustomProductListDto<CustomProductDto>> response = this.productService.getShopProducts(productFilterDto);
+        model.addAttribute("response", response);
+        model.addAttribute("productCriteriaDto", productFilterDto);
 
         return "/client/shop";
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/product/{productSlug}")
     public String showProductDetailsPage(
-            @PathVariable Long id,
+            @PathVariable String productSlug,
             Model model
-    ) throws Exception {
-        Product product = this.productService.handleGetProductById(id);
-        if(product == null) {
-            throw new NotFoundException("Product not found");
+    )  {
+        String email = AuthenticationUtils.getAuthenticatedName();
+        if (email != null && !email.isEmpty()) {
+            model.addAttribute("productDetails", this.productService.getShopProductDetailsBySlug(productSlug, email));
+        }else{
+            model.addAttribute("productDetails", this.productService.getShopProductDetailsBySlug(productSlug));
         }
 
-        model.addAttribute("product", product);
-
         return "/client/product_details";
+    }
+
+    @GetMapping("/product/{productSlug}/reviews")
+    public String showAllReviewsPage(
+            @PathVariable String productSlug,
+            ReviewFilterDto reviewFilterDto,
+            Model model
+    )  {
+        PageResponse<CustomProductDetailsDto> response;
+        String email = AuthenticationUtils.getAuthenticatedName();
+        if (email != null && !email.isEmpty()) {
+            response = this.reviewService.getProductReviews(productSlug, email, reviewFilterDto);
+        }
+        else {
+            response = this.reviewService.getProductReviews(productSlug, reviewFilterDto);
+        }
+        model.addAttribute("response", response);
+        model.addAttribute("reviewFilterDto", reviewFilterDto);
+
+        return "/client/review/product_reviews";
     }
 }

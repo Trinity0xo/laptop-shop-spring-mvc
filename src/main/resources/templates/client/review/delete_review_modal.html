@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<form
+  id="deleteReviewModal"
+  class="review-form modal"
+  th:attr="data-product-id=${deleteReviewDto.productId}"
+>
+  <div class="modal-header">
+    <div class="header-title">Xóa đánh giá của bạn</div>
+    <button
+      type="button"
+      class="hide-modal-button"
+      data-hide="deleteReviewModal"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="form-data modal-body">
+    <h4 class="form-data-title">
+      Bạn có muốn xóa đánh giá của mình về
+      <span th:text="${deleteReviewDto.productName}"></span> không ?
+    </h4>
+    <input
+      type="hidden"
+      name="reviewId"
+      th:value="${deleteReviewDto.reviewId}"
+    />
+  </div>
+  <div class="form-actions modal-footer">
+    <button class="form-submit-button danger-button" type="submit">Có</button>
+    <button
+      type="button"
+      data-hide="deleteReviewModal"
+      class="cancel-delete-button hide-modal-button secondary-button"
+    >
+      Không
+    </button>
+  </div>
+</form>

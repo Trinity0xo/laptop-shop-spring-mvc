@@ -1,9 +1,6 @@
 package com.laptopstore.ecommerce.dto.product;
 
-import com.laptopstore.ecommerce.model.Brand;
-import com.laptopstore.ecommerce.model.Category;
-
-import com.laptopstore.ecommerce.util.anotaion.validation.product.CreateProductConstraint;
+import com.laptopstore.ecommerce.util.validation.product.CreateProductConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,14 +10,12 @@ import java.util.List;
 @Getter
 @Setter
 @CreateProductConstraint
-public class CreateProductDto {
-    private List<MultipartFile> images;
-    private String name;
-    private Double price;
-    private Float discount;
-    private Long quantity;
-    private String shortDescription;
-    private String description;
-    private Category category;
-    private Brand brand;
+public class CreateProductDto extends BaseProductDto {
+    private List<MultipartFile> newImages;
+    private ProductMetaDataDto productMetaData;
+    private String slug;
+
+    public CreateProductDto(ProductMetaDataDto productMetaData){
+        this.productMetaData = productMetaData;
+    }
 }

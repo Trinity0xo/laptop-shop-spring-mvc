@@ -1,18 +1,20 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Error - ShopLap</title>
     <link rel="stylesheet" href="/css/reset.css" />
-    <link rel="stylesheet" href="/css/admin/style.css" />
+    <link rel="stylesheet" href="/css/share.css" />
     <link rel="stylesheet" href="/css/error.css" />
   </head>
+
   <body>
-    <div class="error-container">
-      <div class="status-code" th:text="${code}">500</div>
-      <h1 th:text="${error}">Internal Server Error</h1>
-      <p th:text="${message}">We're sorry, but something went wrong on our end.</p>
-      <a href="/">Return to Home</a>
+    <div class="error">
+      <div class="status-code" th:text="${code}"></div>
+      <h1 class="title" th:text="${error}"></h1>
+      <p class="message" th:text="${message}"></p>
+      <a class="home-button primary-button" href="/">Return to Home</a>
     </div>
   </body>
 </html>

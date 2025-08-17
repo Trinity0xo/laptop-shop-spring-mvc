@@ -1,7 +1,10 @@
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/admin/layout/layout">
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,214 +12,793 @@
   </head>
 
   <body>
-    <div class="container-fluid" layout:fragment="content">
-      <section class="dashboard-cards">
-        <div class="row">
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-            <div class="dashboard-card">
-              <i class="fa-solid fa-cubes"></i>
-              <p class="dashboard-card-title">Products</p>
-              <h3 class="dashboard-card-value" th:text="${productCount}"></h3>
-              <div class="divider"></div>
-              <a href="/dashboard/product" class="dashboard-card-link">View details</a>
+    <div
+      class="dashboard"
+      layout:fragment="content"
+      th:with="queryUtils=${T(com.laptopstore.ecommerce.util.QueryUtils)},
+               orderStatusEnum=${T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum)},
+               dateTimeUtils=${T(com.laptopstore.ecommerce.util.DateTimeUtils)},
+               "
+    >
+      <div
+        class="container-fluid"
+        th:with="startDate=${#temporals.format(dateTimeUtils.getInstantDaysAgo(7), 'yyyy-MM-dd')},
+                 endDate=${#temporals.format(dateTimeUtils.getCurrentInstant(), 'yyyy-MM-dd')}
+                "
+      >
+        <!-- dashboard -->
+        <section class="dashboard-cards">
+          <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+              <div class="dashboard-card">
+                <i class="fa-solid fa-cubes"></i>
+                <p class="dashboard-card-title">Sản phẩm</p>
+                <h3
+                  class="dashboard-card-value"
+                  th:text="${dashboardContent.productCount}"
+                ></h3>
+                <div class="divider"></div>
+                <a href="/dashboard/product" class="dashboard-card-link"
+                  >Xem chi tiết</a
+                >
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+              <div class="dashboard-card">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <p class="dashboard-card-title">Đơn hàng</p>
+                <h3
+                  class="dashboard-card-value"
+                  th:text="${dashboardContent.orderCount}"
+                ></h3>
+                <div class="divider"></div>
+                <a href="/dashboard/order" class="dashboard-card-link"
+                  >Xem chi tiết</a
+                >
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+              <div class="dashboard-card">
+                <i class="fa-solid fa-users"></i>
+                <p class="dashboard-card-title">Người dùng</p>
+                <h3
+                  class="dashboard-card-value"
+                  th:text="${dashboardContent.userCount}"
+                ></h3>
+                <div class="divider"></div>
+                <a href="/dashboard/user" class="dashboard-card-link"
+                  >Xem chi tiết</a
+                >
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+              <div class="dashboard-card">
+                <i class="fa-solid fa-layer-group"></i>
+                <p class="dashboard-card-title">Danh mục</p>
+                <h3
+                  class="dashboard-card-value"
+                  th:text="${dashboardContent.categoryCount}"
+                ></h3>
+                <div class="divider"></div>
+                <a href="/dashboard/category" class="dashboard-card-link"
+                  >Xem chi tiết</a
+                >
+              </div>
             </div>
           </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-            <div class="dashboard-card">
-              <i class="fa-solid fa-cart-shopping"></i>
-              <p class="dashboard-card-title">Orders</p>
-              <h3 class="dashboard-card-value" th:text="${orderCount}"></h3>
-              <div class="divider"></div>
-              <a href="/dashboard/order" class="dashboard-card-link">View details</a>
-            </div>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-            <div class="dashboard-card">
-              <i class="fa-solid fa-users"></i>
-              <p class="dashboard-card-title">Users</p>
-              <h3 class="dashboard-card-value" th:text="${userCount}"></h3>
-              <div class="divider"></div>
-              <a href="/dashboard/user" class="dashboard-card-link">View details</a>
-            </div>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-            <div class="dashboard-card">
-              <i class="fa-solid fa-layer-group"></i>
-              <p class="dashboard-card-title">Categories</p>
-              <h3 class="dashboard-card-value" th:text="${categoryCount}"></h3>
-              <div class="divider"></div>
-              <a href="/dashboard/category" class="dashboard-card-link">View details</a>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="top-sale-products">
-        <!-- header -->
-        <div class="header">
-          <h1 class="title">Top sale products</h1>
+        <!-- statistics -->
+        <section class="statistics-overview">
+          <div class="statistics-overview-header">
+            <h2 class="title">Thống kê</h2>
 
-          <div class="time-limit dropdown">
-            <button class="time-limit-toggle dropdown-toggle">
-              <i class="fa-solid fa-caret-down"></i>Time:
-              <span class="sort-selected" th:if="${query.monthLimit == '1'}">1 month</span>
-              <span class="sort-selected" th:if="${query.monthLimit == '3'}">3 month</span>
-              <span class="sort-selected" th:if="${query.monthLimit == '6'}">6 month</span>
-              <span class="sort-selected" th:if="${query.monthLimit == '12'}">12 month</span>
-            </button>
-            <ul class="time-limit-dropdown-menu dropdown-menu">
-              <li>
-                <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=1')}"
-                   th:classappend="${query.monthLimit == '1' ? 'active' : ''}"
-                >
-                  1 month
-                </a>
-              </li>
-              <li>
-                <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=3')}"
-                   th:classappend="${query.monthLimit == '3' ? 'active' : ''}"
-                >
-                  3 month
-                </a>
-              </li>
-              <li>
-                <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=6')}"
-                   th:classappend="${query.monthLimit == '6' ? 'active' : ''}"
-                >
-                  6 month
-                </a>
-              </li>
-              <li>
-                <a th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=12')}"
-                   th:classappend="${query.monthLimit == '12' ? 'active' : ''}"
-                >
-                  12 month
-                </a>
-              </li>
-            </ul>
+            <a
+              th:href="@{/dashboard/statistics}"
+              class="view-all-button primary-button"
+            >
+              <i class="fa-solid fa-arrow-right"></i>
+              Chi tiết
+            </a>
           </div>
-        </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+              <canvas id="orderCountChart"></canvas>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+              <canvas id="productSoldChart" class="chart"></canvas>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-">
+              <canvas id="salesChart" class="chart"></canvas>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-">
+              <canvas id="categorySoldChart" class="chart"></canvas>
+            </div>
+          </div>
+        </section>
 
-        <!-- table -->
-        <div class="table-container">
-          <table>
-            <thead>
-            <tr>
-              <th class="col-width-1">ID</th>
-              <th class="col-width-1">Image</th>
-              <th class="col-width-3">Name</th>
-              <th class="col-width-2">Category</th>
-              <th class="col-width-2">Brand</th>
-              <th class="col-width-2">Price</th>
-              <th class="col-width-1"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="product : ${productList}">
-              <td>
-                <span th:text="${product.id}"></span>
-              </td>
-              <td>
-                <div class="image-container">
-                  <img th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (product.productImages != null and product.productImages.size() > 0 ? product.productImages[0].imageName : '')}" alt="product image" />
-                </div>
-              </td>
-              <td>
-                <span th:text="${product.name}"></span>
-              </td>
-              <td>
-                <span th:text="${product.category?.name}"></span>
-              </td>
-              <td>
-                <span th:text="${product.brand?.name}">Apple</span>
-              </td>
-              <td>
-                <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
-              </td>
-              <td>
-                <div class="actions">
+        <!-- recent orders -->
+        <section class="recent-orders">
+          <!-- header -->
+          <div class="recent-orders-header">
+            <h2 class="title">Đơn hàng gần đây</h2>
+
+            <a
+              th:href="@{/dashboard/order}"
+              class="view-all-button primary-button"
+            >
+              <i class="fa-solid fa-arrow-right"></i>
+              Tất cả
+            </a>
+          </div>
+
+          <!-- table -->
+          <div class="recent-orders-table">
+            <table class="table">
+              <thead>
+                <tr class="table-header-row">
+                  <th class="table-header-cell col-width-1">Tạo lúc</th>
+                  <th class="table-header-cell col-width-1">Mã</th>
+                  <th class="table-header-cell col-width-3">Email</th>
+                  <th class="table-header-cell col-width-2">Tổng giá trị</th>
+                  <th class="table-header-cell col-width-2">Thanh toán</th>
+                  <th class="table-header-cell col-width-2">Trạng thái</th>
+                  <th class="table-header-cell col-width-1"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="table-body-row"
+                  th:each="order : ${dashboardContent.recentOrders}"
+                >
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${order.createdAt != null ? #temporals.format(order.createdAt, 'dd-MM-yyyy') : 'N/A'}"
+                    >
+                    </span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${order.id != null ? order.id : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${!#strings.isEmpty(order.email) ? order.email : 'N/A'}"
+                    >
+                    </span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${order.totalPrice != null ? #numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"
+                    >
+                    </span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${order.paymentMethod != null ? order.paymentMethod : 'N/A'}"
+                    >
+                    </span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      th:text="${order.status != null ? order.status.displayName : 'N/A'}"
+                      th:classappend="${
+                        order.status == null ? '' :
+                        order.status.equals(orderStatusEnum.PENDING) ? 'secondary-badge' :
+                        order.status.equals(orderStatusEnum.CONFIRMED) ? 'primary-badge' :
+                        order.status.equals(orderStatusEnum.DELIVERED) ? 'success-badge' :
+                        order.status.equals(orderStatusEnum.CANCELLED) ? 'danger-badge' : ''
+                      }"
+                    >
+                    </span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <div class="table-row-actions">
+                      <a
+                        class="view-button primary-button"
+                        th:href="@{/dashboard/order/details/{id}(id=${order.id})}"
+                      >
+                        Xem
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- top selling -->
+        <section class="top-selling">
+          <!-- header -->
+          <div class="top-selling-header">
+            <h1 class="title">Bán chạy (7 ngày)</h1>
+
+            <a
+              th:with="newUrl=${queryUtils.modifiedQuery('/dashboard/top-selling', {{'startDate': startDate, 'endDate': endDate}})}"
+              th:href="${newUrl}"
+              class="view-all-button primary-button"
+            >
+              <i class="fa-solid fa-arrow-right"></i>
+              Tất cả
+            </a>
+
+            <!-- <div class="time-limit dropdown">
+              <button class="time-limit-toggle dropdown-toggle">
+                <i class="fa-solid fa-caret-down"></i>Time:
+                <span class="sort-selected" th:if="${query.monthLimit == '1'}"
+                  >1 month</span
+                >
+                <span class="sort-selected" th:if="${query.monthLimit == '3'}"
+                  >3 month</span
+                >
+                <span class="sort-selected" th:if="${query.monthLimit == '6'}"
+                  >6 month</span
+                >
+                <span class="sort-selected" th:if="${query.monthLimit == '12'}"
+                  >12 month</span
+                >
+              </button>
+              <ul class="time-limit-dropdown-menu dropdown-menu">
+                <li>
                   <a
-                          th:href="@{/dashboard/product/details/{id}(id=${product.id})}"
-                          class="view-button"
+                    th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=1')}"
+                    th:classappend="${query.monthLimit == '1' ? 'active' : ''}"
                   >
-                    View
+                    1 month
                   </a>
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="recent-orders">
-        <!-- header -->
-        <div class="header">
-          <h1 class="title">Recent orders</h1>
-
-          <a th:href="@{/dashboard/order}" class="view-all-button">
-            <i class="fa-solid fa-arrow-right"></i>
-            View all
-          </a>
-        </div>
-
-        <!-- table -->
-        <div class="table-container">
-          <table>
-            <thead>
-            <tr class="table-row">
-              <th class="col-width-1">Date</th>
-              <th class="col-width-1">Order ID</th>
-              <th class="col-width-3">Email</th>
-              <th class="col-width-2">Total</th>
-              <th class="col-width-2">Payment method</th>
-              <th class="col-width-2">Status</th>
-              <th class="col-width-1"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="order : ${orderList}">
-              <th>
-                <span th:text="${#temporals.format(order.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
-              </th>
-              <td>
-                <span th:text="${order.id}"></span>
-              </td>
-              <td>
-                <span th:text="${order.receiverEmail}"></span>
-              </td>
-              <td>
-                <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
-              </td>
-              <td>
-                <span th:text="${order.paymentMethod}"></span>
-              </td>
-              <td>
-                            <span class="order-status"
-                                  th:text="${order.orderStatus}"
-                                  th:classappend="${order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).PENDING ? 'pending-status' :
-                                                                               (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CONFIRMED ? 'confirmed-status' :
-                                                                                (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).SHIPPING ? 'shipping-status' :
-                                                                                 (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).DELIVERED ? 'delivered-status' :
-                                                                                  (order.orderStatus == T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum).CANCELLED ? 'cancelled-status' :  ''))))}"
-                            >
-                            </span>
-              </td>
-              <td>
-                <div class="actions">
+                </li>
+                <li>
                   <a
-                          th:href="@{/dashboard/order/details/{id}(id=${order.id})}"
-                          class="view-button"
-                  >View</a
+                    th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=3')}"
+                    th:classappend="${query.monthLimit == '3' ? 'active' : ''}"
                   >
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+                    3 month
+                  </a>
+                </li>
+                <li>
+                  <a
+                    th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=6')}"
+                    th:classappend="${query.monthLimit == '6' ? 'active' : ''}"
+                  >
+                    6 month
+                  </a>
+                </li>
+                <li>
+                  <a
+                    th:href="${'/dashboard' + query.toQuery().replace('monthLimit=' + query.monthLimit, 'monthLimit=12')}"
+                    th:classappend="${query.monthLimit == '12' ? 'active' : ''}"
+                  >
+                    12 month
+                  </a>
+                </li>
+              </ul>
+            </div> -->
+          </div>
+
+          <!-- table -->
+          <div class="top-selling-table">
+            <table class="table">
+              <thead>
+                <tr class="table-header-row">
+                  <th class="table-header-cell col-width-1">Mã</th>
+                  <th class="table-header-cell col-width-1">Hình ảnh</th>
+                  <th class="table-header-cell col-width-5">Tên</th>
+                  <th class="table-header-cell col-width-2">Đã bán</th>
+                  <th class="table-header-cell col-width-2">Tồn kho</th>
+                  <th class="table-header-cell col-width-1"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="table-body-row"
+                  th:each="product : ${dashboardContent.topSellingProducts}"
+                >
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${product.id != null ? product.id : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span th:if="${product.productImage == null}">N/A</span>
+                    <div
+                      class="product-image"
+                      th:if="${product.productImage != null}"
+                    >
+                      <img
+                        th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + product.productImage.imageName}"
+                        alt="product"
+                      />
+                    </div>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${!#strings.isEmpty(product.name) ? product.name : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${product.sold != null ? product.sold : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${product.quantity != null ? product.quantity : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <div class="table-row-actions">
+                      <a
+                        class="view-button primary-button"
+                        th:href="@{/dashboard/product/details/{id}(id=${product.id})}"
+                      >
+                        Xem
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- recent reviews -->
+        <section class="recent-reviews">
+          <!-- header -->
+          <div class="recent-reviews-header">
+            <h1 class="title">Đánh giá gần đây</h1>
+
+            <a
+              th:href="@{/dashboard/review}"
+              class="view-all-button primary-button"
+            >
+              <i class="fa-solid fa-arrow-right"></i>
+              Tất cả
+            </a>
+          </div>
+
+          <!-- table -->
+          <div class="recent-reviews-table">
+            <table class="table">
+              <thead>
+                <tr class="table-header-row">
+                  <th class="table-header-cell col-width-1">Mã</th>
+                  <th class="table-header-cell col-width-1">Avatar</th>
+                  <th class="table-header-cell col-width-3">Email</th>
+                  <th class="table-header-cell col-width-2">Đánh giá</th>
+                  <th class="table-header-cell col-width-4">Sản phẩm</th>
+                  <th class="table-header-cell col-width-1"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="table-body-row"
+                  th:each="review : ${dashboardContent.recentReviews}"
+                >
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${review.id != null ? review.id : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <div
+                      class="user-avatar"
+                      th:if="${review.userAvatar != null and !review.userAvatar.isEmpty()}"
+                    >
+                      <img
+                        th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + review.userAvatar}"
+                        alt="avatar"
+                      />
+                    </div>
+                    <div
+                      class="user-avatar"
+                      th:if="${review.userAvatar == null or review.userAvatar.isEmpty()}"
+                    >
+                      <img src="/images/default-avatar.png" alt="avatar" />
+                    </div>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${!#strings.isEmpty(review.userEmail) ? review.userEmail : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <div class="review-stars">
+                      <i
+                        class="fa-solid fa-star"
+                        th:each="i : ${#numbers.sequence(1, 5)}"
+                        th:classappend="${i <= review.rating} ? 'active' : ''"
+                      >
+                      </i>
+                    </div>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${!#strings.isEmpty(review.productName) ? review.productName : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <div class="table-row-actions">
+                      <a
+                        class="view-button primary-button"
+                        th:href="@{/dashboard/review/details/{id}(id=${review.id})}"
+                      >
+                        Xem
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- top rated -->
+        <section class="top-rated">
+          <!-- header -->
+          <div class="top-rated-header">
+            <h1 class="title">Đánh giá cao (7 ngày)</h1>
+
+            <a
+              th:with="newUrl=${queryUtils.modifiedQuery('/dashboard/top-rated', {{'startDate': startDate, 'endDate': endDate}})}"
+              th:href="${newUrl}"
+              class="view-all-button primary-button"
+            >
+              <i class="fa-solid fa-arrow-right"></i>
+              Tất cả
+            </a>
+          </div>
+
+          <!-- table -->
+          <div class="top-rated-table">
+            <table class="table">
+              <thead>
+                <tr class="table-header-row">
+                  <th class="table-header-cell col-width-1">Mã</th>
+                  <th class="table-header-cell col-width-1">Hình ảnh</th>
+                  <th class="table-header-cell col-width-3">Tên</th>
+                  <th class="table-header-cell col-width-3">Đánh giá</th>
+                  <th class="table-header-cell col-width-3">Lượt đánh giá</th>
+                  <th class="table-header-cell col-width-1"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="table-body-row"
+                  th:each="product : ${dashboardContent.topRatedProducts}"
+                >
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${product.id != null ? product.id : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span th:if="${product.productImage == null}">N/A</span>
+                    <div
+                      class="product-image"
+                      th:if="${product.productImage != null}"
+                    >
+                      <img
+                        th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + product.productImage.imageName}"
+                        alt="product"
+                      />
+                    </div>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${!#strings.isEmpty(product.name) ? product.name : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <div class="review-stars">
+                      <i
+                        th:with="score=${product.averageRating}"
+                        class="fa-solid"
+                        th:each="i : ${#numbers.sequence(1, 5)}"
+                        th:classappend="${i <= T(java.lang.Math).floor(score) ? 'fa-star active' : i - 1 < score ? 'fa-star-half-stroke active' : 'fa-star'}"
+                      >
+                      </i>
+                    </div>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${product.totalRatings != null ? product.totalRatings : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <div class="table-row-actions">
+                      <a
+                        class="view-button primary-button"
+                        th:href="@{/dashboard/product/details/{id}(id=${product.id})}"
+                      >
+                        Xem
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
     </div>
   </body>
 
+  <script layout:fragment="scripts" th:inline="javascript">
+    const monthlyDeliveredOrderCounts =
+      /*[[${dashboardContent.monthlyDeliveredOrderCounts}]]*/ [];
+
+    const monthlySoldProductCounts =
+      /*[[${dashboardContent.monthlySoldProductCounts}]]*/ [];
+
+    const monthlySales = /*[[${dashboardContent.monthlySales}]]*/ [];
+    const categorySoldCounts =
+      /*[[${dashboardContent.categorySoldCounts}]]*/ [];
+
+    const months = [
+      "Tháng 1",
+      "Tháng 2",
+      "Tháng 3",
+      "Tháng 4",
+      "Tháng 5",
+      "Tháng 6",
+      "Tháng 7",
+      "Tháng 8",
+      "Tháng 9",
+      "Tháng 10",
+      "Tháng 11",
+      "Tháng 12",
+    ];
+
+    const orderCount = [];
+    const productCount = [];
+    const salesValue = [];
+    const categoryLabels = categorySoldCounts.map((item) => item.categoryName);
+    const categorySolds = categorySoldCounts.map((item) => item.soldCount);
+
+    for (let i = 0; i < 12; i++) {
+      const deliveredDto = monthlyDeliveredOrderCounts[i];
+      const soldDto = monthlySoldProductCounts[i];
+      const salesDto = monthlySales[i];
+
+      orderCount.push(deliveredDto ? deliveredDto.orderCount : 0);
+      productCount.push(soldDto ? soldDto.productCount : 0);
+      salesValue.push(salesDto ? salesDto.salesValue : 0);
+    }
+
+    const salesChart = $("#salesChart").get(0).getContext("2d");
+    const productSoldChart = $("#productSoldChart").get(0).getContext("2d");
+    const orderCountChart = $("#orderCountChart").get(0).getContext("2d");
+    const categorySoldChart = $("#categorySoldChart").get(0).getContext("2d");
+
+    new Chart(orderCountChart, {
+      type: "bar",
+      data: {
+        labels: months,
+        datasets: [
+          {
+            data: orderCount,
+            backgroundColor: "#3b71ca",
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: "Tổng quan số đơn hàng đã hoàn thành 12 tháng năm nay",
+            font: {
+              size: 16,
+              weight: "normal",
+            },
+            color: "#333",
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const value = context.raw.toLocaleString();
+                return `Số đơn hàng: ${value}`;
+              },
+            },
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: true,
+
+        scales: {
+          y: {
+            beginAtZero: true,
+            stepSize: 1,
+            ticks: {
+              stepSize: 1,
+              callback: function (value) {
+                return value.toLocaleString();
+              },
+            },
+          },
+        },
+      },
+    });
+
+    new Chart(productSoldChart, {
+      type: "bar",
+      data: {
+        labels: months,
+        datasets: [
+          {
+            data: productCount,
+            backgroundColor: "#3b71ca",
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: "Tổng quan số sản phẩm bán được 12 tháng năm nay",
+            font: {
+              size: 16,
+              weight: "normal",
+            },
+            color: "#333",
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const value = context.raw.toLocaleString();
+                return `Số sản phẩm: ${value}`;
+              },
+            },
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: true,
+
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1,
+              callback: function (value) {
+                return value.toLocaleString();
+              },
+            },
+          },
+        },
+      },
+    });
+
+    new Chart(categorySoldChart, {
+      type: "doughnut",
+      data: {
+        labels: categoryLabels,
+        datasets: [
+          {
+            data: categorySolds,
+            backgroundColor: [
+              "#3b71ca",
+              "#14a44d",
+              "#54b4d3",
+              "#e4a11b",
+              "#dc4c64",
+              "#9fa6b2",
+            ],
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: { display: true },
+          title: {
+            display: true,
+            text: "Tổng quan danh mục đã bán trong năm nay",
+            font: {
+              size: 16,
+              weight: "normal",
+            },
+            color: "#333",
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const label = context.label || "";
+                const value = context.raw.toLocaleString();
+                return `${label}: ${value} đã bán`;
+              },
+            },
+          },
+        },
+        responsive: true,
+        cutout: "20%",
+        maintainAspectRatio: false,
+      },
+    });
+
+    new Chart(salesChart, {
+      type: "line",
+      data: {
+        labels: months,
+        datasets: [
+          {
+            data: salesValue,
+            backgroundColor: "#3b71ca",
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: "Tổng quan doanh thu 12 tháng năm nay",
+            font: {
+              size: 16,
+              weight: "normal",
+            },
+            color: "#333",
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const value = context.raw.toLocaleString("vi-VN");
+                return `Doanh thu: ${value} ₫`;
+              },
+            },
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: true,
+
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function (value) {
+                return value.toLocaleString("vi-VN") + " ₫";
+              },
+            },
+          },
+        },
+      },
+    });
+  </script>
 </html>

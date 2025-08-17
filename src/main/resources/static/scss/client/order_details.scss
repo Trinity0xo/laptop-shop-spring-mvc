@@ -1,0 +1,75 @@
+@import "../variables";
+@import "../media_advanced";
+@import "../responsive_grid";
+@import "../table_col_width";
+@import "../button";
+
+.order-details {
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    .order-details-content {
+      background-color: $bg-white;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      padding: 1.6rem;
+      border-radius: 1.6rem;
+      box-shadow: $box-shadow-01;
+
+      .content-title {
+        font-size: 2rem;
+        color: $text-primary;
+      }
+
+      .content-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2.4rem;
+
+        .info {
+          display: flex;
+          flex-direction: column;
+          gap: 1.6rem;
+
+          .info-title {
+            font-size: 1.8rem;
+            color: $text-primary;
+          }
+
+          &.order-info {
+            .description-list-actions {
+              margin-top: 1.6rem;
+            }
+          }
+
+          &.products-info {
+            overflow-x: auto;
+
+            .products-info-title {
+              font-size: 1.8rem;
+              color: $text-primary;
+            }
+
+            .products-info-table {
+              @include generate-col-widths($maxWidth: 750px);
+
+              .product-image {
+                width: 6.4rem;
+                height: 6.4rem;
+
+                .image {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

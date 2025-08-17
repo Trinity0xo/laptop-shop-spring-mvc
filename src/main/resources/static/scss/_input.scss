@@ -1,15 +1,25 @@
 @import "variables";
 
 @mixin input(
-  $borderColor: rgba($textColor01, 0.15),
-  $textColor: $textColor01,
-  $fontSize: 1.5rem,
-  $padding: 8px 16px
+  $borderColor: rgba($text-primary, 0.25),
+  $textColor: $text-primary,
+  $fontSize: 1.6rem,
+  $padding: 0.8rem 1.6rem,
+  $borderRadius: 1rem,
+  $textAlign: start
 ) {
   padding: $padding;
   font-size: $fontSize;
-  border: 1px solid $borderColor;
+  border: 0.1rem solid $borderColor;
   color: $textColor;
+  border-radius: $borderRadius;
+  text-align: $textAlign;
 
-  @content;
+  &.error {
+    border: 0.1rem solid $color-danger;
+  }
+
+  &:focus {
+    border: 0.1rem solid $color-primary;
+  }
 }

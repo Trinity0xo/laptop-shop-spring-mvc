@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -50,7 +49,6 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             session.setAttribute("username", userPrincipal.getName());
             session.setAttribute("fullName", userPrincipal.getFullName());
             session.setAttribute("avatar", userPrincipal.getAvatar());
-            session.setAttribute("cartItemCount", userPrincipal.getCartItemCount());
         }
 
         redirectStrategy.sendRedirect(request, response, targetUrl);

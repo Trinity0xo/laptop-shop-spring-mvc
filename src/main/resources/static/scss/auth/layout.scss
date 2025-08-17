@@ -1,0 +1,33 @@
+@import "../variables";
+@import "../media_advanced";
+@import "../responsive_grid";
+@import "../button";
+@import "../input";
+
+body {
+  background-color: $bg-light;
+
+  .authentication {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0 1.6rem;
+
+    .authentication-form {
+      padding: 1.6rem;
+      background-color: $bg-white;
+      width: 55rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      box-shadow: $box-shadow-01;
+      border-radius: 1.6rem;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

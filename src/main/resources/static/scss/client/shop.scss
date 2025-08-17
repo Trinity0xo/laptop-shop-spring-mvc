@@ -1,0 +1,25 @@
+@import "../variables";
+@import "../media_advanced";
+@import "../responsive_grid";
+@import "../button";
+@import "../input";
+
+.shop {
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    .shop-title {
+      color: $text-primary;
+      font-size: 2.5rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.6rem;
+    }
+  }
+}

@@ -1,35 +1,60 @@
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/admin/layout/layout"
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
 >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sản phẩm</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Product</title>
-</head>
+  <body>
+    <div class="product product-delete" layout:fragment="content">
+      <div class="container-fluid">
+        <!-- breadcrumb -->
+        <ul class="breadcrumb">
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/dashboard/product">Sản phẩm</a></li>
+          <li>
+            <a
+              th:href="@{/dashboard/product/details/{id}(id=${productId})}"
+              th:text="${productId}"
+            ></a>
+          </li>
+          <li>Xóa</li>
+        </ul>
 
-<body>
-  <div class="container-fluid" layout:fragment="content">
-    <!-- breadcrumb -->
-    <ul class="breadcrumb">
-      <li><a href="/dashboard">Dashboard</a></li>
-      <li><a href="/dashboard/product">Product</a></li>
-      <li>Delete</li>
-    </ul>
+        <!-- delete product form -->
+        <form
+          class="delete-product-form product-form"
+          method="post"
+          th:action="@{/dashboard/product/delete}"
+        >
+          <h1 class="form-title">
+            Xóa sản phẩm với "Mã: <span th:text="${productId}"></span>"
+          </h1>
 
-    <div class="product-container">
-      <h1 class="title">Delete product "<span th:text="${product.name}"></span>"</h1>
+          <div class="form-content">
+            <input type="hidden" name="productId" th:value="${productId}" />
+            <p class="warning-message">
+              Bạn có chắc chắn muốn xóa sản phẩm với "Mã:
+              <span th:text="${productId}"></span>" không?
+            </p>
+          </div>
 
-      <form method="post" th:action="@{/dashboard/product/delete/{id}(id=${product.id})}" class="delete-product-form">
-        <p class="warning-message">Are you sure you want to delete the "<span th:text="${product.name}" ></span>" product ?</p>
-        <div class="actions">
-          <button type="submit" class="confirm-button">Confirm</button>
-          <a href="/dashboard/product" class="cancel-button">Back</a>
-        </div>
-      </form>
+          <div class="form-actions">
+            <button type="submit" class="confirm-button danger-button">
+              Xác nhận
+            </button>
+            <a href="/dashboard/product" class="back-button secondary-button">
+              Quay lại
+            </a>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

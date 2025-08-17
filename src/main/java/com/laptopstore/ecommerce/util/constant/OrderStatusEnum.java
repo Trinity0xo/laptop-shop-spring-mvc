@@ -1,9 +1,17 @@
 package com.laptopstore.ecommerce.util.constant;
 
+import lombok.Getter;
+
+@Getter
 public enum OrderStatusEnum {
-    PENDING,
-    CONFIRMED,
-    SHIPPING,
-    DELIVERED,
-    CANCELLED
+    PENDING("Đang xử lý"),
+    CONFIRMED("Đã xác nhận"),
+    DELIVERED("Đã giao"),
+    CANCELLED("Đã hủy");
+
+    private final String displayName;
+
+    OrderStatusEnum(String displayName) {
+        this.displayName = displayName;
+    }
 }

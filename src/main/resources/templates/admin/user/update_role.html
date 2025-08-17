@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Người dùng</title>
+  </head>
+
+  <body>
+    <div
+      class="user user-update"
+      layout:fragment="content"
+      th:with="roleEnum=${T(com.laptopstore.ecommerce.util.constant.RoleEnum)}"
+    >
+      <div class="container-fluid">
+        <!-- breadcrumb -->
+        <ul class="breadcrumb">
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/dashboard/user">Người dùng</a></li>
+          <li th:text="${updateUserRoleDto.id}"></li>
+          <li>Cập nhật</li>
+        </ul>
+
+        <!-- update user form -->
+        <form
+          class="update-user-form user-form"
+          method="post"
+          th:action="@{/dashboard/user/update-role}"
+          th:object="${updateUserRoleDto}"
+        >
+          <h1 class="form-title">
+            Cập nhật người dùng "<span
+              th:text="${updateUserRoleDto.email}"
+            ></span
+            >"
+          </h1>
+
+          <input type="hidden" name="id" th:value="${updateUserRoleDto.id}" />
+
+          <div class="form-content">
+            <div class="input-group">
+              <label for="role">Vai trò:</label>
+              <div class="input-group-control">
+                <select name="role" id="role">
+                  <option
+                    th:each="role : ${roleEnum.values()}"
+                    th:value="${role}"
+                    th:text="${role.displayName}"
+                    th:selected="${role.equals(updateUserRoleDto.role)}"
+                  ></option>
+                </select>
+                <span
+                  class="input-error-message"
+                  th:if="${#fields.hasErrors('role')}"
+                  th:errors="${updateUserRoleDto.role}"
+                ></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <div class="spacer"></div>
+            <button type="submit" class="save-button primary-button">
+              Lưu
+            </button>
+            <a href="/dashboard/user" class="back-button secondary-button"
+              >Quay lại</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

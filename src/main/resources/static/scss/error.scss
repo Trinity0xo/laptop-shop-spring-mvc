@@ -1,38 +1,29 @@
 @import "button";
 @import "variables";
 
-.error-container {
+.error {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.6rem;
   height: 100vh;
   justify-content: center;
   align-items: center;
 
   .status-code {
-    font-size: 20rem;
+    font-size: 16rem;
     font-weight: 600;
-    color: $primaryColor;
+    color: $color-primary;
   }
 
-  h1 {
-    font-size: 5rem;
+  .title {
+    font-size: 3.2rem;
     font-weight: 600;
-    color: $textColor01;
+    color: $color-primary;
+    text-transform: uppercase;
   }
 
-  p {
-    font-size: 2.5rem;
-    color: $textColor01;
-  }
-
-  a {
-    @include button($fontSize: 2rem, $borderRadius: 50px, $padding: 10px 20px) {
-      transition: 0.3s;
-
-      &:hover {
-        transform: scale(1.05);
-      }
-    }
+  .message {
+    font-size: 2.4rem;
+    color: $text-primary;
   }
 }

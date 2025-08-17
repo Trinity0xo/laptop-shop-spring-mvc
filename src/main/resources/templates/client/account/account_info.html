@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/client/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account</title>
+  </head>
+
+  <body>
+    <main class="account-info" layout:fragment="content">
+      <div class="container">
+        <!-- breadcrumb -->
+        <ul class="breadcrumb">
+          <li><a href="/">Trang chủ</a></li>
+          <li>Tài khoản</li>
+        </ul>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+            <!-- account aside -->
+            <div th:replace="/client/account/account_aside"></div>
+          </div>
+
+          <!-- account info -->
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
+            <div class="account-info-content">
+              <h1 class="content-title">Thông tin tài khoản</h1>
+              <dl class="content-description-list description-list row">
+                <dt
+                  class="description-term col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4"
+                >
+                  Ảnh đại diện:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-6 col-md-8 col-lg-8 col-xl-8"
+                >
+                  <a
+                    class="avatar"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    th:if="${!#strings.isEmpty(accountInfo.currentAvatarName)}"
+                    th:href="@{'/' + ${resourcesMappingFolder} + '/' + ${avatarsFolder} + '/' + ${accountInfo.currentAvatarName}}"
+                  >
+                    <img
+                      th:src="@{'/' + ${resourcesMappingFolder} + '/' + ${avatarsFolder} + '/' + ${accountInfo.currentAvatarName}}"
+                      alt="avatar"
+                    />
+                  </a>
+
+                  <a
+                    class="avatar"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    th:if="${#strings.isEmpty(accountInfo.currentAvatarName)}"
+                    href="/images/default-avatar.png"
+                  >
+                    <img src="/images/default-avatar.png" alt="avatar" />
+                  </a>
+                </dd>
+
+                <dt
+                  class="description-term col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4"
+                >
+                  Tên:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-6 col-md-8 col-lg-8 col-xl-8"
+                  th:text="${!#strings.isEmpty(accountInfo.firstName) ? accountInfo.firstName : 'N/A'}"
+                ></dd>
+
+                <dt
+                  class="description-term col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4"
+                >
+                  Họ:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-6 col-md-8 col-lg-8 col-xl-8"
+                  th:text="${!#strings.isEmpty(accountInfo.lastName) ? accountInfo.lastName : 'N/A'}"
+                ></dd>
+
+                <dt
+                  class="description-term col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4"
+                >
+                  Email:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-6 col-md-8 col-lg-8 col-xl-8"
+                  th:text="${!#strings.isEmpty(accountInfo.email) ? accountInfo.email : 'N/A'}"
+                ></dd>
+
+                <dt
+                  class="description-term col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4"
+                >
+                  Số điện thoại:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-6 col-md-8 col-lg-8 col-xl-8"
+                  th:text="${!#strings.isEmpty(accountInfo.phone) ? accountInfo.phone : 'N/A'}"
+                ></dd>
+
+                <dt
+                  class="description-term col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4"
+                >
+                  Địa chỉ:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-6 col-md-8 col-lg-8 col-xl-8"
+                  th:text="${!#strings.isEmpty(accountInfo.address) ? accountInfo.address : 'N/A'}"
+                ></dd>
+
+                <dt
+                  class="description-term col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4"
+                >
+                  Ngày tham gia:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-6 col-md-8 col-lg-8 col-xl-8"
+                  th:text="${accountInfo.createdAt != null ? #temporals.format(accountInfo.createdAt, 'dd-MM-yyyy') : 'N/A'}"
+                ></dd>
+
+                <dt
+                  class="description-term col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4"
+                >
+                  Cập nhật lúc:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-6 col-md-8 col-lg-8 col-xl-8"
+                  th:text="${accountInfo.updatedAt != null ? #temporals.format(accountInfo.updatedAt, 'dd-MM-yyyy') : 'N/A'}"
+                ></dd>
+              </dl>
+
+              <div class="content-actions">
+                <a
+                  href="/account/information/update"
+                  class="update-button primary-button"
+                  >Cập nhật</a
+                >
+                <a class="back-button secondary-button" href="/shop"
+                  >Quay lại</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

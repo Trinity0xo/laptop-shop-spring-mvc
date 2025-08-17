@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,6 +19,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "roles")
 public class Role {
+    public static final String DEFAULT_SORT_FIELD = "createdAt";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,19 +28,28 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private List<User> users = new ArrayList<>();
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
+    @NotNull
     private String name;
 
+    @Column(unique = true, nullable = false)
+    @NotNull
+    private String slug;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String description;
 
     @CreationTimestamp
+    @Column(nullable = false)
     private Instant createdAt;
 
     @UpdateTimestamp
+    @Column(nullable = false)
     private Instant updatedAt;
 
-    public Role(String name, String description) {
+    public Role(String name, String slug, String description) {
         this.name = name;
+        this.slug = slug;
         this.description = description;
     }
 }

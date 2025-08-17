@@ -10,5 +10,5 @@ import com.laptopstore.ecommerce.model.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long>, JpaSpecificationExecutor<Role> {
-    Optional<Role> findByName(String name);
+    Optional<Role> findBySlug(String slug);
 }

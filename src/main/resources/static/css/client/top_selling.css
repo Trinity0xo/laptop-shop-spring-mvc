@@ -1,0 +1,9 @@
+.top-selling .container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.top-selling .container .top-selling-title {
+  color: #333;
+  font-size: 2.5rem;
+}

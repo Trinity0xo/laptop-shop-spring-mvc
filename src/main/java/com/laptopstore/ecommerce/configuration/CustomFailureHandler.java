@@ -1,6 +1,5 @@
 package com.laptopstore.ecommerce.configuration;
 
-import com.laptopstore.ecommerce.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,10 +16,10 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String errorMessage;
 
-        if(exception instanceof BadCredentialsException){
-            errorMessage = "Invalid email or password";
-        } else{
-            errorMessage = "Something went wrong";
+        if (exception instanceof BadCredentialsException) {
+            errorMessage = "Email hoặc mật khẩu không đúng";
+        } else {
+            errorMessage = "Đã xảy ra lỗi, vui lòng thử lại";
         }
 
         request.getSession().setAttribute("loginErrorMessage", errorMessage);

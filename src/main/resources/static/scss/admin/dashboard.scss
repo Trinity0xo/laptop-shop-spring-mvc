@@ -1,24 +1,23 @@
 @import "../media_advanced";
 @import "../variables";
 @import "../responsive_grid";
-@import "../table";
 @import "../table_col_width";
 @import "../button";
 @import "../input";
+@import "../lines_base_overflow";
 
-main {
+.dashboard {
   .container-fluid {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1.6rem;
 
     section {
-      background-color: $backgroundColor02;
-      padding: 16px;
-      box-shadow: $boxShadow01;
+      background-color: $bg-white;
+      padding: 1.6rem;
+      box-shadow: $box-shadow-01;
 
       &.dashboard-cards {
-        margin: -5px;
         background-color: transparent;
         padding: 0;
         box-shadow: none;
@@ -26,111 +25,56 @@ main {
         .dashboard-card {
           display: flex;
           flex-direction: column;
-          gap: 8px;
-          background-color: $backgroundColor02;
-          box-shadow: $boxShadow01;
-          padding: 16px 32px;
+          gap: 0.8rem;
+          background-color: $bg-white;
+          box-shadow: $box-shadow-01;
+          padding: 1.6rem 3.2rem;
           text-align: center;
 
           i {
             font-size: 2rem;
-            color: $textColor01;
+            color: $text-primary;
           }
 
           .dashboard-card-title {
-            font-size: 1.5rem;
-            color: $textColor01;
+            font-size: 1.6rem;
+            color: $text-primary;
           }
 
           .dashboard-card-value {
             font-size: 2.5rem;
-            color: $textColor01;
+            color: $text-primary;
+            @include linesBaseOverflow();
           }
 
           .dashboard-card-link {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
           }
         }
       }
 
-      &.top-sale-products {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-
-        .header {
+      &.statistics-overview {
+        .statistics-overview-header {
           display: flex;
-          gap: 16px;
+          gap: 1.6rem;
           justify-content: space-between;
-
-          @include media(xs, sm) {
-            flex-direction: column;
-            align-items: start;
-          }
-
-          @include media(md, lg, xl) {
-            flex-direction: row;
-            align-items: center;
-          }
+          flex-wrap: wrap;
 
           .title {
             font-size: 2rem;
-            color: $textColor01;
+            color: $text-primary;
           }
 
-          .time-limit {
-            .time-limit-toggle {
-              display: flex;
-              gap: 8px;
-              align-items: center;
-              font-size: 1.5rem;
-              color: $textColor01;
-              padding: 5px 10px;
-              cursor: pointer;
+          .view-all-button {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            font-size: 1.6rem;
 
-              i {
-                font-size: 1.5rem;
-                color: $textColor01;
-              }
-
-              &:hover {
-                background-color: $primaryColor;
-                color: $textColor02;
-
-                i {
-                  color: $textColor02;
-                }
-              }
+            i {
+              font-size: 1.6rem;
+              color: $text-inverse;
             }
-          }
-        }
-
-        .table-container {
-          overflow-x: auto;
-
-          table {
-            @include table() {
-              .image-container {
-                width: 64px;
-                height: 64px;
-
-                img {
-                  width: 100%;
-                  height: 100%;
-                  object-fit: contain;
-                }
-              }
-              .actions {
-                display: flex;
-                gap: 8px;
-
-                .view-button {
-                  @include button($backgroundColor: $successColor);
-                }
-              }
-            }
-
-            @include generate-col-widths(1500px)
           }
         }
       }
@@ -138,69 +82,226 @@ main {
       &.recent-orders {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 1.6rem;
 
-        .header {
+        .recent-orders-header {
           display: flex;
-          gap: 16px;
+          gap: 1.6rem;
           justify-content: space-between;
-
-          @include media(xs, sm) {
-            flex-direction: column;
-            align-items: start;
-          }
-
-          @include media(md, lg, xl) {
-            flex-direction: row;
-            align-items: center;
-          }
+          flex-wrap: wrap;
 
           .title {
             font-size: 2rem;
-            color: $textColor01;
+            color: $text-primary;
           }
 
           .view-all-button {
             display: flex;
-            gap: 8px;
+            gap: 0.8rem;
             align-items: center;
-            font-size: 1.5rem;
-            color: $textColor01;
-            padding: 5px 10px;
-            cursor: pointer;
+            font-size: 1.6rem;
 
             i {
-              font-size: 1.5rem;
-              color: $textColor01;
-            }
-
-            &:hover {
-              background-color: $primaryColor;
-              color: $textColor02;
-
-              i {
-                color: $textColor02;
-              }
+              font-size: 1.6rem;
+              color: $text-inverse;
             }
           }
         }
 
-        .table-container {
+        .recent-orders-table {
           overflow-x: auto;
 
           table {
-            @include table() {
-              .actions {
-                display: flex;
-                gap: 8px;
+            @include generate-col-widths(120rem);
 
-                .view-button {
-                  @include button($backgroundColor: $successColor);
-                }
+            .table-row-actions {
+              display: flex;
+              gap: 0.8rem;
+            }
+          }
+        }
+      }
+
+      &.top-selling {
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+
+        .top-selling-header {
+          display: flex;
+          gap: 1.6rem;
+          justify-content: space-between;
+          flex-wrap: wrap;
+
+          .title {
+            font-size: 2rem;
+            color: $text-primary;
+          }
+
+          .view-all-button {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            font-size: 1.6rem;
+
+            i {
+              font-size: 1.6rem;
+              color: $text-inverse;
+            }
+          }
+        }
+
+        .top-selling-table {
+          overflow-x: auto;
+
+          table {
+            @include generate-col-widths(120rem);
+
+            .product-image {
+              display: flex;
+              align-items: center;
+
+              img {
+                width: 6.4rem;
+                height: 6.4rem;
+                object-fit: contain;
               }
             }
 
-            @include generate-col-widths(1500px)
+            .table-row-actions {
+              display: flex;
+              gap: 0.8rem;
+            }
+          }
+        }
+      }
+
+      &.top-rated {
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+
+        .top-rated-header {
+          display: flex;
+          gap: 1.6rem;
+          justify-content: space-between;
+          flex-wrap: wrap;
+
+          .title {
+            font-size: 2rem;
+            color: $text-primary;
+          }
+
+          .view-all-button {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            font-size: 1.6rem;
+
+            i {
+              font-size: 1.6rem;
+              color: $text-inverse;
+            }
+          }
+        }
+
+        .top-rated-table {
+          overflow-x: auto;
+
+          table {
+            @include generate-col-widths(120rem);
+
+            .product-image {
+              display: flex;
+              align-items: center;
+
+              img {
+                width: 6.4rem;
+                height: 6.4rem;
+                object-fit: contain;
+              }
+            }
+
+            .review-stars {
+              display: flex;
+              gap: 0.6rem;
+
+              .fa-star,
+              .fa-star-half-stroke {
+                font-size: 1.5rem;
+              }
+            }
+
+            .table-row-actions {
+              display: flex;
+              gap: 0.8rem;
+            }
+          }
+        }
+      }
+
+      &.recent-reviews {
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+
+        .recent-reviews-header {
+          display: flex;
+          gap: 1.6rem;
+          justify-content: space-between;
+          flex-wrap: wrap;
+
+          .title {
+            font-size: 2rem;
+            color: $text-primary;
+          }
+
+          .view-all-button {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            font-size: 1.6rem;
+
+            i {
+              font-size: 1.6rem;
+              color: $text-inverse;
+            }
+          }
+        }
+
+        .recent-reviews-table {
+          overflow-x: auto;
+
+          table {
+            @include generate-col-widths(120rem);
+
+            .user-avatar {
+              display: flex;
+              align-items: center;
+
+              img {
+                width: 5rem;
+                height: 5rem;
+                object-fit: contain;
+                border-radius: 50%;
+                overflow: hidden;
+              }
+            }
+
+            .review-stars {
+              display: flex;
+              gap: 0.6rem;
+
+              .fa-star,
+              .fa-star-half-stroke {
+                font-size: 1.5rem;
+              }
+            }
+
+            .table-row-actions {
+              display: flex;
+              gap: 0.8rem;
+            }
           }
         }
       }

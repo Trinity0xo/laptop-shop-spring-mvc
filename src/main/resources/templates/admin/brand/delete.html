@@ -1,34 +1,64 @@
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/admin/layout/layout">
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brand</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Brand</title>
-</head>
-
-<body>
-      <div class="container-fluid" layout:fragment="content">
+  <body>
+    <div class="brand brand-delete" layout:fragment="content">
+      <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/dashboard/brand">Brand</a></li>
-          <li>Delete</li>
+          <li>
+            <a href="/dashboard">Dashboard</a>
+          </li>
+          <li>
+            <a href="/dashboard/brand">Thương hiệu</a>
+          </li>
+          <li>
+            <a
+              th:href="@{/dashboard/brand/details/{id}(id=${brandId})}"
+              th:text="${brandId}"
+            ></a>
+          </li>
+          <li>Xóa</li>
         </ul>
 
-        <div class="brand-container">
-          <h1 class="title">Delete brand "<span th:text="${brand.name}"></span>"</h1>
+        <!-- delete brand form -->
+        <form
+          class="brand-delete-form brand-form"
+          method="post"
+          th:action="@{/dashboard/brand/delete}"
+        >
+          <h1 class="form-title">
+            Xóa thương hiệu với "Mã: <span th:text="${brandId}"></span>"
+          </h1>
 
-          <form method="post" th:action="@{/dashboard/brand/delete/{id}(id=${brand.id})}" class="delete-brand-form">
-            <p class="warning-message">Are you sure you want to delete the "<span th:text="${brand.name}"></span>" brand ?</p>
-            <div class="actions">
-              <button type="submit" class="confirm-button">Confirm</button>
-              <a href="/dashboard/brand" class="cancel-button">Back</a>
-            </div>
-          </form>
-        </div>
+          <div class="form-content">
+            <input type="hidden" name="brandId" th:value="${brandId}" />
+            <p class="warning-message">
+              Bạn có chắc chắn muốn xóa thương hiệu với "Mã:
+              <span th:text="${brandId}"></span>" không?
+            </p>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="confirm-button danger-button">
+              Xác nhận
+            </button>
+            <a href="/dashboard/brand" class="back-button success-button">
+              Quay lại
+            </a>
+          </div>
+        </form>
       </div>
-</body>
+    </div>
+  </body>
 </html>

@@ -1,0 +1,424 @@
+@import "../variables";
+@import "../media_advanced";
+@import "../responsive_grid";
+@import "../button";
+
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  .banners {
+    position: relative;
+    height: 50rem;
+
+    @include media(xs, sm, md) {
+      height: 25rem;
+    }
+
+    @include media(lg, xl) {
+      height: 50rem;
+    }
+
+    .banner-carousel,
+    .banner-list {
+      width: 100%;
+      height: 100%;
+
+      .owl-stage-outer,
+      .owl-stage,
+      .owl-item {
+        width: 100%;
+        height: 100%;
+
+        .banner-item {
+          width: 100%;
+          height: 100%;
+
+          .banner-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+
+    .banners-intro {
+      position: absolute;
+      z-index: 990;
+      top: 50%;
+      transform: translateY(-50%);
+
+      @include media(xs, sm, md) {
+        width: 100%;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .intro-message {
+          font-size: 3rem;
+          text-align: center;
+        }
+      }
+
+      @include media(lg) {
+        width: 40rem;
+        right: 5%;
+        display: block;
+
+        .intro-message {
+          font-size: 4rem;
+          text-align: start;
+        }
+      }
+
+      @include media(xl) {
+        width: 50rem;
+        right: 10%;
+        display: block;
+
+        .intro-message {
+          font-size: 5rem;
+          text-align: start;
+        }
+      }
+
+      .intro-message {
+        color: $text-inverse;
+        font-weight: 500;
+        margin-bottom: 1.6rem;
+      }
+
+      .intro-button {
+        i {
+          color: $text-inverse;
+          font-size: 1.6rem;
+          margin-left: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .categories {
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+
+      .categories-title {
+        font-size: 4rem;
+        font-weight: 500;
+        color: $text-primary;
+      }
+
+      .category-card {
+        background-color: $bg-white;
+        border-radius: 1.6rem;
+        padding: 1.6rem;
+        transition: 0.3s;
+        box-shadow: $box-shadow-01;
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+        height: 100%;
+        cursor: pointer;
+
+        &:hover {
+          box-shadow: $box-shadow-02;
+          transform: scale(1.025);
+        }
+
+        .category-image {
+          img {
+            width: 100%;
+            height: 20rem;
+            object-fit: contain;
+          }
+        }
+
+        .category-information {
+          .category-name {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: $text-primary;
+          }
+
+          .category-description {
+            font-size: 1.6rem;
+            color: $text-primary;
+          }
+        }
+      }
+    }
+  }
+
+  .top-selling {
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      flex-wrap: wrap;
+
+      .top-selling-header {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        @include media(xs) {
+          flex-direction: column;
+          align-items: start;
+
+          .view-all-button {
+            width: 100%;
+          }
+        }
+
+        @include media(sm, md, lg, xl) {
+          flex-direction: row;
+          align-items: center;
+
+          .view-all-button {
+            width: auto;
+          }
+        }
+
+        .header-title {
+          font-size: 4rem;
+          font-weight: 500;
+          color: $text-primary;
+        }
+
+        .view-all-button {
+          display: flex;
+          gap: 0.8rem;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  .ideal-laptop {
+    .container {
+      display: flex;
+      gap: 1.6rem;
+
+      @include media(xs, sm, md) {
+        flex-direction: column;
+
+        .ideal-laptop-intro {
+          width: 100%;
+
+          .intro-button {
+            width: 100%;
+          }
+        }
+
+        .ideal-laptop-image {
+          width: 100%;
+        }
+      }
+
+      @include media(lg, xl) {
+        flex-direction: row;
+
+        .ideal-laptop-intro {
+          width: 40%;
+
+          .intro-button {
+            width: auto;
+          }
+        }
+
+        .ideal-laptop-image {
+          width: 60%;
+        }
+      }
+
+      .ideal-laptop-intro {
+        margin-top: auto;
+        margin-bottom: auto;
+
+        .intro-title {
+          font-size: 5rem;
+          color: $text-primary;
+          font-weight: 500;
+        }
+
+        .intro-description {
+          font-size: 2.5rem;
+          color: $text-primary;
+          font-weight: 500;
+          margin-bottom: 1.6rem;
+        }
+
+        .intro-button {
+          i {
+            color: $text-inverse;
+            font-size: 1.6rem;
+            margin-left: 0.5rem;
+          }
+        }
+      }
+
+      .ideal-laptop-image {
+        // height: 500px;
+
+        img {
+          width: 100%;
+          // height: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+
+  .top-discount {
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+
+      .top-discount-header {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        @include media(xs) {
+          flex-direction: column;
+          align-items: start;
+
+          .view-all-button {
+            width: 100%;
+          }
+        }
+
+        @include media(sm, md, lg, xl) {
+          flex-direction: row;
+          align-items: center;
+          gap: 0;
+
+          .view-all-button {
+            width: auto;
+          }
+        }
+
+        .header-title {
+          font-size: 4rem;
+          font-weight: 500;
+          color: $text-primary;
+        }
+
+        .view-all-button {
+          display: flex;
+          gap: 0.8rem;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  .top-rating {
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      flex-wrap: wrap;
+
+      .top-rating-header {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        @include media(xs) {
+          flex-direction: column;
+          align-items: start;
+
+          .view-all-button {
+            width: 100%;
+          }
+        }
+
+        @include media(sm, md, lg, xl) {
+          flex-direction: row;
+          align-items: center;
+
+          .view-all-button {
+            width: auto;
+          }
+        }
+
+        .header-title {
+          font-size: 4rem;
+          font-weight: 500;
+          color: $text-primary;
+        }
+
+        .view-all-button {
+          display: flex;
+          gap: 0.8rem;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  .reasons-shop-here {
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+
+      .reasons-title {
+        font-size: 4rem;
+        font-weight: 500;
+        color: $text-primary;
+      }
+
+      .reason-card {
+        background-color: $bg-white;
+        border-radius: 3.2rem;
+        padding: 3.2rem;
+        transition: 0.3s;
+        box-shadow: $box-shadow-01;
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+        height: 100%;
+        cursor: pointer;
+
+        &:hover {
+          box-shadow: $box-shadow-02;
+          transform: scale(1.025);
+        }
+
+        .reason-image {
+          width: 6.4rem;
+          height: 6.4rem;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
+
+        .reason-title {
+          font-size: 1.6rem;
+          font-weight: 500;
+          color: $text-primary;
+        }
+
+        .reason-description {
+          font-size: 1.6rem;
+          color: $text-primary;
+        }
+      }
+    }
+  }
+}

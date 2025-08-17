@@ -1,16 +1,20 @@
 package com.laptopstore.ecommerce.dto.category;
 
-import com.laptopstore.ecommerce.util.anotaion.validation.category.EditCategoryConstraint;
+import com.laptopstore.ecommerce.util.validation.category.UpdateCategoryConstraint;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-@EditCategoryConstraint
-public class UpdateCategoryDto {
+@UpdateCategoryConstraint
+public class UpdateCategoryDto extends BaseCategoryDto {
     private Long id;
-    private MultipartFile image;
-    private String name;
-    private String description;
+    private String currentImageName;
+
+    public UpdateCategoryDto(long id, String currentImageName, String name, String description){
+        this.id = id;
+        this.currentImageName = currentImageName;
+        this.name = name;
+        this.description = description;
+    }
 }

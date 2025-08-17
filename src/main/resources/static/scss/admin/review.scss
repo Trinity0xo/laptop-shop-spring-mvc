@@ -1,0 +1,104 @@
+@import "../variables";
+@import "../button";
+@import "../media_advanced";
+@import "../input";
+@import "../table_col_width";
+@import "../lines_base_overflow";
+
+.review {
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    .review-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      background-color: $bg-white;
+      padding: 1.6rem;
+      box-shadow: $box-shadow-01;
+
+      .content-title {
+        font-size: 3rem;
+        color: $text-primary;
+      }
+
+      .content-table {
+        overflow-y: auto;
+
+        table {
+          @include generate-col-widths(120rem);
+
+          .user-avatar {
+            display: flex;
+            align-items: center;
+
+            img {
+              width: 5rem;
+              height: 5rem;
+              object-fit: contain;
+              border-radius: 50%;
+              overflow: hidden;
+            }
+          }
+
+          .review-stars {
+            display: flex;
+            gap: 0.6rem;
+
+            .fa-star {
+              font-size: 1.5rem;
+            }
+          }
+
+          .table-row-actions {
+            display: flex;
+            gap: 0.8rem;
+          }
+        }
+      }
+
+      .content-description-list {
+        dl {
+          .review-stars {
+            display: flex;
+            gap: 0.6rem;
+
+            .fa-star {
+              font-size: 1.5rem;
+            }
+          }
+
+          .user-avatar {
+            display: block;
+            width: 5rem;
+            width: 5rem;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              object-fit: contain;
+              border-radius: 50%;
+              overflow: hidden;
+            }
+          }
+        }
+      }
+
+      .content-actions {
+        display: flex;
+        gap: 1rem;
+
+        @include media(xs, sm) {
+          flex-direction: column;
+        }
+
+        @include media(md, lg, xl) {
+          flex-direction: row;
+        }
+      }
+    }
+  }
+}

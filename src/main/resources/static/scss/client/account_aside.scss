@@ -1,0 +1,37 @@
+@import "../variables";
+@import "../media_advanced";
+@import "../responsive_grid";
+
+.account-aside {
+  background-color: $bg-white;
+  padding: 1.6rem;
+  box-shadow: $box-shadow-01;
+  border-radius: 1.6rem;
+
+  .aside-option-list {
+    .item {
+      &:not(:last-child) {
+        margin-bottom: 0.4rem;
+      }
+
+      .link {
+        display: inline-block;
+        padding: 1rem 1.6rem;
+        width: 100%;
+        font-size: 1.6rem;
+        color: $text-primary;
+        border-radius: 1rem;
+
+        &:hover {
+          background-color: $color-primary;
+          color: $text-inverse;
+        }
+
+        &.active {
+          background-color: $color-primary;
+          color: $text-inverse;
+        }
+      }
+    }
+  }
+}

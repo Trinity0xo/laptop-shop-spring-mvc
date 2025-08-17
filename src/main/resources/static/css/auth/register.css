@@ -1,0 +1,38 @@
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.register-form .register-form-title {
+  font-size: 2rem;
+  color: #333;
+}
+.register-form .input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.register-form .input-group label {
+  display: inline-block;
+  font-size: 1.6rem;
+  color: #333;
+}
+.register-form .input-group input {
+  padding: 0.8rem 1.6rem;
+  font-size: 1.6rem;
+  border: 0.1rem solid rgba(51, 51, 51, 0.25);
+  color: #333;
+  border-radius: 1rem;
+  text-align: start;
+  width: 100%;
+}
+.register-form .input-group input.error {
+  border: 0.1rem solid #dc4c64;
+}
+.register-form .input-group input:focus {
+  border: 0.1rem solid #3b71ca;
+}
+.register-form .login-text {
+  font-size: 1.6rem;
+  text-align: center;
+}

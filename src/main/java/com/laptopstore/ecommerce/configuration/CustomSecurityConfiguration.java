@@ -1,6 +1,6 @@
 package com.laptopstore.ecommerce.configuration;
 
-import com.laptopstore.ecommerce.service.UserService;
+import com.laptopstore.ecommerce.util.constant.RoleEnum;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,8 +54,21 @@ public class CustomSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http, CustomFailureHandler customFailureHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomSuccessHandler customSuccessHandler, CustomOAuth2SuccessHandler customOAuth2SuccessHandler)
             throws Exception {
         http.authorizeHttpRequests(authorization -> authorization
-                        .requestMatchers("/auth/**", "/", "/shop/**", "/images/**", "/admin/**", "/client/**", "/libraries/**", "/uploads/**" ).permitAll()
-                        .requestMatchers("/dashboard/**").hasRole("ADMIN")
+                        .requestMatchers( "/", "/auth/**","/shop/**", "/about", "/contact", "/hot-deals/**", "/images/**", "/js/**", "/css/**", "/uploads/**", "/error" ).permitAll()
+
+                        // Owners & Admins can view users
+                        .requestMatchers("/dashboard/user", "/dashboard/user/details/**")
+                        .hasAnyRole(RoleEnum.SUPER_ADMIN.name(), RoleEnum.OWNER.name())
+
+
+                        // Admin-only actions
+                        .requestMatchers("/dashboard/user/create").hasRole(RoleEnum.SUPER_ADMIN.name())
+                        .requestMatchers("/dashboard/user/update-role").hasRole(RoleEnum.SUPER_ADMIN.name())
+                        .requestMatchers("/dashboard/user/update-role/**").hasRole(RoleEnum.SUPER_ADMIN.name())
+
+                        // Owners & Admins can view dashboard
+                        .requestMatchers("/dashboard/**").hasAnyRole(RoleEnum.SUPER_ADMIN.name(), RoleEnum.OWNER.name())
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

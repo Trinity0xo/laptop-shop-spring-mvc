@@ -1,205 +1,310 @@
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/admin/layout/layout"
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
 >
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Role</title>
-</head>
+    <title>Vai trò</title>
+  </head>
 
-<body>
-    <form method="get" layout:fragment="content" th:action="@{/dashboard/role}">
-        <div class="container-fluid">
+  <body>
+    <div
+      class="role role-list"
+      layout:fragment="content"
+      th:with="queryUtils=${T(com.laptopstore.ecommerce.util.QueryUtils)},
+               sortDirectionEnum=${T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum)},
+               roleClass=${T(com.laptopstore.ecommerce.model.Role)},
+               paginationUtils=${T(com.laptopstore.ecommerce.util.PaginationUtils)}
+               "
+    >
+      <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li>Role</li>
+          <li>
+            <a href="/dashboard">Dashboard</a>
+          </li>
+          <li>Vai trò</li>
         </ul>
 
-        <div class="role-container">
-            <h1 class="title">Role</h1>
+        <!-- role list content -->
+        <div
+          class="role-list-content role-content"
+          th:with="validSortBy=${paginationUtils.getValidSortBy(roleClass, roleFilterDto.sortBy, roleClass.DEFAULT_SORT_FIELD)}"
+        >
+          <h1 class="content-title">Vai trò</h1>
 
-            <!-- header -->
-            <div class="header">
-                <div class="filters-container">
-                    <div class="limit">
-                        <label for="limit">Limit: </label>
-                        <select class="limit-select" name="limit" id="limit" onchange="this.form.submit()">
-                            <option th:value="10" th:selected="${query.getIntegerLimit() == 10}">10</option>
-                            <option th:value="20" th:selected="${query.getIntegerLimit() == 20}">20</option>
-                            <option th:value="40" th:selected="${query.getIntegerLimit() == 40}">40</option>
-                            <option th:value="80" th:selected="${query.getIntegerLimit() == 80}">80</option>
-                        </select>
-                    </div>
+          <!-- control panel -->
+          <form
+            class="control-panel-form"
+            th:action="@{/dashboard/role}"
+            method="get"
+          >
+            <input type="hidden" name="sortBy" th:value="${validSortBy}" />
 
-                    <div class="search">
-                        <input class="search-box" type="text" name="name" id="name" th:value="${query.name}" placeholder="Search name..." />
-                        <button type="submit"  class="search-button">Search</button>
-                    </div>
+            <input
+              type="hidden"
+              name="sortDirection"
+              th:value="${roleFilterDto.getEnumSortDirection()}"
+            />
 
-                    <input type="hidden" name="sortBy" th:value="${query.sortBy}" />
-                    <input type="hidden" name="sortDirection" th:value="${query.sortDirection}" />
-                </div>
-            </div>
-
-            <!-- search result -->
-            <div class="search-result-container"
-                 th:if="${query.name != null and query.name != ''}"
-            >
-                <p class="search-result-message">
-                    <span
-                            class="result-count"
-                            th:text="${resultCount}"
-                    >
-                    </span> results for "<span
-                            class="result-query"
-                            th:text="${query.name}">
-
-                    </span>"
-                </p>
-                <a
-                        class="search-result-reset"
-                        th:href="${'/dashboard/role' + query.toQuery()
-                                  .replace('name=' + query.name , '')
-                                  .replace('&page=' + query.getIntegerPage(), 'page=1')}"
+            <!-- limit -->
+            <div class="limit">
+              <label class="limit-label" for="limit">Giới hạn:</label>
+              <select
+                class="limit-select"
+                name="limit"
+                id="limit"
+                onchange="this.form.submit()"
+              >
+                <option
+                  th:value="10"
+                  th:selected="${roleFilterDto.getIntegerLimit() == 10}"
                 >
-                    reset
-                </a>
+                  10
+                </option>
+                <option
+                  th:value="20"
+                  th:selected="${roleFilterDto.getIntegerLimit() == 20}"
+                >
+                  20
+                </option>
+                <option
+                  th:value="40"
+                  th:selected="${roleFilterDto.getIntegerLimit() == 40}"
+                >
+                  40
+                </option>
+                <option
+                  th:value="80"
+                  th:selected="${roleFilterDto.getIntegerLimit() == 80}"
+                >
+                  80
+                </option>
+              </select>
             </div>
 
-            <!-- table -->
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="col-width-1" th:with="sortDirection=${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}">
-                                <a th:href="${'/dashboard/role' + query.toQuery()
-                                               .replace('sortBy=' + query.sortBy, 'sortBy=id')
-                                               .replace('page=' + query.getIntegerPage(), 'page=1')
-                                               .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                               }"
-                                >
-                                    ID
-                                    <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                                       class="fa-solid fa-arrow-down"></i>
-
-                                    <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                                       class="fa-solid fa-arrow-up"></i>
-                                </a>
-                            </th>
-                            <th class="col-width-4" th:with="sortDirection=${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}">
-                                <a th:href="${'/dashboard/role' + query.toQuery()
-                                               .replace('sortBy=' + query.sortBy, 'sortBy=name')
-                                               .replace('page=' + query.getIntegerPage(), 'page=1')
-                                               .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                               }"
-                                >
-                                    Name
-                                    <i th:if="${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                                       class="fa-solid fa-arrow-down"></i>
-
-                                    <i th:if="${query.sortBy == 'name' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                                       class="fa-solid fa-arrow-up"></i>
-                                </a>
-                            </th>
-                            <th class="col-width-3" th:with="sortDirection=${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}">
-                                <a th:href="${'/dashboard/role' + query.toQuery()
-                                               .replace('sortBy=' + query.sortBy, 'sortBy=createdAt')
-                                               .replace('page=' + query.getIntegerPage(), 'page=1')
-                                               .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                               }"
-                                >
-                                    Created at
-                                    <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                                       class="fa-solid fa-arrow-down"></i>
-
-                                    <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                                       class="fa-solid fa-arrow-up"></i>
-                                </a>
-                            </th>
-                            <th class="col-width-3" th:with="sortDirection=${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}">
-                                <a th:href="${'/dashboard/role' + query.toQuery()
-                                               .replace('sortBy=' + query.sortBy, 'sortBy=updatedAt')
-                                               .replace('page=' + query.getIntegerPage(), 'page=1')
-                                               .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                               }"
-                                >
-                                    Updated at
-                                    <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                                       class="fa-solid fa-arrow-down"></i>
-
-                                    <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                                       class="fa-solid fa-arrow-up"></i>
-                                </a>
-                            </th>
-                            <th class="col-width-1"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="role: ${roleList}">
-                            <td>
-                                <span th:text="${role.id}"></span>
-                            </td>
-                            <td>
-                                <span th:text="${role.name}"></span>
-                            </td>
-                            <td>
-                                <span th:text="${#temporals.format(role.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
-                            </td>
-                            <td>
-                                <span th:text="${#temporals.format(role.updatedAt, 'dd-MM-yyyy HH:mm')}"></span>
-                            </td>
-                            <td>
-                                <div class="actions">
-                                    <a class="view-button" th:href="@{/dashboard/role/details/{id}(id=${role.id})}">View</a>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- search -->
+            <div class="search">
+              <input
+                class="search-input"
+                type="text"
+                name="search"
+                id="search"
+                th:value="${roleFilterDto.search}"
+                placeholder="Tên vai trò..."
+              />
+              <button type="submit" class="search-button">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
             </div>
+          </form>
 
-            <!-- pagination -->
-            <ul class="pagination" th:if="${totalPages > 0}">
-                <li>
-                    <a class="previous"
-                       th:href="${'/dashboard/role' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage - 1))}"
-                       th:classappend="${currentPage == 1 ? 'disabled' : ''}"
+          <!-- search summary -->
+          <div
+            class="search-summary"
+            th:if="${roleFilterDto.search != null && !roleFilterDto.search.isEmpty()}"
+          >
+            <p class="search-message">
+              <span
+                class="search-result-count"
+                th:text="${response.totalItem}"
+              ></span>
+              kết quả cho "
+              <span
+                class="search-value"
+                th:text="${roleFilterDto.search}"
+              ></span
+              >"
+            </p>
+            <a
+              class="search-reset-link"
+              th:with="newQuery=${queryUtils.modifiedQuery(roleFilterDto.toQuery(), {{'search': null, 'page': '1'}})}"
+              th:href="${'/dashboard/role' + newQuery}"
+            >
+              đặt lại
+            </a>
+          </div>
+
+          <!-- table -->
+          <div class="content-table">
+            <table class="table">
+              <thead>
+                <tr class="table-header-row">
+                  <th
+                    class="table-header-cell col-width-1"
+                    th:with="sortDirection=${validSortBy.equals('id') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                  >
+                    <a
+                      th:with="newQuery=${queryUtils.modifiedQuery(roleFilterDto.toQuery(), {{'sortBy': 'id', 'page': '1', 'sortDirection' : sortDirection }})}"
+                      th:href="${'/dashboard/role' + newQuery}"
                     >
-                        <i class="fa-solid fa-chevron-left"></i>
+                      Mã
+                      <i
+                        th:if="${validSortBy.equals('id') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                        class="fa-solid fa-arrow-down"
+                      ></i>
+
+                      <i
+                        th:if="${validSortBy.equals('id') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                        class="fa-solid fa-arrow-up"
+                      ></i>
                     </a>
-                </li>
-                <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
-                    <a th:href="${'/dashboard/role' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (pageNumber + 1))}"
-                       th:class="${currentPage == pageNumber + 1 ? 'active' : ''}"
-                       th:text="${pageNumber + 1}">
-                    </a>
-                </li>
-                <li>
-                    <a class="next"
-                       th:href="${'/dashboard/role' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage + 1))}"
-                       th:classappend="${currentPage + 1 > totalPages ? 'disabled' : ''}"
+                  </th>
+
+                  <th
+                    class="table-header-cell col-width-4"
+                    th:with="sortDirection=${validSortBy.equals('name') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                  >
+                    <a
+                      th:with="newQuery=${queryUtils.modifiedQuery(roleFilterDto.toQuery(), {'sortBy': 'name', 'page': '1', 'sortDirection': sortDirection})}"
+                      th:href="${'/dashboard/role' + newQuery}"
                     >
-                        <i class="fa-solid fa-chevron-right"></i>
+                      Tên
+                      <i
+                        th:if="${validSortBy.equals('name') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                        class="fa-solid fa-arrow-down"
+                      ></i>
+
+                      <i
+                        th:if="${validSortBy.equals('name') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                        class="fa-solid fa-arrow-up"
+                      ></i>
                     </a>
-                </li>
-            </ul>
-            <ul class="pagination" th:if="${totalPages == 0}">
-                <li>
-                    <a class="previous disabled"><i class="fa-solid fa-chevron-left"></i></a>
-                </li>
-                <li>
-                    <a th:class="active" th:text="1"></a>
-                </li>
-                <li>
-                    <a class="next disabled"><i class="fa-solid fa-chevron-right"></i></a>
-                </li>
-            </ul>
+                  </th>
+
+                  <th
+                    class="table-header-cell col-width-3"
+                    th:with="sortDirection=${validSortBy.equals('createdAt') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                  >
+                    <a
+                      th:with="newQuery=${queryUtils.modifiedQuery(roleFilterDto.toQuery(), {'sortBy': 'createdAt', 'page': '1', 'sortDirection': sortDirection})}"
+                      th:href="${'/dashboard/role' + newQuery}"
+                    >
+                      Ngày tạo
+                      <i
+                        th:if="${validSortBy.equals('createdAt') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                        class="fa-solid fa-arrow-down"
+                      ></i>
+
+                      <i
+                        th:if="${validSortBy.equals('createdAt') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                        class="fa-solid fa-arrow-up"
+                      ></i>
+                    </a>
+                  </th>
+
+                  <th
+                    class="table-header-cell col-width-3"
+                    th:with="sortDirection=${validSortBy.equals('updatedAt') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                  >
+                    <a
+                      th:with="newQuery=${queryUtils.modifiedQuery(roleFilterDto.toQuery(), {'sortBy': 'updatedAt', 'page': '1', 'sortDirection': sortDirection})}"
+                      th:href="${'/dashboard/role' + newQuery}"
+                    >
+                      Ngày cập nhật
+                      <i
+                        th:if="${validSortBy.equals('updatedAt') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                        class="fa-solid fa-arrow-down"
+                      ></i>
+
+                      <i
+                        th:if="${validSortBy.equals('updatedAt') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                        class="fa-solid fa-arrow-up"
+                      ></i>
+                    </a>
+                  </th>
+
+                  <th class="table-header-cell col-width-1"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-body-row" th:each="role: ${response.data}">
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${role.id != null ? role.id : 'N/A'}"
+                    ></span>
+                  </td>
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${#strings.isEmpty(role.name) ? 'N/A' : role.name}"
+                    ></span>
+                  </td>
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${role.createdAt != null ? #temporals.format(role.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+                    ></span>
+                  </td>
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${role.updatedAt != null ? #temporals.format(role.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+                    ></span>
+                  </td>
+                  <td class="table-body-cell">
+                    <div class="table-row-actions">
+                      <a
+                        class="view-button primary-button"
+                        th:if="${role.id != null}"
+                        th:href="@{/dashboard/role/details/{id}(id=${role.id})}"
+                        >Xem</a
+                      >
+                      <span th:if="${role.id == null}">N/A</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- pagination -->
+          <ul class="pagination" th:if="${response.totalPages > 1}">
+            <!-- Previous Page -->
+            <li class="pagination-item">
+              <a
+                class="previous-page-button"
+                th:with="newQuery=${queryUtils.modifiedQuery(roleFilterDto.toQuery(),{{'page': (response.currentPage - 1)}})}"
+                th:href="${'/dashboard/role' + newQuery}"
+                th:classappend="${response.currentPage <= 1 ? 'pagination__previous-button--disabled' : ''}"
+              >
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+            </li>
+
+            <!-- Page Numbers -->
+            <li
+              class="pagination-item"
+              th:each="pageNumber : ${#numbers.sequence(1, response.totalPages)}"
+            >
+              <a
+                class="page-number-button"
+                th:with="newQuery=${queryUtils.modifiedQuery(roleFilterDto.toQuery(),{{'page': pageNumber}})}"
+                th:href="${'/dashboard/role' + newQuery}"
+                th:classappend="${response.currentPage == pageNumber ? 'pagination__number-button--active' : ''}"
+                th:text="${pageNumber}"
+              ></a>
+            </li>
+
+            <!-- Next Page -->
+            <li class="pagination-item">
+              <a
+                class="next-page-button"
+                th:with="newQuery=${queryUtils.modifiedQuery(roleFilterDto.toQuery(),{{'page': (response.currentPage + 1)}})}"
+                th:href="${'/dashboard/role' + newQuery}"
+                th:classappend="${response.currentPage >= response.totalPages ? 'pagination__next-button--disabled' : ''}"
+              >
+                <i class="fa-solid fa-chevron-right"></i>
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
-    </form>
-</body>
+  </body>
 </html>

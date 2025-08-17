@@ -1,65 +1,102 @@
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/admin/layout/layout"
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
 >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vai trò</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Role</title>
-</head>
-
-<body>
-  <div class="container-fluid" layout:fragment="content">
+  <body>
+    <div class="role role-details" layout:fragment="content">
+      <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/dashboard/role">Role</a></li>
-          <li>Details</li>
+          <li><a href="/dashboard/role">Vai trò</a></li>
+          <li th:text="${role.id}"></li>
         </ul>
 
-        <div class="role-container">
-          <h1 class="title">Role "<span th:text="${role.name}"></span>"</h1>
+        <div class="role-details-content role-content">
+          <h1 class="content-title">
+            Vai trò "<span th:text="${role.name}"></span>"
+          </h1>
 
-          <div class="description-list-container">
-            <dl class="row">
-              <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                ID:
+          <div class="content-description-list">
+            <dl class="description-list row">
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Mã:
               </dt>
-              <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${role.id}">
-              </dd>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${role.id}"
+              ></dd>
 
-              <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                Name:
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Tên:
               </dt>
-              <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${role.name}">
-              </dd>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(role.name) ? 'N/A' : role.name}"
+              ></dd>
 
-              <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                Description:
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Mô tả:
               </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(role.description) ? 'N/A' : role.description}"
+              ></dd>
 
-              <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${role.description}">
-              </dd>
-
-              <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                Created at:
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Slug:
               </dt>
-              <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(role.createdAt, 'dd-MM-yyyy HH:mm')}">
-              </dd>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(role.slug) ? 'N/A' : role.slug}"
+              ></dd>
 
-              <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                Updated at:
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Ngày tạo:
               </dt>
-              <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(role.updatedAt, 'dd-MM-yyyy HH:mm')}">
-              </dd>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${role.createdAt != null ? #temporals.format(role.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+              ></dd>
+
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Ngày cập nhật:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${role.updatedAt != null ? #temporals.format(role.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+              ></dd>
             </dl>
-            <div class="actions">
-              <a href="/dashboard/role" class="back-button">Back</a>
-            </div>
+          </div>
+
+          <div class="content-actions">
+            <a href="/dashboard/role" class="back-button secondary-button"
+              >Quay lại</a
+            >
           </div>
         </div>
       </div>
-</body>
+    </div>
+  </body>
 </html>

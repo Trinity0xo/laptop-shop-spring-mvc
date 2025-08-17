@@ -1,23 +1,21 @@
 package com.laptopstore.ecommerce.controller.admin;
 
-import com.laptopstore.ecommerce.util.error.NotFoundException;
-import org.springframework.data.domain.Page;
+import com.laptopstore.ecommerce.dto.brand.BrandFilterDto;
+import com.laptopstore.ecommerce.dto.response.PageResponse;
+import com.laptopstore.ecommerce.service.BrandService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import com.laptopstore.ecommerce.dto.brand.BrandCriteriaDto;
 import com.laptopstore.ecommerce.dto.brand.CreateBrandDto;
 import com.laptopstore.ecommerce.dto.brand.UpdateBrandDto;
 import com.laptopstore.ecommerce.model.Brand;
-import com.laptopstore.ecommerce.service.BrandService;
 
 import jakarta.validation.Valid;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/dashboard/brand")
@@ -31,14 +29,11 @@ public class BrandController {
     @GetMapping("")
     public String showBrandPage(
             Model model,
-            BrandCriteriaDto brandCriteriaDto
-    ) throws Exception {
-        Page<Brand> brands = this.brandService.handleGetAllBrands(brandCriteriaDto);
-        model.addAttribute("brandList", brands.getContent());
-        model.addAttribute("totalPages", brands.getTotalPages());
-        model.addAttribute("currentPage", brands.getPageable().getPageNumber() + 1);
-        model.addAttribute("query", brandCriteriaDto);
-        model.addAttribute("resultCount", brands.getTotalElements());
+            BrandFilterDto brandFilterDto
+    ) {
+        PageResponse<List<Brand>> response = this.brandService.getAllBrands(brandFilterDto);
+        model.addAttribute("response", response);
+        model.addAttribute("brandCriteriaDto", brandFilterDto);
 
         return "/admin/brand/index";
     }
@@ -46,8 +41,7 @@ public class BrandController {
     @GetMapping("/create")
     public String showCreateBrandPage(
             Model model
-    ) throws Exception {
-
+    ) {
         model.addAttribute("createBrandDto", new CreateBrandDto());
 
         return "/admin/brand/create";
@@ -58,98 +52,73 @@ public class BrandController {
             @Valid CreateBrandDto createBrandDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
-    ) throws Exception {
+    ) {
         if (bindingResult.hasErrors()) {
             return "/admin/brand/create";
         }
 
-        this.brandService.handleCreateBrand(createBrandDto);
+        this.brandService.createBrand(createBrandDto);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Brand created successfully");
+        redirectAttributes.addFlashAttribute("successMessage", "Tạo thương hiệu thành công");
 
         return "redirect:/dashboard/brand";
     }
 
-    @GetMapping("/edit/{id}")
-    public String showEditPage(
-            @PathVariable Long id,
+    @GetMapping("/update/{brandId}")
+    public String showUpdatePage(
+            @PathVariable Long brandId,
             Model model
-    ) throws Exception {
-        Brand brand = brandService.handleGetBrandById(id);
-        if (brand == null) {
-            throw new NotFoundException("Brand not found");
-        }
-
-        UpdateBrandDto updateBrandDto = new UpdateBrandDto();
-        updateBrandDto.setId(brand.getId());
-        updateBrandDto.setName(brand.getName());
-        updateBrandDto.setDescription(brand.getDescription());
-
+    ) {
+        UpdateBrandDto updateBrandDto = this.brandService.getInformationForUpdateBrand(brandId);
         model.addAttribute("updateBrandDto", updateBrandDto);
 
-        return "/admin/brand/edit";
+        return "/admin/brand/update";
     }
 
-    @PostMapping("/edit/{id}")
-    public String editBrand(
-            @PathVariable Long id,
+    @PostMapping("/update")
+    public String updateBrand(
             @Valid UpdateBrandDto updateBrandDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
-    ) throws Exception {
-
+    ) {
         if (bindingResult.hasErrors()) {
-            return "/admin/brand/edit";
+            return "/admin/brand/update";
         }
 
-        Brand brand = brandService.handleGetBrandById(id);
-        if (brand == null) {
-            throw new NotFoundException("Brand not found");
-        }
+        this.brandService.updateBrand(updateBrandDto);
 
-        this.brandService.handleUpdateBrand(updateBrandDto, brand);
-
-        redirectAttributes.addFlashAttribute("successMessage", "Brand updated successfully");
+        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thương hiệu thành công");
 
         return "redirect:/dashboard/brand";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{brandId}")
     public String showDeleteBrandPage(
-            @PathVariable Long id,
+            @PathVariable Long brandId,
             Model model
-    ) throws Exception {
-        Brand brand = brandService.handleGetBrandById(id);
-        if (brand == null) {
-            throw new NotFoundException("Brand not found");
-        }
+    ) {
+        model.addAttribute("brandId", brandId);
 
-        model.addAttribute("brand", brand);
         return "/admin/brand/delete";
     }
 
-    @PostMapping("/delete/{id}")
+    @PostMapping("/delete")
     public String deleteBrand(
-            @PathVariable Long id,
+            Long brandId,
             RedirectAttributes redirectAttributes
-    ) throws Exception {
-        this.brandService.handleDeleteBrandById(id);
-
-        redirectAttributes.addFlashAttribute("successMessage", "Brand deleted successfully");
+    ) {
+        this.brandService.deleteBrand(brandId);
+        redirectAttributes.addFlashAttribute("successMessage", "Xóa thương hiệu thành công");
 
         return "redirect:/dashboard/brand";
     }
 
-    @GetMapping("/details/{id}")
-    public String showDetailsPage(
-            @PathVariable Long id,
+    @GetMapping("/details/{brandId}")
+    public String showBrandDetailsPage(
+            @PathVariable Long brandId,
             Model model
-    ) throws Exception {
-        Brand brand = this.brandService.handleGetBrandById(id);
-        if (brand == null) {
-            throw new NotFoundException("Brand not found");
-        }
-
+    ) {
+        Brand brand = this.brandService.getBrandById(brandId);
         model.addAttribute("brand", brand);
 
         return "/admin/brand/details";

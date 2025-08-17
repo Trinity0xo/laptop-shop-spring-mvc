@@ -1,10 +1,9 @@
 package com.laptopstore.ecommerce.configuration;
 
 import com.laptopstore.ecommerce.dto.auth.RegisterDto;
-import com.laptopstore.ecommerce.model.Cart;
 import com.laptopstore.ecommerce.model.User;
-import com.laptopstore.ecommerce.service.CartService;
 import com.laptopstore.ecommerce.service.UserService;
+import com.laptopstore.ecommerce.service.impl.UserServiceImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -17,11 +16,10 @@ import java.util.Collections;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserService userService;
-    private final CartService cartService;
 
-    public CustomOAuth2UserService(UserService userService, CartService cartService) {
+    public CustomOAuth2UserService(UserService userService) {
         this.userService = userService;
-        this.cartService = cartService;
+        ;
     }
 
     @Override
@@ -29,7 +27,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oauth2User = super.loadUser(userRequest);
         String email = oauth2User.getAttribute("email");
 
-        User user = this.userService.handleGetUserByEmail(email);
+        User user = this.userService.getUserByEmail(email);
         if(user == null){
             String firstName = oauth2User.getAttribute("given_name");
             String lastName = oauth2User.getAttribute("family_name");
@@ -37,21 +35,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             registerDto.setFirstName(firstName);
             registerDto.setLastName(lastName);
             registerDto.setEmail(email);
-            user = userService.handleCreateNewUser(registerDto);
-        }
-
-        int cartItemCount = 0;
-
-        Cart userCart = user.getCart();
-        if (userCart != null) {
-            cartItemCount = this.cartService.handleCountCartItemByCart(user.getCart());
+            user = userService.createNewUser(registerDto);
         }
 
         return new CustomOAuth2User(
                 user.getFullName(),
                 user.getAvatar(),
-                cartItemCount,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName())), // Authorities
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getSlug())), // Authorities
                 oauth2User.getAttributes(),
                 "email"
         );

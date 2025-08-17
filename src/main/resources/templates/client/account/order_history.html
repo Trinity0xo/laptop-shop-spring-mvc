@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/client/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Order history</title>
+  </head>
+  <body>
+    <main
+      layout:fragment="content"
+      class="order-history"
+      th:with="orderStatusEnum=${T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum)},
+               queryUtils=${T(com.laptopstore.ecommerce.util.QueryUtils)},
+               sortDirectionEnum=${T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum)},
+               priceUtils=${T(com.laptopstore.ecommerce.util.PriceUtils)},
+               orderClass=${T(com.laptopstore.ecommerce.model.Order)},
+               dateTimeUtils=${T(com.laptopstore.ecommerce.util.DateTimeUtils)},
+               paymentMethodEnum=${T(com.laptopstore.ecommerce.util.constant.PaymentMethodEnum)},
+               paginationUtils=${T(com.laptopstore.ecommerce.util.PaginationUtils)}"
+    >
+      <div class="container">
+        <!-- breadcrumb -->
+        <ul class="breadcrumb">
+          <li><a href="/">Trang chủ</a></li>
+          <li>Lịch sử đơn hàng</li>
+        </ul>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+            <!-- account aside -->
+            <div th:replace="/client/account/account_aside"></div>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
+            <!-- order history content -->
+            <div
+              class="order-history-content"
+              th:with="validSortBy=${paginationUtils.getValidSortBy(orderClass, orderFilterDto.sortBy, orderClass.DEFAULT_SORT_FIELD)}"
+            >
+              <h1 class="content-title">Lịch sử đơn hàng</h1>
+
+              <!-- control panel -->
+              <form
+                class="control-panel-form"
+                method="get"
+                th:action="@{/account/order-history}"
+              >
+                <input type="hidden" name="sortBy" th:value="${validSortBy}" />
+
+                <input
+                  type="hidden"
+                  name="sortDirection"
+                  th:value="${orderFilterDto.getEnumSortDirection()}"
+                />
+
+                <!-- filters -->
+                <div class="filters">
+                  <button
+                    class="show-modal-button show-filters-button primary-button"
+                    data-show="filtersModal"
+                    type="button"
+                  >
+                    <i class="fa-solid fa-filter"></i>
+                    Bộ lọc
+                    <span
+                      class="filter-number warning-badge"
+                      th:if="${orderFilterDto.getFilterCount() > 0}"
+                      th:text="${orderFilterDto.getFilterCount()}"
+                    >
+                    </span>
+                  </button>
+                  <div id="filtersModal" class="filters-modal modal">
+                    <div class="filters-modal-header modal-header">
+                      <div class="header-title">Bộ lọc</div>
+                      <button
+                        type="button"
+                        class="hide-modal-button"
+                        data-hide="filtersModal"
+                      >
+                        <i class="fa-solid fa-xmark"></i>
+                      </button>
+                    </div>
+
+                    <div class="filters-modal-body modal-body">
+                      <div class="filter-section">
+                        <h2 class="filter-label">Thanh toán:</h2>
+                        <div class="filter-options">
+                          <div
+                            class="filter-check-group"
+                            th:each="paymentMethod: ${paymentMethodEnum.values()}"
+                          >
+                            <input
+                              type="checkbox"
+                              name="paymentMethods"
+                              th:id="${'method#' + paymentMethod}"
+                              th:value="${paymentMethod}"
+                              th:checked="${orderFilterDto?.paymentMethods?.contains(paymentMethod.name())}"
+                            />
+                            <label
+                              th:for="${'method#' + paymentMethod}"
+                              th:text="${paymentMethod}"
+                            >
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="filter-section">
+                        <h2 class="filter-label">Trạng thái:</h2>
+                        <div class="filter-options">
+                          <div
+                            class="filter-check-group"
+                            th:each="orderStatus: ${orderStatusEnum.values()}"
+                          >
+                            <input
+                              type="checkbox"
+                              name="statuses"
+                              th:id="${'status#' + orderStatus}"
+                              th:value="${orderStatus}"
+                              th:checked="${orderFilterDto?.statuses?.contains(orderStatus.name())}"
+                            />
+                            <label
+                              th:for="${'status#' + orderStatus}"
+                              th:text="${orderStatus.displayName}"
+                            >
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="filter-section"
+                        th:with="totalPriceRange=${priceUtils.getValidPriceRange(orderFilterDto.getDoubleMinTotalPrice(), orderFilterDto.getDoubleMaxTotalPrice(), orderFilterDto.MIN_TOTAL_PRICE, orderFilterDto.MAX_TOTAL_PRICE)}"
+                      >
+                        <h2 class="filter-label">Tổng giá tiền:</h2>
+                        <div class="filter-options">
+                          <div class="filter-input-group">
+                            <label for="minDiscountPrice">Từ: </label>
+                            <input
+                              type="text"
+                              name="minTotalPrice"
+                              class="price-input"
+                              id="minTotalPrice"
+                              th:value="${!totalPriceRange.isEmpty() ? totalPriceRange.get('min') : orderFilterDto.MIN_TOTAL_PRICE}"
+                            />
+                          </div>
+
+                          <div class="filter-input-group">
+                            <label for="maxDiscountPrice">Đến: </label>
+
+                            <input
+                              type="text"
+                              name="maxTotalPrice"
+                              class="price-input"
+                              id="maxTotalPrice"
+                              th:value="${!totalPriceRange.isEmpty() ? totalPriceRange.get('max') : orderFilterDto.MAX_TOTAL_PRICE}"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="filter-section"
+                        th:with="instantRange=${dateTimeUtils.getValidInstantRange(orderFilterDto.getInstantStartDate(), orderFilterDto.getInstantEndDate())}"
+                      >
+                        <h2 class="filter-label">khoảng thời gian:</h2>
+                        <div class="filter-options">
+                          <div class="filter-input-group">
+                            <label for="startDate">Từ: </label>
+                            <input
+                              type="date"
+                              name="startDate"
+                              class="date-select"
+                              id="startDate"
+                              th:value="${!instantRange.isEmpty() ? #temporals.format(instantRange.get('startDate'), 'yyyy-MM-dd') : null }"
+                            />
+                          </div>
+
+                          <div class="filter-input-group">
+                            <label for="endDate">Đến: </label>
+                            <input
+                              type="date"
+                              name="endDate"
+                              class="date-select"
+                              id="endDate"
+                              th:value="${!instantRange.isEmpty() ? #temporals.format(instantRange.get('endDate'), 'yyyy-MM-dd') : null }"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="filters-modal-footer modal-footer">
+                      <button
+                        type="submit"
+                        class="filters-apply-button primary-button"
+                      >
+                        Áp dụng
+                      </button>
+                      <a
+                        class="filters-reset-button secondary-button"
+                        th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(), {{'paymentMethods': null, 'statuses': null,
+                                'minTotalPrice': null, 'maxTotalPrice': null, 'startDate': null, 'endDate': null}})}"
+                        th:href="${'/account/order-history' + newQuery}"
+                      >
+                        Đặt lại
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- limit -->
+                <div class="limit">
+                  <label class="limit-label" for="limit">Giới hạn:</label>
+                  <select
+                    class="limit-select"
+                    name="limit"
+                    id="limit"
+                    onchange="this.form.submit()"
+                  >
+                    <option
+                      th:value="10"
+                      th:selected="${orderFilterDto.getIntegerLimit() == 10}"
+                    >
+                      10
+                    </option>
+                    <option
+                      th:value="20"
+                      th:selected="${orderFilterDto.getIntegerLimit() == 20}"
+                    >
+                      20
+                    </option>
+                    <option
+                      th:value="40"
+                      th:selected="${orderFilterDto.getIntegerLimit() == 40}"
+                    >
+                      40
+                    </option>
+                    <option
+                      th:value="80"
+                      th:selected="${orderFilterDto.getIntegerLimit() == 80}"
+                    >
+                      80
+                    </option>
+                  </select>
+                </div>
+
+                <!-- search -->
+                <div class="search">
+                  <input
+                    class="search-input"
+                    type="text"
+                    name="search"
+                    id="search"
+                    th:value="${orderFilterDto.search}"
+                    placeholder="Mã đơn hàng..."
+                  />
+                  <button type="submit" class="search-button">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </button>
+                </div>
+              </form>
+
+              <!-- search summary -->
+              <div
+                class="search-summary"
+                th:if="${orderFilterDto.search != null && !orderFilterDto.search.isEmpty()}"
+              >
+                <p class="search-message">
+                  <span
+                    class="search-result-count"
+                    th:text="${response.totalItem}"
+                  ></span>
+                  kết quả cho "
+                  <span
+                    class="search-value"
+                    th:text="${orderFilterDto.search}"
+                  ></span
+                  >"
+                </p>
+                <a
+                  class="search-reset-link"
+                  th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(), {{'search': null, 'page': '1'}})}"
+                  th:href="${'/account/order-history' + newQuery}"
+                >
+                  đặt lại
+                </a>
+              </div>
+
+              <!-- table -->
+              <div class="content-table">
+                <table class="table">
+                  <thead>
+                    <tr class="table-header-row">
+                      <th
+                        class="table-header-cell col-width-2"
+                        th:with="sortDirection=${validSortBy.equals('createdAt') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                      >
+                        <a
+                          th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(), {{'sortBy': 'createdAt', 'page': '1', 'sortDirection' : sortDirection }})}"
+                          th:href="${'/account/order-history' + newQuery}"
+                        >
+                          Ngày đặt
+                          <i
+                            th:if="${validSortBy.equals('createdAt') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                            class="fa-solid fa-arrow-down"
+                          ></i>
+                          <i
+                            th:if="${validSortBy.equals('createdAt') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                            class="fa-solid fa-arrow-up"
+                          ></i>
+                        </a>
+                      </th>
+
+                      <th
+                        class="table-header-cell col-width-2"
+                        th:with="sortDirection=${validSortBy.equals('id') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                      >
+                        <a
+                          th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(), {{'sortBy': 'id', 'page': '1', 'sortDirection': sortDirection}})}"
+                          th:href="${'/account/order-history' + newQuery}"
+                        >
+                          Mã
+                          <i
+                            th:if="${validSortBy.equals('id') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                            class="fa-solid fa-arrow-down"
+                          ></i>
+                          <i
+                            th:if="${validSortBy.equals('id') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                            class="fa-solid fa-arrow-up"
+                          ></i>
+                        </a>
+                      </th>
+
+                      <th
+                        class="table-header-cell col-width-3"
+                        th:with="sortDirection=${validSortBy.equals('totalPrice') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                      >
+                        <a
+                          th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(), {{'sortBy': 'totalPrice', 'page': '1', 'sortDirection': sortDirection}})}"
+                          th:href="${'/account/order-history' + newQuery}"
+                        >
+                          Tổng giá trị
+                          <i
+                            th:if="${validSortBy.equals('totalPrice') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                            class="fa-solid fa-arrow-down"
+                          ></i>
+                          <i
+                            th:if="${validSortBy.equals('totalPrice') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                            class="fa-solid fa-arrow-up"
+                          ></i>
+                        </a>
+                      </th>
+
+                      <th
+                        class="table-header-cell col-width-2"
+                        th:with="sortDirection=${validSortBy.equals('paymentMethod') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                      >
+                        <a
+                          th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(), {{'sortBy': 'paymentMethod', 'page': '1', 'sortDirection': sortDirection}})}"
+                          th:href="${'/account/order-history' + newQuery}"
+                        >
+                          Thanh toán
+                          <i
+                            th:if="${validSortBy.equals('paymentMethod') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                            class="fa-solid fa-arrow-down"
+                          ></i>
+                          <i
+                            th:if="${validSortBy.equals('paymentMethod') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                            class="fa-solid fa-arrow-up"
+                          ></i>
+                        </a>
+                      </th>
+
+                      <th
+                        class="table-header-cell col-width-2"
+                        th:with="sortDirection=${validSortBy.equals('status') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                      >
+                        <a
+                          th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(), {{'sortBy': 'status', 'page': '1', 'sortDirection': sortDirection}})}"
+                          th:href="${'/account/order-history' + newQuery}"
+                        >
+                          Trạng thái
+                          <i
+                            th:if="${validSortBy.equals('status') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                            class="fa-solid fa-arrow-down"
+                          ></i>
+                          <i
+                            th:if="${validSortBy.equals('status') and orderFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                            class="fa-solid fa-arrow-up"
+                          ></i>
+                        </a>
+                      </th>
+
+                      <th class="table-header-cell col-width-1"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      class="table-body-row"
+                      th:each="order : ${response.data}"
+                    >
+                      <td class="table-body-cell">
+                        <span
+                          class="cell-text"
+                          th:text="${order.createdAt != null ? #temporals.format(order.createdAt, 'dd-MM-yyyy') : 'N/A'}"
+                        ></span>
+                      </td>
+
+                      <td class="table-body-cell">
+                        <span
+                          class="cell-text"
+                          th:text="${order.id != null ? order.id : 'N/A'}"
+                        ></span>
+                      </td>
+
+                      <td class="table-body-cell">
+                        <span
+                          class="cell-text"
+                          th:text="${order.totalPrice != null ? #numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"
+                        ></span>
+                      </td>
+
+                      <td class="table-body-cell">
+                        <span
+                          class="cell-text"
+                          th:text="${order.paymentMethod != null ? order.paymentMethod : 'N/A'}"
+                        ></span>
+                      </td>
+
+                      <td class="table-body-cell">
+                        <span
+                          th:text="${order.status != null ? order.status.displayName : 'N/A'}"
+                          th:classappend="${
+                            order.status == null ? '' :
+                            order.status.equals(orderStatusEnum.PENDING) ? 'secondary-badge' :
+                            order.status.equals(orderStatusEnum.CONFIRMED) ? 'primary-badge' :
+                            order.status.equals(orderStatusEnum.DELIVERED) ? 'success-badge' :
+                            order.status.equals(orderStatusEnum.CANCELLED) ? 'danger-badge' : ''
+                          }"
+                        ></span>
+                      </td>
+
+                      <td class="table-body-cell">
+                        <div class="table-row-actions">
+                          <a
+                            class="view-details-button primary-button"
+                            th:href="@{/account/order-history/details/{id}(id=${order.id})}"
+                          >
+                            Xem
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- pagination -->
+              <ul class="pagination" th:if="${response.totalPages > 1}">
+                <!-- Previous Page -->
+                <li class="pagination-item">
+                  <a
+                    class="button previous-page-button"
+                    th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(),{{'page': (response.currentPage - 1)}})}"
+                    th:href="${'/account/order-history' + newQuery}"
+                    th:classappend="${response.currentPage <= 1 ? 'disabled' : ''}"
+                  >
+                    <i class="fa-solid fa-chevron-left"></i>
+                  </a>
+                </li>
+
+                <!-- Page Numbers -->
+                <li
+                  class="pagination-item"
+                  th:each="pageNumber : ${#numbers.sequence(1, response.totalPages)}"
+                >
+                  <a
+                    class="button page-number-button"
+                    th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(),{{'page': pageNumber}})}"
+                    th:href="${'/account/order-history' + newQuery}"
+                    th:classappend="${response.currentPage == pageNumber ? 'active' : ''}"
+                    th:text="${pageNumber}"
+                  >
+                  </a>
+                </li>
+
+                <!-- Next Page -->
+                <li class="pagination-item">
+                  <a
+                    class="button next-page-button"
+                    th:with="newQuery=${queryUtils.modifiedQuery(orderFilterDto.toQuery(),{{'page': (response.currentPage + 1)}})}"
+                    th:href="${'/account/order-history' + newQuery}"
+                    th:classappend="${response.currentPage >= response.totalPages ? 'disabled' : ''}"
+                  >
+                    <i class="fa-solid fa-chevron-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

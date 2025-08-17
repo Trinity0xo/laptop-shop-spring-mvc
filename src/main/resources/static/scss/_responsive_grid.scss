@@ -1,13 +1,13 @@
 @import "media";
 @import "variables";
 
-$gutter: 10px;
+$gutter: 1.6rem;
 $cols: 12;
 
 .row {
   display: flex;
   flex-wrap: wrap;
-  // margin: -($gutter / 2);
+  margin: -($gutter / 2);
 
   @for $i from 1 through $cols {
     @include xs {

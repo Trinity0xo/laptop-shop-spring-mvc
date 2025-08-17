@@ -1,0 +1,127 @@
+.review .container-fluid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.review .container-fluid .review-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  background-color: #fff;
+  padding: 1.6rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.review .container-fluid .review-content .content-title {
+  font-size: 3rem;
+  color: #333;
+}
+.review .container-fluid .review-content .content-table {
+  overflow-y: auto;
+}
+.review .container-fluid .review-content .content-table table .col-width-1 {
+  min-width: 10rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-2 {
+  min-width: 20rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-3 {
+  min-width: 30rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-4 {
+  min-width: 40rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-5 {
+  min-width: 50rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-6 {
+  min-width: 60rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-7 {
+  min-width: 70rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-8 {
+  min-width: 80rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-9 {
+  min-width: 90rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-10 {
+  min-width: 100rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-11 {
+  min-width: 110rem;
+}
+.review .container-fluid .review-content .content-table table .col-width-12 {
+  min-width: 120rem;
+}
+.review .container-fluid .review-content .content-table table .user-avatar {
+  display: flex;
+  align-items: center;
+}
+.review .container-fluid .review-content .content-table table .user-avatar img {
+  width: 5rem;
+  height: 5rem;
+  object-fit: contain;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.review .container-fluid .review-content .content-table table .review-stars {
+  display: flex;
+  gap: 0.6rem;
+}
+.review .container-fluid .review-content .content-table table .review-stars .fa-star {
+  font-size: 1.5rem;
+}
+.review .container-fluid .review-content .content-table table .table-row-actions {
+  display: flex;
+  gap: 0.8rem;
+}
+.review .container-fluid .review-content .content-description-list dl .review-stars {
+  display: flex;
+  gap: 0.6rem;
+}
+.review .container-fluid .review-content .content-description-list dl .review-stars .fa-star {
+  font-size: 1.5rem;
+}
+.review .container-fluid .review-content .content-description-list dl .user-avatar {
+  display: block;
+  width: 5rem;
+  width: 5rem;
+}
+.review .container-fluid .review-content .content-description-list dl .user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-fit: contain;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.review .container-fluid .review-content .content-actions {
+  display: flex;
+  gap: 1rem;
+}
+@media (max-width: 576px) {
+  .review .container-fluid .review-content .content-actions {
+    flex-direction: column;
+  }
+}
+@media (min-width: 576px) {
+  .review .container-fluid .review-content .content-actions {
+    flex-direction: column;
+  }
+}
+@media (min-width: 768px) {
+  .review .container-fluid .review-content .content-actions {
+    flex-direction: row;
+  }
+}
+@media (min-width: 992px) {
+  .review .container-fluid .review-content .content-actions {
+    flex-direction: row;
+  }
+}
+@media (min-width: 1200px) {
+  .review .container-fluid .review-content .content-actions {
+    flex-direction: row;
+  }
+}

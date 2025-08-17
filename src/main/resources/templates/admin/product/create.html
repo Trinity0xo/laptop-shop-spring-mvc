@@ -1,126 +1,471 @@
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/admin/layout/layout"
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
 >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sản phẩm</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
-  <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
-  <title>Product</title>
-</head>
+  <body>
+    <div class="product product-create" layout:fragment="content">
+      <div class="container-fluid">
+        <!-- breadcrumb -->
+        <ul class="breadcrumb">
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/dashboard/product">Sản phẩm</a></li>
+          <li>Tạo</li>
+        </ul>
 
-<body>
-  <div class="container-fluid" layout:fragment="content">
-          <!-- breadcrumb -->
-    <ul class="breadcrumb">
-      <li><a href="/dashboard">Dashboard</a></li>
-      <li><a href="/dashboard/product">Product</a></li>
-      <li>Create</li>
-    </ul>
+        <!-- create product form -->
+        <form id="createProductForm" class="create-product-form product-form">
+          <h1 class="form-title">Tạo sản phẩm mới</h1>
 
-    <div class="product-container">
-      <h1 class="title">Create new product</h1>
-      <form id="createProductForm" class="create-product-form">
-        <div class="info images">
-          <h2 class="title">Images:</h2>
-          <div class="input-group">
-            <label for="images" class="image-add-new-button">Images (JPG, PNG, JPEG, GIF, WebP):</label>
-            <div class="images-input-group">
-              <div class="images-upload-container">
-                <div class="images-preview"></div>
-                <div class="images-upload-control">
-                  <label for="images" class="image-add-new-button"><i class="fa-solid fa-plus"></i></label>
-                  <input class="images-upload"
-                         name="tempImagesInput"
-                         id="images"
-                         type="file"
-                         multiple
-                         accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"
-                  />
+          <div class="form-content">
+            <div class="content images">
+              <h2 class="content-title">Hình ảnh:</h2>
+              <div class="input-group">
+                <label class="image-add-new-button"
+                  >Hình ảnh (JPG, PNG, JPEG, GIF, WebP):</label
+                >
+                <div class="images-input-group">
+                  <!-- images upload group -->
+                  <div class="images-upload-group">
+                    <!-- images upload preview -->
+                    <div class="images-upload-preview"></div>
+
+                    <!-- images upload control -->
+                    <div class="images-upload-control">
+                      <label for="images" class="add-image-button"
+                        ><i class="fa-solid fa-plus"></i
+                      ></label>
+                      <input
+                        class="images-upload-input"
+                        name="newImages"
+                        id="images"
+                        type="file"
+                        multiple
+                        accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"
+                      />
+                    </div>
+                  </div>
+                  <span id="newImagesError" class="input-error-message"></span>
                 </div>
               </div>
-              <span id="imagesError" class="error-message"></span>
             </div>
-          </div>
-        </div>
 
-        <div class="info general-info">
-          <h2 class="title">General Information:</h2>
-          <div class="input-group">
-            <label for="name">Name: </label>
-            <div class="input-group-control">
-              <input type="text" name="name" id="name" placeholder="Product name" required />
-              <span id="nameError" class="error-message"></span>
+            <div class="content general-content">
+              <h2 class="content-title">Thông tin chung:</h2>
+
+              <div class="input-group">
+                <label for="name">Tên: </label>
+                <div class="input-group-control">
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Tên sản phẩm"
+                    required
+                  />
+                  <span id="nameError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="brand">Thương hiệu: </label>
+                <div class="input-group-control">
+                  <select name="brand" id="brand">
+                    <option selected value="">Chọn thương hiệu</option>
+                    <option
+                      th:each="brand : ${createProductDto.productMetaData.brands}"
+                      th:value="${brand.id}"
+                      th:text="${brand.name}"
+                    ></option>
+                  </select>
+                  <span id="brandError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="category">Danh mục: </label>
+                <div class="input-group-control">
+                  <select name="category" id="category">
+                    <option selected value="">Chọn danh mục</option>
+                    <option
+                      th:each="category : ${createProductDto.productMetaData.categories}"
+                      th:value="${category.id}"
+                      th:text="${category.name}"
+                    ></option>
+                  </select>
+                  <span id="categoryError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="shortDescription">Mô tả ngắn: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="shortDescription"
+                    id="shortDescription"
+                    rows="3"
+                    placeholder="Mô tả ngắn sản phẩm"
+                  ></textarea>
+                  <span
+                    id="shortDescriptionError"
+                    class="input-error-message"
+                  ></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="description">Mô tả: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="description"
+                    id="description"
+                    rows="5"
+                    placeholder="Mô tả sản phẩm"
+                  ></textarea>
+                  <span
+                    id="descriptionError"
+                    class="input-error-message"
+                  ></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content pricing-content">
+              <h2 class="content-title">Giá bán:</h2>
+
+              <div class="input-group">
+                <label for="price">Giá:</label>
+                <div class="input-group-control">
+                  <input
+                    class="price-input"
+                    type="text"
+                    name="price"
+                    id="price"
+                    value="0"
+                    required
+                  />
+                  <span id="priceError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="discount">Giảm giá (%): </label>
+                <div class="input-group-control">
+                  <input
+                    class="discount-input"
+                    type="text"
+                    name="discount"
+                    id="discount"
+                    value="0"
+                    required
+                  />
+                  <span id="discountError" class="input-error-message"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content stock-content">
+              <h2 class="content-title">Tồn kho:</h2>
+
+              <div class="input-group">
+                <label for="quantity">Số lượng: </label>
+                <div class="input-group-control">
+                  <input
+                    type="number"
+                    name="quantity"
+                    id="quantity"
+                    value="0"
+                    required
+                  />
+                  <span id="quantityError" class="input-error-message"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content specification-content">
+              <h2 class="content-title">Thông số kỹ thuật:</h2>
+
+              <div class="input-group">
+                <label for="cpu">CPU: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="cpu"
+                    id="cpu"
+                    placeholder="Cpu"
+                    rows="3"
+                  ></textarea>
+                  <span id="cpuError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="gpu">GPU: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="gpu"
+                    id="gpu"
+                    placeholder="Gpu"
+                    rows="3"
+                  ></textarea>
+                  <span id="gpuError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="ram">Ram: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="ram"
+                    id="ram"
+                    placeholder="Ram"
+                    rows="3"
+                  ></textarea>
+                  <span id="ramError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="storage">Bộ nhớ: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="storage"
+                    id="storage"
+                    placeholder="Bộ nhớ"
+                    rows="3"
+                  ></textarea>
+                  <span id="storageError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="cooling">Tản nhiệt: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="cooling"
+                    id="cooling"
+                    placeholder="Tản nhiệt"
+                    rows="3"
+                  ></textarea>
+                  <span id="coolingError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="io">Cổng kết nối: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="io"
+                    id="io"
+                    placeholder="Cổng kết nối"
+                    rows="5"
+                  ></textarea>
+                  <span id="ioError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="screen">Màn hình: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="screen"
+                    id="screen"
+                    placeholder="Màn hình"
+                    rows="3"
+                  ></textarea>
+                  <span id="screenError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="keyboard">Bàn phím: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="keyboard"
+                    id="keyboard"
+                    placeholder="Bàn phím"
+                    rows="3"
+                  ></textarea>
+                  <span id="keyboardError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="audio">Âm thanh: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="audio"
+                    id="audio"
+                    placeholder="Âm thanh"
+                    rows="5"
+                  ></textarea>
+                  <span id="audioError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="sdCard">Thẻ nhớ: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="sdCard"
+                    id="sdCard"
+                    placeholder="thẻ nhớ"
+                    rows="3"
+                  ></textarea>
+                  <span id="sdCardError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="lan">Lan: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="lan"
+                    id="lan"
+                    placeholder="Lan"
+                    rows="3"
+                  ></textarea>
+                  <span id="lanError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="wifi">Wifi: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="wifi"
+                    id="wifi"
+                    placeholder="Wifi"
+                    rows="3"
+                  ></textarea>
+                  <span id="wifiError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="bluetooth">Bluetooth: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="bluetooth"
+                    id="bluetooth"
+                    placeholder="Bluetooth"
+                    rows="3"
+                  ></textarea>
+                  <span id="bluetoothError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="webCam">Webcam: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="webCam"
+                    id="webCam"
+                    placeholder="Webcam"
+                    rows="3"
+                  ></textarea>
+                  <span id="webCamError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="os">Hệ điều hành: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="os"
+                    id="os"
+                    placeholder="Hệ điều hành"
+                    rows="3"
+                  ></textarea>
+                  <span id="osError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="battery">Pin: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="battery"
+                    id="battery"
+                    placeholder="Pin"
+                    rows="3"
+                  ></textarea>
+                  <span id="batteryError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="weight">Khối lượng: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="weight"
+                    id="weight"
+                    placeholder="Khối lượng"
+                    rows="3"
+                  ></textarea>
+                  <span id="weightError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="material">Chất liệu: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="material"
+                    id="material"
+                    placeholder="Chất liệu"
+                    rows="3"
+                  ></textarea>
+                  <span id="materialError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="color">Màu sắc: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="color"
+                    id="color"
+                    placeholder="Màu sắc"
+                    rows="3"
+                  ></textarea>
+                  <span id="colorError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="size">Kích thước: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="size"
+                    id="size"
+                    placeholder="Kích thước"
+                    rows="3"
+                  ></textarea>
+                  <span id="sizeError" class="input-error-message"></span>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="input-group">
-            <label for="brand">Brand: </label>
-            <div class="input-group-control">
-              <select name="brand" id="brand">
-                <option selected value="">Select brand</option>
-                <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
-              </select>
-              <span id="brandError" class="error-message"></span>
-            </div>
+
+          <div class="form-actions">
+            <div class="spacer"></div>
+            <button type="submit" class="save-button primary-button">
+              Lưu
+            </button>
+            <a href="/dashboard/product" class="back-button secondary-button"
+              >Quay lại</a
+            >
           </div>
-          <div class="input-group">
-            <label for="category">Category: </label>
-            <div class="input-group-control">
-              <select name="category" id="category">
-                <option selected value="">Select category</option>
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
-                </option>
-              </select>
-              <span id="categoryError" class="error-message"></span>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="shortDescription">Short description: </label>
-            <div class="input-group-control">
-              <textarea name="shortDescription" id="shortDescription" rows="3" placeholder=" Product short description"
-                required></textarea>
-              <span id="shortDescriptionError" class="error-message"></span>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="description">Description: </label>
-            <div class="input-group-control">
-              <textarea name="description" id="description" rows="5" placeholder="Product description" required></textarea>
-              <span id="descriptionError" class="error-message"></span>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="price">Price: </label>
-            <div class="input-group-control">
-              <input type="number" name="price" id="price" value="0" required />
-              <span id="priceError" class="error-message"></span>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="discount">Discount(%): </label>
-            <div class="input-group-control">
-              <input type="number" name="discount" id="discount" value="0" required />
-              <span id="discountError" class="error-message"></span>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="quantity">Quantity: </label>
-            <div class="input-group-control">
-              <input type="number" name="quantity" id="quantity" value="0" required />
-              <span id="quantityError" class="error-message"></span>
-            </div>
-          </div>
-        </div>
-        <div class="actions">
-          <div class="empty"></div>
-          <button type="submit" class="save-button">Save</button>
-          <a href="/dashboard/product" class="back-button">Back</a>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

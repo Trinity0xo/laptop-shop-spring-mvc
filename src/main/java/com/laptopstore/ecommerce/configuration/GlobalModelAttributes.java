@@ -1,6 +1,9 @@
 package com.laptopstore.ecommerce.configuration;
 
-import com.laptopstore.ecommerce.service.UploadFoldersService;
+import com.laptopstore.ecommerce.dto.auth.AuthenticatedInformationDto;
+import com.laptopstore.ecommerce.service.FolderService;
+import com.laptopstore.ecommerce.service.UserService;
+import com.laptopstore.ecommerce.util.AuthenticationUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,25 +14,28 @@ public class GlobalModelAttributes {
     @Value("${static.resources.mapping.folder}")
     private String resourcesMappingFolder;
 
-    private final UploadFoldersService uploadFoldersService;
+    private final FolderService folderService;
+    private final UserService userService;
 
-    public GlobalModelAttributes(UploadFoldersService uploadFoldersService) {
-        this.uploadFoldersService = uploadFoldersService;
+
+    public GlobalModelAttributes(FolderService folderService, UserService userService) {
+        this.folderService = folderService;
+        this.userService = userService;
     }
 
     @ModelAttribute("productPicturesFolder")
     public String productPicturesFolder() {
-        return uploadFoldersService.handleGetProductPicturesFolderName();
+        return folderService.getProductPicturesFolderName();
     }
 
     @ModelAttribute("categoryPicturesFolder")
     public String categoryPicturesFolder() {
-        return uploadFoldersService.handleGetCategoryPicturesFolderName();
+        return folderService.getCategoryPicturesFolderName();
     }
 
     @ModelAttribute("avatarsFolder")
     public String avatarsFolder() {
-        return uploadFoldersService.handleGetAvatarsFolderName();
+        return folderService.getAvatarsFolderName();
     }
 
     @ModelAttribute("resourcesMappingFolder")
@@ -40,5 +46,14 @@ public class GlobalModelAttributes {
     @ModelAttribute("currentPath")
     public String currentPath(HttpServletRequest request) {
         return request.getRequestURI();
+    }
+
+    @ModelAttribute("authenticatedInformation")
+    public AuthenticatedInformationDto authenticatedInformation(HttpServletRequest request){
+        String email = AuthenticationUtils.getAuthenticatedName();
+        if(email != null && !email.isEmpty()){
+            return this.userService.getAuthenticatedInformation(email);
+        }
+        return null;
     }
 }

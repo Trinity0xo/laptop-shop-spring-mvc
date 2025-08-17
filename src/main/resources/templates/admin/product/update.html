@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sản phẩm</title>
+  </head>
+
+  <body>
+    <div class="product product-update" layout:fragment="content">
+      <div class="container-fluid">
+        <!-- breadcrumb -->
+        <ul class="breadcrumb">
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/dashboard/product">Sản phẩm</a></li>
+          <li>Cập nhật</li>
+        </ul>
+
+        <!-- update product form -->
+        <form id="updateProductForm" class="update-product-form product-form">
+          <h1 class="form-title">
+            Cập nhật sản phẩm với "Mã:
+            <span th:text="${updateProductDto.id}"></span>"
+          </h1>
+
+          <input type="hidden" id="deleteImageNames" name="deleteImageNames" />
+          <input type="hidden" name="id" th:value="${updateProductDto.id}" />
+          <input
+            type="hidden"
+            name="currentImageNames"
+            th:value="${updateProductDto.currentImageNames}"
+          />
+
+          <div class="form-content">
+            <div class="content images">
+              <h2 class="content-title">Hình ảnh:</h2>
+              <div class="input-group">
+                <label class="image-add-new-button"
+                  >Hình ảnh (JPG, PNG, JPEG, GIF, WebP):</label
+                >
+                <div class="images-input-group">
+                  <!-- images upload group -->
+                  <div class="images-upload-group">
+                    <!-- images upload preview -->
+                    <div class="images-upload-preview">
+                      <div
+                        class="preview-image"
+                        th:each="imageName : ${updateProductDto.currentImageNames}"
+                      >
+                        <button type="button" class="image-remove-button">
+                          <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <img
+                          th:src="@{/uploads/product_pictures/{image}(image=${imageName})}"
+                          alt="product"
+                        />
+                      </div>
+                    </div>
+
+                    <!-- images upload control -->
+                    <div class="images-upload-control">
+                      <label for="images" class="add-image-button"
+                        ><i class="fa-solid fa-plus"></i
+                      ></label>
+                      <input
+                        class="images-upload-input"
+                        name="newImages"
+                        id="images"
+                        type="file"
+                        multiple
+                        accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"
+                      />
+                    </div>
+                  </div>
+                  <span id="newImagesError" class="input-error-message"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content general-content">
+              <h2 class="content-title">Thông tin chung:</h2>
+
+              <div class="input-group">
+                <label for="name">Tên: </label>
+                <div class="input-group-control">
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Tên sản phẩm"
+                    th:value="${updateProductDto.name}"
+                    required
+                  />
+                  <span id="nameError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="brand">Thương hiệu: </label>
+                <div class="input-group-control">
+                  <select name="brand" id="brand">
+                    <option selected value="">Chọn thương hiệu</option>
+                    <option
+                      th:each="brand : ${updateProductDto.productMetaData.brands}"
+                      th:value="${brand.id}"
+                      th:text="${brand.name}"
+                      th:selected="${brand.id == updateProductDto.brand?.id}"
+                    ></option>
+                  </select>
+                  <span id="brandError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="category">Danh mục: </label>
+                <div class="input-group-control">
+                  <select name="category" id="category">
+                    <option selected value="">Chọn danh mục</option>
+                    <option
+                      th:each="category : ${updateProductDto.productMetaData.categories}"
+                      th:value="${category.id}"
+                      th:text="${category.name}"
+                      th:selected="${category.id == updateProductDto.category?.id}"
+                    ></option>
+                  </select>
+                  <span id="categoryError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="shortDescription">Mô tả ngắn: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="shortDescription"
+                    id="shortDescription"
+                    rows="3"
+                    placeholder="Mô tả ngắn sản phẩm"
+                    th:text="${updateProductDto.shortDescription}"
+                  ></textarea>
+                  <span
+                    id="shortDescriptionError"
+                    class="input-error-message"
+                  ></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="description">Mô tả: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="description"
+                    id="description"
+                    rows="5"
+                    placeholder="Mô tả sản phẩm"
+                    th:text="${updateProductDto.description}"
+                  ></textarea>
+                  <span
+                    id="descriptionError"
+                    class="input-error-message"
+                  ></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content pricing-content">
+              <h2 class="content-title">Giá bán:</h2>
+
+              <div class="input-group">
+                <label for="price">Giá:</label>
+                <div class="input-group-control">
+                  <input
+                    class="price-input"
+                    type="text"
+                    name="price"
+                    id="price"
+                    th:value="${updateProductDto.price}"
+                    required
+                  />
+                  <span id="priceError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="discount">Giảm giá (%): </label>
+                <div class="input-group-control">
+                  <input
+                    class="discount-input"
+                    type="text"
+                    name="discount"
+                    id="discount"
+                    th:value="${updateProductDto.discount}"
+                    required
+                  />
+                  <span id="discountError" class="input-error-message"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content stock-content">
+              <h2 class="content-title">Tồn kho:</h2>
+
+              <div class="input-group">
+                <label for="quantity">Số lượng: </label>
+                <div class="input-group-control">
+                  <input
+                    type="number"
+                    name="quantity"
+                    id="quantity"
+                    th:value="${updateProductDto.quantity}"
+                    required
+                  />
+                  <span id="quantityError" class="input-error-message"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content specification-content">
+              <h2 class="content-title">Thông số kỹ thuật:</h2>
+
+              <div class="input-group">
+                <label for="cpu">CPU: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="cpu"
+                    id="cpu"
+                    placeholder="Cpu"
+                    th:text="${updateProductDto.cpu}"
+                  ></textarea>
+                  <span id="cpuError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="gpu">GPU: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="gpu"
+                    id="gpu"
+                    placeholder="Gpu"
+                    th:text="${updateProductDto.gpu}"
+                  ></textarea>
+                  <span id="gpuError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="ram">Ram: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="ram"
+                    id="ram"
+                    placeholder="Ram"
+                    th:text="${updateProductDto.ram}"
+                  ></textarea>
+                  <span id="ramError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="storage">Bộ nhớ: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="storage"
+                    id="storage"
+                    placeholder="Bộ nhớ"
+                    th:text="${updateProductDto.storage}"
+                  ></textarea>
+                  <span id="storageError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="cooling">Tản nhiệt: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="cooling"
+                    id="cooling"
+                    placeholder="Tản nhiệt"
+                    th:text="${updateProductDto.cooling}"
+                  ></textarea>
+                  <span id="coolingError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="io">Cổng kết nối: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="io"
+                    id="io"
+                    placeholder="Cổng kết nối"
+                    th:text="${updateProductDto.io}"
+                  ></textarea>
+                  <span id="ioError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="screen">Màn hình: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="screen"
+                    id="screen"
+                    placeholder="Màn hình"
+                    th:text="${updateProductDto.screen}"
+                  ></textarea>
+                  <span id="screenError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="keyboard">Bàn phím: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="keyboard"
+                    id="keyboard"
+                    placeholder="Bàn phím"
+                    th:text="${updateProductDto.keyboard}"
+                  ></textarea>
+                  <span id="keyboardError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="audio">Âm thanh: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="audio"
+                    id="audio"
+                    placeholder="Âm thanh"
+                    th:text="${updateProductDto.audio}"
+                  ></textarea>
+                  <span id="audioError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="sdCard">Thẻ nhớ: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="sdCard"
+                    id="sdCard"
+                    placeholder="Thẻ nhớ"
+                    th:text="${updateProductDto.sdCard}"
+                  ></textarea>
+                  <span id="sdCardError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="lan">Lan: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="lan"
+                    id="lan"
+                    placeholder="Lan"
+                    th:text="${updateProductDto.lan}"
+                  ></textarea>
+                  <span id="lanError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="wifi">Wifi: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="wifi"
+                    id="wifi"
+                    placeholder="Wifi"
+                    th:text="${updateProductDto.wifi}"
+                  ></textarea>
+                  <span id="wifiError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="bluetooth">Bluetooth: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="bluetooth"
+                    id="bluetooth"
+                    placeholder="Bluetooth"
+                    th:text="${updateProductDto.bluetooth}"
+                  ></textarea>
+                  <span id="bluetoothError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="webCam">Webcam: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="webCam"
+                    id="webCam"
+                    placeholder="Webcam"
+                    th:text="${updateProductDto.webCam}"
+                  ></textarea>
+                  <span id="webCamError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="os">Hệ điều hành: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="os"
+                    id="os"
+                    placeholder="Hệ điều hành"
+                    th:text="${updateProductDto.os}"
+                  ></textarea>
+                  <span id="osError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="battery">Pin: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="battery"
+                    id="battery"
+                    placeholder="Pin"
+                    th:text="${updateProductDto.battery}"
+                  ></textarea>
+                  <span id="batteryError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="weight">Trọng lượng: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="weight"
+                    id="weight"
+                    placeholder="Trọng lượng"
+                    th:text="${updateProductDto.weight}"
+                  ></textarea>
+                  <span id="weightError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="material">Chất liệu: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="material"
+                    id="material"
+                    placeholder="Chất liệu"
+                    th:text="${updateProductDto.material}"
+                  ></textarea>
+                  <span id="materialError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="color">Màu sắc: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="color"
+                    id="color"
+                    placeholder="Màu sắc"
+                    th:text="${updateProductDto.color}"
+                  ></textarea>
+                  <span id="colorError" class="input-error-message"></span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="size">Kích thước: </label>
+                <div class="input-group-control">
+                  <textarea
+                    name="size"
+                    id="size"
+                    placeholder="Kích thước"
+                    th:text="${updateProductDto.size}"
+                  ></textarea>
+                  <span id="sizeError" class="input-error-message"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <div class="spacer"></div>
+            <button type="submit" class="save-button primary-button">
+              Lưu
+            </button>
+            <a href="/dashboard/product" class="back-button secondary-button"
+              >Quay lại</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

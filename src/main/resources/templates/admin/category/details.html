@@ -1,70 +1,130 @@
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/admin/layout/layout"
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
 >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Danh mục</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Category</title>
-</head>
-
-<body>
-  <div class="container-fluid" layout:fragment="content">
+  <body>
+    <div class="category category-details" layout:fragment="content">
+      <div class="container-fluid">
         <!-- breadcrumb -->
-    <ul class="breadcrumb">
-      <li><a href="/dashboard">Dashboard</a></li>
-      <li><a href="/dashboard/role">Category</a></li>
-      <li>Details</li>
-    </ul>
+        <ul class="breadcrumb">
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/dashboard/category">Danh mục</a></li>
+          <li th:text="${category.id}"></li>
+        </ul>
 
-    <div class="category-container">
-      <h1 class="title">Category "<span th:text="${category.name}"></span>"</h1>
+        <div class="category-details-content category-content">
+          <h1 class="content-title">
+            Danh mục "<span th:text="${category.name}"></span>"
+          </h1>
 
-      <div class="description-list-container">
-        <dl class="row">
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Image:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-            <div class="image-container">
-              <img th:src="${'/' + resourcesMappingFolder + '/' + categoryPicturesFolder + '/' + category.image}" alt="category image" />
-            </div>
-          </dd>
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            ID:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${category.id}">
-          </dd>
+          <div class="content-description-list">
+            <dl class="description-list row">
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Hình ảnh:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+              >
+                <span th:if="${#strings.isEmpty(category.image)}">N/A</span>
+                <a
+                  class="category-image"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  th:if="${!#strings.isEmpty(category.image)}"
+                  th:href="${'/' + resourcesMappingFolder + '/' + categoryPicturesFolder + '/' + category.image}"
+                >
+                  <img
+                    th:src="${'/' + resourcesMappingFolder + '/' + categoryPicturesFolder + '/' + category.image}"
+                    alt="category"
+                  />
+                </a>
+              </dd>
 
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Name:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${category.name}">
-          </dd>
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Description:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${category.description}">
-          </dd>
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Created at:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(category.updatedAt, 'dd-MM-yyyy HH:mm')}">
-          </dd>
-          <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            Updated at:
-          </dt>
-          <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" th:text="${#temporals.format(category.updatedAt, 'dd-MM-yyyy HH:mm')}">
-          </dd>
-        </dl>
-        <div class="actions">
-          <a th:href="@{/dashboard/category/edit/{id}(id=${category.id})}" class="edit-button">Edit</a>
-          <a href="/dashboard/category" class="back-button">Back</a>
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Mã:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${category.id}"
+              ></dd>
+
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Tên:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(category.name) ? 'N/A' : category.name}"
+              ></dd>
+
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Mô tả:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(category.description) ? 'N/A' : category.description}"
+              ></dd>
+
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Slug hiển thị:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${#strings.isEmpty(category.slug) ? 'N/A' : category.slug}"
+              ></dd>
+
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Ngày tạo:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${category.createdAt != null ? #temporals.format(category.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+              ></dd>
+
+              <dt
+                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+              >
+                Ngày cập nhật:
+              </dt>
+              <dd
+                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                th:text="${category.updatedAt != null ? #temporals.format(category.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+              ></dd>
+            </dl>
+          </div>
+
+          <div class="content-actions">
+            <a
+              th:href="@{/dashboard/category/update/{id}(id=${category.id})}"
+              class="update-button warning-button"
+              >Sửa</a
+            >
+            <a href="/dashboard/category" class="back-button secondary-button"
+              >Quay lại</a
+            >
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

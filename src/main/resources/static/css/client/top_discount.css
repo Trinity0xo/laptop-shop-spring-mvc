@@ -1,0 +1,15 @@
+.top-discount .container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.top-discount .container .top-discount-title {
+  color: #333;
+  font-size: 2.5rem;
+}
+.top-discount .container .header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+}

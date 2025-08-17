@@ -1,6 +1,6 @@
 package com.laptopstore.ecommerce.dto.auth;
 
-import com.laptopstore.ecommerce.util.anotaion.validation.auth.register.RegisterConstraint;
+import com.laptopstore.ecommerce.util.validation.auth.register.RegisterConstraint;
 
 import lombok.Getter;
 import lombok.Setter;

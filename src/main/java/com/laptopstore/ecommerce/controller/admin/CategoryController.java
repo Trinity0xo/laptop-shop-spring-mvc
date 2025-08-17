@@ -1,59 +1,47 @@
 package com.laptopstore.ecommerce.controller.admin;
 
-import com.laptopstore.ecommerce.service.FileService;
-import com.laptopstore.ecommerce.service.UploadFoldersService;
-import com.laptopstore.ecommerce.util.error.NotFoundException;
-import org.springframework.data.domain.Page;
+import com.laptopstore.ecommerce.dto.category.CategoryFilterDto;
+import com.laptopstore.ecommerce.dto.response.PageResponse;
+import com.laptopstore.ecommerce.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import com.laptopstore.ecommerce.dto.category.CategoryCriteriaDto;
 import com.laptopstore.ecommerce.dto.category.CreateCategoryDto;
 import com.laptopstore.ecommerce.dto.category.UpdateCategoryDto;
 import com.laptopstore.ecommerce.model.Category;
-import com.laptopstore.ecommerce.service.CategoryService;
 
 import jakarta.validation.Valid;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/dashboard/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final FileService fileService;
-    private final UploadFoldersService uploadFoldersService;
 
-    public CategoryController(CategoryService categoryService,
-                              FileService fileService,
-                              UploadFoldersService uploadFoldersService) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
-        this.fileService = fileService;
-        this.uploadFoldersService = uploadFoldersService;
     }
 
     @GetMapping("")
     public String showCategoryPage(
             Model model,
-            CategoryCriteriaDto categoryCriteriaDto
-    ) throws Exception {
-        Page<Category> categories = this.categoryService.handleGetAllCategories(categoryCriteriaDto);
-        model.addAttribute("categoryList", categories.getContent());
-        model.addAttribute("totalPages", categories.getTotalPages());
-        model.addAttribute("currentPage", categories.getPageable().getPageNumber() + 1);
-        model.addAttribute("query", categoryCriteriaDto);
-        model.addAttribute("resultCount", categories.getTotalElements());
-
+            CategoryFilterDto categoryFilterDto
+    )  {
+        PageResponse<List<Category>> response = this.categoryService.getAllCategories(categoryFilterDto);
+        model.addAttribute("response", response);
+        model.addAttribute("categoryCriteriaDto", categoryFilterDto);
         return "/admin/category/index";
     }
 
     @GetMapping("/create")
     public String showCreateCategoryPage(
             Model model
-    ) throws Exception {
-
+    )  {
         model.addAttribute("createCategoryDto", new CreateCategoryDto());
 
         return "/admin/category/create";
@@ -64,125 +52,74 @@ public class CategoryController {
             @Valid CreateCategoryDto createCategoryDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
-    ) throws Exception {
+    )  {
         if (bindingResult.hasErrors()) {
             return "/admin/category/create";
         }
 
-        String categoryPicturesFolderName = this.uploadFoldersService.handleGetCategoryPicturesFolderName();
+        this.categoryService.createCategory(createCategoryDto);
 
-        String imageName = this.fileService.handleUploadFile(createCategoryDto.getImage(), categoryPicturesFolderName);
-
-        this.categoryService.handleCreateCategory(createCategoryDto, imageName);
-
-        redirectAttributes.addFlashAttribute("successMessage", "Category created successfully");
+        redirectAttributes.addFlashAttribute("successMessage", "Tạo loại sản phẩm thành công");
 
         return "redirect:/dashboard/category";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/update/{categoryId}")
     public String showEditCategoryPage(
-            @PathVariable Long id,
+            @PathVariable Long categoryId,
             Model model
-    ) throws Exception {
-
-        Category category = categoryService.handleGetCategoryById(id);
-        if (category == null) {
-            throw new NotFoundException("Category not found");
-        }
-
-        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto();
-        updateCategoryDto.setId(category.getId());
-        updateCategoryDto.setName(category.getName());
-        updateCategoryDto.setDescription(category.getDescription());
-
+    )  {
+        UpdateCategoryDto updateCategoryDto = this.categoryService.getInformationForUpdateCategory(categoryId);
         model.addAttribute("updateCategoryDto", updateCategoryDto);
-        model.addAttribute("categoryImage", category.getImage());
 
-        return "/admin/category/edit";
+        return "/admin/category/update";
     }
 
-    @PostMapping("/edit/{id}")
-    public String editCategory(
-            @PathVariable Long id,
+    @PostMapping("/update")
+    public String updateCategory(
             @Valid UpdateCategoryDto updateCategoryDto,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes,
-            @RequestParam(value = "deleteImageName", required = false) String deleteImageName
-    ) throws Exception {
-
+            RedirectAttributes redirectAttributes
+    )  {
         if (bindingResult.hasErrors()) {
-            return "/admin/category/edit";
+            return "/admin/category/update";
         }
 
-        Category category = categoryService.handleGetCategoryById(id);
-        if (category == null) {
-            throw new NotFoundException("Category not found");
-        }
+        this.categoryService.updateCategory(updateCategoryDto);
 
-        String categoryPicturesFolderName = this.uploadFoldersService.handleGetCategoryPicturesFolderName();
-
-        if (deleteImageName != null && !deleteImageName.isEmpty() && updateCategoryDto.getImage() != null && !updateCategoryDto.getImage().isEmpty()) {
-            this.fileService.handleDeleteFile(deleteImageName, categoryPicturesFolderName);
-        }
-
-        if (updateCategoryDto.getImage() != null && !updateCategoryDto.getImage().isEmpty()) {
-            String updatedProductImage = this.fileService.handleUploadFile(updateCategoryDto.getImage(), categoryPicturesFolderName);
-            category.setImage(updatedProductImage);
-        }
-
-        this.categoryService.handleUpdateCategory(updateCategoryDto, category);
-
-        redirectAttributes.addFlashAttribute("successMessage", "Category updated successfully");
+        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật loại sản phẩm thành công");
 
         return "redirect:/dashboard/category";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{categoryId}")
     public String showDeleteCategoryPage(
-            @PathVariable Long id,
+            @PathVariable Long categoryId,
             Model model
-    ) throws Exception {
-        Category category = categoryService.handleGetCategoryById(id);
-        if (category == null) {
-            throw new NotFoundException("Category not found");
-        }
+    )  {
+        model.addAttribute("categoryId", categoryId);
 
-        model.addAttribute("category", category);
         return "/admin/category/delete";
     }
 
-    @PostMapping("/delete/{id}")
+    @PostMapping("/delete")
     public String deleteCategory(
-            @PathVariable Long id,
+            Long categoryId,
             RedirectAttributes redirectAttributes
-    ) throws Exception {
-        Category category = categoryService.handleGetCategoryById(id);
-        if (category == null) {
-            throw new NotFoundException("Category not found");
-        }
+    )  {
+        this.categoryService.deleteCategory(categoryId);
 
-        String categoryPicturesFolderName = this.uploadFoldersService.handleGetCategoryPicturesFolderName();
-
-        this.fileService.handleDeleteFile(category.getImage(), categoryPicturesFolderName);
-
-        this.categoryService.handleDeleteCategoryById(id);
-
-        redirectAttributes.addFlashAttribute("successMessage", "Category deleted successfully");
+        redirectAttributes.addFlashAttribute("successMessage", "Xóa loại sản phẩm thành công");
 
         return "redirect:/dashboard/category";
     }
 
-    @GetMapping("/details/{id}")
+    @GetMapping("/details/{categoryId}")
     public String showDetailsCategoryPage(
-            @PathVariable Long id,
+            @PathVariable Long categoryId,
             Model model
-    ) throws Exception {
-        Category category = this.categoryService.handleGetCategoryById(id);
-        if (category == null) {
-            throw new NotFoundException("Category not found");
-        }
-
+    )  {
+        Category category = this.categoryService.getCategoryById(categoryId);
         model.addAttribute("category", category);
 
         return "/admin/category/details";

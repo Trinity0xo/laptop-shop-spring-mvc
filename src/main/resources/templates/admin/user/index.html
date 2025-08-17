@@ -1,222 +1,334 @@
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/admin/layout/layout"
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/admin/layout"
 >
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>User</title>
-</head>
+    <title>Người dùng</title>
+  </head>
 
-<body>
-    <form method="get" layout:fragment="content" th:action="@{/dashboard/user}">
-        <div class="container-fluid">
-            <!-- breadcrumb -->
-            <ul class="breadcrumb">
-                <li><a href="/dashboard">Dashboard</a></li>
-                <li>User</li>
-            </ul>
+  <body>
+    <div
+      class="user user-list"
+      layout:fragment="content"
+      th:with="queryUtils=${T(com.laptopstore.ecommerce.util.QueryUtils)},
+               sortDirectionEnum=${T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum)},
+               userClass=${T(com.laptopstore.ecommerce.model.User)},
+               paginationUtils=${T(com.laptopstore.ecommerce.util.PaginationUtils)},
+               roleEnum=${T(com.laptopstore.ecommerce.util.constant.RoleEnum)}
+               "
+    >
+      <div class="container-fluid">
+        <!-- breadcrumb -->
+        <ul class="breadcrumb">
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li>Người dùng</li>
+        </ul>
 
-            <div class="user-container">
-                <h1 class="title">User</h1>
+        <!-- user list content -->
+        <div
+          class="user-list-content user-content"
+          th:with="validSortBy=${paginationUtils.getValidSortBy(userClass, userFilterDto.sortBy, userClass.DEFAULT_SORT_FIELD)}"
+        >
+          <h1 class="content-title">Người dùng</h1>
 
-                <!-- header -->
-                <div class="header">
-                    <div class="filters-container">
-                        <div class="limit">
-                            <label for="limit">Limit: </label>
-                            <select class="limit-select" name="limit" id="limit" onchange="this.form.submit()">
-                                <option th:value="10" th:selected="${query.getIntegerLimit() == 10}">10</option>
-                                <option th:value="20" th:selected="${query.getIntegerLimit() == 20}">20</option>
-                                <option th:value="40" th:selected="${query.getIntegerLimit() == 40}">40</option>
-                                <option th:value="80" th:selected="${query.getIntegerLimit() == 80}">80</option>
-                            </select>
-                        </div>
+          <!-- control panel -->
+          <form
+            class="control-panel-form"
+            th:action="@{/dashboard/user}"
+            method="get"
+          >
+            <input type="hidden" name="sortBy" th:value="${validSortBy}" />
 
-                        <div class="search">
-                            <input class="search-box" type="text" name="email" id="email" th:value="${query.email}" placeholder="Search email..." />
-                            <button type="submit"  class="search-button">Search</button>
-                        </div>
+            <input
+              type="hidden"
+              name="sortDirection"
+              th:value="${userFilterDto.getEnumSortDirection()}"
+            />
 
-                        <input type="hidden" name="sortBy" th:value="${query.sortBy}" />
-                        <input type="hidden" name="sortDirection" th:value="${query.sortDirection}" />
+            <!-- limit -->
+            <div class="limit">
+              <label class="limit-label" for="limit">Giới hạn:</label>
+              <select
+                class="limit-select"
+                name="limit"
+                id="limit"
+                onchange="this.form.submit()"
+              >
+                <option
+                  th:value="10"
+                  th:selected="${userFilterDto.getIntegerLimit() == 10}"
+                >
+                  10
+                </option>
+                <option
+                  th:value="20"
+                  th:selected="${userFilterDto.getIntegerLimit() == 20}"
+                >
+                  20
+                </option>
+                <option
+                  th:value="40"
+                  th:selected="${userFilterDto.getIntegerLimit() == 40}"
+                >
+                  40
+                </option>
+                <option
+                  th:value="80"
+                  th:selected="${userFilterDto.getIntegerLimit() == 80}"
+                >
+                  80
+                </option>
+              </select>
+            </div>
+
+            <!-- search -->
+            <div class="search">
+              <input
+                class="search-input"
+                type="text"
+                name="search"
+                id="search"
+                th:value="${userFilterDto.search}"
+                placeholder="Email..."
+              />
+              <button type="submit" class="search-button">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+
+            <a
+              th:if="${authenticatedInformation.roleSlug.equals(roleEnum.ADMIN.name())}"
+              class="create-button primary-button"
+              href="/dashboard/user/create"
+              ><i class="fa-solid fa-plus"></i>Thêm</a
+            >
+          </form>
+
+          <!-- search summary -->
+          <div
+            class="search-summary"
+            th:if="${userFilterDto.search != null && !userFilterDto.search.isEmpty()}"
+          >
+            <p class="search-message">
+              <span
+                class="search-result-count"
+                th:text="${response.totalItem}"
+              ></span>
+              Kết qua cho "
+              <span
+                class="search-value"
+                th:text="${userFilterDto.search}"
+              ></span
+              >"
+            </p>
+            <a
+              class="search-reset-link"
+              th:with="newQuery=${queryUtils.modifiedQuery(userFilterDto.toQuery(), {{'search': null, 'page': '1'}})}"
+              th:href="${'/dashboard/user' + newQuery}"
+            >
+              Đặt lại
+            </a>
+          </div>
+
+          <!-- table -->
+          <div class="content-table">
+            <table class="table">
+              <thead>
+                <tr class="table-header-row">
+                  <th
+                    class="table-header-cell col-width-1"
+                    th:with="sortDirection=${validSortBy.equals('id') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                  >
+                    <a
+                      th:with="newQuery=${queryUtils.modifiedQuery(userFilterDto.toQuery(), {{'sortBy': 'id', 'page': '1', 'sortDirection' : sortDirection }})}"
+                      th:href="${'/dashboard/user' + newQuery}"
+                    >
+                      Mã
+                      <i
+                        th:if="${validSortBy.equals('id') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                        class="fa-solid fa-arrow-down"
+                      ></i>
+
+                      <i
+                        th:if="${validSortBy.equals('id') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                        class="fa-solid fa-arrow-up"
+                      ></i>
+                    </a>
+                  </th>
+
+                  <th class="table-header-cell col-width-2">Avatar</th>
+
+                  <th
+                    class="table-header-cell col-width-4"
+                    th:with="sortDirection=${validSortBy.equals('email') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                  >
+                    <a
+                      th:with="newQuery=${queryUtils.modifiedQuery(userFilterDto.toQuery(), {'sortBy': 'email', 'page': '1', 'sortDirection': sortDirection})}"
+                      th:href="${'/dashboard/user' + newQuery}"
+                    >
+                      Email
+                      <i
+                        th:if="${validSortBy.equals('email') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                        class="fa-solid fa-arrow-down"
+                      ></i>
+
+                      <i
+                        th:if="${validSortBy.equals('email') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                        class="fa-solid fa-arrow-up"
+                      ></i>
+                    </a>
+                  </th>
+
+                  <th
+                    class="table-header-cell col-width-2"
+                    th:with="sortDirection=${validSortBy.equals('createdAt') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                  >
+                    <a
+                      th:with="newQuery=${queryUtils.modifiedQuery(userFilterDto.toQuery(), {'sortBy': 'createdAt', 'page': '1', 'sortDirection': sortDirection})}"
+                      th:href="${'/dashboard/user' + newQuery}"
+                    >
+                      Ngày tham gia
+                      <i
+                        th:if="${validSortBy.equals('createdAt') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                        class="fa-solid fa-arrow-down"
+                      ></i>
+
+                      <i
+                        th:if="${validSortBy.equals('createdAt') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                        class="fa-solid fa-arrow-up"
+                      ></i>
+                    </a>
+                  </th>
+
+                  <th
+                    class="table-header-cell col-width-2"
+                    th:with="sortDirection=${validSortBy.equals('updatedAt') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                  >
+                    <a
+                      th:with="newQuery=${queryUtils.modifiedQuery(userFilterDto.toQuery(), {'sortBy': 'updatedAt', 'page': '1', 'sortDirection': sortDirection})}"
+                      th:href="${'/dashboard/user' + newQuery}"
+                    >
+                      Ngày cập nhật
+                      <i
+                        th:if="${validSortBy.equals('updatedAt') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                        class="fa-solid fa-arrow-down"
+                      ></i>
+
+                      <i
+                        th:if="${validSortBy.equals('updatedAt') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                        class="fa-solid fa-arrow-up"
+                      ></i>
+                    </a>
+                  </th>
+
+                  <th class="table-header-cell col-width-1"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-body-row" th:each="user: ${response.data}">
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${user.id != null ? user.id : 'N/A'}"
+                    ></span>
+                  </td>
+                  <td class="table-body-cell">
+                    <div
+                      class="user-avatar"
+                      th:if="${user.avatar != null and !user.avatar.isEmpty()}"
+                    >
+                      <img
+                        th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + user.avatar}"
+                        alt="user avatar"
+                      />
                     </div>
-                </div>
-
-                <!-- search result -->
-                <div class="search-result-container"
-                     th:if="${query.email != null and query.email != ''}"
-                >
-                    <p class="search-result-message">
-                        <span
-                            class="result-count"
-                            th:text="${resultCount}"
+                    <div
+                      class="user-avatar"
+                      th:if="${user.avatar == null or user.avatar.isEmpty()}"
                     >
-                    </span> results for "<span
-                            class="result-query"
-                            th:text="${query.email}">
+                      <img src="/images/default-avatar.png" alt="user avatar" />
+                    </div>
+                  </td>
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${(!#strings.isEmpty(user.email)) ? user.email : 'N/A'}"
+                    ></span>
+                  </td>
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${user.createdAt != null ? #temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+                    ></span>
+                  </td>
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${user.updatedAt != null ? #temporals.format(user.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+                    ></span>
+                  </td>
+                  <td class="table-body-cell">
+                    <div class="table-row-actions">
+                      <a
+                        class="view-button primary-button"
+                        th:href="@{/dashboard/user/details/{id}(id=${user.id})}"
+                        >Xem</a
+                      >
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-                     </span>"
-                </p>
-                <a
-                        class="search-result-reset"
-                        th:href="${'/dashboard/user' + query.toQuery()
-                                  .replace('email=' + query.email , '')
-                                  .replace('&page=' + query.getIntegerPage(), 'page=1')}"
-                >
-                    reset
-                </a>
-            </div>
+          <!-- pagination -->
+          <ul class="pagination" th:if="${response.totalPages > 1}">
+            <!-- Previous Page -->
+            <li class="pagination-item">
+              <a
+                class="button previous-page-button"
+                th:with="newQuery=${queryUtils.modifiedQuery(userFilterDto.toQuery(),{{'page': (response.currentPage - 1)}})}"
+                th:href="${'/dashboard/user' + newQuery}"
+                th:classappend="${response.currentPage <= 1 ? 'disabled' : ''}"
+              >
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+            </li>
 
-            <!-- table -->
-            <div class="table-container">
-                <table>
-                    <thead>
-                    <tr>
-                        <th class="col-width-1" th:with="sortDirection=${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}">
-                            <a th:href="${'/dashboard/role' + query.toQuery()
-                                               .replace('sortBy=' + query.sortBy, 'sortBy=id')
-                                               .replace('page=' + query.getIntegerPage(), 'page=1')
-                                               .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                               }"
-                            >
-                                ID
-                                <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                                   class="fa-solid fa-arrow-down"></i>
+            <!-- Page Numbers -->
+            <li
+              class="pagination-item"
+              th:each="pageNumber : ${#numbers.sequence(1, response.totalPages)}"
+            >
+              <a
+                class="button page-number-button"
+                th:with="newQuery=${queryUtils.modifiedQuery(userFilterDto.toQuery(),{{'page': pageNumber}})}"
+                th:href="${'/dashboard/user' + newQuery}"
+                th:classappend="${response.currentPage == pageNumber ? 'active' : ''}"
+                th:text="${pageNumber}"
+              >
+              </a>
+            </li>
 
-                                <i th:if="${query.sortBy == 'id' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                                   class="fa-solid fa-arrow-up"></i>
-                            </a>
-                        </th>
-                        <th class="col-width-2">
-                            Avatar
-                        </th>
-                        <th class="col-width-4"
-                            th:with="sortDirection=${query.sortBy == 'email' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
-                        >
-                            <a th:href="${'/dashboard/user' + query.toQuery()
-                                               .replace('sortBy=' + query.sortBy, 'sortBy=email')
-                                               .replace('page=' + query.getIntegerPage(), 'page=1')
-                                               .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                               }"
-                            >
-                                Email
-                                <i th:if="${query.sortBy == 'email' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                                   class="fa-solid fa-arrow-down"></i>
-
-                                <i th:if="${query.sortBy == 'email' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                                   class="fa-solid fa-arrow-up"></i>
-                            </a>
-                        </th>
-                        <th class="col-width-2"
-                            th:with="sortDirection=${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
-                        >
-                            <a th:href="${'/dashboard/user' + query.toQuery()
-                                               .replace('sortBy=' + query.sortBy, 'sortBy=createdAt')
-                                               .replace('page=' + query.getIntegerPage(), 'page=1')
-                                               .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                               }"
-                            >
-                                Created at
-                                <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                                   class="fa-solid fa-arrow-down"></i>
-
-                                <i th:if="${query.sortBy == 'createdAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                                   class="fa-solid fa-arrow-up"></i>
-                            </a>
-                        </th>
-                        <th class="col-width-2"
-                            th:with="sortDirection=${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC ? 'sortDirection=DESC' : 'sortDirection=ASC'}"
-                        >
-                            <a th:href="${'/dashboard/user' + query.toQuery()
-                                               .replace('sortBy=' + query.sortBy, 'sortBy=updatedAt')
-                                               .replace('page=' + query.getIntegerPage(), 'page=1')
-                                               .replace('sortDirection=' + query.getEnumSortDirection().toString(), sortDirection)
-                                               }"
-                            >
-                                Updated at
-                                <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).DESC}"
-                                   class="fa-solid fa-arrow-down"></i>
-
-                                <i th:if="${query.sortBy == 'updatedAt' and query.getEnumSortDirection() == T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum).ASC}"
-                                   class="fa-solid fa-arrow-up"></i>
-                            </a>
-                        </th>
-                        <th class="col-width-1"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="user: ${userList}">
-                        <td>
-                            <span th:text="${user.id}"></span>
-                        </td>
-                        <td>
-                            <div class="avatar-container" th:if="${user.avatar != null and !user.avatar.isEmpty()}">
-                                <img th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + user.avatar}" alt="avatar" />
-                            </div>
-                            <div class="avatar-container" th:if="${user.avatar == null or user.avatar.isEmpty()}">
-                                <img th:src="@{/images/default-avatar.png}" alt="avatar">
-                            </div>
-                        </td>
-                        <td>
-                            <span th:text="${user.email}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${#temporals.format(user.updatedAt, 'dd-MM-yyyy HH:mm')}"></span>
-                        </td>
-                        <td>
-                            <div class="actions">
-                                <a class="view-button" th:href="@{/dashboard/user/details/{id}(id=${user.id})}">View</a>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- pagination -->
-            <ul class="pagination" th:if="${totalPages > 0}">
-                <li>
-                    <a class="previous"
-                       th:href="${'/dashboard/user' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage - 1))}"
-                       th:classappend="${currentPage == 1 ? 'disabled' : ''}"
-                    >
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
-                </li>
-                <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
-                    <a th:href="${'/dashboard/user' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (pageNumber + 1))}"
-                       th:class="${currentPage == pageNumber + 1 ? 'active' : ''}"
-                       th:text="${pageNumber + 1}">
-                    </a>
-                </li>
-                <li>
-                    <a class="next"
-                       th:href="${'/dashboard/user' + query.toQuery().replace('page=' + query.getIntegerPage(), 'page=' + (currentPage + 1))}"
-                       th:classappend="${currentPage + 1 > totalPages ? 'disabled' : ''}"
-                    >
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                </li>
-            </ul>
-            <ul class="pagination" th:if="${totalPages == 0}">
-                <li>
-                    <a class="previous disabled"><i class="fa-solid fa-chevron-left"></i></a>
-                </li>
-                <li>
-                    <a th:class="active" th:text="1"></a>
-                </li>
-                <li>
-                    <a class="next disabled"><i class="fa-solid fa-chevron-right"></i></a>
-                </li>
-            </ul>
+            <!-- Next Page -->
+            <li class="pagination-item">
+              <a
+                class="button next-page-button"
+                th:with="newQuery=${queryUtils.modifiedQuery(userFilterDto.toQuery(),{{'page': (response.currentPage + 1)}})}"
+                th:href="${'/dashboard/user' + newQuery}"
+                th:classappend="${response.currentPage >= response.totalPages ? 'disabled' : ''}"
+              >
+                <i class="fa-solid fa-chevron-right"></i>
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
-    </form>
-</body>
+  </body>
 </html>
