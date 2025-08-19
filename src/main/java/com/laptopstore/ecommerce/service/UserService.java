@@ -17,7 +17,6 @@ public interface UserService {
     ResetPasswordDto getResetPasswordInformation(String tokenValue);
     String forgotPassword(ForgotPasswordDto forgotPasswordDto);
     void registerAccount(RegisterDto registerDto);
-    boolean checkIfUserExistsByEmail(String email);
     User getUserByEmail(String email);
     User getUserById(long userId);
     User createNewUser(RegisterDto registerDto);

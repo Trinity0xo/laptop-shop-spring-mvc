@@ -74,7 +74,10 @@
     <!-- header -->
     <header>
       <!-- container -->
-      <div class="container">
+      <div
+        class="container"
+        th:with="roleEnum=${T(com.laptopstore.ecommerce.util.constant.RoleEnum)}"
+      >
         <!-- header top -->
         <div class="header-top">
           <div class="log">
@@ -283,6 +286,16 @@
                     >Lịch sử đơn hàng</a
                   >
                 </li>
+                <li
+                  class="account-dropdown-item dropdown-item"
+                  th:if="${authenticatedInformation.roleSlug.equals(roleEnum.SUPER_ADMIN.name()) or authenticatedInformation.roleSlug.equals(roleEnum.OWNER.name())}"
+                >
+                  <a
+                    class="link account-information-link"
+                    href="/account/information"
+                    >Trang dashboard</a
+                  >
+                </li>
                 <li class="account-dropdown-item dropdown-item">
                   <form
                     class="logout-form"
@@ -323,19 +336,22 @@
         >
           <div class="account-avatar">
             <img
-              th:if="${session.avatar == null or session.avatar.isEmpty()}"
+              class="account-avatar"
+              th:if="${authenticatedInformation.avatar == null or authenticatedInformation.avatar.isEmpty()}"
               src="/images/default-avatar.png"
               alt="avatar"
             />
+
             <img
-              th:if="${session.avatar != null and not session.avatar.isEmpty()}"
-              th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + session.avatar}"
+              class="account-avatar"
+              th:if="${authenticatedInformation.avatar != null and not authenticatedInformation.avatar.isEmpty()}"
+              th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + authenticatedInformation.avatar}"
               alt="avatar"
             />
           </div>
           <div class="account-information">
-            <p class="name" th:text="${session.fullName}"></p>
-            <p class="email" th:text="${session.username}"></p>
+            <p class="name" th:text="${authenticatedInformation.fullName}"></p>
+            <p class="email" th:text="${authenticatedInformation.email}"></p>
           </div>
         </div>
 
@@ -355,7 +371,10 @@
       </div>
 
       <!-- sidebar body -->
-      <div class="sidebar-body">
+      <div
+        class="sidebar-body"
+        th:with="roleEnum=${T(com.laptopstore.ecommerce.util.constant.RoleEnum)}"
+      >
         <!-- account links -->
         <ul
           class="account-link-list"
@@ -369,6 +388,14 @@
           <li class="account-link-item">
             <a class="link order-history-link" href="/account/order-history"
               ><i class="fas fa-history"></i>Lịch sử đơn hàng</a
+            >
+          </li>
+          <li
+            class="account-link-item"
+            th:if="${authenticatedInformation.roleSlug.equals(roleEnum.SUPER_ADMIN.name()) or authenticatedInformation.roleSlug.equals(roleEnum.OWNER.name())}"
+          >
+            <a class="link account-information-link" href="/dashboard"
+              ><i class="fa-solid fa-gauge"></i>Trang dashboard</a
             >
           </li>
         </ul>
@@ -403,12 +430,12 @@
             >
           </li>
           <li class="item">
-            <a class="link about-link" href="#"
+            <a class="link about-link" href="/about"
               ><i class="fa-solid fa-circle-exclamation"></i>Giới thiệu</a
             >
           </li>
           <li class="item">
-            <a class="link contact-link" href="#"
+            <a class="link contact-link" href="/contact"
               ><i class="fa-solid fa-phone"></i>Liên hệ</a
             >
           </li>
@@ -534,7 +561,7 @@
         <div class="copyright">
           <p class="text">
             Copyright &copy; 2025 ShopLap. Design by
-            <a class="link" href="#">Trinity0xo</a> All rights reserved
+            <a class="link" href="#">Trinity0xo</a>
           </p>
         </div>
       </div>

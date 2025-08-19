@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
     Optional<ProductImage> findByImageName(String imageName);
     Optional<ProductImage> findByProductIdAndIsMain(long productId, boolean isMain);
-    List<ProductImage> findByProductId(Long productId);
+    List<ProductImage> findByProductId(long productId);
     List<ProductImage> findByProductIdIn(List<Long> productIds);
+    Optional<ProductImage> findFirstByProductId(long productId);
 }

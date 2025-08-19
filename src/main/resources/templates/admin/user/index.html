@@ -102,7 +102,7 @@
             </div>
 
             <a
-              th:if="${authenticatedInformation.roleSlug.equals(roleEnum.ADMIN.name())}"
+              th:if="${authenticatedInformation.roleSlug.equals(roleEnum.SUPER_ADMIN.name())}"
               class="create-button primary-button"
               href="/dashboard/user/create"
               ><i class="fa-solid fa-plus"></i>Thêm</a

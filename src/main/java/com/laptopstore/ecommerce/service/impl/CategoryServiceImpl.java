@@ -8,7 +8,7 @@ import com.laptopstore.ecommerce.service.CategoryService;
 import com.laptopstore.ecommerce.service.FileService;
 import com.laptopstore.ecommerce.service.FolderService;
 import com.laptopstore.ecommerce.util.PaginationUtils;
-import com.laptopstore.ecommerce.util.error.NotFoundException;
+import com.laptopstore.ecommerce.util.error.CategoryNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -80,7 +80,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategoryById(long categoryId){
         Category category = this.categoryRepository.findById(categoryId).orElse(null);
         if(category == null){
-            throw new NotFoundException("Không tìm thấy danh mục");
+            throw new CategoryNotFoundException();
         }
 
         return category;

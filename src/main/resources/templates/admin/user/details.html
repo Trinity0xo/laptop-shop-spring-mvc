@@ -158,7 +158,7 @@
 
           <div class="content-actions">
             <a
-              th:if="${authenticatedInformation.roleSlug.equals(roleEnum.ADMIN.name())}"
+              th:if="${authenticatedInformation.roleSlug.equals(roleEnum.SUPER_ADMIN.name())}"
               th:href="@{/dashboard/user/update-role/{id}(id=${user.id})}"
               class="back-button warning-button"
               >Cập nhật</a

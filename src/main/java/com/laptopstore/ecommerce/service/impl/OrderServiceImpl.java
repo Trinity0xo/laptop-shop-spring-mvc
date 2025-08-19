@@ -15,8 +15,7 @@ import com.laptopstore.ecommerce.repository.*;
 import com.laptopstore.ecommerce.service.OrderService;
 import com.laptopstore.ecommerce.specification.OrderSpecifications;
 import com.laptopstore.ecommerce.util.PaginationUtils;
-import com.laptopstore.ecommerce.util.error.BadRequestException;
-import com.laptopstore.ecommerce.util.error.NotFoundException;
+import com.laptopstore.ecommerce.util.error.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -49,24 +48,26 @@ public class OrderServiceImpl implements OrderService {
     public void createNewOrder(CheckoutDto checkoutDto) {
         User user = this.userRepository.findByEmail(checkoutDto.getEmail()).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         List<CheckoutDto.CheckoutProduct> checkoutProducts = checkoutDto.getCheckoutProducts();
         if (checkoutProducts == null || checkoutProducts.isEmpty()) {
-            throw new BadRequestException("Không có sản phẩm để thanh toán");
+            throw new BadRequestException("Không có sản phẩm để thanh toán", "/cart");
         }
 
         Map<Long, Product> validCheckoutProducts = new HashMap<>();
 
+
+        // n + 1 (not good)
         for (CheckoutDto.CheckoutProduct checkoutProduct : checkoutProducts){
             Product product = this.productRepository.findById(checkoutProduct.getId()).orElse(null);
             if(product == null){
-               throw new  BadRequestException("Sản phẩm không hợp lệ trong đơn hàng");
+               throw new ProductNotFoundException("/cart");
             }
 
             if(checkoutProduct.getQuantity() > product.getQuantity()){
-                throw new BadRequestException("Số lượng sản phẩm trong kho không đủ");
+                throw new StockUnavailableException("/cart");
             }
 
             validCheckoutProducts.put(product.getId(), product);
@@ -130,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
     public PageResponse<List<Order>> getUserOrderHistory(String email, OrderFilterDto orderFilterDto){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         Specification<Order> specification = Specification.where(
@@ -199,12 +200,12 @@ public class OrderServiceImpl implements OrderService {
     public Order getUserOrderItems(String email, long orderId) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         Order userOrder = this.orderRepository.findByIdAndUser(orderId, user).orElse(null);
         if(userOrder == null){
-            throw new NotFoundException("Không tìm thấy đơn hàng");
+            throw new OrderNotFoundException();
         }
 
         return userOrder;
@@ -213,7 +214,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public CancelOrderInformationDto getInformationForUserCancelOrder(String email, long orderId){
         Order order = this.getUserOrderItems(email, orderId);
-
         return new CancelOrderInformationDto(order.getId());
     }
 
@@ -221,16 +221,16 @@ public class OrderServiceImpl implements OrderService {
     public void userCancelOrder(String email, CancelOrderInformationDto cancelOrderInformationDto) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-             throw new NotFoundException("Không tìm thấy người dùng");
+             throw new AuthenticatedUserNotFoundException();
         }
 
         Order userOrder = this.orderRepository.findByIdAndUser(cancelOrderInformationDto.getId(), user).orElse(null);
         if(userOrder == null){
-            throw new NotFoundException("Không tìm thấy đơn hàng");
+            throw new OrderNotFoundException("/account/order-history");
         }
 
         if(!userOrder.getStatus().equals(OrderStatusEnum.PENDING)){
-            throw new BadRequestException("Bạn chỉ có thể huỷ đơn hàng khi trạng thái đang là 'Đang xử lý'");
+            throw new BadRequestException("Bạn chỉ có thể huỷ đơn hàng khi trạng thái đang là 'Đang xử lý'", "/account/order-history/details/" + userOrder.getId());
         }
 
         userOrder.setStatus(OrderStatusEnum.CANCELLED);
@@ -306,7 +306,7 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderItems(long orderId){
         Order order = this.orderRepository.findById(orderId).orElse(null);
         if(order == null){
-            throw new NotFoundException("Không tìm thấy đơn hàng");
+            throw new OrderNotFoundException();
         }
 
         return order;
@@ -316,7 +316,7 @@ public class OrderServiceImpl implements OrderService {
     public UpdateOrderStatusDto getOrderStatusUpdateInformation(long orderId){
         Order order = this.orderRepository.findById(orderId).orElse(null);
         if(order == null){
-            throw new NotFoundException("Không tìm thấy đơn hàng");
+            throw new OrderNotFoundException("/dashboard/order");
         }
 
         return new UpdateOrderStatusDto(
@@ -330,17 +330,17 @@ public class OrderServiceImpl implements OrderService {
     public void updateOrderStatus(String email, UpdateOrderStatusDto updateOrderStatusDto) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         Order order = this.orderRepository.findById(updateOrderStatusDto.getId()).orElse(null);
         if(order == null){
-            throw new NotFoundException("Không tìm thấy đơn hàng");
+            throw new OrderNotFoundException("/dashboard/order");
         }
 
         if (updateOrderStatusDto.getStatus().equals(OrderStatusEnum.CANCELLED)) {
             if(order.getStatus().equals(OrderStatusEnum.DELIVERED)){
-                throw new NotFoundException("Không thể hủy đơn hàng khi đã giao");
+                throw new BadRequestException("Không thể hủy đơn hàng khi đã giao", "/dashboard/order/details/" + order.getId());
             }
 
             order.setCancelledReason(updateOrderStatusDto.getCancelledReason());

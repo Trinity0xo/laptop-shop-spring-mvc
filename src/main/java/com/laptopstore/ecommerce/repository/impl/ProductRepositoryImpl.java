@@ -93,7 +93,7 @@ public class ProductRepositoryImpl implements CustomProductRepository {
         CriteriaQuery<CustomProductDto> cq = cb.createQuery(CustomProductDto.class);
         Root<Product> root = cq.from(Product.class);
 
-        Join<Product, ProductImage> imageJoin = root.join("productImages");
+        Join<Product, ProductImage> imageJoin = root.join("productImages", JoinType.LEFT);
         imageJoin.on(cb.isTrue(imageJoin.get("isMain")));
         Join<Product, Review> reviewJoin = root.join("reviews", JoinType.LEFT);
 
@@ -176,7 +176,7 @@ public class ProductRepositoryImpl implements CustomProductRepository {
         CriteriaQuery<CustomProductDto> cq = cb.createQuery(CustomProductDto.class);
         Root<Product> root = cq.from(Product.class);
 
-        Join<Product, ProductImage> imageJoin = root.join("productImages");
+        Join<Product, ProductImage> imageJoin = root.join("productImages", JoinType.LEFT);
         imageJoin.on(cb.isTrue(imageJoin.get("isMain")));
 
         List<Predicate> predicates = this.buildPredicates(root, cb, productFilterDto);
@@ -236,7 +236,7 @@ public class ProductRepositoryImpl implements CustomProductRepository {
         CriteriaQuery<CustomProductSoldDto> cq = cb.createQuery(CustomProductSoldDto.class);
         Root<Product> root = cq.from(Product.class);
 
-        Join<Product, ProductImage> imageJoin = root.join("productImages");
+        Join<Product, ProductImage> imageJoin = root.join("productImages", JoinType.LEFT);
         imageJoin.on(cb.isTrue(imageJoin.get("isMain")));
         Join<Product, OrderItem> orderItemJoin = root.join("orderItems");
         Join<OrderItem, Order> orderJoin = orderItemJoin.join("order");
@@ -299,7 +299,7 @@ public class ProductRepositoryImpl implements CustomProductRepository {
         CriteriaQuery<CustomProductSoldDto> cq = cb.createQuery(CustomProductSoldDto.class);
         Root<Product> root = cq.from(Product.class);
 
-        Join<Product, ProductImage> imageJoin = root.join("productImages");
+        Join<Product, ProductImage> imageJoin = root.join("productImages", JoinType.LEFT);
         imageJoin.on(cb.isTrue(imageJoin.get("isMain")));
         Join<Product, OrderItem> orderItemJoin = root.join("orderItems");
         Join<OrderItem, Order> orderJoin = orderItemJoin.join("order");
@@ -355,7 +355,7 @@ public class ProductRepositoryImpl implements CustomProductRepository {
         CriteriaQuery<CustomProductRatingDto> cq = cb.createQuery(CustomProductRatingDto.class);
         Root<Product> root = cq.from(Product.class);
 
-        Join<Product, ProductImage> imageJoin = root.join("productImages");
+        Join<Product, ProductImage> imageJoin = root.join("productImages", JoinType.LEFT);
         imageJoin.on(cb.isTrue(imageJoin.get("isMain")));
         Join<Product, Review> reviewJoin = root.join("reviews");
 
@@ -422,7 +422,7 @@ public class ProductRepositoryImpl implements CustomProductRepository {
         CriteriaQuery<CustomProductRatingDto> cq = cb.createQuery(CustomProductRatingDto.class);
         Root<Product> root = cq.from(Product.class);
 
-        Join<Product, ProductImage> imageJoin = root.join("productImages");
+        Join<Product, ProductImage> imageJoin = root.join("productImages", JoinType.LEFT);
         imageJoin.on(cb.isTrue(imageJoin.get("isMain")));
         Join<Product, Review> reviewJoin = root.join("reviews");
 
@@ -540,7 +540,7 @@ public class ProductRepositoryImpl implements CustomProductRepository {
         CriteriaQuery<CustomProductDto> cq = cb.createQuery(CustomProductDto.class);
         Root<Product> root = cq.from(Product.class);
 
-        Join<Product, ProductImage> imageJoin = root.join("productImages");
+        Join<Product, ProductImage> imageJoin = root.join("productImages", JoinType.LEFT);
         imageJoin.on(cb.isTrue(imageJoin.get("isMain")));
         Join<Product, Review> reviewJoin = root.join("reviews", JoinType.LEFT);
 
@@ -608,7 +608,7 @@ public class ProductRepositoryImpl implements CustomProductRepository {
         CriteriaQuery<CustomProductDto> cq = cb.createQuery(CustomProductDto.class);
         Root<Product> root = cq.from(Product.class);
 
-        Join<Product, ProductImage> imageJoin = root.join("productImages");
+        Join<Product, ProductImage> imageJoin = root.join("productImages", JoinType.LEFT);
         imageJoin.on(cb.isTrue(imageJoin.get("isMain")));
         Join<Product, Review> reviewJoin = root.join("reviews", JoinType.LEFT);
 

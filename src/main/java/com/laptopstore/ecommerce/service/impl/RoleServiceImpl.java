@@ -5,7 +5,7 @@ import com.laptopstore.ecommerce.dto.role.RoleFilterDto;
 import com.laptopstore.ecommerce.service.RoleService;
 import com.laptopstore.ecommerce.specification.RoleSpecifications;
 import com.laptopstore.ecommerce.util.PaginationUtils;
-import com.laptopstore.ecommerce.util.error.NotFoundException;
+import com.laptopstore.ecommerce.util.error.RoleNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -64,7 +64,7 @@ public class RoleServiceImpl implements RoleService {
     public Role getRoleById(long roleId){
         Role role = this.roleRepository.findById(roleId).orElse(null);
         if(role == null){
-            throw new NotFoundException("Không tìm thấy vai trò");
+            throw new RoleNotFoundException();
         }
 
         return role;

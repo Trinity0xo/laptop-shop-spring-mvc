@@ -629,7 +629,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="review-stars">
+                <div class="review-stars" th:if="${product.averageRating > 0}">
                   <i
                     th:with="score=${product.averageRating}"
                     class="fa-solid"

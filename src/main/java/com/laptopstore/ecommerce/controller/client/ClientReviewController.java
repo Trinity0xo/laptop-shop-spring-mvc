@@ -53,9 +53,9 @@ public class ClientReviewController {
                 errors.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
 
-            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>("validation errors", errors);
+            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>(null, errors);
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ajaxResponse);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ajaxResponse);
         }
 
         this.reviewService.UserCreateReview(productId, email, createReviewDto);
@@ -94,9 +94,9 @@ public class ClientReviewController {
                 errors.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
 
-            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>("validation errors", errors);
+            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>(null, errors);
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ajaxResponse);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ajaxResponse);
         }
 
         this.reviewService.UserUpdateReview(productId, email, updateReviewDto);

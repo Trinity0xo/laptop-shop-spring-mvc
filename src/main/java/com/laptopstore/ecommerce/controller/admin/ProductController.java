@@ -66,14 +66,14 @@ public class ProductController {
                 errors.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
 
-            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>("validation error", errors);
+            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>(null, errors);
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ajaxResponse);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ajaxResponse);
         }
 
         this.productService.createProduct(createProductDto);
 
-        AjaxResponse<Object> ajaxResponse = new AjaxResponse<>("Create new product success", null);
+        AjaxResponse<Object> ajaxResponse = new AjaxResponse<>("Tạo sản phẩm thành công", null);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ajaxResponse);
     }
@@ -101,14 +101,14 @@ public class ProductController {
                 errors.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
 
-            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>("validation error", errors);
+            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>(null, errors);
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ajaxResponse);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ajaxResponse);
         }
 
         this.productService.updateProduct(updateProductDto);
 
-        AjaxResponse<Object> ajaxResponse = new AjaxResponse<>("Update product success", null);
+        AjaxResponse<Object> ajaxResponse = new AjaxResponse<>("Cập nhật thành công", null);
 
         return ResponseEntity.status(HttpStatus.OK).body(ajaxResponse);
     }
@@ -130,7 +130,7 @@ public class ProductController {
     ) {
         this.productService.deleteProduct(productId);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Delete product success");
+        redirectAttributes.addFlashAttribute("successMessage", "Xóa sản phẩm thành công");
 
         return "redirect:/dashboard/product";
     }

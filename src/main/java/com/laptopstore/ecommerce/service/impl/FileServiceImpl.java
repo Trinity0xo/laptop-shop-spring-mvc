@@ -1,7 +1,6 @@
 package com.laptopstore.ecommerce.service.impl;
 
 import com.laptopstore.ecommerce.service.FileService;
-import com.laptopstore.ecommerce.util.error.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +45,7 @@ public class FileServiceImpl implements FileService {
             return newFileName;
         } catch (IOException e) {
             System.out.println(">> Error when uploading file: " + e.getMessage());
-            throw new FileUploadException("Không thể tải ảnh lên. Vui lòng thử lại");
+            return null;
         }
     }
 

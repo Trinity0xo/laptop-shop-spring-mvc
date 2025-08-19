@@ -1,13 +1,12 @@
 package com.laptopstore.ecommerce.util.error;
 
-public class BadRequestException extends RuntimeException {
+public class EntityNotFoundException extends RuntimeException {
     String redirectUrl;
 
-    public BadRequestException(String message){
-        super(message);
+    public EntityNotFoundException(){
     }
 
-    public BadRequestException(String message, String redirectUrl) {
+    public EntityNotFoundException(String message, String redirectUrl) {
         super(message);
         this.redirectUrl = redirectUrl;
     }

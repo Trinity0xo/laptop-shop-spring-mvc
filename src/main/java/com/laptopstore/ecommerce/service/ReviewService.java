@@ -8,7 +8,6 @@ import com.laptopstore.ecommerce.model.Review;
 import java.util.List;
 
 public interface ReviewService {
-    Review getUserReviewOnProduct(long reviewId, long productId, String email);
     PageResponse<List<CustomReviewDto>> getReviews(ReviewFilterDto reviewFilterDto);
     Review getReviewDetails(long reviewId);
     PageResponse<CustomProductDetailsDto> getProductReviews(long productId, ReviewFilterDto reviewFilterDto);

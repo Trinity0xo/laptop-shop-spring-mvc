@@ -283,7 +283,9 @@
 
                 <td class="table-body-cell">
                   <span
-                    th:text="${orderItem.totalPrice != null ? #numbers.formatDecimal(orderItem.totalPrice, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"
+                    th:text="${orderItem.price != null and orderItem.quantity != null ?
+                                    #numbers.formatDecimal(orderItem.price * orderItem.quantity, 0, 'COMMA', 0, 'POINT') + '₫' : 
+                                    'N/A'}"
                   ></span>
                 </td>
 

@@ -63,8 +63,8 @@ public class AuthController {
             return "/auth/forgot_password";
         }
 
-        String email = this.userService.forgotPassword(forgotPasswordDto);
-        model.addAttribute("email", email);
+        String message = this.userService.forgotPassword(forgotPasswordDto);
+        model.addAttribute("message", message);
 
         return "/auth/forgot_password_confirmation";
     }

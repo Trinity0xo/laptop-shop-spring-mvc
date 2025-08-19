@@ -23,17 +23,26 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
+    public ProductImage getAnyImageByProductId(long productId) {
+        return productImageRepository.findFirstByProductId(productId).orElse(null);
+    }
+
+    @Override
+    public void saveProductImage(ProductImage productImage) {
+        this.productImageRepository.save(productImage);
+    }
+
+    @Override
     public void createProductImages(List<String> imageNames, Product product, boolean skipMain) {
         List<ProductImage> productImages = new ArrayList<>();
 
-        for (String imageName : imageNames){
-            boolean isMain = !skipMain;
-
-            ProductImage productImage = new ProductImage(
-                    product, imageName, isMain
-            );
-
+        boolean mainAssigned = skipMain;
+        for (String imageName : imageNames) {
+            boolean isMain = !mainAssigned;
+            ProductImage productImage = new ProductImage(product, imageName, isMain);
             productImages.add(productImage);
+
+            if (isMain) mainAssigned = true;
         }
 
         this.productImageRepository.saveAll(productImages);

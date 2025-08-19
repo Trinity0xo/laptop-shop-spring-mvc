@@ -11,7 +11,8 @@ import com.laptopstore.ecommerce.repository.ProductRepository;
 import com.laptopstore.ecommerce.repository.UserRepository;
 import com.laptopstore.ecommerce.service.CartService;
 import com.laptopstore.ecommerce.util.error.BadRequestException;
-import com.laptopstore.ecommerce.util.error.NotFoundException;
+import com.laptopstore.ecommerce.util.error.ProductNotFoundException;
+import com.laptopstore.ecommerce.util.error.AuthenticatedUserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.laptopstore.ecommerce.model.Cart;
@@ -45,13 +46,18 @@ public class CartServiceImpl implements CartService {
     public CheckoutDto getBuyNowInformation(String email, long productId, int quantity){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new NotFoundException("Không tìm thấy sản phẩm");
+            throw new ProductNotFoundException("/shop");
         }
+
+        if (quantity <= 0) {
+            throw new BadRequestException("Số lượng phải lớn hơn 0", "/shop/product/" + product.getSlug());
+        }
+
 
         double totalPrice = product.getDiscountPrice() * quantity;
 
@@ -81,34 +87,39 @@ public class CartServiceImpl implements CartService {
     public CheckoutDto getUserCheckoutInformation(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
 
         }
 
         Cart userCart = user.getCart();
         if(userCart == null || userCart.getCartItems().isEmpty()){
-            throw new BadRequestException("Giỏ hàng trống");
+            throw new BadRequestException("Giỏ hàng trống", "/cart");
         }
 
         List<CartItem> validCartItems = new ArrayList<>();
-        for (CartItem details : userCart.getCartItems()) {
-            if(details.getQuantity() <= details.getProduct().getQuantity()){
-                validCartItems.add(details);
+        for (CartItem cartItem : userCart.getCartItems()) {
+            if(cartItem.getQuantity() <= cartItem.getProduct().getQuantity()){
+                validCartItems.add(cartItem);
             }
         }
 
         if(validCartItems.isEmpty()){
-            throw new BadRequestException("Không thể thanh toán vì một số sản phẩm đã hết hàng");
+            throw new BadRequestException("Không thể thanh toán vì một số sản phẩm đã hết hàng", "/cart");
         }
 
-        double totalPrice = this.cartItemsRepository.calculateCartTotalPrice(userCart);
+//        double totalPrice = this.cartItemsRepository.calculateCartTotalPrice(userCart);
+
+        double totalPrice = 0;
 
         List<CheckoutDto.CheckoutProduct> checkoutProducts = new ArrayList<>();
 
         for (CartItem cartItem : validCartItems){
+            double itemTotal = cartItem.getProduct().getDiscountPrice() * cartItem.getQuantity();
+            totalPrice += itemTotal;
+
             CheckoutDto.CheckoutProduct checkoutProduct = new CheckoutDto.CheckoutProduct(
                     cartItem.getProduct().getId(),
-                    cartItem.getProduct().getProductImages().get(0).getImageName(),
+                    cartItem.getProduct().getProductImages().isEmpty() ? null : cartItem.getProduct().getProductImages().get(0).getImageName(),
                     cartItem.getProduct().getName(),
                     cartItem.getQuantity(),
                     cartItem.getProduct().getDiscountPrice()
@@ -129,14 +140,14 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void addProductToUserCart(String email, long productId, int quantity) {
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) {
-            throw new NotFoundException("Không tìm thấy sản phẩm");
-        }
-
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
+        }
+
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product == null) {
+            throw new ProductNotFoundException("/shop");
         }
 
         Cart userCart = user.getCart();
@@ -179,19 +190,19 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void updateUserCartProductQuantity(String email, long productId, int quantityChange){
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) {
-            throw new NotFoundException("Không tìm thấy sản phẩm");
-        }
-
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
+        }
+
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product == null) {
+            throw new ProductNotFoundException("/cart");
         }
 
         Cart userCart = user.getCart();
         if(userCart == null || userCart.getCartItems().isEmpty()){
-            throw new BadRequestException("Giỏ hàng trống");
+            throw new BadRequestException("Giỏ hàng trống", "/cart");
         }
 
         for (CartItem item : user.getCart().getCartItems()) {
@@ -208,23 +219,18 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void removeUserCartProduct(String email, long productId){
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) {
-            throw new NotFoundException("Không tìm thấy sản phẩm");
-        }
-
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         Cart userCart = user.getCart();
-        if(userCart == null || userCart.getCartItems().isEmpty()){
-            throw new BadRequestException("Giỏ hàng trống");
+        if (userCart == null || userCart.getCartItems().isEmpty()) {
+            return;
         }
 
-        for (CartItem item : user.getCart().getCartItems()) {
-            if (item.getProduct().getId().equals(product.getId())) {
+        for (CartItem item : userCart.getCartItems()) {
+            if (item.getProduct().getId().equals(productId)) {
                 this.cartItemsRepository.delete(item);
                 break;
             }
@@ -235,7 +241,7 @@ public class CartServiceImpl implements CartService {
     public CartItemsDto getUserCartItems(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         Cart userCart = user.getCart();

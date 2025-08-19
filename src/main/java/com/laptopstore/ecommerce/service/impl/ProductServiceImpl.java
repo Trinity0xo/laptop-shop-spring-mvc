@@ -13,7 +13,8 @@ import com.laptopstore.ecommerce.service.ProductService;
 import com.laptopstore.ecommerce.specification.ReviewSpecifications;
 import com.laptopstore.ecommerce.util.PaginationUtils;
 import com.laptopstore.ecommerce.util.constant.OrderStatusEnum;
-import com.laptopstore.ecommerce.util.error.NotFoundException;
+import com.laptopstore.ecommerce.util.error.AuthenticatedUserNotFoundException;
+import com.laptopstore.ecommerce.util.error.ProductNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -56,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductById(long productId) {
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new NotFoundException("Không tìm thấy sản phẩm");
+            throw new ProductNotFoundException();
         }
 
         return product;
@@ -71,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductBySlug(String slug) {
         Product product = this.productRepository.findBySlug(slug).orElse(null);
         if(product == null){
-            throw new NotFoundException("Không tìm thấy sản phẩm");
+            throw new ProductNotFoundException();
         }
 
         return product;
@@ -301,7 +302,7 @@ public class ProductServiceImpl implements ProductService {
     public CustomProductDetailsDto getShopProductDetailsBySlug(String productSlug, String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         Product product = this.getProductBySlug(productSlug);
@@ -578,25 +579,25 @@ public class ProductServiceImpl implements ProductService {
 
         String productPicturesFolderName = this.folderService.getProductPicturesFolderName();
 
-        boolean skipMain = true;
+        boolean mainDeleted = false;
 
-        if(updateProductDto.getDeleteImageNames() != null && !updateProductDto.getDeleteImageNames().isEmpty()) {
+        if (updateProductDto.getDeleteImageNames() != null && !updateProductDto.getDeleteImageNames().isEmpty()) {
             ProductImage mainImage = this.productImageService.getProductMainImageById(product.getId());
-            skipMain =  updateProductDto.getDeleteImageNames().contains(mainImage.getImageName());
+            if (mainImage != null && updateProductDto.getDeleteImageNames().contains(mainImage.getImageName())) {
+                mainDeleted = true;
+            }
 
-            for(String imageName : updateProductDto.getDeleteImageNames()) {
+            for (String imageName : updateProductDto.getDeleteImageNames()) {
                 this.fileService.deleteFile(imageName, productPicturesFolderName);
                 ProductImage productImage = this.productImageService.getProductImageByName(imageName);
-
-                if(productImage != null) {
+                if (productImage != null) {
                     this.productImageService.deleteProductImageById(productImage.getId());
                 }
             }
         }
 
-        if(updateProductDto.getNewImages() != null && !updateProductDto.getNewImages().isEmpty()) {
+        if (updateProductDto.getNewImages() != null && !updateProductDto.getNewImages().isEmpty()) {
             List<String> imageNames = new ArrayList<>();
-
             for (MultipartFile image : updateProductDto.getNewImages()) {
                 String imageName = this.fileService.uploadFile(image, productPicturesFolderName);
                 if (imageName != null) {
@@ -604,17 +605,21 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
 
-            this.productImageService.createProductImages(imageNames, product, skipMain);
+            this.productImageService.createProductImages(imageNames, product, !mainDeleted);
+        } else if (mainDeleted) {
+            ProductImage anotherImage = this.productImageService.getAnyImageByProductId(product.getId());
+            if (anotherImage != null) {
+                anotherImage.setMain(true);
+                this.productImageService.saveProductImage(anotherImage);
+            }
         }
-
-        this.productRepository.save(product);
     }
 
     @Override
     public CustomProductDetailsDto getAdminProductDetailsById(long productId){
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new NotFoundException("Không tìm thấy sản phẩm");
+            throw new ProductNotFoundException();
         }
 
        long sold = this.orderItemsRepository.countSoldProductByProductId(product.getId());

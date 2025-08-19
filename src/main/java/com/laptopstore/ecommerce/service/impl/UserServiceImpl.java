@@ -17,8 +17,7 @@ import com.laptopstore.ecommerce.specification.UserSpecifications;
 import com.laptopstore.ecommerce.util.PaginationUtils;
 import com.laptopstore.ecommerce.util.constant.RoleEnum;
 import com.laptopstore.ecommerce.util.constant.TokenTypeEnum;
-import com.laptopstore.ecommerce.util.error.BadRequestException;
-import com.laptopstore.ecommerce.util.error.NotFoundException;
+import com.laptopstore.ecommerce.util.error.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -53,12 +52,12 @@ public class UserServiceImpl implements UserService {
     public void updateUserRole(UpdateUserRoleDto updateUserRoleDto) {
         User user = this.userRepository.findById(updateUserRoleDto.getId()).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new UserNotFoundException("/dashboard/user");
         }
 
         Role role = this.roleRepository.findBySlug(updateUserRoleDto.getRole().name()).orElse(null);
         if(role == null){
-            throw new NotFoundException("Không tìm thấy vai trò");
+            throw new RoleNotFoundException("/dashboard/user");
         }
 
         user.setRole(role);
@@ -69,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public UpdateUserRoleDto getUserInformationForRoleUpdate(long userId) {
         User user = this.userRepository.findById(userId).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new UserNotFoundException("/dashboard/user");
         }
 
         RoleEnum role = RoleEnum.valueOf(user.getRole().getSlug());
@@ -89,7 +88,7 @@ public class UserServiceImpl implements UserService {
         User user = token.getUser();
 
         if(user == null){
-            throw new BadRequestException("User not found");
+            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ");
         }
 
         String newHashedPassword = this.passwordEncoder.encode(resetPasswordDto.getNewPassword());
@@ -112,17 +111,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public String forgotPassword(ForgotPasswordDto forgotPasswordDto) {
         User user = this.getUserByEmail(forgotPasswordDto.getEmail());
-
-        if (user == null) {
-            throw new BadRequestException("Không tìm thấy người dùng");
+        if(user != null){
+            String resetPasswordToken = this.tokenService.createToken(user, TokenTypeEnum.RESET_PASSWORD);
+            String fullName = user.getFullName();
+            this.mailService.sendResetPasswordLink(fullName, user.getEmail(), resetPasswordToken);
         }
 
-        String resetPasswordToken = this.tokenService.createToken(user, TokenTypeEnum.RESET_PASSWORD);
-        String fullName = user.getFullName();
-
-        this.mailService.sendResetPasswordLink(fullName, user.getEmail(), resetPasswordToken);
-
-        return user.getEmail();
+        return "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được liên kết đặt lại mật khẩu";
     }
 
     @Override
@@ -134,11 +129,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkIfUserExistsByEmail(String email){
-        return this.userRepository.existsUserByEmail(email);
-    }
-
-    @Override
     public User getUserByEmail(String email) {
         return this.userRepository.findByEmail(email).orElse(null);
     }
@@ -147,15 +137,15 @@ public class UserServiceImpl implements UserService {
     public User createNewUser(RegisterDto registerDto) {
         Role role = this.roleRepository.findBySlug(RoleEnum.USER.name()).orElse(null);
         if(role == null){
-            throw new NotFoundException("không tìm thấy vai trò cho người dùng");
+            throw new RuntimeException("Không tìm thấy vai trò mặc định cho người dùng");
         }
 
         User user = new User(
-                registerDto.getFirstName(),
-                registerDto.getLastName(),
-                registerDto.getEmail(),
-                registerDto.getPassword(),
-                role
+            registerDto.getFirstName(),
+            registerDto.getLastName(),
+            registerDto.getEmail(),
+            registerDto.getPassword(),
+            role
         );
 
         return this.userRepository.save(user);
@@ -165,7 +155,7 @@ public class UserServiceImpl implements UserService {
     public void createNewUser(CreateUserDto createUserDto) {
         Role role = this.roleRepository.findBySlug(createUserDto.getRole().name()).orElse(null);
         if(role == null){
-            throw new NotFoundException("Không tìm thấy vai trò");
+            throw new RoleNotFoundException("/dashboard/user/create");
         }
 
         String hashedPassword = this.passwordEncoder.encode(createUserDto.getPassword());
@@ -185,7 +175,7 @@ public class UserServiceImpl implements UserService {
     public PageResponse<List<User>> getAllUsers(UserFilterDto userFilterDto, String email) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         Specification<User> specification = Specification.where(UserSpecifications.notEqualId(user.getId()));
@@ -223,7 +213,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(long id) {
         User user = this.userRepository.findById(id).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new UserNotFoundException();
         }
 
         return user;
@@ -233,7 +223,7 @@ public class UserServiceImpl implements UserService {
     public AuthenticatedInformationDto getAuthenticatedInformation(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         int cartItemCount = this.cartItemsRepository.countByCart(user.getCart());
@@ -252,7 +242,7 @@ public class UserServiceImpl implements UserService {
     public UserInformationDto getUserAccountInformation(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         return new UserInformationDto(
@@ -271,7 +261,7 @@ public class UserServiceImpl implements UserService {
     public UpdateUserInformationDto getUserAccountInformationForUpdate(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null) {
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         return new UpdateUserInformationDto(
@@ -287,7 +277,7 @@ public class UserServiceImpl implements UserService {
     public void updateUserAccountInformation(String email, UpdateUserInformationDto updateAccountInfoDto){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new NotFoundException("Không tìm thấy người dùng");
+            throw new AuthenticatedUserNotFoundException();
         }
 
         if(updateAccountInfoDto.getNewAvatar() != null && !updateAccountInfoDto.getNewAvatar().isEmpty()){

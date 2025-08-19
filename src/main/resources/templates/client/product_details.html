@@ -815,8 +815,28 @@
           }
         },
         error: function (xhr) {
-          if (xhr.status == 401) {
+          let response = null;
+
+          try {
+            response = JSON.parse(xhr.responseText);
+          } catch (e) {
+            console.warn("Response is not valid JSON:", e);
+          }
+
+          if (response && response.message) {
+            localStorage.setItem("errorMessage", response.message);
+          }
+
+          if (xhr.status === 401) {
             window.location.href = "/auth/login";
+          } else if (xhr.status === 400) {
+            location.reload();
+          } else if (xhr.status === 404) {
+            if (response && response.data) {
+              window.location.href = response.data;
+            }
+          } else if (xhr.status === 409) {
+            location.reload();
           } else {
             document.open();
             document.write(xhr.responseText);
@@ -849,21 +869,44 @@
           if (xhr.status == 201) {
             localStorage.setItem("successMessage", xhr.responseJSON.message);
             location.reload();
-            // window.location.href = `/shop/product/${productId}`;
           }
         },
         error: function (xhr) {
-          if (xhr.status === 400) {
-            const errors = xhr.responseJSON.data;
-            $(".input-error-message").text("");
-            $("input").removeClass("error");
+          let response = null;
 
-            for (const field in errors) {
-              if (errors.hasOwnProperty(field)) {
-                $("#" + field + "Error").text(errors[field]);
-                $("#" + field).addClass("error");
+          try {
+            response = JSON.parse(xhr.responseText);
+          } catch (e) {
+            console.warn("Response is not valid JSON:", e);
+          }
+
+          if (response && response.message) {
+            localStorage.setItem("errorMessage", response.message);
+          }
+
+          if (xhr.status === 422) {
+            if (response && response.data) {
+              const errors = response.data;
+              $(".input-error-message").text("");
+              $("input").removeClass("error");
+
+              for (const field in errors) {
+                if (errors.hasOwnProperty(field)) {
+                  $("#" + field + "Error").text(errors[field]);
+                  $("#" + field).addClass("error");
+                }
               }
             }
+          } else if (xhr.status === 401) {
+            window.location.href = "/auth/login";
+          } else if (xhr.status === 400) {
+            location.reload();
+          } else if (xhr.status === 404) {
+            if (response && response.data) {
+              window.location.href = response.data;
+            }
+          } else if (xhr.status === 409) {
+            location.reload();
           } else {
             document.open();
             document.write(xhr.responseText);
@@ -900,8 +943,28 @@
           }
         },
         error: function (xhr) {
-          if (xhr.status == 401) {
+          let response = null;
+
+          try {
+            response = JSON.parse(xhr.responseText);
+          } catch (e) {
+            console.warn("Response is not valid JSON:", e);
+          }
+
+          if (response && response.message) {
+            localStorage.setItem("errorMessage", response.message);
+          }
+
+          if (xhr.status === 401) {
             window.location.href = "/auth/login";
+          } else if (xhr.status === 400) {
+            location.reload();
+          } else if (xhr.status === 404) {
+            if (response && response.data) {
+              window.location.href = response.data;
+            }
+          } else if (xhr.status === 409) {
+            location.reload();
           } else {
             document.open();
             document.write(xhr.responseText);
@@ -935,21 +998,44 @@
           if (xhr.status == 200) {
             localStorage.setItem("successMessage", xhr.responseJSON.message);
             location.reload();
-            // window.location.href = `/shop/product/${productId}`;
           }
         },
         error: function (xhr) {
-          if (xhr.status === 400) {
-            const errors = xhr.responseJSON.data;
-            $(".input-error-message").text("");
-            $("input").removeClass("error");
+          let response = null;
 
-            for (const field in errors) {
-              if (errors.hasOwnProperty(field)) {
-                $("#" + field + "Error").text(errors[field]);
-                $("#" + field).addClass("error");
+          try {
+            response = JSON.parse(xhr.responseText);
+          } catch (e) {
+            console.warn("Response is not valid JSON:", e);
+          }
+
+          if (response && response.message) {
+            localStorage.setItem("errorMessage", response.message);
+          }
+
+          if (xhr.status === 422) {
+            if (response && response.data) {
+              const errors = response.data;
+              $(".input-error-message").text("");
+              $("input").removeClass("error");
+
+              for (const field in errors) {
+                if (errors.hasOwnProperty(field)) {
+                  $("#" + field + "Error").text(errors[field]);
+                  $("#" + field).addClass("error");
+                }
               }
             }
+          } else if (xhr.status === 401) {
+            window.location.href = "/auth/login";
+          } else if (xhr.status === 400) {
+            location.reload();
+          } else if (xhr.status === 404) {
+            if (response && response.data) {
+              window.location.href = response.data;
+            }
+          } else if (xhr.status === 409) {
+            location.reload();
           } else {
             document.open();
             document.write(xhr.responseText);
@@ -986,8 +1072,28 @@
           }
         },
         error: function (xhr) {
-          if (xhr.status == 401) {
+          let response = null;
+
+          try {
+            response = JSON.parse(xhr.responseText);
+          } catch (e) {
+            console.warn("Response is not valid JSON:", e);
+          }
+
+          if (response && response.message) {
+            localStorage.setItem("errorMessage", response.message);
+          }
+
+          if (xhr.status === 401) {
             window.location.href = "/auth/login";
+          } else if (xhr.status === 400) {
+            location.reload();
+          } else if (xhr.status === 404) {
+            if (response && response.data) {
+              window.location.href = response.data;
+            }
+          } else if (xhr.status === 409) {
+            location.reload();
           } else {
             document.open();
             document.write(xhr.responseText);
@@ -1020,13 +1126,37 @@
           if (xhr.status == 200) {
             localStorage.setItem("successMessage", xhr.responseJSON.message);
             location.reload();
-            // window.location.href = `/shop/product/${productId}`;
           }
         },
+
         error: function (xhr) {
-          document.open();
-          document.write(xhr.responseText);
-          document.close();
+          let response = null;
+
+          try {
+            response = JSON.parse(xhr.responseText);
+          } catch (e) {
+            console.warn("Response is not valid JSON:", e);
+          }
+
+          if (response && response.message) {
+            localStorage.setItem("errorMessage", response.message);
+          }
+
+          if (xhr.status === 401) {
+            window.location.href = "/auth/login";
+          } else if (xhr.status === 400) {
+            location.reload();
+          } else if (xhr.status === 404) {
+            if (response && response.data) {
+              window.location.href = response.data;
+            }
+          } else if (xhr.status === 409) {
+            location.reload();
+          } else {
+            document.open();
+            document.write(xhr.responseText);
+            document.close();
+          }
         },
       });
     });

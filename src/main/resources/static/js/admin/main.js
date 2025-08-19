@@ -113,7 +113,7 @@ function showMessage() {
       heading: "Error",
       text: errorMessageText,
       showHideTransition: "slide",
-      icon: "Error",
+      icon: "error",
       hideAfter: 5000,
       position: "top-right",
     });
@@ -126,7 +126,7 @@ function showMessage() {
       heading: "Error",
       text: localStorageErrorMessage,
       showHideTransition: "slide",
-      icon: "Error",
+      icon: "error",
       hideAfter: 5000,
       position: "top-right",
     });
@@ -321,36 +321,56 @@ const imagesUploadControl = $(".images-upload-control");
 let newImages = [];
 let deleteImageNames = [];
 
-imagesUploadInput.change(function () {
+// convert FileReader into a Promise
+function readFileAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => resolve(e.target.result);
+    reader.onerror = (e) => reject(e);
+    reader.readAsDataURL(file);
+  });
+}
+
+function readFileAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+imagesUploadInput.change(async function () {
   const files = $(this)[0].files;
+
   for (let i = 0; i < files.length; i++) {
     if (checkFileType(files[i], ALLOWED_EXTENSIONS)) {
       const index = newImages.length;
       newImages.push(files[i]);
 
-      const reader = new FileReader();
-      reader.onload = function (e) {
+      try {
+        const result = await readFileAsDataURL(files[i]);
+
         const img = $("<img alt='product image'>");
-        img.attr("src", e.target.result);
+        img.attr("src", result);
 
-        const previewImage = $(`
-          <div class="preview-image"></div>
+        const previewImage = $(`<div class="preview-image"></div>`);
+
+        const imageRemoveButton = $(`
+          <button type="button" class="image-remove-button" data-index="${index}">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         `);
-
-        const imageRemoveButton = $(
-          `<button type="button" class="image-remove-button" data-index="${index}">
-              <i class="fa-solid fa-xmark"></i>
-            </button>`
-        );
 
         previewImage.append(img);
         previewImage.append(imageRemoveButton);
         imagesUploadPreview.append(previewImage);
-      };
-
-      reader.readAsDataURL(files[i]);
+      } catch (err) {
+        console.error("File read error", err);
+      }
     }
   }
+
   $(this).val("");
 });
 
@@ -411,24 +431,41 @@ $("#createProductForm").submit(function (e) {
       }
     },
     error: function (xhr) {
-      if (xhr.status === 400) {
-        const errors = xhr.responseJSON.data;
+      let response = null;
 
-        $(".input-error-message").text("");
-        $("input").removeClass("error");
+      try {
+        response = JSON.parse(xhr.responseText);
+      } catch (e) {
+        console.warn("Response is not valid JSON:", e);
+      }
 
-        for (const field in errors) {
-          if (errors.hasOwnProperty(field)) {
-            $("#" + field + "Error").text(errors[field]);
-            $("#" + field).addClass("error");
-          }
-          if (field === "newImages") {
-            // $(".images-upload-group").addClass("error");
-            $("#" + field + "Error").text(errors[field]);
+      if (response && response.message) {
+        localStorage.setItem("errorMessage", response.message);
+      }
+
+      if (xhr.status === 422) {
+        if (response && response.data) {
+          const errors = response.data;
+          $(".input-error-message").text("");
+          $("input").removeClass("error");
+
+          for (const field in errors) {
+            if (errors.hasOwnProperty(field)) {
+              $("#" + field + "Error").text(errors[field]);
+              $("#" + field).addClass("error");
+            }
           }
         }
-
-        $(window).scrollTop(0);
+      } else if (xhr.status === 401) {
+        window.location.href = "/auth/login";
+      } else if (xhr.status === 400) {
+        location.reload();
+      } else if (xhr.status === 404) {
+        if (response && response.data) {
+          window.location.href = response.data;
+        }
+      } else if (xhr.status === 409) {
+        location.reload();
       } else {
         document.open();
         document.write(xhr.responseText);
@@ -470,24 +507,41 @@ $("#updateProductForm").submit(function (e) {
       }
     },
     error: function (xhr) {
-      if (xhr.status === 400) {
-        const errors = xhr.responseJSON.data;
+      let response = null;
 
-        $(".input-error-message").text("");
-        $("input").removeClass("error");
+      try {
+        response = JSON.parse(xhr.responseText);
+      } catch (e) {
+        console.warn("Response is not valid JSON:", e);
+      }
 
-        for (const field in errors) {
-          if (errors.hasOwnProperty(field)) {
-            $("#" + field + "Error").text(errors[field]);
-            $("#" + field).addClass("error");
-          }
-          if (field === "newImages") {
-            // $(".images-upload-group").addClass("error");
-            $("#" + field + "Error").text(errors[field]);
+      if (response && response.message) {
+        localStorage.setItem("errorMessage", response.message);
+      }
+
+      if (xhr.status === 422) {
+        if (response && response.data) {
+          const errors = response.data;
+          $(".input-error-message").text("");
+          $("input").removeClass("error");
+
+          for (const field in errors) {
+            if (errors.hasOwnProperty(field)) {
+              $("#" + field + "Error").text(errors[field]);
+              $("#" + field).addClass("error");
+            }
           }
         }
-
-        $(window).scrollTop(0);
+      } else if (xhr.status === 401) {
+        window.location.href = "/auth/login";
+      } else if (xhr.status === 400) {
+        location.reload();
+      } else if (xhr.status === 404) {
+        if (response && response.data) {
+          window.location.href = response.data;
+        }
+      } else if (xhr.status === 409) {
+        location.reload();
       } else {
         document.open();
         document.write(xhr.responseText);

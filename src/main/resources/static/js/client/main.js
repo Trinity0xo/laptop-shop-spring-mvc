@@ -128,7 +128,7 @@ function showMessage() {
       heading: "Error",
       text: errorMessageText,
       showHideTransition: "slide",
-      icon: "Error",
+      icon: "error",
       hideAfter: 5000,
       position: "top-right",
     });
@@ -141,7 +141,7 @@ function showMessage() {
       heading: "Error",
       text: localStorageErrorMessage,
       showHideTransition: "slide",
-      icon: "Error",
+      icon: "error",
       hideAfter: 5000,
       position: "top-right",
     });
