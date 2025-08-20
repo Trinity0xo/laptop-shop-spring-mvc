@@ -28,11 +28,11 @@
               <div class="product-images">
                 <a
                   target="_blank"
-                  th:href="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (productDetails.productImages != null and productDetails.productImages.size() > 0 ? productDetails.productImages[0].imageName : '')}"
+                  th:href="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (productDetails.productImages != null and productDetails.productImages.size() > 0 ? productDetails.productImages[0].imageName : '')}"
                   class="main-image"
                 >
                   <img
-                    th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (productDetails.productImages != null and productDetails.productImages.size() > 0 ? productDetails.productImages[0].imageName : '')}"
+                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (productDetails.productImages != null and productDetails.productImages.size() > 0 ? productDetails.productImages[0].imageName : '')}"
                     alt="product"
                 /></a>
                 <div
@@ -44,7 +44,7 @@
                     th:classappend="${stat.index == 0} ? ' active' : ''"
                   >
                     <img
-                      th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + productImage.imageName}"
+                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + productImage.imageName}"
                       alt="product thumbnail"
                     />
                   </div>
@@ -652,7 +652,7 @@
                   >
                     <div class="product-image">
                       <img
-                        th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (productSummary.productImages != null and productSummary.productImages.size() > 0 ? productSummary.productImages[0].imageName : '')}"
+                        th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (productSummary.productImages != null and productSummary.productImages.size() > 0 ? productSummary.productImages[0].imageName : '')}"
                         alt="product"
                       />
                     </div>
@@ -699,8 +699,7 @@
       </div>
     </main>
   </body>
-
-  <script layout:fragment="scripts" th:inline="javascript">
+  <script layout:fragment="scripts">
     // thumbnails carousel
     $(".thumbnails-carousel").owlCarousel({
       dots: false,
@@ -786,9 +785,6 @@
       $("#rating").val(index + 1);
     });
 
-    const body = $("body");
-    const overlay = $(".overlay");
-
     // show create review modal
     $("#createReviewBtn").click(function () {
       const productId = $(this).data("product-id");
@@ -802,8 +798,7 @@
           reviewModal.empty();
           reviewModal.append(response);
 
-          body.css("overflow", "hidden");
-          overlay.addClass("show");
+          $(".overlay").addClass("show");
 
           const createReviewModal = reviewModal.children();
           if (createReviewModal.length > 0) {
@@ -930,8 +925,7 @@
           reviewModal.empty();
           reviewModal.append(response);
 
-          body.css("overflow", "hidden");
-          overlay.addClass("show");
+          $(".overlay").addClass("show");
 
           const updateReviewModal = reviewModal.children();
           if (updateReviewModal.length > 0) {
@@ -1059,8 +1053,7 @@
           reviewModal.empty();
           reviewModal.append(response);
 
-          body.css("overflow", "hidden");
-          overlay.addClass("show");
+          $(".overlay").addClass("show");
 
           const deleteReviewModal = reviewModal.children();
           if (deleteReviewModal.length > 0) {

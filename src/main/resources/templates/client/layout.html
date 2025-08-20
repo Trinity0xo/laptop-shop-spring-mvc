@@ -585,6 +585,53 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  <script type="module" src="/js/client/main.js"></script>
+  <script src="/js/main.js"></script>
   <script layout:fragment="scripts"></script>
+  <script>
+    // sidebar left
+    const sideBarLeft = $(".sidebar");
+    const btnShowSideBar = $("#btnShowSideBar");
+    const btnHideSideBar = $("#btnHideSideBar");
+    const btnShowAuthenticationLinks = $("#btnShowAuthenticationLinks");
+    const btnShowAccountLinks = $("#btnShowAccountLinks");
+
+    // show sidebar left
+    btnShowSideBar.click(function (e) {
+      e.stopPropagation();
+      $(".overlay").addClass("show");
+      sideBarLeft.addClass("show");
+    });
+
+    btnShowAuthenticationLinks.click(function (e) {
+      e.stopPropagation();
+      $(".overlay").addClass("show");
+      sideBarLeft.addClass("show");
+    });
+
+    btnShowAccountLinks.click(function (e) {
+      e.stopPropagation();
+      $(".overlay").addClass("show");
+      sideBarLeft.addClass("show");
+    });
+
+    // hide sidebar left
+    btnHideSideBar.click(function (e) {
+      e.stopPropagation();
+      $(".overlay").removeClass("show");
+      sideBarLeft.removeClass("show");
+    });
+
+    // Hide sidebar on click outside
+    $(document).click(function (e) {
+      if (
+        !sideBarLeft.is(e.target) &&
+        sideBarLeft.has(e.target).length === 0 &&
+        !btnShowSideBar.is(e.target) &&
+        !btnShowAuthenticationLinks.is(e.target) &&
+        !btnShowAccountLinks.is(e.target)
+      ) {
+        sideBarLeft.removeClass("show");
+      }
+    });
+  </script>
 </html>

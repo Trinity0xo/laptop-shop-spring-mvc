@@ -23,14 +23,14 @@ public class GlobalModelAttributes {
         this.userService = userService;
     }
 
-    @ModelAttribute("productPicturesFolder")
-    public String productPicturesFolder() {
-        return folderService.getProductPicturesFolderName();
+    @ModelAttribute("productImagesFolder")
+    public String productImagesFolder() {
+        return folderService.getProductImagesFolderName();
     }
 
-    @ModelAttribute("categoryPicturesFolder")
-    public String categoryPicturesFolder() {
-        return folderService.getCategoryPicturesFolderName();
+    @ModelAttribute("categoryImagesFolder")
+    public String categoryImagesFolder() {
+        return folderService.getCategoryImagesFolderName();
     }
 
     @ModelAttribute("avatarsFolder")

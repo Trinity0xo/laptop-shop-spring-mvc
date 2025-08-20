@@ -41,7 +41,7 @@
                   <div class="product-image">
                     <img
                       class="image"
-                      th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (cartItem.product.productImages != null and cartItem.product.productImages.size() > 0 ? cartItem.product.productImages[0].imageName : '')}"
+                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (cartItem.product.productImages != null and cartItem.product.productImages.size() > 0 ? cartItem.product.productImages[0].imageName : '')}"
                       alt="product"
                     />
                   </div>

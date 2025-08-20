@@ -32,11 +32,11 @@
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <a
                   target="_blank"
-                  th:href="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (customProductDetailsDto.productImages != null and customProductDetailsDto.productImages.size() > 0 ? customProductDetailsDto.productImages[0].imageName : '')}"
+                  th:href="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (customProductDetailsDto.productImages != null and customProductDetailsDto.productImages.size() > 0 ? customProductDetailsDto.productImages[0].imageName : '')}"
                   class="main-image"
                 >
                   <img
-                    th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (customProductDetailsDto.productImages != null and customProductDetailsDto.productImages.size() > 0 ? customProductDetailsDto.productImages[0].imageName : '')}"
+                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (customProductDetailsDto.productImages != null and customProductDetailsDto.productImages.size() > 0 ? customProductDetailsDto.productImages[0].imageName : '')}"
                     alt="product"
                 /></a>
               </div>
@@ -50,7 +50,7 @@
                     th:classappend="${stat.index == 0} ? ' active' : ''"
                   >
                     <img
-                      th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + productImage.imageName}"
+                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + productImage.imageName}"
                       alt="product thumbnail"
                     />
                   </div>

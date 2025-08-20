@@ -19,5 +19,4 @@ public class CustomUserPrincipal extends User {
         this.fullName = fullName;
         this.avatar = avatar;
     }
-
 }

@@ -61,7 +61,7 @@
                 <div class="category-image">
                   <img
                     class="image"
-                    th:src="${'/' + resourcesMappingFolder + '/' + categoryPicturesFolder + '/' + category.image}"
+                    th:src="${'/' + resourcesMappingFolder + '/' + categoryImagesFolder + '/' + category.image}"
                     alt="category"
                   />
                 </div>
@@ -127,7 +127,7 @@
               >
                 <div class="product-image">
                   <img
-                    th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' +
+                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' +
                         (product.productImage != null ? product.productImage.imageName: '')}"
                     alt="product"
                   />

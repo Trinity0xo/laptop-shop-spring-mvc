@@ -26,9 +26,13 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
 
+        String password = (user.getPassword() != null && !user.getPassword().isEmpty())
+                ? user.getPassword()
+                : "{noop}N/A"; // dummy password nếu đăng nhập bằng google
+
         return new CustomUserPrincipal(
                 user.getEmail(),
-                user.getPassword(),
+                password,
                 user.getFullName(),
                 user.getAvatar(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getSlug())));

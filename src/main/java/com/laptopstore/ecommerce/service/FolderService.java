@@ -1,7 +1,7 @@
 package com.laptopstore.ecommerce.service;
 
 public interface FolderService {
-    String getProductPicturesFolderName();
-    String getCategoryPicturesFolderName();
+    String getProductImagesFolderName();
+    String getCategoryImagesFolderName();
     String getAvatarsFolderName();
 }

@@ -456,10 +456,10 @@ public class ProductServiceImpl implements ProductService {
 
         if(createProductDto.getNewImages() != null && !createProductDto.getNewImages().isEmpty()) {
             List<String> imageNames = new ArrayList<>();
-            String productPicturesFolderName = this.folderService.getProductPicturesFolderName();
+            String productImagesFolderName = this.folderService.getProductImagesFolderName();
 
             for (MultipartFile image : createProductDto.getNewImages()) {
-                String imageName = this.fileService.uploadFile(image, productPicturesFolderName);
+                String imageName = this.fileService.uploadFile(image, productImagesFolderName);
                 if (imageName != null) {
                     imageNames.add(imageName);
                 }
@@ -476,10 +476,10 @@ public class ProductServiceImpl implements ProductService {
             List<ProductImage> productImages = product.getProductImages();
 
             if(productImages != null && !productImages.isEmpty()){
-                String productPicturesFolderName = this.folderService.getProductPicturesFolderName();
+                String productImagesFolderName = this.folderService.getProductImagesFolderName();
 
                 for (ProductImage productImage : productImages){
-                    this.fileService.deleteFile(productImage.getImageName(), productPicturesFolderName);
+                    this.fileService.deleteFile(productImage.getImageName(), productImagesFolderName);
                     this.productImageService.deleteProductImageById(productImage.getId());
                 }
             }
@@ -577,7 +577,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCooling(updateProductDto.getCooling());
         product.setMaterial(updateProductDto.getMaterial());
 
-        String productPicturesFolderName = this.folderService.getProductPicturesFolderName();
+        String productImagesFolderName = this.folderService.getProductImagesFolderName();
 
         boolean mainDeleted = false;
 
@@ -588,7 +588,7 @@ public class ProductServiceImpl implements ProductService {
             }
 
             for (String imageName : updateProductDto.getDeleteImageNames()) {
-                this.fileService.deleteFile(imageName, productPicturesFolderName);
+                this.fileService.deleteFile(imageName, productImagesFolderName);
                 ProductImage productImage = this.productImageService.getProductImageByName(imageName);
                 if (productImage != null) {
                     this.productImageService.deleteProductImageById(productImage.getId());
@@ -599,7 +599,7 @@ public class ProductServiceImpl implements ProductService {
         if (updateProductDto.getNewImages() != null && !updateProductDto.getNewImages().isEmpty()) {
             List<String> imageNames = new ArrayList<>();
             for (MultipartFile image : updateProductDto.getNewImages()) {
-                String imageName = this.fileService.uploadFile(image, productPicturesFolderName);
+                String imageName = this.fileService.uploadFile(image, productImagesFolderName);
                 if (imageName != null) {
                     imageNames.add(imageName);
                 }

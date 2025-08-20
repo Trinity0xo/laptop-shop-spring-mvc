@@ -62,9 +62,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void createCategory(CreateCategoryDto createCategoryDto) {
-        String categoryPicturesFolderName = this.folderService.getCategoryPicturesFolderName();
+        String categoryImagesFolderName = this.folderService.getCategoryImagesFolderName();
 
-        String imageName = this.fileService.uploadFile(createCategoryDto.getNewImage(), categoryPicturesFolderName);
+        String imageName = this.fileService.uploadFile(createCategoryDto.getNewImage(), categoryImagesFolderName);
 
         Category newCategory = new Category(
                 imageName,
@@ -103,9 +103,9 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = this.getCategoryById(updateCategoryDto.getId());
 
         if(updateCategoryDto.getNewImage() != null && !updateCategoryDto.getNewImage().isEmpty()) {
-            String categoryPicturesFolderName = this.folderService.getCategoryPicturesFolderName();
-            String newImageName = this.fileService.uploadFile(updateCategoryDto.getNewImage(), categoryPicturesFolderName);
-            this.fileService.deleteFile(category.getImage(), categoryPicturesFolderName);
+            String categoryImagesFolderName = this.folderService.getCategoryImagesFolderName();
+            String newImageName = this.fileService.uploadFile(updateCategoryDto.getNewImage(), categoryImagesFolderName);
+            this.fileService.deleteFile(category.getImage(), categoryImagesFolderName);
             category.setImage(newImageName);
         }
 
@@ -119,8 +119,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(long categoryId){
         Category category = this.getCategoryById(categoryId);
-        String categoryPicturesFolderName = this.folderService.getCategoryPicturesFolderName();
-        this.fileService.deleteFile(category.getImage(), categoryPicturesFolderName);
+        String categoryImagesFolderName = this.folderService.getCategoryImagesFolderName();
+        this.fileService.deleteFile(category.getImage(), categoryImagesFolderName);
         this.categoryRepository.delete(category);
     }
 

@@ -253,7 +253,7 @@
                     th:if="${orderItem.product != null}"
                   >
                     <img
-                      th:src="${'/' + resourcesMappingFolder + '/' + productPicturesFolder + '/' + (orderItem.product.productImages != null and orderItem.product.productImages.size() > 0 ? orderItem.product.productImages[0].imageName : '')}"
+                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (orderItem.product.productImages != null and orderItem.product.productImages.size() > 0 ? orderItem.product.productImages[0].imageName : '')}"
                       alt="product"
                     />
                   </div>

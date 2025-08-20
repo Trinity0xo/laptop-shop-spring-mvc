@@ -42,10 +42,10 @@
                   target="_blank"
                   rel="noopener noreferrer"
                   th:if="${!#strings.isEmpty(category.image)}"
-                  th:href="${'/' + resourcesMappingFolder + '/' + categoryPicturesFolder + '/' + category.image}"
+                  th:href="${'/' + resourcesMappingFolder + '/' + categoryImagesFolder + '/' + category.image}"
                 >
                   <img
-                    th:src="${'/' + resourcesMappingFolder + '/' + categoryPicturesFolder + '/' + category.image}"
+                    th:src="${'/' + resourcesMappingFolder + '/' + categoryImagesFolder + '/' + category.image}"
                     alt="category"
                   />
                 </a>

@@ -19,7 +19,7 @@ public class MailServiceImpl implements MailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
 
-    @Value("${server.address}")
+    @Value("${server.host}")
     private String host;
 
     @Value("${server.port}")

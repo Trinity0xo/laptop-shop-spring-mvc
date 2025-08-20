@@ -6,23 +6,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FolderServiceImpl implements FolderService {
-    @Value("${upload.product-pictures.folder}")
-    private String productPicturesFolderName;
+    @Value("${upload.product-images.folder}")
+    private String productImagesFolderName;
 
-    @Value("${upload.category-pictures.folder}")
-    private String categoryPicturesFolderName;
+    @Value("${upload.category-images.folder}")
+    private String categoryImagesFolderName;
 
     @Value("${upload.avatars.folder}")
     private String avatarsFolderName;
 
     @Override
-    public String getProductPicturesFolderName() {
-        return productPicturesFolderName.trim();
+    public String getProductImagesFolderName() {
+        return productImagesFolderName.trim();
     }
 
     @Override
-    public String getCategoryPicturesFolderName() {
-        return categoryPicturesFolderName.trim();
+    public String getCategoryImagesFolderName() {
+        return categoryImagesFolderName.trim();
     }
 
     @Override

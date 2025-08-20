@@ -313,6 +313,39 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  <script src="/js/admin/main.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/admin.js"></script>
   <script layout:fragment="scripts"></script>
+  <script>
+    // sidebar
+    const sideBar = $(".sidebar");
+    const btnToggleSidebar = $("#btnToggleSideBar");
+    const layout = $(".layout");
+
+    const MIN_WIDTH = 1200;
+
+    // toggle sidebar
+    btnToggleSidebar.click(function (e) {
+      e.stopPropagation();
+      if ($(window).outerWidth() >= MIN_WIDTH) {
+        layout.removeClass("mobile-show");
+        layout.toggleClass("desktop-hide");
+      } else {
+        layout.removeClass("desktop-hide");
+        layout.toggleClass("mobile-show");
+      }
+    });
+
+    // hide sidebar on click outside (only for mobile)
+    $(document).click(function (e) {
+      if (
+        $(window).outerWidth() < MIN_WIDTH &&
+        !sideBar.is(e.target) &&
+        sideBar.has(e.target).length === 0 &&
+        !btnToggleSidebar.is(e.target)
+      ) {
+        layout.removeClass("mobile-show");
+      }
+    });
+  </script>
 </html>
