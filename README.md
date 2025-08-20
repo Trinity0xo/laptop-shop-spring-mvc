@@ -1,14 +1,14 @@
 # Laptop Shop Spring MVC
 
-Laptop Shop Spring MVC là một dự án web bán hàng (shop online) đơn giản về laptop được xây dựng theo mô hình Spring MVC
+Laptop Shop Spring MVC là một dự án web bán laptop (shop online) đơn giản được xây dựng theo mô hình Spring MVC
 
 ## Cấu hình dự án
 
-Để chạy được dự án thì cần phải cấu hình một số thành phần ở file `application.properties` trong `src/main/resources`.
+Để chạy được dự án thì cần phải cấu hình một số thành phần ở file `application.properties` trong `src/main/resources`
 
 ### 1. Cấu hình cơ sở dữ liệu (MySQL)
 
-Tạo môt MySQL database với tên bất kỳ và chỉnh sửa những dòng bên dưới:
+Tạo một database với tên bất kỳ và chỉnh sửa những dòng bên dưới:
 
 ```
 spring.datasource.username=USERNAME
