@@ -42,13 +42,13 @@ static.resources.mapping.folder=uploads
 ### 2.2. Cấu hình các thư mục con
 
 ```
-upload.product-pictures.folder=product_images
-upload.category-pictures.folder=category_images
+upload.product-images.folder=product_images
+upload.category-images.folder=category_images
 upload.avatars.folder=avatars
 ```
 
-- `upload.product-pictures.folder`: thư mục con để lưu ảnh sản phẩm
-- `upload.category-pictures.folder`: thư mục con để lưu ảnh danh mục
+- `upload.product-images.folder`: thư mục con để lưu ảnh sản phẩm
+- `upload.category-images.folder`: thư mục con để lưu ảnh danh mục
 - `upload.avatars.folder`: thư mục con để lưu ảnh đại diện người dùng (avatar)
 
 ## 3. Cấu hình gửi email
