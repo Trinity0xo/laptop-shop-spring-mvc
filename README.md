@@ -1,3 +1,7 @@
+# Laptop Shop Spring MVC
+
+Laptop Shop Spring MVC là một dự án web bán hàng (shop online) đơn giản về laptop được xây dựng theo mô hình Spring MVC
+
 # Cấu hình dự án
 
 Để chạy được dự án thì cần phải cấu hình một số thành phần ở file `application.properties` trong `src/main/resources`.
