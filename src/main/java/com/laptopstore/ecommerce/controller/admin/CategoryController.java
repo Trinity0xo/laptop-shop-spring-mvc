@@ -59,7 +59,7 @@ public class CategoryController {
 
         this.categoryService.createCategory(createCategoryDto);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Tạo loại sản phẩm thành công");
+        redirectAttributes.addFlashAttribute("successMessage", "Tạo danh mục thành công");
 
         return "redirect:/dashboard/category";
     }
@@ -87,7 +87,7 @@ public class CategoryController {
 
         this.categoryService.updateCategory(updateCategoryDto);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật loại sản phẩm thành công");
+        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật danh mục thành công");
 
         return "redirect:/dashboard/category";
     }
@@ -109,7 +109,7 @@ public class CategoryController {
     )  {
         this.categoryService.deleteCategory(categoryId);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Xóa loại sản phẩm thành công");
+        redirectAttributes.addFlashAttribute("successMessage", "Xóa danh mục thành công");
 
         return "redirect:/dashboard/category";
     }

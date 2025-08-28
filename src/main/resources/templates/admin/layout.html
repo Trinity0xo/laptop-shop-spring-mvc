@@ -258,12 +258,12 @@
       <!-- messages -->
       <div class="messages" style="display: none">
         <p
-          class="message message-success"
+          class="message success-message"
           th:if="${successMessage != null and !successMessage.isEmpty()}"
           th:text="${successMessage}"
         ></p>
         <p
-          class="message message-error"
+          class="message error-message"
           th:if="${errorMessage != null and !errorMessage.isEmpty()}"
           th:text="${errorMessage}"
         ></p>
