@@ -4,8 +4,8 @@
 @import "../input";
 @import "../lines_base_overflow";
 
-// body
-body {
+// layout
+.layout {
   display: flex;
   flex-direction: column;
   min-height: 100%;

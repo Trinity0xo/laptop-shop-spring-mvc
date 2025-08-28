@@ -3,297 +3,294 @@
 @import "../responsive_grid";
 @import "../button";
 
-// body
-body {
+// layout
+.layout {
+  flex: 1;
   background-color: $bg-light;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
 
-  // layout
-  .layout {
-    flex: 1;
+  // show on mobile
+  &.mobile-show {
+    .sidebar {
+      transform: translateX(0%);
+    }
+  }
 
-    // show on mobile
-    &.mobile-show {
-      .sidebar {
-        transform: translateX(0%);
-      }
+  // hide on desktop
+  &.desktop-hide {
+    .header-left {
+      width: 0;
+      overflow: hidden;
     }
 
-    // hide on desktop
-    &.desktop-hide {
-      .header-left {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+
+    .main {
+      margin-left: 0;
+    }
+  }
+
+  // overlay
+  .overlay {
+    z-index: 998;
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(#333, 0.75);
+
+    &.show {
+      display: block;
+    }
+  }
+
+  // header
+  header {
+    height: 6.4rem;
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: $bg-white;
+    z-index: 997;
+    display: flex;
+    align-items: center;
+    box-shadow: $box-shadow-01;
+
+    .header-left {
+      transition: 0.5s;
+
+      @include media(xs, sm, md, lg) {
         width: 0;
         overflow: hidden;
       }
 
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .main {
-        margin-left: 0;
-      }
-    }
-
-    // overlay
-    .overlay {
-      z-index: 998;
-      display: none;
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-color: rgba(#333, 0.75);
-
-      &.show {
-        display: block;
-      }
-    }
-
-    // header
-    header {
-      height: 6.4rem;
-      position: sticky;
-      top: 0;
-      left: 0;
-      background-color: $bg-white;
-      z-index: 997;
-      display: flex;
-      align-items: center;
-      box-shadow: $box-shadow-01;
-
-      .header-left {
-        transition: 0.5s;
-
-        @include media(xs, sm, md, lg) {
-          width: 0;
-          overflow: hidden;
-        }
-
-        @include media(xl) {
-          width: 26rem;
-        }
-
-        .logo {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-      }
-
-      .header-right {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 1.6rem;
-        flex: 1;
-
-        .toggle-sidebar-button {
-          cursor: pointer;
-          font-size: 2.5rem;
-          color: $text-primary;
-        }
-
-        .account-dropdown {
-          .account-dropdown-toggle {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: contain;
-              border-radius: 50%;
-            }
-          }
-
-          .account-dropdown-menu {
-            z-index: 997;
-            overflow: hidden;
-
-            .account-dropdown-item {
-              .account-information {
-                padding: 8px 10px;
-
-                .account-name {
-                  font-size: 1.6rem;
-                  color: $text-primary;
-                  font-weight: 500;
-                }
-
-                .account-email {
-                  font-size: 1.4rem;
-                  color: $text-primary;
-                }
-
-                .account-role {
-                  font-size: 1.4rem;
-                  color: $text-primary;
-                  margin: 8px 0px;
-                }
-
-                &::after {
-                  content: "";
-                  display: block;
-                  height: 1px;
-                  width: 100%;
-                  background-color: rgba($text-primary, 0.5);
-                }
-              }
-
-              .link {
-                display: inline-block;
-                padding: 8px 10px;
-                width: 100%;
-                color: $text-primary;
-                font-size: 1.6rem;
-                transition: 0.3s;
-                text-align: start;
-
-                &:hover {
-                  background: $color-primary;
-                  color: $text-inverse;
-                }
-
-                &.active {
-                  background: $color-primary;
-                  color: $text-inverse;
-                }
-
-                &.logout {
-                  color: $color-danger;
-
-                  &:hover {
-                    background-color: $color-danger;
-                    color: $text-inverse;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // sidebar
-    .sidebar {
-      position: fixed;
-      height: 100%;
-      overflow: hidden;
-      background-color: $bg-white;
-      box-shadow: $box-shadow-01;
-      z-index: 996;
-      padding: 1.6rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
-      transition: 0.5s;
-
-      @include media(xs) {
-        width: 70%;
-        transform: translateX(-100%);
-      }
-
-      @include media(sm) {
-        width: 50%;
-        transform: translateX(-100%);
-      }
-
-      @include media(lg, md) {
-        width: 30%;
-        transform: translateX(-100%);
-      }
-
       @include media(xl) {
         width: 26rem;
-        transform: translateX(0%);
       }
 
-      .nav-list {
-        overflow: auto;
+      .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
 
-        .item {
-          &:not(:last-child) {
-            margin-bottom: 0.4rem;
+    .header-right {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1.6rem;
+      flex: 1;
+
+      .toggle-sidebar-button {
+        cursor: pointer;
+        font-size: 2.5rem;
+        color: $text-primary;
+      }
+
+      .account-dropdown {
+        .account-dropdown-toggle {
+          display: inline-block;
+          width: 40px;
+          height: 40px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
           }
+        }
 
-          .link {
-            display: inline-block;
+        .account-dropdown-menu {
+          z-index: 997;
+          overflow: hidden;
+
+          .account-dropdown-item {
+            .account-information {
+              padding: 8px 10px;
+
+              .account-name {
+                font-size: 1.6rem;
+                color: $text-primary;
+                font-weight: 500;
+              }
+
+              .account-email {
+                font-size: 1.4rem;
+                color: $text-primary;
+              }
+
+              .account-role {
+                font-size: 1.4rem;
+                color: $text-primary;
+                margin: 8px 0px;
+              }
+
+              &::after {
+                content: "";
+                display: block;
+                height: 1px;
+                width: 100%;
+                background-color: rgba($text-primary, 0.5);
+              }
+            }
+
+            .link {
+              display: inline-block;
+              padding: 8px 10px;
+              width: 100%;
+              color: $text-primary;
+              font-size: 1.6rem;
+              transition: 0.3s;
+              text-align: start;
+
+              &:hover {
+                background: $color-primary;
+                color: $text-inverse;
+              }
+
+              &.active {
+                background: $color-primary;
+                color: $text-inverse;
+              }
+
+              &.logout {
+                color: $color-danger;
+
+                &:hover {
+                  background-color: $color-danger;
+                  color: $text-inverse;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // sidebar
+  .sidebar {
+    position: fixed;
+    height: 100%;
+    overflow: hidden;
+    background-color: $bg-white;
+    box-shadow: $box-shadow-01;
+    z-index: 996;
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    transition: 0.5s;
+
+    @include media(xs) {
+      width: 70%;
+      transform: translateX(-100%);
+    }
+
+    @include media(sm) {
+      width: 50%;
+      transform: translateX(-100%);
+    }
+
+    @include media(lg, md) {
+      width: 30%;
+      transform: translateX(-100%);
+    }
+
+    @include media(xl) {
+      width: 26rem;
+      transform: translateX(0%);
+    }
+
+    .nav-list {
+      overflow: auto;
+
+      .item {
+        &:not(:last-child) {
+          margin-bottom: 0.4rem;
+        }
+
+        .link {
+          display: inline-block;
+          font-size: 1.6rem;
+          color: $text-primary;
+          padding: 1rem 1.6rem;
+          border-radius: 1rem;
+          width: 100%;
+
+          i {
             font-size: 1.6rem;
             color: $text-primary;
-            padding: 1rem 1.6rem;
-            border-radius: 1rem;
-            width: 100%;
+            margin-right: 1rem;
+          }
+
+          &:hover {
+            background-color: $color-primary;
+            color: $text-inverse;
 
             i {
               font-size: 1.6rem;
-              color: $text-primary;
+              color: $text-inverse;
               margin-right: 1rem;
             }
+          }
 
-            &:hover {
-              background-color: $color-primary;
+          &.active {
+            background-color: $color-primary;
+            color: $text-inverse;
+
+            i {
+              font-size: 1.6rem;
               color: $text-inverse;
-
-              i {
-                font-size: 1.6rem;
-                color: $text-inverse;
-                margin-right: 1rem;
-              }
-            }
-
-            &.active {
-              background-color: $color-primary;
-              color: $text-inverse;
-
-              i {
-                font-size: 1.6rem;
-                color: $text-inverse;
-                margin-right: 1rem;
-              }
+              margin-right: 1rem;
             }
           }
         }
       }
     }
+  }
 
-    // main
-    .main {
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
-      min-height: 100%;
-      margin-top: 1.6rem;
-      transition: 0.5s;
+  // main
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    min-height: 100%;
+    margin-top: 1.6rem;
+    transition: 0.5s;
 
-      @include media(xs, sm, md, lg) {
-        margin-left: 0;
-      }
-
-      @include media(xl) {
-        margin-left: 26rem;
-      }
+    @include media(xs, sm, md, lg) {
+      margin-left: 0;
     }
 
-    // footer
-    footer {
-      margin-top: auto;
-      background-color: $bg-white;
-      padding: 1.6rem;
-      z-index: 995;
+    @include media(xl) {
+      margin-left: 26rem;
+    }
+  }
 
-      .copyright {
-        text-align: center;
-      }
+  // footer
+  footer {
+    margin-top: auto;
+    background-color: $bg-white;
+    padding: 1.6rem;
+    z-index: 995;
 
-      .text {
-        font-size: 1.6rem;
-        color: $text-muted;
-      }
+    .copyright {
+      text-align: center;
+    }
+
+    .text {
+      font-size: 1.6rem;
+      color: $text-muted;
     }
   }
 }

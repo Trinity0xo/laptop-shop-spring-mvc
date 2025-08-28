@@ -292,29 +292,27 @@
   }
 }
 
-body {
+.layout {
+  flex: 1;
   background-color: rgb(245, 245, 247);
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
 }
-body .layout {
-  flex: 1;
-}
-body .layout.mobile-show .sidebar {
+.layout.mobile-show .sidebar {
   transform: translateX(0%);
 }
-body .layout.desktop-hide .header-left {
+.layout.desktop-hide .header-left {
   width: 0;
   overflow: hidden;
 }
-body .layout.desktop-hide .sidebar {
+.layout.desktop-hide .sidebar {
   transform: translateX(-100%);
 }
-body .layout.desktop-hide .main {
+.layout.desktop-hide .main {
   margin-left: 0;
 }
-body .layout .overlay {
+.layout .overlay {
   z-index: 998;
   display: none;
   position: fixed;
@@ -324,10 +322,10 @@ body .layout .overlay {
   left: 0;
   background-color: rgba(51, 51, 51, 0.75);
 }
-body .layout .overlay.show {
+.layout .overlay.show {
   display: block;
 }
-body .layout header {
+.layout header {
   height: 6.4rem;
   position: sticky;
   top: 0;
@@ -338,95 +336,95 @@ body .layout header {
   align-items: center;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
-body .layout header .header-left {
+.layout header .header-left {
   transition: 0.5s;
 }
 @media (max-width: 576px) {
-  body .layout header .header-left {
+  .layout header .header-left {
     width: 0;
     overflow: hidden;
   }
 }
 @media (min-width: 576px) {
-  body .layout header .header-left {
+  .layout header .header-left {
     width: 0;
     overflow: hidden;
   }
 }
 @media (min-width: 768px) {
-  body .layout header .header-left {
+  .layout header .header-left {
     width: 0;
     overflow: hidden;
   }
 }
 @media (min-width: 992px) {
-  body .layout header .header-left {
+  .layout header .header-left {
     width: 0;
     overflow: hidden;
   }
 }
 @media (min-width: 1200px) {
-  body .layout header .header-left {
+  .layout header .header-left {
     width: 26rem;
   }
 }
-body .layout header .header-left .logo {
+.layout header .header-left .logo {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-body .layout header .header-right {
+.layout header .header-right {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 1.6rem;
   flex: 1;
 }
-body .layout header .header-right .toggle-sidebar-button {
+.layout header .header-right .toggle-sidebar-button {
   cursor: pointer;
   font-size: 2.5rem;
   color: #333;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-toggle {
+.layout header .header-right .account-dropdown .account-dropdown-toggle {
   display: inline-block;
   width: 40px;
   height: 40px;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-toggle img {
+.layout header .header-right .account-dropdown .account-dropdown-toggle img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   border-radius: 50%;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu {
+.layout header .header-right .account-dropdown .account-dropdown-menu {
   z-index: 997;
   overflow: hidden;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information {
   padding: 8px 10px;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information .account-name {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information .account-name {
   font-size: 1.6rem;
   color: #333;
   font-weight: 500;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information .account-email {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information .account-email {
   font-size: 1.4rem;
   color: #333;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information .account-role {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information .account-role {
   font-size: 1.4rem;
   color: #333;
   margin: 8px 0px;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information::after {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information::after {
   content: "";
   display: block;
   height: 1px;
   width: 100%;
   background-color: rgba(51, 51, 51, 0.5);
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link {
   display: inline-block;
   padding: 8px 10px;
   width: 100%;
@@ -435,22 +433,22 @@ body .layout header .header-right .account-dropdown .account-dropdown-menu .acco
   transition: 0.3s;
   text-align: start;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link:hover {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link:hover {
   background: #3b71ca;
   color: #fff;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link.active {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link.active {
   background: #3b71ca;
   color: #fff;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link.logout {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link.logout {
   color: #dc4c64;
 }
-body .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link.logout:hover {
+.layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link.logout:hover {
   background-color: #dc4c64;
   color: #fff;
 }
-body .layout .sidebar {
+.layout .sidebar {
   position: fixed;
   height: 100%;
   overflow: hidden;
@@ -464,42 +462,42 @@ body .layout .sidebar {
   transition: 0.5s;
 }
 @media (max-width: 576px) {
-  body .layout .sidebar {
+  .layout .sidebar {
     width: 70%;
     transform: translateX(-100%);
   }
 }
 @media (min-width: 576px) {
-  body .layout .sidebar {
+  .layout .sidebar {
     width: 50%;
     transform: translateX(-100%);
   }
 }
 @media (min-width: 992px) {
-  body .layout .sidebar {
+  .layout .sidebar {
     width: 30%;
     transform: translateX(-100%);
   }
 }
 @media (min-width: 768px) {
-  body .layout .sidebar {
+  .layout .sidebar {
     width: 30%;
     transform: translateX(-100%);
   }
 }
 @media (min-width: 1200px) {
-  body .layout .sidebar {
+  .layout .sidebar {
     width: 26rem;
     transform: translateX(0%);
   }
 }
-body .layout .sidebar .nav-list {
+.layout .sidebar .nav-list {
   overflow: auto;
 }
-body .layout .sidebar .nav-list .item:not(:last-child) {
+.layout .sidebar .nav-list .item:not(:last-child) {
   margin-bottom: 0.4rem;
 }
-body .layout .sidebar .nav-list .item .link {
+.layout .sidebar .nav-list .item .link {
   display: inline-block;
   font-size: 1.6rem;
   color: #333;
@@ -507,30 +505,31 @@ body .layout .sidebar .nav-list .item .link {
   border-radius: 1rem;
   width: 100%;
 }
-body .layout .sidebar .nav-list .item .link i {
+.layout .sidebar .nav-list .item .link i {
   font-size: 1.6rem;
   color: #333;
   margin-right: 1rem;
 }
-body .layout .sidebar .nav-list .item .link:hover {
+.layout .sidebar .nav-list .item .link:hover {
   background-color: #3b71ca;
   color: #fff;
 }
-body .layout .sidebar .nav-list .item .link:hover i {
+.layout .sidebar .nav-list .item .link:hover i {
   font-size: 1.6rem;
   color: #fff;
   margin-right: 1rem;
 }
-body .layout .sidebar .nav-list .item .link.active {
+.layout .sidebar .nav-list .item .link.active {
   background-color: #3b71ca;
   color: #fff;
 }
-body .layout .sidebar .nav-list .item .link.active i {
+.layout .sidebar .nav-list .item .link.active i {
   font-size: 1.6rem;
   color: #fff;
   margin-right: 1rem;
 }
-body .layout .main {
+.layout .main {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
@@ -539,40 +538,40 @@ body .layout .main {
   transition: 0.5s;
 }
 @media (max-width: 576px) {
-  body .layout .main {
+  .layout .main {
     margin-left: 0;
   }
 }
 @media (min-width: 576px) {
-  body .layout .main {
+  .layout .main {
     margin-left: 0;
   }
 }
 @media (min-width: 768px) {
-  body .layout .main {
+  .layout .main {
     margin-left: 0;
   }
 }
 @media (min-width: 992px) {
-  body .layout .main {
+  .layout .main {
     margin-left: 0;
   }
 }
 @media (min-width: 1200px) {
-  body .layout .main {
+  .layout .main {
     margin-left: 26rem;
   }
 }
-body .layout footer {
+.layout footer {
   margin-top: auto;
   background-color: #fff;
   padding: 1.6rem;
   z-index: 995;
 }
-body .layout footer .copyright {
+.layout footer .copyright {
   text-align: center;
 }
-body .layout footer .text {
+.layout footer .text {
   font-size: 1.6rem;
   color: rgb(87, 88, 100);
 }

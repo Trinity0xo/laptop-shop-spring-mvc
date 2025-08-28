@@ -55,25 +55,28 @@
   </head>
 
   <body>
-    <div class="authentication">
-      <!-- messages -->
-      <div class="messages" style="display: none">
-        <p
-          class="message success-message"
-          th:if="${successMessage != null and !successMessage.isEmpty()}"
-          th:text="${successMessage}"
-        ></p>
-        <p
-          class="message error-message"
-          th:if="${errorMessage != null and !errorMessage.isEmpty()}"
-          th:text="${errorMessage}"
-        ></p>
-      </div>
-      <div class="authentication-form">
-        <div class="logo">
-          <a class="site-logo" href="/">ShopLap</a>
+    <div class="layout">
+      <div class="authentication">
+        <!-- messages -->
+        <div class="messages" style="display: none">
+          <p
+            class="message success-message"
+            th:if="${successMessage != null and !successMessage.isEmpty()}"
+            th:text="${successMessage}"
+          ></p>
+          <p
+            class="message error-message"
+            th:if="${errorMessage != null and !errorMessage.isEmpty()}"
+            th:text="${errorMessage}"
+          ></p>
         </div>
-        <div layout:fragment="content"></div>
+
+        <div class="authentication-form">
+          <div class="logo">
+            <a class="site-logo" href="/">ShopLap</a>
+          </div>
+          <div layout:fragment="content"></div>
+        </div>
       </div>
     </div>
   </body>

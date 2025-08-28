@@ -60,354 +60,360 @@
           </div>
 
           <div class="content-general">
-            <h2 class="">Thông tin chung:</h2>
-            <dl class="row description-list">
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Mã:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${customProductDetailsDto.id != null ? customProductDetailsDto.id : 'N/A' }"
-              ></dd>
+            <div class="content-description-list">
+              <h2 class="title">Thông tin chung:</h2>
+              <dl class="row description-list">
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Mã:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${customProductDetailsDto.id != null ? customProductDetailsDto.id : 'N/A' }"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Tên:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.name) ? 'N/A' : customProductDetailsDto.name}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Tên:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.name) ? 'N/A' : customProductDetailsDto.name}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Thương hiệu:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto?.brand?.name) ? 'N/A' : customProductDetailsDto.brand.name}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Thương hiệu:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto?.brand?.name) ? 'N/A' : customProductDetailsDto.brand.name}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Danh mục:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto?.category?.name) ? 'N/A' : customProductDetailsDto.category.name}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Danh mục:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto?.category?.name) ? 'N/A' : customProductDetailsDto.category.name}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Mô tả ngắn:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.shortDescription) ? 'N/A' : customProductDetailsDto.shortDescription}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Mô tả ngắn:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.shortDescription) ? 'N/A' : customProductDetailsDto.shortDescription}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Mô tả:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.description) ? 'N/A' : customProductDetailsDto.description}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Mô tả:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.description) ? 'N/A' : customProductDetailsDto.description}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Slug hiển thị:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.slug) ? 'N/A' : customProductDetailsDto.slug}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Slug hiển thị:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.slug) ? 'N/A' : customProductDetailsDto.slug}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Ngày tạo:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${customProductDetailsDto.createdAt != null ? #temporals.format(customProductDetailsDto.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Ngày tạo:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${customProductDetailsDto.createdAt != null ? #temporals.format(customProductDetailsDto.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Ngày cập nhật:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${customProductDetailsDto.updatedAt != null ? #temporals.format(customProductDetailsDto.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-              ></dd>
-            </dl>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Ngày cập nhật:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${customProductDetailsDto.updatedAt != null ? #temporals.format(customProductDetailsDto.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
+                ></dd>
+              </dl>
+            </div>
           </div>
 
           <div class="content-pricing">
-            <h2 class="">Giá bán:</h2>
-            <dl class="row description-list">
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Giá:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${customProductDetailsDto.price != null ? #numbers.formatDecimal(customProductDetailsDto.price, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"
-              ></dd>
+            <div class="content-description-list">
+              <h2 class="title">Giá bán:</h2>
+              <dl class="row description-list">
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Giá:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${customProductDetailsDto.price != null ? #numbers.formatDecimal(customProductDetailsDto.price, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Giảm giá (%):
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${customProductDetailsDto.discount != null ? customProductDetailsDto.discount : 'N/A'}"
-              ></dd>
-            </dl>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Giảm giá (%):
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${customProductDetailsDto.discount != null ? customProductDetailsDto.discount : 'N/A'}"
+                ></dd>
+              </dl>
+            </div>
           </div>
 
           <div class="content-stock">
-            <h2 class="">Tồn kho:</h2>
-            <dl class="row description-list">
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Số lượng:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${customProductDetailsDto.quantity != null ? customProductDetailsDto.quantity : 'N/A'}"
-              ></dd>
-            </dl>
+            <div class="content-description-list">
+              <h2 class="title">Tồn kho:</h2>
+              <dl class="row description-list">
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Số lượng:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${customProductDetailsDto.quantity != null ? customProductDetailsDto.quantity : 'N/A'}"
+                ></dd>
 
-            <dl class="row description-list">
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Đã bán:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${customProductDetailsDto.sold != null ? customProductDetailsDto.sold : 'N/A'}"
-              ></dd>
-            </dl>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Đã bán:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${customProductDetailsDto.sold != null ? customProductDetailsDto.sold : 'N/A'}"
+                ></dd>
+              </dl>
+            </div>
           </div>
 
           <div class="content-specification">
-            <h2 class="">Thông tin kỹ thuật:</h2>
-            <dl class="row description-list">
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                CPU:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.cpu) ? 'N/A' : customProductDetailsDto.cpu}"
-              ></dd>
+            <div class="content-description-list">
+              <h2 class="title">Thông tin kỹ thuật:</h2>
+              <dl class="row description-list">
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  CPU:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.cpu) ? 'N/A' : customProductDetailsDto.cpu}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                GPU:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.gpu) ? 'N/A' : customProductDetailsDto.gpu}"
-              ></dd>
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                RAM:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.ram) ? 'N/A' : customProductDetailsDto.ram}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  GPU:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.gpu) ? 'N/A' : customProductDetailsDto.gpu}"
+                ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  RAM:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.ram) ? 'N/A' : customProductDetailsDto.ram}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Bộ nhớ:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.storage) ? 'N/A' : customProductDetailsDto.storage}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Bộ nhớ:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.storage) ? 'N/A' : customProductDetailsDto.storage}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Tản nhiệt:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.cooling) ? 'N/A' : customProductDetailsDto.cooling}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Tản nhiệt:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.cooling) ? 'N/A' : customProductDetailsDto.cooling}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Cổng kết nối:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.io) ? 'N/A' : customProductDetailsDto.io}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Cổng kết nối:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.io) ? 'N/A' : customProductDetailsDto.io}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Màn hình:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.screen) ? 'N/A' : customProductDetailsDto.screen}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Màn hình:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.screen) ? 'N/A' : customProductDetailsDto.screen}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Bàn phím:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.keyboard) ? 'N/A' : customProductDetailsDto.keyboard}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Bàn phím:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.keyboard) ? 'N/A' : customProductDetailsDto.keyboard}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Âm thanh:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.audio) ? 'N/A' : customProductDetailsDto.audio}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Âm thanh:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.audio) ? 'N/A' : customProductDetailsDto.audio}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Thẻ nhớ:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.sdCard) ? 'N/A' : customProductDetailsDto.sdCard}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Thẻ nhớ:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.sdCard) ? 'N/A' : customProductDetailsDto.sdCard}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                LAN:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.lan) ? 'N/A' : customProductDetailsDto.lan}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  LAN:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.lan) ? 'N/A' : customProductDetailsDto.lan}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                WiFi:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.wifi) ? 'N/A' : customProductDetailsDto.wifi}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  WiFi:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.wifi) ? 'N/A' : customProductDetailsDto.wifi}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Bluetooth:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.bluetooth) ? 'N/A' : customProductDetailsDto.bluetooth}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Bluetooth:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.bluetooth) ? 'N/A' : customProductDetailsDto.bluetooth}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Webcam:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.webCam) ? 'N/A' : customProductDetailsDto.webCam}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Webcam:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.webCam) ? 'N/A' : customProductDetailsDto.webCam}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Hệ điều hành:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.os) ? 'N/A' : customProductDetailsDto.os}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Hệ điều hành:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.os) ? 'N/A' : customProductDetailsDto.os}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Pin:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.battery) ? 'N/A' : customProductDetailsDto.battery}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Pin:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.battery) ? 'N/A' : customProductDetailsDto.battery}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Trọng lượng:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.weight) ? 'N/A' : customProductDetailsDto.weight}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Trọng lượng:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.weight) ? 'N/A' : customProductDetailsDto.weight}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Chất liệu:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.material) ? 'N/A' : customProductDetailsDto.material}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Chất liệu:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.material) ? 'N/A' : customProductDetailsDto.material}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Màu sắc:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.color) ? 'N/A' : customProductDetailsDto.color}"
-              ></dd>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Màu sắc:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.color) ? 'N/A' : customProductDetailsDto.color}"
+                ></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Kích thước:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(customProductDetailsDto.size) ? 'N/A' : customProductDetailsDto.size}"
-              ></dd>
-            </dl>
+                <dt
+                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
+                >
+                  Kích thước:
+                </dt>
+                <dd
+                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                  th:text="${#strings.isEmpty(customProductDetailsDto.size) ? 'N/A' : customProductDetailsDto.size}"
+                ></dd>
+              </dl>
+            </div>
           </div>
 
           <div class="content-actions">

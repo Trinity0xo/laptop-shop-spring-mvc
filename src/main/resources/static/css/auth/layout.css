@@ -292,17 +292,21 @@
   }
 }
 
-body {
+.layout {
   background-color: rgb(245, 245, 247);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
-body .authentication {
+.layout .authentication {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
   margin: 0 1.6rem;
 }
-body .authentication .authentication-form {
+.layout .authentication .authentication-form {
   padding: 1.6rem;
   background-color: #fff;
   width: 55rem;
@@ -312,7 +316,7 @@ body .authentication .authentication-form {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-radius: 1.6rem;
 }
-body .authentication .logo {
+.layout .authentication .logo {
   display: flex;
   justify-content: center;
 }
