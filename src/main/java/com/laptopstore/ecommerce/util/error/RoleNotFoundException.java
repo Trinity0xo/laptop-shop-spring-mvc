@@ -3,7 +3,8 @@ package com.laptopstore.ecommerce.util.error;
 public class RoleNotFoundException extends EntityNotFoundException {
     private static final String DEFAULT_MESSAGE = "Không tìm thấy vai trò";
 
-    public RoleNotFoundException(){
+    public RoleNotFoundException() {
+        super(DEFAULT_MESSAGE);
     }
 
     public RoleNotFoundException(String redirectUrl) {

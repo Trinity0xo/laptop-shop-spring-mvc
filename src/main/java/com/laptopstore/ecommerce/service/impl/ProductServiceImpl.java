@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductById(long productId) {
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException("/dashboard/product");
         }
 
         return product;
@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductBySlug(String slug) {
         Product product = this.productRepository.findBySlug(slug).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException("/shop");
         }
 
         return product;
@@ -619,7 +619,7 @@ public class ProductServiceImpl implements ProductService {
     public CustomProductDetailsDto getAdminProductDetailsById(long productId){
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException("/dashboard/product");
         }
 
        long sold = this.orderItemsRepository.countSoldProductByProductId(product.getId());

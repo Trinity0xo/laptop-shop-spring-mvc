@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import com.laptopstore.ecommerce.dto.order.UpdateOrderStatusDto;
 import com.laptopstore.ecommerce.util.constant.OrderStatusEnum;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.laptopstore.ecommerce.util.DateTimeUtils.getValidInstantRange;
 import static com.laptopstore.ecommerce.util.PriceUtils.getValidPriceRange;
@@ -45,6 +46,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void createNewOrder(CheckoutDto checkoutDto) {
         User user = this.userRepository.findByEmail(checkoutDto.getEmail()).orElse(null);
         if(user == null){
@@ -53,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<CheckoutDto.CheckoutProduct> checkoutProducts = checkoutDto.getCheckoutProducts();
         if (checkoutProducts == null || checkoutProducts.isEmpty()) {
-            throw new BadRequestException("Không có sản phẩm để thanh toán", "/cart");
+            throw new BadRequestException("Không có sản phẩm để thanh toán");
         }
 
         Map<Long, Product> validCheckoutProducts = new HashMap<>();
@@ -67,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             if(checkoutProduct.getQuantity() > product.getQuantity()){
-                throw new StockUnavailableException("/cart");
+                throw new BadRequestException("Số lượng trong kho không đủ");
             }
 
             validCheckoutProducts.put(product.getId(), product);
@@ -205,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order userOrder = this.orderRepository.findByIdAndUser(orderId, user).orElse(null);
         if(userOrder == null){
-            throw new OrderNotFoundException();
+            throw new OrderNotFoundException("/account/order-history");
         }
 
         return userOrder;
@@ -230,7 +232,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         if(!userOrder.getStatus().equals(OrderStatusEnum.PENDING)){
-            throw new BadRequestException("Bạn chỉ có thể huỷ đơn hàng khi trạng thái đang là 'Đang xử lý'", "/account/order-history/details/" + userOrder.getId());
+            throw new BadRequestException("Bạn chỉ có thể huỷ đơn hàng khi trạng thái đang là 'Đang xử lý'");
         }
 
         userOrder.setStatus(OrderStatusEnum.CANCELLED);
@@ -306,7 +308,7 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderItems(long orderId){
         Order order = this.orderRepository.findById(orderId).orElse(null);
         if(order == null){
-            throw new OrderNotFoundException();
+            throw new OrderNotFoundException("/dashboard/order");
         }
 
         return order;
@@ -340,7 +342,7 @@ public class OrderServiceImpl implements OrderService {
 
         if (updateOrderStatusDto.getStatus().equals(OrderStatusEnum.CANCELLED)) {
             if(order.getStatus().equals(OrderStatusEnum.DELIVERED)){
-                throw new BadRequestException("Không thể hủy đơn hàng khi đã giao", "/dashboard/order/details/" + order.getId());
+                throw new BadRequestException("Không thể hủy đơn hàng khi đã giao");
             }
 
             order.setCancelledReason(updateOrderStatusDto.getCancelledReason());

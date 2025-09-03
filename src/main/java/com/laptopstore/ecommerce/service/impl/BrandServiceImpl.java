@@ -96,7 +96,7 @@ public class BrandServiceImpl implements BrandService {
     public Brand getBrandById(long brandId){
         Brand brand = this.brandRepository.findById(brandId).orElse(null);
         if(brand == null){
-            throw new BrandNotFoundException();
+            throw new BrandNotFoundException("/dashboard/brand");
         }
 
         return brand;

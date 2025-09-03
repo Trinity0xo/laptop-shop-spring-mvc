@@ -20,6 +20,7 @@ import com.laptopstore.ecommerce.model.CartItem;
 import com.laptopstore.ecommerce.model.User;
 import com.laptopstore.ecommerce.repository.CartItemsRepository;
 import com.laptopstore.ecommerce.repository.CartRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -55,7 +56,7 @@ public class CartServiceImpl implements CartService {
         }
 
         if (quantity <= 0) {
-            throw new BadRequestException("Số lượng phải lớn hơn 0", "/shop/product/" + product.getSlug());
+            throw new BadRequestException("Số lượng phải lớn hơn 0");
         }
 
 
@@ -93,7 +94,7 @@ public class CartServiceImpl implements CartService {
 
         Cart userCart = user.getCart();
         if(userCart == null || userCart.getCartItems().isEmpty()){
-            throw new BadRequestException("Giỏ hàng trống", "/cart");
+            throw new BadRequestException("Giỏ hàng trống");
         }
 
         List<CartItem> validCartItems = new ArrayList<>();
@@ -104,7 +105,7 @@ public class CartServiceImpl implements CartService {
         }
 
         if(validCartItems.isEmpty()){
-            throw new BadRequestException("Không thể thanh toán vì một số sản phẩm đã hết hàng", "/cart");
+            throw new BadRequestException("Không thể thanh toán vì một số sản phẩm đã hết hàng");
         }
 
 //        double totalPrice = this.cartItemsRepository.calculateCartTotalPrice(userCart);
@@ -139,6 +140,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public void addProductToUserCart(String email, long productId, int quantity) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
@@ -202,7 +204,7 @@ public class CartServiceImpl implements CartService {
 
         Cart userCart = user.getCart();
         if(userCart == null || userCart.getCartItems().isEmpty()){
-            throw new BadRequestException("Giỏ hàng trống", "/cart");
+            throw new BadRequestException("Giỏ hàng trống");
         }
 
         for (CartItem item : user.getCart().getCartItems()) {

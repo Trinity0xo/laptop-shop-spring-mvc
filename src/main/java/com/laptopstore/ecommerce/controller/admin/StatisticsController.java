@@ -14,6 +14,6 @@ public class StatisticsController {
     public String showStatisticsPage(
             Model model
     ){
-        throw new NotImplementException("Chức năng này chưa hoàn thành");
+        throw new NotImplementException("/dashboard");
     }
 }

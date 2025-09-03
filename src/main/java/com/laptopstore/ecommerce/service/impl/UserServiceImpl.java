@@ -82,13 +82,13 @@ public class UserServiceImpl implements UserService {
     public void resetPassword(ResetPasswordDto resetPasswordDto) {
         Token token = this.tokenService.getToken(resetPasswordDto.getResetPasswordToken(), TokenTypeEnum.RESET_PASSWORD);
         if(token == null || token.isExpired()) {
-            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ");
+            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ", "/auth/reset-password");
         }
 
         User user = token.getUser();
 
         if(user == null){
-            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ");
+            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ", "/auth/reset-password");
         }
 
         String newHashedPassword = this.passwordEncoder.encode(resetPasswordDto.getNewPassword());
@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
     public ResetPasswordDto getResetPasswordInformation(String tokenValue) {
         Token resetPasswordToken = this.tokenService.getToken(tokenValue, TokenTypeEnum.RESET_PASSWORD);
         if(resetPasswordToken == null || resetPasswordToken.isExpired()) {
-            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ");
+            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ", "/auth/reset-password");
         }
 
         return new ResetPasswordDto(resetPasswordToken.getValue());
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
     public void createNewUser(CreateUserDto createUserDto) {
         Role role = this.roleRepository.findBySlug(createUserDto.getRole().name()).orElse(null);
         if(role == null){
-            throw new RoleNotFoundException("/dashboard/user/create");
+            throw new RoleNotFoundException();
         }
 
         String hashedPassword = this.passwordEncoder.encode(createUserDto.getPassword());
@@ -213,7 +213,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(long id) {
         User user = this.userRepository.findById(id).orElse(null);
         if(user == null){
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("/dashboard/user");
         }
 
         return user;

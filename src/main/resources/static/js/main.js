@@ -147,9 +147,6 @@ function showMessage() {
   const successMessage = $(".success-message");
   const errorMessage = $(".error-message");
 
-  const localStorageSuccessMessage = localStorage.getItem("successMessage");
-  const localStorageErrorMessage = localStorage.getItem("errorMessage");
-
   let showMessage = false;
 
   if (successMessage.length > 0) {
@@ -157,19 +154,6 @@ function showMessage() {
     $.toast({
       heading: "Success",
       text: successMessageText,
-      showHideTransition: "slide",
-      icon: "success",
-      hideAfter: 5000,
-      position: "top-right",
-    });
-
-    showMessage = true;
-  }
-
-  if (localStorageSuccessMessage) {
-    $.toast({
-      heading: "Success",
-      text: localStorageSuccessMessage,
       showHideTransition: "slide",
       icon: "success",
       hideAfter: 5000,
@@ -194,24 +178,9 @@ function showMessage() {
     showMessage = true;
   }
 
-  if (localStorageErrorMessage) {
-    $.toast({
-      heading: "Error",
-      text: localStorageErrorMessage,
-      showHideTransition: "slide",
-      icon: "error",
-      hideAfter: 5000,
-      position: "top-right",
-    });
-
-    showMessage = true;
-  }
-
   if (showMessage) {
     successMessage.text("");
     errorMessage.text("");
-    localStorage.removeItem("successMessage");
-    localStorage.removeItem("errorMessage");
   }
 }
 

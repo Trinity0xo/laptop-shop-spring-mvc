@@ -80,7 +80,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategoryById(long categoryId){
         Category category = this.categoryRepository.findById(categoryId).orElse(null);
         if(category == null){
-            throw new CategoryNotFoundException();
+            throw new CategoryNotFoundException("/dashboard/category");
         }
 
         return category;

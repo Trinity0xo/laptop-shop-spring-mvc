@@ -64,7 +64,7 @@ public class RoleServiceImpl implements RoleService {
     public Role getRoleById(long roleId){
         Role role = this.roleRepository.findById(roleId).orElse(null);
         if(role == null){
-            throw new RoleNotFoundException();
+            throw new RoleNotFoundException("/dashboard/role");
         }
 
         return role;

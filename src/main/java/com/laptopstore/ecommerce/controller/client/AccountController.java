@@ -133,6 +133,6 @@ public class AccountController {
     @GetMapping("/change-password")
     public String showChangePasswordPage(
     )  {
-        throw new NotImplementException("Chức năng này chưa hoàn thành");
+        throw new NotImplementException("/account/information");
     }
 }

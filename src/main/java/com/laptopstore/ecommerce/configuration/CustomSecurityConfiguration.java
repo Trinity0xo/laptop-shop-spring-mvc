@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
 @Configuration
@@ -50,10 +51,16 @@ public class CustomSecurityConfiguration {
         return rememberMeServices;
     }
 
+//    @Bean
+//    public AccessDeniedHandler accessDeniedHandler(){
+//        return new CustomAccessDeniedHandler();
+//    }
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomFailureHandler customFailureHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomSuccessHandler customSuccessHandler, CustomOAuth2SuccessHandler customOAuth2SuccessHandler)
+    public SecurityFilterChain filterChain(HttpSecurity http, CustomFailureHandler customFailureHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomSuccessHandler customSuccessHandler, CustomOAuth2SuccessHandler customOAuth2SuccessHandler,  CustomAccessDeniedHandler customAccessDeniedHandler)
             throws Exception {
-        http.authorizeHttpRequests(authorization -> authorization
+        http
+                .authorizeHttpRequests(authorization -> authorization
                         .requestMatchers( "/", "/auth/**","/shop/**", "/about", "/contact", "/hot-deals/**", "/images/**", "/js/**", "/css/**", "/uploads/**", "/error" ).permitAll()
 
                         // Owners & Admins can view users
@@ -76,7 +83,10 @@ public class CustomSecurityConfiguration {
                         .loginProcessingUrl("/login")
                         .successHandler(customSuccessHandler)
                         .failureHandler(customFailureHandler))
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthenticationEntryPoint))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/auth/login")
                         .failureUrl("/auth/login?error")

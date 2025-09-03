@@ -4,7 +4,7 @@ public class CategoryNotFoundException extends EntityNotFoundException {
     private static final String DEFAULT_MESSAGE = "Không tìm thấy Danh mục";
 
     public CategoryNotFoundException() {
-        super();
+        super(DEFAULT_MESSAGE);
     }
 
     public CategoryNotFoundException(String redirectUrl) {

@@ -14,7 +14,9 @@
       <div class="status-code" th:text="${code}"></div>
       <h1 class="title" th:text="${error}"></h1>
       <p class="message" th:text="${message}"></p>
-      <a class="home-button primary-button" href="/">Quay lại trang chủ</a>
+      <a class="home-button primary-button" th:href="${redirectUrl}"
+        >Quay lại
+      </a>
     </div>
   </body>
 </html>

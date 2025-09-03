@@ -256,12 +256,12 @@ public class ReviewServiceImpl implements ReviewService {
 
         boolean isUserBoughtProduct = this.orderItemsRepository.existsByOrderUserAndOrderStatusAndProduct(user, OrderStatusEnum.DELIVERED, product);
         if(!isUserBoughtProduct){
-            throw new BadRequestException("Bạn cần phải mua sản phẩm trươc khi để lại đánh giá", "/shop/product/" + product.getSlug());
+            throw new BadRequestException("Bạn cần phải mua sản phẩm trước khi để lại đánh giá");
         }
 
         boolean isUserAlreadyReviewProduct = this.reviewRepository.existsByUserAndProduct(user, product);
         if(isUserAlreadyReviewProduct){
-            throw new ConflictException("Bạn đã đánh giá sản phẩm này rồi", "/shop/product/" + product.getSlug());
+            throw new ConflictException("Bạn đã đánh giá sản phẩm này rồi");
         }
 
         Review newReview = new Review(
@@ -351,12 +351,12 @@ public class ReviewServiceImpl implements ReviewService {
 
         boolean isUserBoughtProduct = this.orderItemsRepository.existsByOrderUserAndOrderStatusAndProduct(user, OrderStatusEnum.DELIVERED, product);
         if(!isUserBoughtProduct){
-            throw new BadRequestException("Bạn cần phải mua sản phẩm trươc khi để lại đánh giá", "/shop/product/" + product.getSlug());
+            throw new BadRequestException("Bạn cần phải mua sản phẩm trươc khi để lại đánh giá");
         }
 
         boolean isUserAlreadyReviewProduct = this.reviewRepository.existsByUserAndProduct(user, product);
         if(isUserAlreadyReviewProduct){
-            throw new ConflictException("Bạn đã đánh giá sản phẩm này rồi", "/shop/product/" + product.getSlug());
+            throw new ConflictException("Bạn đã đánh giá sản phẩm này rồi");
         }
 
         return new CreateReviewDto(
@@ -379,7 +379,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review review = this.reviewRepository.findByIdAndUserAndProduct(reviewId, user, product).orElse(null);
         if(review == null){
-            throw new ReviewNotFoundException("/shop/product/" + product.getSlug());
+            throw new ReviewNotFoundException();
         }
 
         return new UpdateReviewDto(

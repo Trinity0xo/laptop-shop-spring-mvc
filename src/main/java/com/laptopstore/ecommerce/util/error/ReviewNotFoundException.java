@@ -4,7 +4,7 @@ public class ReviewNotFoundException extends EntityNotFoundException {
     private static final String DEFAULT_MESSAGE = "Không tìm thấy Đánh giá";
 
     public ReviewNotFoundException(){
-
+        super(DEFAULT_MESSAGE);
     }
 
     public ReviewNotFoundException(String redirectUrl) {

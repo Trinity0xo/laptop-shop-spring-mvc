@@ -3,7 +3,8 @@ package com.laptopstore.ecommerce.util.error;
 public class EntityNotFoundException extends RuntimeException {
     String redirectUrl;
 
-    public EntityNotFoundException(){
+    public EntityNotFoundException(String message){
+        super(message);
     }
 
     public EntityNotFoundException(String message, String redirectUrl) {

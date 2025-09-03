@@ -4,7 +4,7 @@ public class BrandNotFoundException extends EntityNotFoundException {
     private static final String DEFAULT_MESSAGE = "Không tìm thấy Hãng";
 
     public BrandNotFoundException() {
-        super();
+        super(DEFAULT_MESSAGE);
     }
 
     public BrandNotFoundException(String redirectUrl) {

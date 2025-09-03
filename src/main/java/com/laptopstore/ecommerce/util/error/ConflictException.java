@@ -13,6 +13,6 @@ public class ConflictException extends RuntimeException {
     }
 
     public boolean hasRedirect() {
-        return redirectUrl != null && !redirectUrl.isEmpty();
+        return this.redirectUrl != null && !this.redirectUrl.isEmpty();
     }
 }

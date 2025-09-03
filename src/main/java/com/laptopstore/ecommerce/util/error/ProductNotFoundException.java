@@ -4,7 +4,7 @@ public class ProductNotFoundException extends EntityNotFoundException{
     private static final String DEFAULT_MESSAGE = "Không tìm thấy sản phẩm";
 
     public ProductNotFoundException() {
-        super();
+        super(DEFAULT_MESSAGE);
     }
 
     public ProductNotFoundException(String redirectUrl) {

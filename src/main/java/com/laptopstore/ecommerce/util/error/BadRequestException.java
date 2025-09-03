@@ -1,5 +1,8 @@
 package com.laptopstore.ecommerce.util.error;
 
+import lombok.Getter;
+
+@Getter
 public class BadRequestException extends RuntimeException {
     String redirectUrl;
 
@@ -13,6 +16,6 @@ public class BadRequestException extends RuntimeException {
     }
 
     public boolean hasRedirect() {
-        return redirectUrl != null && !redirectUrl.isEmpty();
+        return this.redirectUrl != null && !this.redirectUrl.isEmpty();
     }
 }

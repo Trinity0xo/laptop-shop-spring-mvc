@@ -178,37 +178,30 @@ $("#createProductForm").submit(function (e) {
 
       try {
         response = JSON.parse(xhr.responseText);
-      } catch (e) {
-        console.warn("Response is not valid JSON:", e);
-      }
+      } catch (e) {}
 
       if (response && response.message) {
-        localStorage.setItem("errorMessage", response.message);
-      }
-
-      if (xhr.status === 422) {
-        if (response && response.data) {
-          const errors = response.data;
-          $(".input-error-message").text("");
-          $("input").removeClass("error");
-
-          for (const field in errors) {
-            if (errors.hasOwnProperty(field)) {
-              $("#" + field + "Error").text(errors[field]);
-              $("#" + field).addClass("error");
-            }
-          }
-        }
+        $.toast({
+          heading: "Error",
+          text: response.message,
+          showHideTransition: "slide",
+          icon: "error",
+          hideAfter: 5000,
+          position: "top-right",
+        });
       } else if (xhr.status === 401) {
         window.location.href = "/auth/login";
-      } else if (xhr.status === 400) {
-        location.reload();
-      } else if (xhr.status === 404) {
-        if (response && response.data) {
-          window.location.href = response.data;
+      } else if (xhr.status === 422) {
+        const errors = response.data;
+        $(".input-error-message").text("");
+        $("input").removeClass("error");
+
+        for (const field in errors) {
+          if (errors.hasOwnProperty(field)) {
+            $("#" + field + "Error").text(errors[field]);
+            $("#" + field).addClass("error");
+          }
         }
-      } else if (xhr.status === 409) {
-        location.reload();
       } else {
         document.open();
         document.write(xhr.responseText);
@@ -254,37 +247,30 @@ $("#updateProductForm").submit(function (e) {
 
       try {
         response = JSON.parse(xhr.responseText);
-      } catch (e) {
-        console.warn("Response is not valid JSON:", e);
-      }
+      } catch (e) {}
 
       if (response && response.message) {
-        localStorage.setItem("errorMessage", response.message);
-      }
-
-      if (xhr.status === 422) {
-        if (response && response.data) {
-          const errors = response.data;
-          $(".input-error-message").text("");
-          $("input").removeClass("error");
-
-          for (const field in errors) {
-            if (errors.hasOwnProperty(field)) {
-              $("#" + field + "Error").text(errors[field]);
-              $("#" + field).addClass("error");
-            }
-          }
-        }
+        $.toast({
+          heading: "Error",
+          text: response.message,
+          showHideTransition: "slide",
+          icon: "error",
+          hideAfter: 5000,
+          position: "top-right",
+        });
       } else if (xhr.status === 401) {
         window.location.href = "/auth/login";
-      } else if (xhr.status === 400) {
-        location.reload();
-      } else if (xhr.status === 404) {
-        if (response && response.data) {
-          window.location.href = response.data;
+      } else if (xhr.status === 422) {
+        const errors = response.data;
+        $(".input-error-message").text("");
+        $("input").removeClass("error");
+
+        for (const field in errors) {
+          if (errors.hasOwnProperty(field)) {
+            $("#" + field + "Error").text(errors[field]);
+            $("#" + field).addClass("error");
+          }
         }
-      } else if (xhr.status === 409) {
-        location.reload();
       } else {
         document.open();
         document.write(xhr.responseText);
