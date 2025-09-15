@@ -12,7 +12,7 @@ import com.laptopstore.ecommerce.repository.UserRepository;
 import com.laptopstore.ecommerce.service.CartService;
 import com.laptopstore.ecommerce.exception.BadRequestException;
 import com.laptopstore.ecommerce.exception.ProductNotFoundException;
-import com.laptopstore.ecommerce.exception.AuthenticatedUserNotFoundException;
+import com.laptopstore.ecommerce.exception.AuthUserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.laptopstore.ecommerce.model.Cart;
@@ -46,7 +46,7 @@ public class CartServiceImpl implements CartService {
     public CheckoutDto getBuyNowInformation(String email, long productId, int quantity){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = this.productRepository.findById(productId).orElse(null);
@@ -86,8 +86,7 @@ public class CartServiceImpl implements CartService {
     public CheckoutDto getUserCheckoutInformation(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
-
+            throw new AuthUserNotFoundException(email);
         }
 
         Cart userCart = user.getCart();
@@ -140,7 +139,7 @@ public class CartServiceImpl implements CartService {
     public void addProductToUserCart(String email, long productId, int quantity) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = productRepository.findById(productId).orElse(null);
@@ -185,7 +184,7 @@ public class CartServiceImpl implements CartService {
     public void updateUserCartProductQuantity(String email, long productId, int quantityChange){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = productRepository.findById(productId).orElse(null);
@@ -215,7 +214,7 @@ public class CartServiceImpl implements CartService {
     public void removeUserCartProduct(String email, long productId){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Cart userCart = user.getCart();
@@ -240,10 +239,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public int getTotalCartItem(String email) {
+        return this.cartItemsRepository.countCartItemsByUserEmail(email);
+    }
+
+    @Override
     public CartItemsDto getUserCartItems(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Cart userCart = user.getCart();

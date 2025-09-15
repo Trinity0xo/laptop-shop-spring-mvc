@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
 @Configuration
@@ -51,7 +52,7 @@ public class CustomSecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomFailureHandler customFailureHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomSuccessHandler customSuccessHandler, CustomOAuth2SuccessHandler customOAuth2SuccessHandler,  CustomAccessDeniedHandler customAccessDeniedHandler)
+    public SecurityFilterChain filterChain(HttpSecurity http, CustomFailureHandler customFailureHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomSuccessHandler customSuccessHandler, CustomOAuth2SuccessHandler customOAuth2SuccessHandler,  CustomAccessDeniedHandler customAccessDeniedHandler ,AuthoritiesRefreshFilter authoritiesRefreshFilter)
             throws Exception {
         http
                 .authorizeHttpRequests(authorization -> authorization
@@ -72,6 +73,7 @@ public class CustomSecurityConfiguration {
 
                         .anyRequest().authenticated()
                 )
+                .addFilterAfter(authoritiesRefreshFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(login -> login
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/login")

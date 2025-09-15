@@ -6,7 +6,7 @@ import com.laptopstore.ecommerce.dto.auth.ResetPasswordDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.dto.user.*;
 import com.laptopstore.ecommerce.dto.auth.RegisterDto;
-import com.laptopstore.ecommerce.exception.AuthenticatedUserNotFoundException;
+import com.laptopstore.ecommerce.exception.AuthUserNotFoundException;
 import com.laptopstore.ecommerce.exception.BadRequestException;
 import com.laptopstore.ecommerce.exception.RoleNotFoundException;
 import com.laptopstore.ecommerce.exception.UserNotFoundException;
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
     public PageResponse<List<User>> getAllUsers(UserFilterDto userFilterDto, String email) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Specification<User> specification = Specification.where(UserSpecifications.notEqualId(user.getId()));
@@ -226,7 +226,7 @@ public class UserServiceImpl implements UserService {
     public AuthenticatedInformationDto getAuthenticatedInformation(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         int cartItemCount = this.cartItemsRepository.countByCart(user.getCart());
@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService {
     public UserInformationDto getUserAccountInformation(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         return new UserInformationDto(
@@ -264,7 +264,7 @@ public class UserServiceImpl implements UserService {
     public UpdateUserInformationDto getUserAccountInformationForUpdate(String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null) {
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         return new UpdateUserInformationDto(
@@ -280,7 +280,7 @@ public class UserServiceImpl implements UserService {
     public void updateUserAccountInformation(String email, UpdateUserInformationDto updateAccountInfoDto){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         if(updateAccountInfoDto.getNewAvatar() != null && !updateAccountInfoDto.getNewAvatar().isEmpty()){

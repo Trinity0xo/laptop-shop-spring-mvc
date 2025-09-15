@@ -1,6 +1,7 @@
 package com.laptopstore.ecommerce.configuration;
 
 import com.laptopstore.ecommerce.model.User;
+import com.laptopstore.ecommerce.service.CartService;
 import com.laptopstore.ecommerce.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,9 +14,11 @@ import java.util.Collections;
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserService userService;
+    private final CartService cartService;
 
-    public CustomUserDetailsService(UserService userService) {
+    public CustomUserDetailsService(UserService userService, CartService cartService) {
         this.userService = userService;
+        this.cartService = cartService;
     }
 
     @Override
@@ -26,6 +29,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
 
+        int cartItemCount = this.cartService.getTotalCartItem(user.getEmail());
+
         String password = (user.getPassword() != null && !user.getPassword().isEmpty())
                 ? user.getPassword()
                 : "{noop}N/A"; // dummy password nếu đăng nhập bằng google
@@ -35,6 +40,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 password,
                 user.getFullName(),
                 user.getAvatar(),
+                cartItemCount,
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getSlug())));
     }
 }

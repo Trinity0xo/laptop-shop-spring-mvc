@@ -12,6 +12,13 @@ import com.laptopstore.ecommerce.model.CartItem;
 public interface CartItemsRepository extends JpaRepository<CartItem, Long> {
     int countByCart(Cart cart);
 
+    @Query("SELECT COUNT(ci) " +
+            "FROM User u " +
+            "LEFT JOIN u.cart c " +
+            "LEFT JOIN c.cartItems ci " +
+            "WHERE u.email = :email")
+    int countCartItemsByUserEmail(@Param("email") String email);
+
     @Query("SELECT COALESCE(SUM((ci.product.price - (ci.product.price * ci.product.discount / 100)) * ci.quantity), 0) " +
             "FROM CartItem ci " +
             "WHERE ci.cart = :cart AND ci.quantity <= ci.product.quantity")

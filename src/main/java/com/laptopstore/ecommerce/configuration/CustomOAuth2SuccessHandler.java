@@ -1,5 +1,6 @@
 package com.laptopstore.ecommerce.configuration;
 
+import com.laptopstore.ecommerce.util.constant.RoleEnum;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -56,8 +57,9 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
     protected String determineTargetUrl(final Authentication authentication) {
         Map<String, String> roleTargetUrlMap = new HashMap<>();
-        roleTargetUrlMap.put("ROLE_USER", "/");
-        roleTargetUrlMap.put("ROLE_ADMIN", "/dashboard");
+        roleTargetUrlMap.put("ROLE_" + RoleEnum.USER.name(), "/");
+        roleTargetUrlMap.put("ROLE_" + RoleEnum.OWNER.name(), "/dashboard");
+        roleTargetUrlMap.put("ROLE_" + RoleEnum.SUPER_ADMIN.name(), "/dashboard");
 
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {

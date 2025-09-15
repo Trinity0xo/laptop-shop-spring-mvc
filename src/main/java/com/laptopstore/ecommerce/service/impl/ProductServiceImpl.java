@@ -13,7 +13,7 @@ import com.laptopstore.ecommerce.service.ProductService;
 import com.laptopstore.ecommerce.specification.ReviewSpecifications;
 import com.laptopstore.ecommerce.util.PaginationUtils;
 import com.laptopstore.ecommerce.util.constant.OrderStatusEnum;
-import com.laptopstore.ecommerce.exception.AuthenticatedUserNotFoundException;
+import com.laptopstore.ecommerce.exception.AuthUserNotFoundException;
 import com.laptopstore.ecommerce.exception.ProductNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -303,7 +303,7 @@ public class ProductServiceImpl implements ProductService {
     public CustomProductDetailsDto getShopProductDetailsBySlug(String productSlug, String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = this.getProductBySlug(productSlug);

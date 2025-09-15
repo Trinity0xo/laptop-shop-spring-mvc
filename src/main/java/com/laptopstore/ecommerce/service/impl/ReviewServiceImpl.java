@@ -44,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
     public PageResponse<CustomProductDetailsDto> getProductReviews(String productSlug, String email, ReviewFilterDto reviewFilterDto){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = this.productRepository.findBySlug(productSlug).orElse(null);
@@ -246,7 +246,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void UserCreateReview(long productId, String email, CreateReviewDto createReviewDto){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = this.productRepository.findById(productId).orElse(null);
@@ -278,7 +278,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void UserUpdateReview(long productId, String email, UpdateReviewDto updateReviewDto){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null) {
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = this.productRepository.findById(productId).orElse(null);
@@ -301,7 +301,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void UserDeleteReview(long reviewId, long productId, String email){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = this.productRepository.findById(productId).orElse(null);
@@ -317,7 +317,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Review getInformationForDeleteReview(String email, long productId, long reviewId){
         User user = userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = this.productRepository.findById(productId).orElse(null);
@@ -337,7 +337,7 @@ public class ReviewServiceImpl implements ReviewService {
     public CreateReviewDto getInformationForCreateReview(String email, long productId){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = this.productRepository.findById(productId).orElse(null);
@@ -365,7 +365,7 @@ public class ReviewServiceImpl implements ReviewService {
     public UpdateReviewDto getInformationForUpdateReview(String email, long productId, long reviewId){
         User user = userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Product product = this.productRepository.findById(productId).orElse(null);

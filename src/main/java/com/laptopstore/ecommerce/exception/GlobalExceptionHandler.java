@@ -37,9 +37,9 @@ public class GlobalExceptionHandler {
         }
     }
 
-    @ExceptionHandler(AuthenticatedUserNotFoundException.class)
-    public Object handleAuthenticatedUserNotFound(AuthenticatedUserNotFoundException exception, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        log.error("Authenticated user not found. Session invalidated. Request URI: {}", request.getRequestURI(), exception);
+    @ExceptionHandler(AuthUserNotFoundException.class)
+    public Object handleAuthenticatedUserNotFound(AuthUserNotFoundException exception, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        log.error("Unauthorized: {}, Request URI: {}", exception.getMessage(), request.getRequestURI(), exception);
 
         if(isAjax(request)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 

@@ -10,10 +10,7 @@ import com.laptopstore.ecommerce.dto.cart.CheckoutDto;
 import com.laptopstore.ecommerce.dto.order.OrderFilterDto;
 import com.laptopstore.ecommerce.dto.order.UserCancelOrderDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
-import com.laptopstore.ecommerce.exception.AuthenticatedUserNotFoundException;
-import com.laptopstore.ecommerce.exception.BadRequestException;
-import com.laptopstore.ecommerce.exception.OrderNotFoundException;
-import com.laptopstore.ecommerce.exception.ProductNotFoundException;
+import com.laptopstore.ecommerce.exception.*;
 import com.laptopstore.ecommerce.model.*;
 import com.laptopstore.ecommerce.repository.*;
 import com.laptopstore.ecommerce.service.OrderService;
@@ -50,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
     public Order createNewOrder(CheckoutDto checkoutDto) {
         User user = this.userRepository.findByEmail(checkoutDto.getEmail()).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(checkoutDto.getEmail());
         }
 
         List<CheckoutDto.CheckoutProduct> checkoutProducts = checkoutDto.getCheckoutProducts();
@@ -138,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
     public PageResponse<List<Order>> getUserOrderHistory(String email, OrderFilterDto orderFilterDto){
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Specification<Order> specification = Specification.where(
@@ -207,7 +204,7 @@ public class OrderServiceImpl implements OrderService {
     public Order getUserOrderItems(String email, long orderId) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Order userOrder = this.orderRepository.findByIdAndUser(orderId, user).orElse(null);
@@ -229,7 +226,7 @@ public class OrderServiceImpl implements OrderService {
     public void userCancelOrder(String email, UserCancelOrderDto userCancelOrderDto) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-             throw new AuthenticatedUserNotFoundException();
+             throw new AuthUserNotFoundException(email);
         }
 
         Order userOrder = this.orderRepository.findByIdAndUser(userCancelOrderDto.getId(), user).orElse(null);
@@ -352,7 +349,7 @@ public class OrderServiceImpl implements OrderService {
     public void updateOrderStatus(String email, UpdateOrderStatusDto updateOrderStatusDto) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
-            throw new AuthenticatedUserNotFoundException();
+            throw new AuthUserNotFoundException(email);
         }
 
         Order order = this.orderRepository.findById(updateOrderStatusDto.getId()).orElse(null);

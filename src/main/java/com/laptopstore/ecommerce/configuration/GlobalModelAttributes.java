@@ -49,11 +49,7 @@ public class GlobalModelAttributes {
     }
 
     @ModelAttribute("authenticatedInformation")
-    public AuthenticatedInformationDto authenticatedInformation(HttpServletRequest request){
-        String email = AuthenticationUtils.getAuthenticatedName();
-        if(email != null && !email.isEmpty()){
-            return this.userService.getAuthenticatedInformation(email);
-        }
-        return null;
+    public AuthenticatedInformationDto authenticatedInformation(){
+        return AuthenticationUtils.getAuthenticatedInfo();
     }
 }
