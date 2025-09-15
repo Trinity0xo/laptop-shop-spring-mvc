@@ -17,6 +17,6 @@ public interface ReviewService {
     void UserCreateReview(long productId, String email, CreateReviewDto createReviewDto);
     UpdateReviewDto getInformationForUpdateReview(String email, long productId, long reviewId);
     void UserUpdateReview(long productId, String email, UpdateReviewDto updateReviewDto);
-    DeleteReviewDto getInformationForDeleteReview(String email, long productId, long reviewId);
+    Review getInformationForDeleteReview(String email, long productId, long reviewId);
     void UserDeleteReview(long reviewId, long productId, String email);
 }

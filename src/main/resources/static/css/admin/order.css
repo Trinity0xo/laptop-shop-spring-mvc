@@ -7,9 +7,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  background-color: #fff;
-  padding: 1.6rem;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .order .container-fluid .order-content .content-title {
   font-size: 3rem;
@@ -19,43 +16,44 @@
   overflow-y: auto;
 }
 .order .container-fluid .order-content .content-table table .col-width-1 {
-  min-width: 10rem;
+  min-width: 9.1666666667rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-2 {
-  min-width: 20rem;
+  min-width: 18.3333333333rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-3 {
-  min-width: 30rem;
+  min-width: 27.5rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-4 {
-  min-width: 40rem;
+  min-width: 36.6666666667rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-5 {
-  min-width: 50rem;
+  min-width: 45.8333333333rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-6 {
-  min-width: 60rem;
+  min-width: 55rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-7 {
-  min-width: 70rem;
+  min-width: 64.1666666667rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-8 {
-  min-width: 80rem;
+  min-width: 73.3333333333rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-9 {
-  min-width: 90rem;
+  min-width: 82.5rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-10 {
-  min-width: 100rem;
+  min-width: 91.6666666667rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-11 {
-  min-width: 110rem;
+  min-width: 100.8333333333rem;
 }
 .order .container-fluid .order-content .content-table table .col-width-12 {
-  min-width: 120rem;
+  min-width: 110rem;
 }
 .order .container-fluid .order-content .content-table table .table-row-actions {
   display: flex;
+  justify-content: end;
   gap: 1.6rem;
 }
 .order .container-fluid .order-content .content-actions {
@@ -91,9 +89,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  background-color: #fff;
-  padding: 1.6rem;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .order .container-fluid .order-form .form-title {
   font-size: 3rem;
@@ -156,7 +151,7 @@
   font-size: 1.6rem;
   border: 0.1rem solid rgba(51, 51, 51, 0.25);
   color: #333;
-  border-radius: 1rem;
+  border-radius: 0.4rem;
   text-align: start;
   width: 100%;
 }
@@ -257,9 +252,6 @@
   }
 }
 .order .container-fluid .order-details-products {
-  background-color: #fff;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  padding: 1.6rem;
   overflow-y: auto;
 }
 .order .container-fluid .order-details-products .products-title {
@@ -267,40 +259,40 @@
   color: #333;
 }
 .order .container-fluid .order-details-products table .col-width-1 {
-  min-width: 10rem;
+  min-width: 9.1666666667rem;
 }
 .order .container-fluid .order-details-products table .col-width-2 {
-  min-width: 20rem;
+  min-width: 18.3333333333rem;
 }
 .order .container-fluid .order-details-products table .col-width-3 {
-  min-width: 30rem;
+  min-width: 27.5rem;
 }
 .order .container-fluid .order-details-products table .col-width-4 {
-  min-width: 40rem;
+  min-width: 36.6666666667rem;
 }
 .order .container-fluid .order-details-products table .col-width-5 {
-  min-width: 50rem;
+  min-width: 45.8333333333rem;
 }
 .order .container-fluid .order-details-products table .col-width-6 {
-  min-width: 60rem;
+  min-width: 55rem;
 }
 .order .container-fluid .order-details-products table .col-width-7 {
-  min-width: 70rem;
+  min-width: 64.1666666667rem;
 }
 .order .container-fluid .order-details-products table .col-width-8 {
-  min-width: 80rem;
+  min-width: 73.3333333333rem;
 }
 .order .container-fluid .order-details-products table .col-width-9 {
-  min-width: 90rem;
+  min-width: 82.5rem;
 }
 .order .container-fluid .order-details-products table .col-width-10 {
-  min-width: 100rem;
+  min-width: 91.6666666667rem;
 }
 .order .container-fluid .order-details-products table .col-width-11 {
-  min-width: 110rem;
+  min-width: 100.8333333333rem;
 }
 .order .container-fluid .order-details-products table .col-width-12 {
-  min-width: 120rem;
+  min-width: 110rem;
 }
 .order .container-fluid .order-details-products table .product-image {
   display: flex;
@@ -313,6 +305,6 @@
 }
 .order .container-fluid .order-details-products table .table-row-actions {
   display: flex;
-  align-items: center;
+  justify-content: end;
   gap: 1.6rem;
 }

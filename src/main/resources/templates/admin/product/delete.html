@@ -20,8 +20,8 @@
           <li><a href="/dashboard/product">Sản phẩm</a></li>
           <li>
             <a
-              th:href="@{/dashboard/product/details/{id}(id=${productId})}"
-              th:text="${productId}"
+              th:href="@{/dashboard/product/details/{id}(id=${product.id})}"
+              th:text="${product.name}"
             ></a>
           </li>
           <li>Xóa</li>
@@ -29,19 +29,21 @@
 
         <!-- delete product form -->
         <form
-          class="delete-product-form product-form"
+          class="delete-product-form product-form card"
           method="post"
           th:action="@{/dashboard/product/delete}"
         >
           <h1 class="form-title">
-            Xóa sản phẩm với "Mã: <span th:text="${productId}"></span>"
+            Xóa sản phẩm "<span th:text="${product.name}"></span>"
           </h1>
 
           <div class="form-content">
-            <input type="hidden" name="productId" th:value="${productId}" />
+            <input type="hidden" name="productId" th:value="${product.id}" />
             <p class="warning-message">
-              Bạn có chắc chắn muốn xóa sản phẩm với "Mã:
-              <span th:text="${productId}"></span>" không?
+              Bạn có chắc chắn muốn xóa sản phẩm với "<span
+                th:text="${product.name}"
+              ></span
+              >" không?
             </p>
           </div>
 

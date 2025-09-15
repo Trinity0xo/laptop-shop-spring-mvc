@@ -134,13 +134,13 @@
                 th:if="${#authorization.expression('isAuthenticated()')}"
               >
                 <img
-                  th:if="${authenticatedInformation.avatar == null or authenticatedInformation.avatar.isEmpty()}"
+                  th:if="${#strings.isEmpty(authenticatedInformation.avatar)}"
                   src="/images/default-avatar.png"
                   alt="avatar"
                 />
 
                 <img
-                  th:if="${authenticatedInformation.avatar != null and not authenticatedInformation.avatar.isEmpty()}"
+                  th:if="${!#strings.isEmpty(authenticatedInformation.avatar)}"
                   th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + authenticatedInformation.avatar}"
                   alt="avatar"
                 />
@@ -256,14 +256,14 @@
                 >
                   <img
                     class="account-avatar"
-                    th:if="${authenticatedInformation.avatar == null or authenticatedInformation.avatar.isEmpty()}"
+                    th:if="${#strings.isEmpty(authenticatedInformation.avatar)}"
                     src="/images/default-avatar.png"
                     alt="avatar"
                   />
 
                   <img
                     class="account-avatar"
-                    th:if="${authenticatedInformation.avatar != null and not authenticatedInformation.avatar.isEmpty()}"
+                    th:if="${!#strings.isEmpty(authenticatedInformation.avatar)}"
                     th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + authenticatedInformation.avatar}"
                     alt="avatar"
                   />
@@ -299,9 +299,7 @@
                     class="account-dropdown-item dropdown-item"
                     th:if="${authenticatedInformation.roleSlug.equals(roleEnum.SUPER_ADMIN.name()) or authenticatedInformation.roleSlug.equals(roleEnum.OWNER.name())}"
                   >
-                    <a
-                      class="link account-information-link"
-                      href="/dashboard"
+                    <a class="link account-information-link" href="/dashboard"
                       >Trang dashboard</a
                     >
                   </li>
@@ -352,14 +350,14 @@
             <div class="account-avatar">
               <img
                 class="account-avatar"
-                th:if="${authenticatedInformation.avatar == null or authenticatedInformation.avatar.isEmpty()}"
+                th:if="${#strings.isEmpty(authenticatedInformation.avatar)}"
                 src="/images/default-avatar.png"
                 alt="avatar"
               />
 
               <img
                 class="account-avatar"
-                th:if="${authenticatedInformation.avatar != null and not authenticatedInformation.avatar.isEmpty()}"
+                th:if="${!#strings.isEmpty(authenticatedInformation.avatar)}"
                 th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + authenticatedInformation.avatar}"
                 alt="avatar"
               />
@@ -512,11 +510,6 @@
           th:if="${successMessage != null and !successMessage.isEmpty()}"
           th:text="${successMessage}"
         ></p>
-        <p
-          class="message error-message"
-          th:if="${errorMessage != null and !errorMessage.isEmpty()}"
-          th:text="${errorMessage}"
-        ></p>
       </div>
 
       <!-- main -->
@@ -584,7 +577,7 @@
           <!-- copyright -->
           <div class="copyright">
             <p class="text">
-              Copyright &copy; 2025 ShopLap. Design by
+              &copy; 2025 ShopLap. Design by
               <a class="link" href="#">Trinity0xo</a>
             </p>
           </div>
@@ -610,7 +603,7 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  <script src="/js/main.js"></script>
+  <script type="module" src="/js/main.js"></script>
   <script layout:fragment="scripts"></script>
   <script>
     // sidebar left

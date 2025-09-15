@@ -23,7 +23,7 @@
 
         <!-- create category form -->
         <form
-          class="create-category-form category-form"
+          class="create-category-form category-form card"
           method="post"
           th:action="@{/dashboard/category/create}"
           th:object="${createCategoryDto}"
@@ -33,7 +33,7 @@
 
           <div class="form-content">
             <div class="input-group">
-              <label>Hình ảnh (JPG, PNG, JPEG, GIF, WebP):</label>
+              <label>Hình ảnh:</label>
 
               <!-- image input group -->
               <div class="image-input-group">

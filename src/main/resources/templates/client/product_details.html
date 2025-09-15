@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title th:text="${productDetails.name}">N/A</title>
+    <title th:text="${productDetailsDto.name}">N/A</title>
   </head>
 
   <body>
@@ -18,21 +18,34 @@
         <ul class="breadcrumb">
           <li><a href="/">Trang chủ</a></li>
           <li><a href="/shop">Cửa hàng</a></li>
-          <li th:text="${productDetails.name}"></li>
+          <li th:text="${productDetailsDto.name}"></li>
         </ul>
 
         <!-- product details header -->
-        <div class="product-details-header">
+        <div class="product-details-header card">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
               <div class="product-images">
                 <a
+                  th:if="${!#lists.isEmpty(productDetailsDto.productImages.?[isMain])}"
                   target="_blank"
-                  th:href="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (productDetails.productImages != null and productDetails.productImages.size() > 0 ? productDetails.productImages[0].imageName : '')}"
+                  th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + productDetailsDto.productImages.?[isMain][0].imageName}"
                   class="main-image"
                 >
                   <img
-                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (productDetails.productImages != null and productDetails.productImages.size() > 0 ? productDetails.productImages[0].imageName : '')}"
+                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + productDetailsDto.productImages.?[isMain][0].imageName}"
+                    alt="product"
+                  />
+                </a>
+
+                <a
+                  th:if="${#lists.isEmpty(productDetailsDto.productImages.?[isMain])}"
+                  target="_blank"
+                  th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + productDetailsDto.productImages[0].imageName}"
+                  class="main-image"
+                >
+                  <img
+                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + productDetailsDto.productImages[0].imageName}"
                     alt="product"
                 /></a>
                 <div
@@ -40,7 +53,7 @@
                 >
                   <div
                     class="thumbnail"
-                    th:each="productImage, stat : ${productDetails.productImages}"
+                    th:each="productImage, stat : ${productDetailsDto.productImages}"
                     th:classappend="${stat.index == 0} ? ' active' : ''"
                   >
                     <img
@@ -56,42 +69,45 @@
               <div class="product-summary">
                 <a
                   class="product-category"
-                  th:href="${'/shop?categories=' + (productDetails.category != null ? productDetails.category.slug : 'other')}"
-                  th:text="${productDetails.category != null ? productDetails.category.name : 'Khác' }"
+                  th:href="${'/shop?categories=' + (productDetailsDto.category != null ? productDetailsDto.category.slug : 'other')}"
+                  th:text="${productDetailsDto.category != null ? productDetailsDto.category.name : 'Khác' }"
                 ></a>
-                <h1 class="product-name" th:text="${productDetails.name}"></h1>
+                <h1
+                  class="product-name"
+                  th:text="${productDetailsDto.name}"
+                ></h1>
                 <a
                   class="product-brand"
-                  th:href="${'/shop?brands=' + (productDetails.brand != null ? productDetails.brand.slug : 'other')}"
-                  th:text="${productDetails.brand != null ? productDetails.brand.name : 'Khác'}"
+                  th:href="${'/shop?brands=' + (productDetailsDto.brand != null ? productDetailsDto.brand.slug : 'other')}"
+                  th:text="${productDetailsDto.brand != null ? productDetailsDto.brand.name : 'Khác'}"
                 ></a>
                 <p
                   class="product-stock-status stock-status"
-                  th:classappend="${productDetails.quantity > 0 ? 'in-stock' : 'out-stock'}"
-                  th:text="${productDetails.quantity > 0 ? 'Còn hàng' : 'Hết hàng'}"
+                  th:classappend="${productDetailsDto.quantity > 0 ? 'in-stock' : 'out-stock'}"
+                  th:text="${productDetailsDto.quantity > 0 ? 'Còn hàng' : 'Hết hàng'}"
                 ></p>
                 <div class="product-pricing">
                   <p
                     class="price"
-                    th:text="${#numbers.formatDecimal(productDetails.discountPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"
+                    th:text="${#numbers.formatDecimal(productDetailsDto.discountPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"
                   ></p>
                   <div
                     class="discount-information"
-                    th:if="${productDetails.discount > 0}"
+                    th:if="${productDetailsDto.discount > 0}"
                   >
                     <p
                       class="old-price"
-                      th:text="${#numbers.formatDecimal(productDetails.price, 0, 'COMMA', 0, 'POINT')} + '₫'"
+                      th:text="${#numbers.formatDecimal(productDetailsDto.price, 0, 'COMMA', 0, 'POINT')} + '₫'"
                     ></p>
                     <span
                       class="discount-value danger-badge"
-                      th:text="'-' + ${productDetails.discount} + '%'"
+                      th:text="'-' + ${productDetailsDto.discount} + '%'"
                     ></span>
                   </div>
                 </div>
                 <p
                   class="product-short-description"
-                  th:text="${productDetails.shortDescription}"
+                  th:text="${productDetailsDto.shortDescription}"
                 ></p>
                 <div class="product-quantity">
                   <button
@@ -121,9 +137,9 @@
 
                 <div class="product-actions">
                   <form
-                    th:if="${productDetails.quantity > 0}"
+                    th:if="${productDetailsDto.quantity > 0}"
                     class="buy-now-form"
-                    th:action="@{/cart/buy-now/{id}(id=${productDetails.id})}"
+                    th:action="@{/cart/buy-now/{id}(id=${productDetailsDto.id})}"
                     method="post"
                   >
                     <input
@@ -140,7 +156,7 @@
                   </form>
                   <form
                     class="add-cart-form"
-                    th:action="@{/cart/add/{id}(id=${productDetails.id})}"
+                    th:action="@{/cart/add/{id}(id=${productDetailsDto.id})}"
                     method="post"
                   >
                     <input
@@ -167,12 +183,12 @@
         <!-- product details body -->
         <div class="product-details-body">
           <h2 class="product-details-title">Mô tả</h2>
-          <div class="product-information">
+          <div class="product-information card">
             <div class="product-about">
               <h3 class="about-title">Giới thiệu:</h3>
               <p
                 class="about-description"
-                th:text="${productDetails.description}"
+                th:text="${productDetailsDto.description}"
               ></p>
             </div>
             <div class="product-specification">
@@ -185,7 +201,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.cpu) ? 'N/A' : productDetails.cpu}"
+                  th:text="${#strings.isEmpty(productDetailsDto.cpu) ? 'N/A' : productDetailsDto.cpu}"
                 ></dd>
 
                 <dt
@@ -195,7 +211,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.gpu) ? 'N/A' : productDetails.gpu}"
+                  th:text="${#strings.isEmpty(productDetailsDto.gpu) ? 'N/A' : productDetailsDto.gpu}"
                 ></dd>
 
                 <dt
@@ -205,7 +221,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.ram) ? 'N/A' : productDetails.ram}"
+                  th:text="${#strings.isEmpty(productDetailsDto.ram) ? 'N/A' : productDetailsDto.ram}"
                 ></dd>
 
                 <dt
@@ -215,7 +231,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.storage) ? 'N/A' : productDetails.storage}"
+                  th:text="${#strings.isEmpty(productDetailsDto.storage) ? 'N/A' : productDetailsDto.storage}"
                 ></dd>
 
                 <dt
@@ -225,7 +241,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.cooling) ? 'N/A' : productDetails.cooling}"
+                  th:text="${#strings.isEmpty(productDetailsDto.cooling) ? 'N/A' : productDetailsDto.cooling}"
                 ></dd>
 
                 <dt
@@ -235,7 +251,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.io) ? 'N/A' : productDetails.io}"
+                  th:text="${#strings.isEmpty(productDetailsDto.io) ? 'N/A' : productDetailsDto.io}"
                 ></dd>
 
                 <dt
@@ -245,7 +261,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.screen) ? 'N/A' : productDetails.screen}"
+                  th:text="${#strings.isEmpty(productDetailsDto.screen) ? 'N/A' : productDetailsDto.screen}"
                 ></dd>
 
                 <dt
@@ -255,7 +271,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.keyboard) ? 'N/A' : productDetails.keyboard}"
+                  th:text="${#strings.isEmpty(productDetailsDto.keyboard) ? 'N/A' : productDetailsDto.keyboard}"
                 ></dd>
 
                 <dt
@@ -265,7 +281,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.audio) ? 'N/A' : productDetails.audio}"
+                  th:text="${#strings.isEmpty(productDetailsDto.audio) ? 'N/A' : productDetailsDto.audio}"
                 ></dd>
 
                 <dt
@@ -275,7 +291,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.sdCard) ? 'N/A' : productDetails.sdCard}"
+                  th:text="${#strings.isEmpty(productDetailsDto.sdCard) ? 'N/A' : productDetailsDto.sdCard}"
                 ></dd>
 
                 <dt
@@ -285,7 +301,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.lan) ? 'N/A' : productDetails.lan}"
+                  th:text="${#strings.isEmpty(productDetailsDto.lan) ? 'N/A' : productDetailsDto.lan}"
                 ></dd>
 
                 <dt
@@ -295,7 +311,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.wifi) ? 'N/A' : productDetails.wifi}"
+                  th:text="${#strings.isEmpty(productDetailsDto.wifi) ? 'N/A' : productDetailsDto.wifi}"
                 ></dd>
 
                 <dt
@@ -305,7 +321,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.bluetooth) ? 'N/A' : productDetails.bluetooth}"
+                  th:text="${#strings.isEmpty(productDetailsDto.bluetooth) ? 'N/A' : productDetailsDto.bluetooth}"
                 ></dd>
 
                 <dt
@@ -315,7 +331,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.webCam) ? 'N/A' : productDetails.webCam}"
+                  th:text="${#strings.isEmpty(productDetailsDto.webCam) ? 'N/A' : productDetailsDto.webCam}"
                 ></dd>
 
                 <dt
@@ -325,7 +341,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.os) ? 'N/A' : productDetails.os}"
+                  th:text="${#strings.isEmpty(productDetailsDto.os) ? 'N/A' : productDetailsDto.os}"
                 ></dd>
 
                 <dt
@@ -335,7 +351,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.battery) ? 'N/A' : productDetails.battery}"
+                  th:text="${#strings.isEmpty(productDetailsDto.battery) ? 'N/A' : productDetailsDto.battery}"
                 ></dd>
 
                 <dt
@@ -345,7 +361,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.weight) ? 'N/A' : productDetails.weight}"
+                  th:text="${#strings.isEmpty(productDetailsDto.weight) ? 'N/A' : productDetailsDto.weight}"
                 ></dd>
 
                 <dt
@@ -355,7 +371,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.material) ? 'N/A' : productDetails.material}"
+                  th:text="${#strings.isEmpty(productDetailsDto.material) ? 'N/A' : productDetailsDto.material}"
                 ></dd>
 
                 <dt
@@ -365,7 +381,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.color) ? 'N/A' : productDetails.color}"
+                  th:text="${#strings.isEmpty(productDetailsDto.color) ? 'N/A' : productDetailsDto.color}"
                 ></dd>
 
                 <dt
@@ -375,7 +391,7 @@
                 </dt>
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-10 col-xl-10"
-                  th:text="${#strings.isEmpty(productDetails.size) ? 'N/A' : productDetails.size}"
+                  th:text="${#strings.isEmpty(productDetailsDto.size) ? 'N/A' : productDetailsDto.size}"
                 ></dd>
               </dl>
             </div>
@@ -388,18 +404,18 @@
             <h2 class="review-title">Đánh giá</h2>
 
             <!-- review summary -->
-            <div class="review-summary product-review-summary">
+            <div class="review-summary product-review-summary card">
               <div class="reviews-summary-header">
                 <div class="review-average">
                   <span
                     class="review-average-value"
-                    th:text="${productDetails.averageRating}"
+                    th:text="${productDetailsDto.averageRating}"
                   ></span
                   >/5
                 </div>
                 <div class="review-stars">
                   <i
-                    th:with="score=${productDetails.averageRating}"
+                    th:with="score=${productDetailsDto.averageRating}"
                     class="fa-solid"
                     th:each="i : ${#numbers.sequence(1, 5)}"
                     th:classappend="${i <= T(java.lang.Math).floor(score) ? 'fa-star active' : i - 1 < score ? 'fa-star-half-stroke active' : 'fa-star'}"
@@ -407,14 +423,15 @@
                   </i>
                 </div>
                 <div class="review-count">
-                  <span th:text="${productDetails.totalRatings}"></span>
+                  <span th:text="${productDetailsDto.totalRatings}"></span>
                   lượt đánh giá
                 </div>
                 <button
+                  type="button"
                   id="createReviewBtn"
                   class="create-review-button primary-button"
-                  th:if="${productDetails.myReview == null and productDetails.isPurchased == true}"
-                  th:attr="data-product-id=${productDetails.id}"
+                  th:if="${productDetailsDto.myReview == null and productDetailsDto.isPurchased == true}"
+                  th:attr="data-product-id=${productDetailsDto.id}"
                 >
                   Thêm đánh giá
                 </button>
@@ -430,14 +447,14 @@
                     <div class="average-bar-default">
                       <span
                         class="average-bar-fill"
-                        th:style="'right:' + ${100 - productDetails.ratingPercentages.get(5)} + '%'"
+                        th:style="'right:' + ${100 - productDetailsDto.ratingPercentages.get(5)} + '%'"
                       >
                       </span>
                     </div>
                   </div>
                   <div class="review-count">
                     (<span
-                      th:text="${productDetails.ratingCount.get(5)}"
+                      th:text="${productDetailsDto.ratingCount.get(5)}"
                     ></span>
                     lượt đánh giá)
                   </div>
@@ -451,14 +468,14 @@
                     <div class="average-bar-default">
                       <span
                         class="average-bar-fill"
-                        th:style="'right:' + ${100 - productDetails.ratingPercentages.get(4)} + '%'"
+                        th:style="'right:' + ${100 - productDetailsDto.ratingPercentages.get(4)} + '%'"
                       >
                       </span>
                     </div>
                   </div>
                   <div class="review-count">
                     (<span
-                      th:text="${productDetails.ratingCount.get(4)}"
+                      th:text="${productDetailsDto.ratingCount.get(4)}"
                     ></span>
                     lượt đánh giá)
                   </div>
@@ -472,14 +489,14 @@
                     <div class="average-bar-default">
                       <span
                         class="average-bar-fill"
-                        th:style="'right:' + ${100 - productDetails.ratingPercentages.get(3)} + '%'"
+                        th:style="'right:' + ${100 - productDetailsDto.ratingPercentages.get(3)} + '%'"
                       >
                       </span>
                     </div>
                   </div>
                   <div class="review-count">
                     (<span
-                      th:text="${productDetails.ratingCount.get(3)}"
+                      th:text="${productDetailsDto.ratingCount.get(3)}"
                     ></span>
                     lượt đánh giá)
                   </div>
@@ -493,14 +510,14 @@
                     <div class="average-bar-default">
                       <span
                         class="average-bar-fill"
-                        th:style="'right:' + ${100 - productDetails.ratingPercentages.get(2)} + '%'"
+                        th:style="'right:' + ${100 - productDetailsDto.ratingPercentages.get(2)} + '%'"
                       >
                       </span>
                     </div>
                   </div>
                   <div class="review-count">
                     (<span
-                      th:text="${productDetails.ratingCount.get(2)}"
+                      th:text="${productDetailsDto.ratingCount.get(2)}"
                     ></span>
                     lượt đánh giá)
                   </div>
@@ -514,14 +531,14 @@
                     <div class="average-bar-default">
                       <span
                         class="average-bar-fill"
-                        th:style="'right:' + ${100 - productDetails.ratingPercentages.get(1)} + '%'"
+                        th:style="'right:' + ${100 - productDetailsDto.ratingPercentages.get(1)} + '%'"
                       >
                       </span>
                     </div>
                   </div>
                   <div class="review-count">
                     (<span
-                      th:text="${productDetails.ratingCount.get(1)}"
+                      th:text="${productDetailsDto.ratingCount.get(1)}"
                     ></span>
                     lượt đánh giá)
                   </div>
@@ -530,38 +547,43 @@
             </div>
 
             <!-- my review -->
-            <div class="my-review" th:if="${productDetails.myReview != null}">
+            <div
+              class="my-review card"
+              th:if="${productDetailsDto.myReview != null}"
+            >
               <h3 class="my-review-title">Đánh giá của bạn</h3>
               <div class="my-review-content">
                 <div class="review-stars">
                   <i
                     class="fa-solid fa-star"
                     th:each="i : ${#numbers.sequence(1, 5)}"
-                    th:classappend="${i <= productDetails.myReview.rating} ? 'active' : ''"
+                    th:classappend="${i <= productDetailsDto.myReview.rating} ? 'active' : ''"
                   >
                   </i>
                 </div>
                 <p
                   class="review-message"
-                  th:text="${productDetails.myReview.message}"
+                  th:text="${productDetailsDto.myReview.message}"
                 ></p>
                 <p
                   class="review-post-time"
-                  th:text="${#temporals.format(productDetails.myReview.createdAt, 'dd/MM/yyyy')}"
+                  th:text="${#temporals.format(productDetailsDto.myReview.createdAt, 'dd/MM/yyyy')}"
                 ></p>
               </div>
               <div class="my-review-actions">
                 <button
+                  type="button"
                   id="updateReviewBtn"
                   class="update-review-button warning-button"
-                  th:attr="data-product-id=${productDetails.id}, data-review-id=${productDetails.myReview.id}"
+                  th:attr="data-product-id=${productDetailsDto.id}, data-review-id=${productDetailsDto.myReview.id}"
                 >
                   Sửa
                 </button>
                 <button
+                  type="button"
                   id="deleteReviewBtn"
                   class="delete-review-button danger-button"
-                  th:attr="data-product-id=${productDetails.id}, data-review-id=${productDetails.myReview.id}"
+                  th:attr="data-product-id=${productDetailsDto.id}, data-review-id=${productDetailsDto.myReview.id}"
                 >
                   Xóa
                 </button>
@@ -570,15 +592,15 @@
 
             <!-- user reviews -->
             <div
-              class="user-reviews"
-              th:if="${productDetails.userReviews != null and not productDetails.userReviews.isEmpty()}"
+              class="user-reviews card"
+              th:if="${!#lists.isEmpty(productDetailsDto.userReviews)}"
             >
               <h3 class="user-reviews-title">Đánh giá của người mua</h3>
 
-              <ul class="review-list" th:if="${productDetails.userReviews}">
+              <ul class="review-list" th:if="${productDetailsDto.userReviews}">
                 <li
                   class="review-item"
-                  th:each="review : ${productDetails.userReviews}"
+                  th:each="review : ${productDetailsDto.userReviews}"
                 >
                   <div class="review-card">
                     <div class="review-user">
@@ -623,7 +645,7 @@
               <div class="reviews-actions">
                 <a
                   class="view-all-button primary-button"
-                  th:href="@{/shop/product/{slug}/reviews(slug=${productDetails.slug})}"
+                  th:href="@{/shop/product/{slug}/reviews(slug=${productDetailsDto.slug})}"
                   >Xem tất cả</a
                 >
               </div>
@@ -633,13 +655,13 @@
           <!-- related products -->
           <div
             class="related-products"
-            th:if="${productDetails.relatedProducts != null and !productDetails.relatedProducts.isEmpty()}"
+            th:if="${!#lists.isEmpty(productDetailsDto.relatedProducts)}"
           >
             <h2 class="related-products-title">Sản phẩm liên quan</h2>
             <div class="row">
               <div
                 class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-3"
-                th:each="product : ${productDetails.relatedProducts}"
+                th:each="product : ${productDetailsDto.relatedProducts}"
               >
                 <form
                   class="add-cart-form"
@@ -647,46 +669,43 @@
                   th:action="@{/cart/add/{id}(id=${product.id})}"
                 >
                   <a
-                    th:href="@{/shop/product/{id}(id=${productSummary.id})}"
-                    class="product-card"
+                    th:href="@{/shop/product/{id}(id=${product.id})}"
+                    class="product-card card"
                   >
                     <div class="product-image">
                       <img
-                        th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (productSummary.productImages != null and productSummary.productImages.size() > 0 ? productSummary.productImages[0].imageName : '')}"
+                        th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + product.productImage.imageName}"
                         alt="product"
                       />
                     </div>
-                    <p
-                      class="product-name"
-                      th:text="${productSummary.name}"
-                    ></p>
+                    <p class="product-name" th:text="${product.name}"></p>
                     <div class="product-pricing">
                       <p
                         class="price"
-                        th:text="${#numbers.formatDecimal(productSummary.discountPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"
+                        th:text="${#numbers.formatDecimal(product.discountPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"
                       ></p>
                       <div
                         class="discount-information"
-                        th:if="${productSummary.discount > 0}"
+                        th:if="${product.discount > 0}"
                       >
                         <span
                           class="old-price"
-                          th:text="${#numbers.formatDecimal(productSummary.price, 0, 'COMMA', 0, 'POINT')} + '₫'"
+                          th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"
                         ></span>
                         <span
                           class="discount-value danger-badge"
-                          th:text="'-' + ${productSummary.discount} + '%'"
+                          th:text="'-' + ${product.discount} + '%'"
                         ></span>
                       </div>
                     </div>
                     <div
                       class="review-stars"
-                      th:if="${productSummary.averageRating > 0}"
+                      th:if="${product.averageRating > 0}"
                     >
                       <i
                         class="fa-solid fa-star"
                         th:each="i : ${#numbers.sequence(1, 5)}"
-                        th:classappend="${i <= productSummary.averageRating} ? 'active' : ''"
+                        th:classappend="${i <= product.averageRating} ? 'active' : ''"
                       >
                       </i>
                     </div>
@@ -755,7 +774,7 @@
     const quantityInput = $(".quantity-input");
     const btnQuantityPlus = $("#btnQuantityPlus");
     const btnQuantityMinus = $("#btnQuantityMinus");
-    const quantityLimit = 100;
+    const QUANTITY_LIMIT = 100;
 
     btnQuantityMinus.click(function () {
       if (quantityInput.val() > 1) {
@@ -764,7 +783,7 @@
     });
 
     btnQuantityPlus.click(function () {
-      if (quantityInput.val() < quantityLimit) {
+      if (quantityInput.val() < QUANTITY_LIMIT) {
         quantityInput.val(parseInt(quantityInput.val()) + 1);
       }
     });
@@ -810,25 +829,10 @@
           }
         },
         error: function (xhr) {
-          let response = null;
-          try {
-            response = JSON.parse(xhr.responseText);
-          } catch (e) {}
-          if (response && response.message) {
-            $.toast({
-              heading: "Error",
-              text: response.message,
-              showHideTransition: "slide",
-              icon: "error",
-              hideAfter: 5000,
-              position: "top-right",
-            });
-          } else if (xhr.status === 401) {
+          if (xhr.status === 401) {
             window.location.href = "/auth/login";
           } else {
-            document.open();
-            document.write(xhr.responseText);
-            document.close();
+            $("html").html(xhr.responseText);
           }
         },
       });
@@ -863,34 +867,24 @@
           let response = null;
           try {
             response = JSON.parse(xhr.responseText);
-          } catch (e) {}
+          } catch (e) {
+            // ignore
+          }
 
-          if (response && response.message) {
-            $.toast({
-              heading: "Error",
-              text: response.message,
-              showHideTransition: "slide",
-              icon: "error",
-              hideAfter: 5000,
-              position: "top-right",
-            });
-          } else if (xhr.status === 401) {
-            window.location.href = "/auth/login";
-          } else if (xhr.status === 422) {
+          if (response && response.data && xhr.status == 422) {
             const errors = response.data;
             $(".input-error-message").text("");
             $("input").removeClass("error");
-
             for (const field in errors) {
               if (errors.hasOwnProperty(field)) {
                 $("#" + field + "Error").text(errors[field]);
                 $("#" + field).addClass("error");
               }
             }
+          } else if (xhr.status === 401) {
+            window.location.href = "/auth/login";
           } else {
-            document.open();
-            document.write(xhr.responseText);
-            document.close();
+            $("html").html(xhr.responseText);
           }
         },
       });
@@ -922,27 +916,10 @@
           }
         },
         error: function (xhr) {
-          let response = null;
-
-          try {
-            response = JSON.parse(xhr.responseText);
-          } catch (e) {}
-
-          if (response && response.message) {
-            $.toast({
-              heading: "Error",
-              text: response.message,
-              showHideTransition: "slide",
-              icon: "error",
-              hideAfter: 5000,
-              position: "top-right",
-            });
-          } else if (xhr.status === 401) {
+          if (xhr.status === 401) {
             window.location.href = "/auth/login";
           } else {
-            document.open();
-            document.write(xhr.responseText);
-            document.close();
+            $("html").html(xhr.responseText);
           }
         },
       });
@@ -976,37 +953,26 @@
         },
         error: function (xhr) {
           let response = null;
-
           try {
             response = JSON.parse(xhr.responseText);
-          } catch (e) {}
+          } catch (e) {
+            // ignore
+          }
 
-          if (response && response.message) {
-            $.toast({
-              heading: "Error",
-              text: response.message,
-              showHideTransition: "slide",
-              icon: "error",
-              hideAfter: 5000,
-              position: "top-right",
-            });
-          } else if (xhr.status === 401) {
-            window.location.href = "/auth/login";
-          } else if (xhr.status === 422) {
+          if (response && response.data && xhr.status == 422) {
             const errors = response.data;
             $(".input-error-message").text("");
             $("input").removeClass("error");
-
             for (const field in errors) {
               if (errors.hasOwnProperty(field)) {
                 $("#" + field + "Error").text(errors[field]);
                 $("#" + field).addClass("error");
               }
             }
+          } else if (xhr.status === 401) {
+            window.location.href = "/auth/login";
           } else {
-            document.open();
-            document.write(xhr.responseText);
-            document.close();
+            $("html").html(xhr.responseText);
           }
         },
       });
@@ -1038,27 +1004,10 @@
           }
         },
         error: function (xhr) {
-          let response = null;
-
-          try {
-            response = JSON.parse(xhr.responseText);
-          } catch (e) {}
-
-          if (response && response.message) {
-            $.toast({
-              heading: "Error",
-              text: response.message,
-              showHideTransition: "slide",
-              icon: "error",
-              hideAfter: 5000,
-              position: "top-right",
-            });
-          } else if (xhr.status === 401) {
+          if (xhr.status === 401) {
             window.location.href = "/auth/login";
           } else {
-            document.open();
-            document.write(xhr.responseText);
-            document.close();
+            $("html").html(xhr.responseText);
           }
         },
       });
@@ -1092,39 +1041,26 @@
 
         error: function (xhr) {
           let response = null;
-
           try {
             response = JSON.parse(xhr.responseText);
           } catch (e) {
-            console.warn("Response is not valid JSON:", e);
+            // ignore
           }
 
-          if (response && response.message) {
-            $.toast({
-              heading: "Error",
-              text: response.message,
-              showHideTransition: "slide",
-              icon: "error",
-              hideAfter: 5000,
-              position: "top-right",
-            });
-          } else if (xhr.status === 401) {
-            window.location.href = "/auth/login";
-          } else if (xhr.status === 422) {
+          if (response && response.data && xhr.status == 422) {
             const errors = response.data;
             $(".input-error-message").text("");
             $("input").removeClass("error");
-
             for (const field in errors) {
               if (errors.hasOwnProperty(field)) {
                 $("#" + field + "Error").text(errors[field]);
                 $("#" + field).addClass("error");
               }
             }
+          } else if (xhr.status === 401) {
+            window.location.href = "/auth/login";
           } else {
-            document.open();
-            document.write(xhr.responseText);
-            document.close();
+            $("html").html(xhr.responseText);
           }
         },
       });

@@ -826,4 +826,99 @@ public class ProductRepositoryImpl implements CustomProductRepository {
 
         return new PageImpl<>(results, pageable, total);
     }
+
+    @Override
+    public Page<CustomProductDto> findRelatedProducts(Product product, Pageable pageable) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+        // query result
+        CriteriaQuery<CustomProductDto> cq = cb.createQuery(CustomProductDto.class);
+        Root<Product> root = cq.from(Product.class);
+
+        Join<Product, ProductImage> imageJoin = root.join("productImages", JoinType.LEFT);
+        imageJoin.on(cb.isTrue(imageJoin.get("isMain")));
+        Join<Product, Review> reviewJoin = root.join("reviews", JoinType.LEFT);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(ProductPredicates.similarCpuPredicate(root, cb, product.getCpu()));
+        predicates.add(ProductPredicates.similarGpuPredicate(root, cb, product.getGpu()));
+        predicates.add(ProductPredicates.similarRamPredicate(root, cb, product.getRam()));
+        predicates.add(ProductPredicates.similarStoragePredicate(root, cb, product.getStorage()));
+        predicates.add(ProductPredicates.notEqualId(root, cb, product.getId()));
+
+        // calculate discount price
+        Expression<Double> price = cb.coalesce(root.get("price"), 0.0);
+        Expression<Double> discount = cb.coalesce(root.get("discount"), 0.0);
+
+        // price * discount
+        Expression<Double> priceTimesDiscount = cb.prod(price, discount);
+
+        // (price * discount) / 100
+        Expression<Number> discountAmountRaw = cb.quot(priceTimesDiscount, cb.literal(100.0));
+        Expression<Double> discountAmount = discountAmountRaw.as(Double.class);
+
+        // price - ((price * discount) / 100)
+        Expression<Double> discountPrice = cb.diff(price, discountAmount);
+
+
+        cq.select(cb.construct(
+                        CustomProductDto.class,
+                        root.get("id"),
+                        imageJoin,
+                        root.get("name"),
+                        root.get("slug"),
+                        cb.coalesce(cb.avg(reviewJoin.get("rating")), 0),
+                        root.get("price"),
+                        root.get("discount"),
+                        discountPrice,
+                        root.get("createdAt"),
+                        root.get("updatedAt")
+                ))
+                .where(cb.and(predicates.toArray(new Predicate[0])))
+                .groupBy(root.get("id"), root.get("name"), root.get("slug"), root.get("price"), imageJoin, root.get("updatedAt"), root.get("createdAt"));
+
+        // sort
+        List<Order> orders = new ArrayList<>();
+        for (Sort.Order sortOrder : pageable.getSort()) {
+            if ("discountPrice".equals(sortOrder.getProperty())) {
+                Order order = sortOrder.isAscending() ? cb.asc(discountPrice) : cb.desc(discountPrice);
+                orders.add(order);
+            } else if("averageRating".equals(sortOrder.getProperty())){
+                Order order = sortOrder.isAscending() ? cb.asc(cb.coalesce(cb.avg(reviewJoin.get("rating")), 0)) : cb.desc(cb.coalesce(cb.avg(reviewJoin.get("rating")), 0));
+                orders.add(order);
+            }else {
+                Path<?> sortPath = root.get(sortOrder.getProperty());
+                Order order = sortOrder.isAscending() ? cb.asc(sortPath) : cb.desc(sortPath);
+                orders.add(order);
+            }
+        }
+
+        cq.orderBy(orders);
+
+        TypedQuery<CustomProductDto> query = entityManager.createQuery(cq);
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        List<CustomProductDto> results = query.getResultList();
+
+        // count total
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<Product> countRoot = countQuery.from(Product.class);
+
+        List<Predicate> countPredicates = new ArrayList<>();
+
+        countPredicates.add(ProductPredicates.similarCpuPredicate(countRoot, cb, product.getCpu()));
+        countPredicates.add(ProductPredicates.similarGpuPredicate(countRoot, cb, product.getGpu()));
+        countPredicates.add(ProductPredicates.similarRamPredicate(countRoot, cb, product.getRam()));
+        countPredicates.add(ProductPredicates.similarStoragePredicate(countRoot, cb, product.getStorage()));
+        countPredicates.add(ProductPredicates.notEqualId(countRoot, cb, product.getId()));
+
+        countQuery.select(cb.countDistinct(countRoot));
+        countQuery.where(cb.and(countPredicates.toArray(new Predicate[0])));
+
+        Long total = entityManager.createQuery(countQuery).getSingleResult();
+
+        return new PageImpl<>(results, pageable, total);
+    }
 }

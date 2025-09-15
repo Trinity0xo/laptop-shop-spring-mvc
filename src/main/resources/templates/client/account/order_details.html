@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Order details</title>
+    <title>Chi tiết đơn hàng</title>
   </head>
 
   <body>
@@ -33,7 +33,7 @@
 
           <!-- order details content -->
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
-            <div class="order-details-content">
+            <div class="order-details-content card">
               <h1 class="content-title">
                 Đơn hàng với mã "<span th:text="${order.id}"></span>"
               </h1>
@@ -102,7 +102,7 @@
                     </dt>
                     <dd
                       class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
-                      th:text="${order.id != null ? order.id : 'N/A'}"
+                      th:text="${order.id}"
                     ></dd>
 
                     <dt
@@ -249,17 +249,27 @@
                         th:each="orderItem : ${order.orderItems}"
                       >
                         <td class="table-body-cell">
-                          <div class="product-image">
-                            <th:block th:if="${orderItem.product != null}">
-                              <img
-                                class="image"
-                                th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (orderItem.product.productImages != null and orderItem.product.productImages.size() > 0 ? orderItem.product.productImages[0].imageName : '')}"
-                                alt="product"
-                              />
-                            </th:block>
-                            <th:block th:if="${orderItem.product == null}">
-                              <span class="cell-text">N/A</span>
-                            </th:block>
+                          <span
+                            class="cell-text"
+                            th:if="${orderItem.product == null}"
+                            >N/A</span
+                          >
+
+                          <div
+                            class="product-image"
+                            th:if="${orderItem.product != null and !#lists.isEmpty(orderItem.product.productImages)}"
+                          >
+                            <img
+                              th:if="${!#lists.isEmpty(orderItem.product.productImages.?[isMain])}"
+                              th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + orderItem.product.productImages.?[isMain][0].imageName}"
+                              alt="product"
+                            />
+
+                            <img
+                              th:if="${#lists.isEmpty(orderItem.product.productImages.?[isMain])}"
+                              th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + orderItem.product.productImages[0].imageName}"
+                              alt="product"
+                            />
                           </div>
                         </td>
 
@@ -272,7 +282,7 @@
                           <span
                             class="cell-text"
                             th:if="${orderItem.product == null}"
-                            >Không có</span
+                            >N/A</span
                           >
                         </td>
 
@@ -304,11 +314,16 @@
                         <td class="table-body-cell">
                           <div class="table-row-actions">
                             <a
+                              th:if="${orderItem.product != null}"
                               class="view-details-button primary-button"
                               th:href="@{/shop/product/{slug}(slug=${orderItem.product.slug})}"
                             >
                               Xem
                             </a>
+
+                            <span th:if="${orderItem.product == null}"
+                              >N/A</span
+                            >
                           </div>
                         </td>
                       </tr>

@@ -18,14 +18,25 @@
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/product">Sản phẩm</a></li>
+          <li>
+            <a
+              th:href="@{/dashboard/product/details/{id}(id=${updateProductDto.id})}"
+              th:text="${updateProductDto.oldName}"
+            ></a>
+          </li>
           <li>Cập nhật</li>
         </ul>
 
         <!-- update product form -->
-        <form id="updateProductForm" class="update-product-form product-form">
+        <form
+          id="updateProductForm"
+          class="update-product-form product-form card"
+        >
           <h1 class="form-title">
-            Cập nhật sản phẩm với "Mã:
-            <span th:text="${updateProductDto.id}"></span>"
+            Cập nhật sản phẩm với "<span
+              th:text="${updateProductDto.oldName}"
+            ></span
+            >"
           </h1>
 
           <input type="hidden" id="deleteImageNames" name="deleteImageNames" />
@@ -40,9 +51,7 @@
             <div class="content images">
               <h2 class="content-title">Hình ảnh:</h2>
               <div class="input-group">
-                <label class="image-add-new-button"
-                  >Hình ảnh (JPG, PNG, JPEG, GIF, WebP):</label
-                >
+                <label class="image-add-new-button">Hình ảnh:</label>
                 <div class="images-input-group">
                   <!-- images upload group -->
                   <div class="images-upload-group">
@@ -497,4 +506,182 @@
       </div>
     </div>
   </body>
+  <script type="module" layout:fragment="scripts" th:inline="javascript">
+    import {
+      checkFileType,
+      unFormatDiscount,
+      formatDiscount,
+      setTypeNumberAndUnFormatDiscount,
+      setTypeTextAndFormatDiscount,
+      formatCurrency,
+      setTypeNumberAndUnFormatCurrency,
+      setTypeTextAndFormatCurrency,
+    } from "/js/utils.js";
+
+    // multiple images upload
+    const imagesUploadInput = $(".images-upload-input");
+    const imagesUploadPreview = $(".images-upload-preview");
+    const imagesUploadControl = $(".images-upload-control");
+
+    let newImages = [];
+    let deleteImageNames = [];
+
+    // convert FileReader into a Promise
+    function readFileAsDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = (e) => reject(e);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    imagesUploadInput.change(async function () {
+      const files = $(this)[0].files;
+
+      for (let i = 0; i < files.length; i++) {
+        if (checkFileType(files[i])) {
+          const index = newImages.length;
+          newImages.push(files[i]);
+
+          try {
+            const result = await readFileAsDataURL(files[i]);
+
+            const img = $("<img alt='product image'>");
+            img.attr("src", result);
+
+            const previewImage = $(`<div class="preview-image"></div>`);
+
+            const imageRemoveButton = $(`
+          <button type="button" class="image-remove-button" data-index="${index}">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        `);
+
+            previewImage.append(img);
+            previewImage.append(imageRemoveButton);
+            imagesUploadPreview.append(previewImage);
+          } catch (err) {
+            console.error("File read error", err);
+          }
+        }
+      }
+
+      $(this).val("");
+    });
+
+    $(document).on("click", function (e) {
+      const imageRemoveButton = e.target.closest(".image-remove-button");
+      if (imageRemoveButton) {
+        const currentImage = $(imageRemoveButton).next("img");
+        const currentImageUrl = currentImage.attr("src");
+        if (currentImageUrl) {
+          const currentImageUrlArray = currentImageUrl.split("/");
+          const currentImageName =
+            currentImageUrlArray[currentImageUrlArray.length - 1];
+          deleteImageNames.push(currentImageName);
+        }
+
+        const imageIndex = $(imageRemoveButton).data("index");
+        if (
+          imageIndex !== undefined &&
+          imageIndex !== null &&
+          imageIndex >= 0
+        ) {
+          newImages.splice(imageIndex, 1);
+        }
+
+        imagesUploadInput.val("");
+
+        const imagesPreviewItem =
+          $(imageRemoveButton).closest(".preview-image");
+        imagesPreviewItem.remove();
+      }
+    });
+
+    $(".discount-input").each(function () {
+      const input = $(this);
+
+      input.val(formatDiscount(input.val()));
+
+      input.on("focus", function () {
+        setTypeNumberAndUnFormatDiscount(input);
+      });
+
+      input.on("blur", function () {
+        setTypeTextAndFormatDiscount(input);
+      });
+    });
+
+    $("#updateProductForm").on("submit", function () {
+      $(".discount-input").each(function () {
+        setTypeNumberAndUnFormatDiscount($(this));
+      });
+
+      $(".price-input").each(function () {
+        setTypeNumberAndUnFormatCurrency($(this));
+      });
+    });
+
+    // ajax product request url
+    const REQUEST_URL = "/dashboard/product";
+
+    // update product
+    $("#updateProductForm").submit(function (e) {
+      e.preventDefault();
+
+      $("#deleteImageNames").val(deleteImageNames);
+      const formData = new FormData(this);
+      formData.delete("newImages");
+      newImages.forEach((image) => {
+        formData.append("newImages", image);
+      });
+
+      const token = $("meta[name='_csrf']").attr("content");
+      const header = $("meta[name='_csrf_header']").attr("content");
+
+      $.ajax({
+        type: "post",
+        url: `${REQUEST_URL}/update`,
+        beforeSend: function (request) {
+          request.setRequestHeader(header, token);
+        },
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response, status, xhr) {
+          if (xhr.status === 200) {
+            newImages.length = 0;
+            deleteImageNames.length = 0;
+            window.location.href = `${REQUEST_URL}`;
+            localStorage.setItem("successMessage", xhr.responseJSON.message);
+          }
+        },
+        error: function (xhr) {
+          let response = null;
+          try {
+            response = JSON.parse(xhr.responseText);
+          } catch (e) {
+            // ignore
+          }
+
+          if (response && response.data && xhr.status == 422) {
+            const errors = response.data;
+            $(".input-error-message").text("");
+            $("input").removeClass("error");
+            for (const field in errors) {
+              if (errors.hasOwnProperty(field)) {
+                $("#" + field + "Error").text(errors[field]);
+                $("#" + field).addClass("error");
+              }
+            }
+          } else if (xhr.status === 401) {
+            window.location.href = "/auth/login";
+          } else {
+            $("html").html(xhr.responseText);
+          }
+        },
+      });
+    });
+  </script>
 </html>

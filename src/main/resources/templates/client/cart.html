@@ -29,19 +29,25 @@
           sản phẩm)
         </h1>
 
-        <div class="row" th:if="${cartItemsDto.cartItems.size() > 0}">
+        <div class="row" th:if="${!#lists.isEmpty(cartItemsDto.cartItems)}">
           <!-- cart items -->
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
             <ul class="cart-item-list">
               <li
-                class="cart-item"
+                class="cart-item card"
                 th:each="cartItem : ${cartItemsDto.cartItems}"
               >
                 <div class="product">
                   <div class="product-image">
                     <img
-                      class="image"
-                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (cartItem.product.productImages != null and cartItem.product.productImages.size() > 0 ? cartItem.product.productImages[0].imageName : '')}"
+                      th:if="${!#lists.isEmpty(cartItem.product.productImages.?[isMain])}"
+                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + cartItem.product.productImages.?[isMain][0].imageName}"
+                      alt="product"
+                    />
+
+                    <img
+                      th:if="${#lists.isEmpty(cartItem.product.productImages.?[isMain])}"
+                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + cartItem.product.productImages[0].imageName}"
                       alt="product"
                     />
                   </div>
@@ -154,7 +160,7 @@
 
           <!-- cart summary -->
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <div class="cart-summary">
+            <div class="cart-summary card">
               <h2 class="summary-title">Tóm tắt giỏ hàng</h2>
               <div class="total-price-group price-group">
                 <p class="label total-price-label">Tổng cộng:</p>
@@ -178,7 +184,7 @@
               <div class="cart-actions">
                 <a
                   class="check-out-button primary-button"
-                  href="/cart/checkout"
+                  href="/checkout"
                   th:if="${cartItemsDto.validProductsExist}"
                   >Tiến hành thanh toán</a
                 >

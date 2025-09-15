@@ -12,10 +12,6 @@
     gap: 1.6rem;
 
     .order-history-content {
-      background-color: $bg-white;
-      padding: 1.6rem;
-      border-radius: 1.6rem;
-      box-shadow: $box-shadow-01;
       display: flex;
       flex-direction: column;
       gap: 1.6rem;
@@ -28,7 +24,7 @@
       .content-table {
         overflow-y: auto;
 
-        .table {
+        table {
           @include generate-col-widths(85rem);
         }
       }

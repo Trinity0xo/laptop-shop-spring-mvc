@@ -8,14 +8,17 @@ import java.util.Map;
 
 import com.laptopstore.ecommerce.dto.cart.CheckoutDto;
 import com.laptopstore.ecommerce.dto.order.OrderFilterDto;
-import com.laptopstore.ecommerce.dto.order.CancelOrderInformationDto;
+import com.laptopstore.ecommerce.dto.order.UserCancelOrderDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
+import com.laptopstore.ecommerce.exception.AuthenticatedUserNotFoundException;
+import com.laptopstore.ecommerce.exception.BadRequestException;
+import com.laptopstore.ecommerce.exception.OrderNotFoundException;
+import com.laptopstore.ecommerce.exception.ProductNotFoundException;
 import com.laptopstore.ecommerce.model.*;
 import com.laptopstore.ecommerce.repository.*;
 import com.laptopstore.ecommerce.service.OrderService;
 import com.laptopstore.ecommerce.specification.OrderSpecifications;
 import com.laptopstore.ecommerce.util.PaginationUtils;
-import com.laptopstore.ecommerce.util.error.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -31,23 +34,20 @@ import static com.laptopstore.ecommerce.util.PriceUtils.getValidPriceRange;
 @Service
 public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
-    private final CartItemsRepository cartItemsRepository;
+    private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
-    private final OrderItemsRepository orderItemsRepository;
 
-    public OrderServiceImpl(UserRepository userRepository, CartItemsRepository cartItemsRepository, ProductRepository productRepository, OrderRepository orderRepository,
-                            OrderItemsRepository orderItemsRepository) {
+    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, ProductRepository productRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
-        this.cartItemsRepository = cartItemsRepository;
+        this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
-        this.orderItemsRepository = orderItemsRepository;
     }
 
     @Override
     @Transactional
-    public void createNewOrder(CheckoutDto checkoutDto) {
+    public Order createNewOrder(CheckoutDto checkoutDto) {
         User user = this.userRepository.findByEmail(checkoutDto.getEmail()).orElse(null);
         if(user == null){
             throw new AuthenticatedUserNotFoundException();
@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
         for (CheckoutDto.CheckoutProduct checkoutProduct : checkoutProducts){
             Product product = this.productRepository.findById(checkoutProduct.getId()).orElse(null);
             if(product == null){
-               throw new ProductNotFoundException("/cart");
+               throw new ProductNotFoundException(checkoutProduct.getId());
             }
 
             if(checkoutProduct.getQuantity() > product.getQuantity()){
@@ -85,8 +85,7 @@ public class OrderServiceImpl implements OrderService {
                 checkoutDto.getNote()
         );
 
-        order = this.orderRepository.save(order);
-
+        List<OrderItem> newOrderItem = new ArrayList<>();
         for (CheckoutDto.CheckoutProduct checkoutProduct: checkoutDto.getCheckoutProducts()){
             Product product = validCheckoutProducts.get(checkoutProduct.getId());
 
@@ -98,35 +97,41 @@ public class OrderServiceImpl implements OrderService {
             );
 
             order.setTotalPrice(order.getTotalPrice() + checkoutProduct.getProductTotal());
-
-            this.orderItemsRepository.save(orderItem);
+            newOrderItem.add(orderItem);
 
             product.setQuantity(product.getQuantity() - checkoutProduct.getQuantity());
             this.productRepository.save(product);
         }
 
+        order.setOrderItems(newOrderItem);
         this.orderRepository.save(order);
 
         List<CartItem> needRemove = new ArrayList<>();
-
-        for(CheckoutDto.CheckoutProduct checkoutProduct : checkoutDto.getCheckoutProducts()){
-            if(user.getCart() != null && !user.getCart().getCartItems().isEmpty()){
-                for (CartItem cartItem : user.getCart().getCartItems()){
+        Cart userCart = user.getCart();
+        if(userCart != null && !userCart.getCartItems().isEmpty()){
+            List<CartItem> userCartItems = userCart.getCartItems();
+            for(CheckoutDto.CheckoutProduct checkoutProduct : checkoutDto.getCheckoutProducts()){
+                for (CartItem cartItem : userCartItems){
                     if(cartItem.getProduct().getId().equals(checkoutProduct.getId())){
                         if(checkoutProduct.getQuantity() >= cartItem.getQuantity()){
                             needRemove.add(cartItem);
                         }else{
                             cartItem.setQuantity(cartItem.getQuantity() - checkoutProduct.getQuantity());
-                            this.cartItemsRepository.save(cartItem);
                         }
                     }
                 }
             }
+
+            if(!needRemove.isEmpty()){
+                for (CartItem item : needRemove){
+                    userCartItems.remove(item);
+                }
+
+               this.cartRepository.save(userCart);
+            }
         }
 
-        if(!needRemove.isEmpty()){
-            this.cartItemsRepository.deleteAll(needRemove);
-        }
+        return order;
     }
 
     @Override
@@ -207,37 +212,51 @@ public class OrderServiceImpl implements OrderService {
 
         Order userOrder = this.orderRepository.findByIdAndUser(orderId, user).orElse(null);
         if(userOrder == null){
-            throw new OrderNotFoundException("/account/order-history");
+            throw new OrderNotFoundException(orderId);
         }
 
         return userOrder;
     }
 
     @Override
-    public CancelOrderInformationDto getInformationForUserCancelOrder(String email, long orderId){
+    public UserCancelOrderDto getInformationForUserCancelOrder(String email, long orderId){
         Order order = this.getUserOrderItems(email, orderId);
-        return new CancelOrderInformationDto(order.getId());
+        return new UserCancelOrderDto(order.getId());
     }
 
     @Override
-    public void userCancelOrder(String email, CancelOrderInformationDto cancelOrderInformationDto) {
+    @Transactional
+    public void userCancelOrder(String email, UserCancelOrderDto userCancelOrderDto) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
              throw new AuthenticatedUserNotFoundException();
         }
 
-        Order userOrder = this.orderRepository.findByIdAndUser(cancelOrderInformationDto.getId(), user).orElse(null);
+        Order userOrder = this.orderRepository.findByIdAndUser(userCancelOrderDto.getId(), user).orElse(null);
         if(userOrder == null){
-            throw new OrderNotFoundException("/account/order-history");
+            throw new OrderNotFoundException(userCancelOrderDto.getId());
         }
 
         if(!userOrder.getStatus().equals(OrderStatusEnum.PENDING)){
             throw new BadRequestException("Bạn chỉ có thể huỷ đơn hàng khi trạng thái đang là 'Đang xử lý'");
         }
 
+        List<OrderItem> orderItems = userOrder.getOrderItems();
+        List<Product> updatedProducts = new ArrayList<>();
+        for(OrderItem orderItem : orderItems){
+            Product product = orderItem.getProduct();
+            if(product != null){
+                product.setQuantity(product.getQuantity() + orderItem.getQuantity());
+                updatedProducts.add(product);
+            }
+        }
+
+        this.productRepository.saveAll(updatedProducts);
+
         userOrder.setStatus(OrderStatusEnum.CANCELLED);
         userOrder.setCancelledBy(user);
         userOrder.setCancelledAt(Instant.now());
+        userOrder.setCancelledReason(userCancelOrderDto.getCancelledReason());
 
         this.orderRepository.save(userOrder);
     }
@@ -308,7 +327,7 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderItems(long orderId){
         Order order = this.orderRepository.findById(orderId).orElse(null);
         if(order == null){
-            throw new OrderNotFoundException("/dashboard/order");
+            throw new OrderNotFoundException(orderId);
         }
 
         return order;
@@ -318,7 +337,7 @@ public class OrderServiceImpl implements OrderService {
     public UpdateOrderStatusDto getOrderStatusUpdateInformation(long orderId){
         Order order = this.orderRepository.findById(orderId).orElse(null);
         if(order == null){
-            throw new OrderNotFoundException("/dashboard/order");
+            throw new OrderNotFoundException(orderId);
         }
 
         return new UpdateOrderStatusDto(
@@ -329,6 +348,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void updateOrderStatus(String email, UpdateOrderStatusDto updateOrderStatusDto) {
         User user = this.userRepository.findByEmail(email).orElse(null);
         if(user == null){
@@ -337,13 +357,25 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = this.orderRepository.findById(updateOrderStatusDto.getId()).orElse(null);
         if(order == null){
-            throw new OrderNotFoundException("/dashboard/order");
+            throw new OrderNotFoundException(updateOrderStatusDto.getId());
         }
 
         if (updateOrderStatusDto.getStatus().equals(OrderStatusEnum.CANCELLED)) {
             if(order.getStatus().equals(OrderStatusEnum.DELIVERED)){
                 throw new BadRequestException("Không thể hủy đơn hàng khi đã giao");
             }
+
+            List<OrderItem> orderItems = order.getOrderItems();
+            List<Product> updatedProducts = new ArrayList<>();
+            for(OrderItem orderItem : orderItems){
+                Product product = orderItem.getProduct();
+                if(product != null){
+                    product.setQuantity(product.getQuantity() + orderItem.getQuantity());
+                    updatedProducts.add(product);
+                }
+            }
+
+            this.productRepository.saveAll(updatedProducts);
 
             order.setCancelledReason(updateOrderStatusDto.getCancelledReason());
             order.setCancelledBy(user);

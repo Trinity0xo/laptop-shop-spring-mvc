@@ -7,9 +7,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  background-color: #fff;
-  padding: 1.6rem;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .review .container-fluid .review-content .content-title {
   font-size: 3rem;
@@ -19,40 +16,40 @@
   overflow-y: auto;
 }
 .review .container-fluid .review-content .content-table table .col-width-1 {
-  min-width: 10rem;
+  min-width: 9.1666666667rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-2 {
-  min-width: 20rem;
+  min-width: 18.3333333333rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-3 {
-  min-width: 30rem;
+  min-width: 27.5rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-4 {
-  min-width: 40rem;
+  min-width: 36.6666666667rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-5 {
-  min-width: 50rem;
+  min-width: 45.8333333333rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-6 {
-  min-width: 60rem;
+  min-width: 55rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-7 {
-  min-width: 70rem;
+  min-width: 64.1666666667rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-8 {
-  min-width: 80rem;
+  min-width: 73.3333333333rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-9 {
-  min-width: 90rem;
+  min-width: 82.5rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-10 {
-  min-width: 100rem;
+  min-width: 91.6666666667rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-11 {
-  min-width: 110rem;
+  min-width: 100.8333333333rem;
 }
 .review .container-fluid .review-content .content-table table .col-width-12 {
-  min-width: 120rem;
+  min-width: 110rem;
 }
 .review .container-fluid .review-content .content-table table .user-avatar {
   display: flex;

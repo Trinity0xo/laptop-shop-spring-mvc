@@ -2,7 +2,7 @@
 <form
   id="deleteReviewModal"
   class="review-form modal"
-  th:attr="data-product-id=${deleteReviewDto.productId}"
+  th:attr="data-product-id=${review.product.id}"
 >
   <div class="modal-header">
     <div class="header-title">Xóa đánh giá của bạn</div>
@@ -17,13 +17,10 @@
   <div class="form-data modal-body">
     <h4 class="form-data-title">
       Bạn có muốn xóa đánh giá của mình về
-      <span th:text="${deleteReviewDto.productName}"></span> không ?
+      <span th:text="${review.product.name}"></span> không ?
     </h4>
-    <input
-      type="hidden"
-      name="reviewId"
-      th:value="${deleteReviewDto.reviewId}"
-    />
+    <input type="hidden" name="reviewId" th:value="${review.id}" />
+    <input type="hidden" name="productId" th:value="${review.product.id}" />
   </div>
   <div class="form-actions modal-footer">
     <button class="form-submit-button danger-button" type="submit">Có</button>

@@ -3,6 +3,8 @@ package com.laptopstore.ecommerce.service.impl;
 import com.laptopstore.ecommerce.service.MailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 @Service
 public class MailServiceImpl implements MailService {
+    private static final Logger log = LoggerFactory.getLogger(MailServiceImpl.class);
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
 
@@ -39,8 +42,10 @@ public class MailServiceImpl implements MailService {
             message.setSubject(subject);
             message.setText(content, isHtml);
             this.javaMailSender.send(mimeMessage);
+
+            log.info("Email sent to {} with subject '{}'", to, subject);
         } catch (MailException | MessagingException e) {
-            System.out.println(">> Error sending email: " + e);
+            log.error("Failed to send email to {} with subject '{}'", to, subject, e);
         }
     }
 

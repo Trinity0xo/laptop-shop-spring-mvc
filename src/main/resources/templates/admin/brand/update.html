@@ -25,7 +25,7 @@
           <li>
             <a
               th:href="@{/dashboard/brand/details/{id}(id=${updateBrandDto.id})}"
-              th:text="${updateBrandDto.id}"
+              th:text="${updateBrandDto.oldName}"
             ></a>
           </li>
           <li>Sửa</li>
@@ -33,14 +33,13 @@
 
         <!-- update brand form -->
         <form
-          class="brand-update-form brand-form"
+          class="brand-update-form brand-form card"
           method="post"
           th:action="@{/dashboard/brand/update}"
           th:object="${updateBrandDto}"
         >
           <h1 class="form-title">
-            Sửa thương hiệu với "Mã:
-            <span th:text="${updateBrandDto.id}"></span>"
+            Sửa thương hiệu "<span th:text="${updateBrandDto.oldName}"></span>"
           </h1>
 
           <div class="form-content">

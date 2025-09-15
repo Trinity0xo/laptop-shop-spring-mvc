@@ -1,7 +1,8 @@
 package com.laptopstore.ecommerce.dto.product;
 
-import com.laptopstore.ecommerce.util.validation.product.CreateProductConstraint;
+import com.laptopstore.ecommerce.validation.product.CreateProductConstraint;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @CreateProductConstraint
 public class CreateProductDto extends BaseProductDto {
     private List<MultipartFile> newImages;

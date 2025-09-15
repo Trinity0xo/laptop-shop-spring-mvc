@@ -21,7 +21,7 @@
           <li>
             <a
               th:href="@{/dashboard/category/details/{id}(id=${updateCategoryDto.id})}"
-              th:text="${updateCategoryDto.id}"
+              th:text="${updateCategoryDto.oldName}"
             ></a>
           </li>
           <li>Cập nhật</li>
@@ -29,27 +29,29 @@
 
         <!-- update category form -->
         <form
-          class="update-category-form category-form"
+          class="update-category-form category-form card"
           method="post"
           th:action="@{/dashboard/category/update}"
           th:object="${updateCategoryDto}"
           enctype="multipart/form-data"
         >
           <h1 class="form-title">
-            Cập nhật danh mục với "Mã:
-            <span th:text="${updateCategoryDto.id}"></span>"
+            Cập nhật danh mục với "<span
+              th:text="${updateCategoryDto.oldName}"
+            ></span
+            >"
           </h1>
 
           <div class="form-content">
             <div class="input-group">
-              <label for="image">Hình ảnh (JPG, PNG, JPEG, GIF, WebP):</label>
+              <label for="image">Hình ảnh:</label>
               <div class="image-input-group">
                 <div class="image-upload-group">
                   <!-- upload preview -->
                   <div class="image-upload-preview">
                     <div
                       class="image-preview"
-                      th:if="${updateCategoryDto.currentImageName == null or updateCategoryDto.currentImageName.isEmpty()}"
+                      th:if="${#strings.isEmpty(updateCategoryDto.currentImageName)}"
                     >
                       <label class="image-preview-edit-button" for="image"
                         ><i class="fa-solid fa-pen-to-square"></i
@@ -62,7 +64,7 @@
                     </div>
                     <div
                       class="image-preview"
-                      th:if="${updateCategoryDto.currentImageName != null and !updateCategoryDto.currentImageName.isEmpty()}"
+                      th:if="${!#strings.isEmpty(updateCategoryDto.currentImageName)}"
                     >
                       <label class="image-preview-edit-button" for="image"
                         ><i class="fa-solid fa-pen-to-square"></i
@@ -100,11 +102,12 @@
             </div>
 
             <input type="hidden" name="id" th:value="${updateCategoryDto.id}" />
-            <input
+
+            <!-- <input
               type="hidden"
               name="currentImageName"
               th:value="${updateCategoryDto.currentImageName}"
-            />
+            /> -->
 
             <div class="input-group">
               <label for="name">Tên:</label>

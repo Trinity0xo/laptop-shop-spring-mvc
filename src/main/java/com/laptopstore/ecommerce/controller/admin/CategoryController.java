@@ -3,6 +3,7 @@ package com.laptopstore.ecommerce.controller.admin;
 import com.laptopstore.ecommerce.dto.category.CategoryFilterDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.service.CategoryService;
+import com.laptopstore.ecommerce.exception.CategoryNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -66,7 +67,7 @@ public class CategoryController {
 
     @GetMapping("/update/{categoryId}")
     public String showEditCategoryPage(
-            @PathVariable Long categoryId,
+            @PathVariable long categoryId,
             Model model
     )  {
         UpdateCategoryDto updateCategoryDto = this.categoryService.getInformationForUpdateCategory(categoryId);
@@ -82,6 +83,9 @@ public class CategoryController {
             RedirectAttributes redirectAttributes
     )  {
         if (bindingResult.hasErrors()) {
+            UpdateCategoryDto newUpdateCategoryDto = this.categoryService.getInformationForUpdateCategory(updateCategoryDto.getId());
+            updateCategoryDto.setOldName(newUpdateCategoryDto.getOldName());
+            updateCategoryDto.setCurrentImageName(newUpdateCategoryDto.getCurrentImageName());
             return "/admin/category/update";
         }
 
@@ -94,17 +98,18 @@ public class CategoryController {
 
     @GetMapping("/delete/{categoryId}")
     public String showDeleteCategoryPage(
-            @PathVariable Long categoryId,
+            @PathVariable long categoryId,
             Model model
     )  {
-        model.addAttribute("categoryId", categoryId);
+        Category category = this.categoryService.getCategoryById(categoryId);
+        model.addAttribute("category", category);
 
         return "/admin/category/delete";
     }
 
     @PostMapping("/delete")
     public String deleteCategory(
-            Long categoryId,
+            long categoryId,
             RedirectAttributes redirectAttributes
     )  {
         this.categoryService.deleteCategory(categoryId);
@@ -116,7 +121,7 @@ public class CategoryController {
 
     @GetMapping("/details/{categoryId}")
     public String showDetailsCategoryPage(
-            @PathVariable Long categoryId,
+            @PathVariable long categoryId,
             Model model
     )  {
         Category category = this.categoryService.getCategoryById(categoryId);

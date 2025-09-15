@@ -45,8 +45,10 @@ public class UserController {
     @GetMapping("/details/{userId}")
     public String showUserDetailsPage(
             Model model,
-            @PathVariable Long userId
+            @PathVariable long userId
     )  {
+        String email = AuthenticationUtils.getAuthenticatedName();
+
         User user = this.userService.getUserById(userId);
         model.addAttribute("user", user);
 
@@ -81,8 +83,10 @@ public class UserController {
     @GetMapping("/update-role/{userId}")
     public String showUpdateRolePage(
             Model model,
-            @PathVariable Long userId
+            @PathVariable long userId
     )  {
+        String email = AuthenticationUtils.getAuthenticatedName();
+
         UpdateUserRoleDto updateUserRoleDto = this.userService.getUserInformationForRoleUpdate(userId);
         model.addAttribute("updateUserRoleDto", updateUserRoleDto);
 
@@ -91,12 +95,15 @@ public class UserController {
 
     @PostMapping("/update-role")
     public String updateRole(
-            Model model,
             @Valid UpdateUserRoleDto updateUserRoleDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     ){
+        String email = AuthenticationUtils.getAuthenticatedName();
+
         if(bindingResult.hasErrors()){
+            UpdateUserRoleDto newUpdateUserRoleDto = this.userService.getUserInformationForRoleUpdate(updateUserRoleDto.getId());
+            updateUserRoleDto.setEmail(newUpdateUserRoleDto.getEmail());
             return "/admin/user/update_role";
         }
 

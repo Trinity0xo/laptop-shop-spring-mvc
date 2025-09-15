@@ -35,7 +35,7 @@ public class Order {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User user;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     List<OrderItem> orderItems = new ArrayList<>();
 
     @Column(nullable = false)

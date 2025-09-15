@@ -7,31 +7,21 @@
 .layout {
   background-color: $bg-light;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.6rem;
   min-height: 100%;
 
-  .authentication {
-    flex: 1;
+  .authentication-form {
+    max-width: 60rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+
+  .logo {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin: 0 1.6rem;
-
-    .authentication-form {
-      padding: 1.6rem;
-      background-color: $bg-white;
-      width: 55rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
-      box-shadow: $box-shadow-01;
-      border-radius: 1.6rem;
-    }
-
-    .logo {
-      display: flex;
-      justify-content: center;
-    }
   }
 }

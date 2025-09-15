@@ -10,10 +10,6 @@
     gap: 1.6rem;
 
     .account-info-content {
-      background-color: $bg-white;
-      box-shadow: $box-shadow-01;
-      border-radius: 1.6rem;
-      padding: 1.6rem;
       display: flex;
       flex-direction: column;
       gap: 2.4rem;
@@ -31,8 +27,10 @@
 
           img {
             width: 100%;
+            height: 100%;
             border-radius: 50%;
             overflow: hidden;
+            border: 0.3rem solid rgba($text-primary, 0.25);
           }
         }
       }

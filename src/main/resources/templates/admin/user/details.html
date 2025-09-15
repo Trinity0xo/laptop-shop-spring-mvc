@@ -18,11 +18,11 @@
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/user">Người dùng</a></li>
-          <li th:text="${user.id}"></li>
+          <li th:text="${user.email}"></li>
         </ul>
 
         <div
-          class="user-details-content user-content"
+          class="user-details-content user-content card"
           th:with="roleEnum=${T(com.laptopstore.ecommerce.util.constant.RoleEnum)}"
         >
           <h1 class="content-title">
@@ -34,7 +34,7 @@
               <dt
                 class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
               >
-                Avatar:
+                Ảnh đại diện:
               </dt>
 
               <dd
@@ -63,16 +63,6 @@
                   <img src="/images/default-avatar.png" alt="avatar" />
                 </a>
               </dd>
-
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Mã:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${user.id}"
-              ></dd>
 
               <dt
                 class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"

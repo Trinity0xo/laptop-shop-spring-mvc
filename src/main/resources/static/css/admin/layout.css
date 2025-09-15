@@ -387,8 +387,8 @@
 }
 .layout header .header-right .account-dropdown .account-dropdown-toggle {
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  width: 4rem;
+  height: 4rem;
 }
 .layout header .header-right .account-dropdown .account-dropdown-toggle img {
   width: 100%;
@@ -398,10 +398,9 @@
 }
 .layout header .header-right .account-dropdown .account-dropdown-menu {
   z-index: 997;
-  overflow: hidden;
 }
 .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information {
-  padding: 8px 10px;
+  padding: 0.8rem 1rem;
 }
 .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information .account-name {
   font-size: 1.6rem;
@@ -415,18 +414,18 @@
 .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information .account-role {
   font-size: 1.4rem;
   color: #333;
-  margin: 8px 0px;
+  margin: 0.8rem 0;
 }
 .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .account-information::after {
   content: "";
   display: block;
-  height: 1px;
+  height: 0.1rem;
   width: 100%;
   background-color: rgba(51, 51, 51, 0.5);
 }
 .layout header .header-right .account-dropdown .account-dropdown-menu .account-dropdown-item .link {
   display: inline-block;
-  padding: 8px 10px;
+  padding: 0.8rem 1rem;
   width: 100%;
   color: #333;
   font-size: 1.6rem;
@@ -460,6 +459,7 @@
   flex-direction: column;
   gap: 1.6rem;
   transition: 0.5s;
+  margin-top: 6.4rem;
 }
 @media (max-width: 576px) {
   .layout .sidebar {
@@ -502,7 +502,7 @@
   font-size: 1.6rem;
   color: #333;
   padding: 1rem 1.6rem;
-  border-radius: 1rem;
+  border-radius: 0.4rem;
   width: 100%;
 }
 .layout .sidebar .nav-list .item .link i {

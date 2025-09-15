@@ -1,6 +1,8 @@
 package com.laptopstore.ecommerce.service.impl;
 
 import com.laptopstore.ecommerce.service.FileService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +15,8 @@ import java.util.Objects;
 
 @Service
 public class FileServiceImpl implements FileService {
+    private static final Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
+
     @Value("${files.path}")
     private String filesPath;
 
@@ -32,19 +36,19 @@ public class FileServiceImpl implements FileService {
 
             if (Files.notExists(targetPath)) {
                 Files.createDirectories(targetPath);
-                System.out.println(">> Created new folder: " + targetPath);
+                log.info("Created new folder: {}", targetPath);
             }else{
-                System.out.println(">> Folder already exists, skip create");
+                log.debug("Folder already exists, skipping create: {}", targetPath);
             }
 
             Path filePath = targetPath.resolve(newFileName);
             Files.write(filePath, bytes);
 
-            System.out.println(">> File uploaded to: " + filePath);
+            log.info("File uploaded to: {}", filePath);
 
             return newFileName;
         } catch (IOException e) {
-            System.out.println(">> Error when uploading file: " + e.getMessage());
+            log.error("Error uploading file {} to folder {}", file.getOriginalFilename(), targetFolder, e);
             return null;
         }
     }
@@ -59,13 +63,13 @@ public class FileServiceImpl implements FileService {
 
                 if (Files.exists(filePath)) {
                     Files.delete(filePath);
-                    System.out.println(">> File deleted: " + filePath);
+                    log.info("File deleted: {}", filePath);
                 } else {
-                    System.out.println(">> File not found: " + filePath);
+                    log.warn("File not found for deletion: {}", filePath);
                 }
             }
         } catch (IOException e) {
-            System.out.println(">> Error when deleting file: " + e.getMessage());
+            log.error("Error deleting file {} in folder {}", fileName, targetFolder, e);
         }
     }
 }

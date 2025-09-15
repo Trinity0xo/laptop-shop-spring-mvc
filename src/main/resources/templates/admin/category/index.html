@@ -30,7 +30,7 @@
 
         <!-- category list content -->
         <div
-          class="category-list-content category-content"
+          class="category-list-content category-content card"
           th:with="validSortBy=${paginationUtils.getValidSortBy(categoryClass, categoryFilterDto.sortBy, categoryClass.DEFAULT_SORT_FIELD)}"
         >
           <h1 class="content-title">Danh mục</h1>
@@ -110,7 +110,7 @@
           <!-- search summary -->
           <div
             class="search-summary"
-            th:if="${categoryFilterDto.search != null && !categoryFilterDto.search.isEmpty()}"
+            th:if="${!#strings.isEmpty(categoryFilterDto.search)}"
           >
             <p class="search-message">
               <span
@@ -138,27 +138,6 @@
             <table class="table">
               <thead>
                 <tr class="table-header-row">
-                  <th
-                    class="table-header-cell col-width-1"
-                    th:with="sortDirection=${validSortBy.equals('id') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
-                  >
-                    <a
-                      th:with="newQuery=${queryUtils.modifiedQuery(categoryFilterDto.toQuery(), {{'sortBy': 'id', 'page': '1', 'sortDirection' : sortDirection }})}"
-                      th:href="${'/dashboard/category' + newQuery}"
-                    >
-                      Mã
-                      <i
-                        th:if="${validSortBy.equals('id') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-                        class="fa-solid fa-arrow-down"
-                      ></i>
-
-                      <i
-                        th:if="${validSortBy.equals('id') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-                        class="fa-solid fa-arrow-up"
-                      ></i>
-                    </a>
-                  </th>
-
                   <th class="table-header-cell col-width-2">Hình ảnh</th>
 
                   <th
@@ -232,19 +211,12 @@
                   <td class="table-body-cell">
                     <span
                       class="cell-text"
-                      th:text="${category.id != null ? category.id : 'N/A'}"
-                    ></span>
-                  </td>
-
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:if="${category.image == null or category.image.isEmpty()}"
+                      th:if="${#strings.isEmpty(category.image)}"
                       >N/A</span
                     >
                     <div
                       class="category-image"
-                      th:if="${category.image != null and !category.image.isEmpty()}"
+                      th:if="${!#strings.isEmpty(category.image)}"
                     >
                       <img
                         th:src="${'/' + resourcesMappingFolder + '/' + categoryImagesFolder + '/' + category.image}"

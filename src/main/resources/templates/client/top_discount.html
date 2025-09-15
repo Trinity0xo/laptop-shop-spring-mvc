@@ -405,7 +405,10 @@
 
           <!-- sort -->
           <div class="sort-dropdown dropdown">
-            <button class="sort-dropdown-toggle dropdown-toggle primary-button">
+            <button
+              type="button"
+              class="sort-dropdown-toggle dropdown-toggle primary-button"
+            >
               <i class="fa-solid fa-arrow-up-wide-short"></i>Sắp xếp:
 
               <span
@@ -601,7 +604,7 @@
             >
               <a
                 th:href="@{/shop/product/{slug}(slug=${product.slug})}"
-                class="product-card"
+                class="product-card card"
               >
                 <div class="product-image">
                   <img

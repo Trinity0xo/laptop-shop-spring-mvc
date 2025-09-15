@@ -46,9 +46,8 @@ public class CustomProductDetailsDto extends BaseProductDto {
     // all reviews
     private List<CustomReviewDto> reviews;
 
-
     // ???
-    public CustomProductDetailsDto(Long id, String name, String slug, List<CustomReviewDto> reviews){
+    public CustomProductDetailsDto(long id, String name, String slug, List<CustomReviewDto> reviews){
         this.id = id;
         this.name = name;
         this.reviews = reviews;
@@ -177,12 +176,12 @@ public class CustomProductDetailsDto extends BaseProductDto {
                                 String cooling,
                                 String material,
 
-//                                 List<ProductWithAvgRatingDto> relatedProducts,
                                 long totalRatings,
                                 double averageRating,
                                 Map<Integer, Integer> ratingPercentages,
                                 Map<Integer, Long> ratingCount,
-                                List<Review> userReviews
+                                List<Review> userReviews,
+                                List<CustomProductDto> relatedProducts
 
     ){
         this.id = id;
@@ -219,7 +218,7 @@ public class CustomProductDetailsDto extends BaseProductDto {
         this.cooling = cooling;
         this.material = material;
 
-//        this.relatedProducts = relatedProducts;
+        this.relatedProducts = relatedProducts;
         this.totalRatings = totalRatings;
         this.averageRating = averageRating;
         this.ratingPercentages = ratingPercentages;
@@ -261,14 +260,14 @@ public class CustomProductDetailsDto extends BaseProductDto {
                                 String cooling,
                                 String material,
 
-//                                 List<ProductWithAvgRatingDto> relatedProducts,
                                 long totalRatings,
                                 double averageRating,
                                 Map<Integer, Integer> ratingPercentages,
                                 Map<Integer, Long> ratingCount,
                                 List<Review> userReviews,
                                 Review myReview,
-                                boolean purchased
+                                boolean purchased,
+                                   List<CustomProductDto> relatedProducts
     ){
         this.id = id;
         this.productImages = productImages;
@@ -304,7 +303,6 @@ public class CustomProductDetailsDto extends BaseProductDto {
         this.cooling = cooling;
         this.material = material;
 
-//        this.relatedProducts = relatedProducts;
         this.totalRatings = totalRatings;
         this.averageRating = averageRating;
         this.ratingPercentages = ratingPercentages;
@@ -312,6 +310,7 @@ public class CustomProductDetailsDto extends BaseProductDto {
         this.userReviews = userReviews;
         this.myReview = myReview;
         this.purchased = purchased;
+        this.relatedProducts = relatedProducts;
     }
 
     public CustomProductDetailsDto(long id,

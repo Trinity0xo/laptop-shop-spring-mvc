@@ -1,6 +1,7 @@
 package com.laptopstore.ecommerce.dto.review;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
@@ -8,8 +9,10 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class CustomReviewDto extends BaseReviewDto{
     private long id;
+    private long productId;
     private String userAvatar;
     private String userEmail;
 

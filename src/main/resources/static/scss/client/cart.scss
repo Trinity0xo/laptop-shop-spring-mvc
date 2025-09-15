@@ -8,7 +8,7 @@
   .container {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1.6rem;
 
     .cart-title {
       font-size: 2.5rem;
@@ -18,19 +18,13 @@
     .cart-item-list {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 2rem;
 
       .cart-item {
-        padding: 16px;
-        background-color: $bg-white;
-        border-radius: 10px;
-        box-shadow: $box-shadow-01;
-        transition: 0.3s;
-
         .product {
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 1.6rem;
 
           @include media(xs, sm) {
             flex-direction: column;
@@ -41,10 +35,10 @@
           }
 
           .product-image {
-            width: 120px;
-            height: 120px;
+            width: 12rem;
+            height: 12rem;
 
-            .image {
+            img {
               width: 100%;
               height: 100%;
               object-fit: contain;
@@ -57,11 +51,11 @@
             flex-direction: column;
 
             @include media(xs, sm) {
-              gap: 10px;
+              gap: 1rem;
             }
 
             @include media(md, lg, xl) {
-              gap: 6px;
+              gap: 0.6rem;
             }
 
             .product-name {
@@ -72,7 +66,7 @@
 
             .product-pricing {
               display: flex;
-              gap: 10px;
+              gap: 1rem;
               flex-wrap: wrap;
 
               .price {
@@ -83,7 +77,7 @@
 
               .discount-information {
                 display: flex;
-                gap: 10px;
+                gap: 1rem;
                 flex-wrap: wrap;
 
                 .old-price {
@@ -98,7 +92,7 @@
             .product-quantity {
               display: flex;
               align-items: center;
-              gap: 10px;
+              gap: 1rem;
               flex-wrap: wrap;
 
               .quantity-label {
@@ -108,33 +102,33 @@
 
               .quantity-control {
                 display: flex;
-                gap: 6px;
+                gap: 0.6rem;
 
                 .quantity-input {
                   @include input($padding: 0, $textAlign: center);
                   align-self: stretch;
-                  width: 30px;
-                  height: 30px;
+                  width: 3rem;
+                  height: 3rem;
                 }
 
                 .quantity-minus-button {
                   display: flex;
-                  height: 30px;
-                  width: 30px;
+                  height: 3rem;
+                  width: 3rem;
                   align-items: center;
                   justify-content: center;
-                  padding: 10px;
-                  border-radius: 50px 0px 0px 50px;
+                  padding: 1rem;
+                  border-radius: 5rem 0 0 5rem;
                 }
 
                 .quantity-plus-button {
                   display: flex;
-                  height: 30px;
-                  width: 30px;
+                  height: 3rem;
+                  width: 3rem;
                   align-items: center;
                   justify-content: center;
-                  padding: 10px;
-                  border-radius: 0px 50px 50px 0px;
+                  padding: 1rem;
+                  border-radius: 0 5rem 5rem 0;
                 }
               }
             }
@@ -143,7 +137,7 @@
               display: flex;
               flex-wrap: wrap;
               align-items: center;
-              gap: 8px;
+              gap: 0.8rem;
 
               .total-price-label {
                 font-size: 1.6rem;
@@ -162,7 +156,7 @@
               justify-content: space-between;
               align-items: center;
               flex-wrap: wrap;
-              gap: 10px;
+              gap: 1rem;
 
               .product-stock-status {
                 font-size: 1.6rem;
@@ -175,13 +169,9 @@
     }
 
     .cart-summary {
-      background-color: $bg-white;
-      padding: 16px;
-      border-radius: 10px;
-      box-shadow: $box-shadow-01;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 1.6rem;
 
       .summary-title {
         font-size: 2rem;
@@ -207,7 +197,7 @@
       .cart-actions {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 1.6rem;
       }
     }
   }

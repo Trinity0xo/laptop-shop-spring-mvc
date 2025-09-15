@@ -1,14 +1,18 @@
 package com.laptopstore.ecommerce.dto.review;
 
-import com.laptopstore.ecommerce.util.validation.review.CreateReviewConstraint;
+import com.laptopstore.ecommerce.validation.review.CreateReviewConstraint;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @CreateReviewConstraint
 public class CreateReviewDto extends BaseReviewDto {
-    public CreateReviewDto(long productId, String productName){
+    private Long productId;
+
+    public CreateReviewDto(Long productId, String productName){
         this.productId = productId;
         this.productName = productName;
     }

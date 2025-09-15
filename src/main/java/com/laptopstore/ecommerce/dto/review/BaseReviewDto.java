@@ -8,7 +8,6 @@ import java.time.Instant;
 @Getter
 @Setter
 public abstract class BaseReviewDto {
-    protected long productId;
     protected String productName;
     protected Integer rating;
     protected String message;

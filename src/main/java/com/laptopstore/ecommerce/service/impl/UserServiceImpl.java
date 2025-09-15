@@ -6,6 +6,10 @@ import com.laptopstore.ecommerce.dto.auth.ResetPasswordDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.dto.user.*;
 import com.laptopstore.ecommerce.dto.auth.RegisterDto;
+import com.laptopstore.ecommerce.exception.AuthenticatedUserNotFoundException;
+import com.laptopstore.ecommerce.exception.BadRequestException;
+import com.laptopstore.ecommerce.exception.RoleNotFoundException;
+import com.laptopstore.ecommerce.exception.UserNotFoundException;
 import com.laptopstore.ecommerce.model.Role;
 import com.laptopstore.ecommerce.model.Token;
 import com.laptopstore.ecommerce.model.User;
@@ -17,7 +21,6 @@ import com.laptopstore.ecommerce.specification.UserSpecifications;
 import com.laptopstore.ecommerce.util.PaginationUtils;
 import com.laptopstore.ecommerce.util.constant.RoleEnum;
 import com.laptopstore.ecommerce.util.constant.TokenTypeEnum;
-import com.laptopstore.ecommerce.util.error.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -52,12 +55,12 @@ public class UserServiceImpl implements UserService {
     public void updateUserRole(UpdateUserRoleDto updateUserRoleDto) {
         User user = this.userRepository.findById(updateUserRoleDto.getId()).orElse(null);
         if(user == null){
-            throw new UserNotFoundException("/dashboard/user");
+            throw new UserNotFoundException(updateUserRoleDto.getId());
         }
 
         Role role = this.roleRepository.findBySlug(updateUserRoleDto.getRole().name()).orElse(null);
         if(role == null){
-            throw new RoleNotFoundException("/dashboard/user");
+            throw new RoleNotFoundException(updateUserRoleDto.getRole().name());
         }
 
         user.setRole(role);
@@ -68,7 +71,7 @@ public class UserServiceImpl implements UserService {
     public UpdateUserRoleDto getUserInformationForRoleUpdate(long userId) {
         User user = this.userRepository.findById(userId).orElse(null);
         if(user == null){
-            throw new UserNotFoundException("/dashboard/user");
+            throw new UserNotFoundException(userId);
         }
 
         RoleEnum role = RoleEnum.valueOf(user.getRole().getSlug());
@@ -82,13 +85,13 @@ public class UserServiceImpl implements UserService {
     public void resetPassword(ResetPasswordDto resetPasswordDto) {
         Token token = this.tokenService.getToken(resetPasswordDto.getResetPasswordToken(), TokenTypeEnum.RESET_PASSWORD);
         if(token == null || token.isExpired()) {
-            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ", "/auth/reset-password");
+            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ");
         }
 
         User user = token.getUser();
 
         if(user == null){
-            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ", "/auth/reset-password");
+            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ");
         }
 
         String newHashedPassword = this.passwordEncoder.encode(resetPasswordDto.getNewPassword());
@@ -102,7 +105,7 @@ public class UserServiceImpl implements UserService {
     public ResetPasswordDto getResetPasswordInformation(String tokenValue) {
         Token resetPasswordToken = this.tokenService.getToken(tokenValue, TokenTypeEnum.RESET_PASSWORD);
         if(resetPasswordToken == null || resetPasswordToken.isExpired()) {
-            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ", "/auth/reset-password");
+            throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ");
         }
 
         return new ResetPasswordDto(resetPasswordToken.getValue());
@@ -155,7 +158,7 @@ public class UserServiceImpl implements UserService {
     public void createNewUser(CreateUserDto createUserDto) {
         Role role = this.roleRepository.findBySlug(createUserDto.getRole().name()).orElse(null);
         if(role == null){
-            throw new RoleNotFoundException();
+            throw new RoleNotFoundException(createUserDto.getRole().name());
         }
 
         String hashedPassword = this.passwordEncoder.encode(createUserDto.getPassword());
@@ -213,7 +216,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(long id) {
         User user = this.userRepository.findById(id).orElse(null);
         if(user == null){
-            throw new UserNotFoundException("/dashboard/user");
+            throw new UserNotFoundException(id);
         }
 
         return user;

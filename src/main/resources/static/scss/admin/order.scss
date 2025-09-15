@@ -15,9 +15,6 @@
       display: flex;
       flex-direction: column;
       gap: 1.6rem;
-      background-color: $bg-white;
-      padding: 1.6rem;
-      box-shadow: $box-shadow-01;
 
       .content-title {
         font-size: 3rem;
@@ -28,10 +25,11 @@
         overflow-y: auto;
 
         table {
-          @include generate-col-widths(120rem);
+          @include generate-col-widths(110rem);
 
           .table-row-actions {
             display: flex;
+            justify-content: end;
             gap: 1.6rem;
           }
         }
@@ -55,9 +53,6 @@
       display: flex;
       flex-direction: column;
       gap: 1.6rem;
-      background-color: $bg-white;
-      padding: 1.6rem;
-      box-shadow: $box-shadow-01;
 
       .form-title {
         font-size: 3rem;
@@ -148,9 +143,6 @@
     }
 
     .order-details-products {
-      background-color: $bg-white;
-      box-shadow: $box-shadow-01;
-      padding: 1.6rem;
       overflow-y: auto;
 
       .products-title {
@@ -159,7 +151,7 @@
       }
 
       table {
-        @include generate-col-widths(120rem);
+        @include generate-col-widths(110rem);
 
         .product-image {
           display: flex;
@@ -174,7 +166,7 @@
 
         .table-row-actions {
           display: flex;
-          align-items: center;
+          justify-content: end;
           gap: 1.6rem;
         }
       }

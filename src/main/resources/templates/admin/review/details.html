@@ -18,12 +18,13 @@
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/review">Đánh giá</a></li>
-          <li th:text="${review.id}"></li>
+          <li th:text="${review.product.name + ' - ' + review.user.email}"></li>
         </ul>
 
-        <div class="review-details-content review-content">
+        <div class="review-details-content review-content card">
           <h1 class="content-title">
-            Đánh giá với "Mã: <span th:text="${review.id}"></span>"
+            Đánh giá của "<span th:text="${review.user.email}"></span>" trên sản
+            phẩm "<span th:text="${review.product.name}"></span>"
           </h1>
 
           <div class="content-description-list">
@@ -41,21 +42,11 @@
               <dt
                 class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
               >
-                Mã:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${review.id}"
-              ></dd>
-
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
                 Email:
               </dt>
               <dd
                 class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(review.user?.email) ? 'N/A' : review.user.email}"
+                th:text="${review.user == null or #strings.isEmpty(review.user.email) ? 'N/A' : review.user.email}"
               ></dd>
 
               <dt
@@ -93,7 +84,7 @@
               </dt>
               <dd
                 class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(review.product?.name) ? 'N/A' : review.product?.name}"
+                th:text="${review.product == null or #strings.isEmpty(review.product.name) ? 'N/A' : review.product.name}"
               ></dd>
 
               <dt

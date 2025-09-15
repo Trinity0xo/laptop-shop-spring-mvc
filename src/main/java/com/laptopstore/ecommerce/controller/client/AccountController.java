@@ -1,6 +1,6 @@
 package com.laptopstore.ecommerce.controller.client;
 
-import com.laptopstore.ecommerce.dto.order.CancelOrderInformationDto;
+import com.laptopstore.ecommerce.dto.order.UserCancelOrderDto;
 import com.laptopstore.ecommerce.dto.order.OrderFilterDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.dto.user.UserInformationDto;
@@ -9,7 +9,7 @@ import com.laptopstore.ecommerce.model.Order;
 import com.laptopstore.ecommerce.service.OrderService;
 import com.laptopstore.ecommerce.service.UserService;
 import com.laptopstore.ecommerce.util.AuthenticationUtils;
-import com.laptopstore.ecommerce.util.error.NotImplementException;
+import com.laptopstore.ecommerce.exception.NotImplementException;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,25 +48,27 @@ public class AccountController {
     )  {
         String email = AuthenticationUtils.getAuthenticatedName();
 
-        UpdateUserInformationDto updateAccountInfo = this.userService.getUserAccountInformationForUpdate(email);
-        model.addAttribute("updateAccountInfo", updateAccountInfo);
+        UpdateUserInformationDto updateUserInformationDto = this.userService.getUserAccountInformationForUpdate(email);
+        model.addAttribute("updateUserInformationDto", updateUserInformationDto);
 
         return "/client/account/update_account_info";
     }
 
     @PostMapping("/information/update")
     public String updateAccountInformation(
-            @Valid UpdateUserInformationDto updateAccountInfoDto,
+            @Valid UpdateUserInformationDto updateUserInformationDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     )  {
+        String email = AuthenticationUtils.getAuthenticatedName();
+
         if (bindingResult.hasErrors()) {
+            UpdateUserInformationDto newUpdateUserInformationDto = this.userService.getUserAccountInformationForUpdate(email);
+            updateUserInformationDto.setCurrentAvatarName(newUpdateUserInformationDto.getCurrentAvatarName());
             return "/client/account/update_account_info";
         }
 
-        String email = AuthenticationUtils.getAuthenticatedName();
-
-        this.userService.updateUserAccountInformation(email, updateAccountInfoDto);
+        this.userService.updateUserAccountInformation(email, updateUserInformationDto);
         redirectAttributes.addFlashAttribute("successMessage", "Thông tin tài khoản đã được cập nhật thành công.");
 
         return "redirect:/account/information";
@@ -88,7 +90,7 @@ public class AccountController {
 
     @GetMapping("/order-history/details/{orderId}")
     public String showUserOrderDetailsPage(
-            @PathVariable Long orderId,
+            @PathVariable long orderId,
             Model model
     ) {
         String email = AuthenticationUtils.getAuthenticatedName();
@@ -101,12 +103,12 @@ public class AccountController {
 
     @GetMapping("/order-history/cancel/{orderId}")
     public String showCancelOrderPage(
-            @PathVariable Long orderId,
+            @PathVariable long orderId,
             Model model
     ) {
         String email = AuthenticationUtils.getAuthenticatedName();
 
-        CancelOrderInformationDto cancelOrderInfo = this.orderService.getInformationForUserCancelOrder(email, orderId);
+        UserCancelOrderDto cancelOrderInfo = this.orderService.getInformationForUserCancelOrder(email, orderId);
         model.addAttribute("cancelOrderInfo", cancelOrderInfo);
 
         return "/client/account/cancel_order";
@@ -114,7 +116,7 @@ public class AccountController {
 
     @PostMapping("/order-history/cancel")
     public String cancelOrder(
-            @Valid CancelOrderInformationDto cancelOrderInformationDto,
+            @Valid UserCancelOrderDto userCancelOrderDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     )  {
@@ -124,15 +126,15 @@ public class AccountController {
 
         String email = AuthenticationUtils.getAuthenticatedName();
 
-        this.orderService.userCancelOrder(email, cancelOrderInformationDto);
+        this.orderService.userCancelOrder(email, userCancelOrderDto);
         redirectAttributes.addFlashAttribute("successMessage", "Hủy đơn hàng thành công");
 
-        return "redirect:/account/order-history/details/" + cancelOrderInformationDto.getId();
+        return "redirect:/account/order-history/details/" + userCancelOrderDto.getId();
     }
 
     @GetMapping("/change-password")
     public String showChangePasswordPage(
     )  {
-        throw new NotImplementException("/account/information");
+        throw new NotImplementException();
     }
 }

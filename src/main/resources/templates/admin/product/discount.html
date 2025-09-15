@@ -33,7 +33,7 @@
         </ul>
 
         <div
-          class="product-list-content product-content"
+          class="product-list-content product-content card"
           th:with="validSortBy=${paginationUtils.getValidSortBy(productClass, productFilterDto.sortBy, productClass.DEFAULT_SORT_FIELD)}"
         >
           <div class="content-title">Giảm giá</div>
@@ -285,7 +285,7 @@
           <!-- search summary -->
           <div
             class="search-summary"
-            th:if="${productFilterDto.search != null && !productFilterDto.search.isEmpty()}"
+            th:if="${!#strings.isEmpty(productFilterDto.search)}"
           >
             <p class="search-message">
               <span
@@ -313,27 +313,6 @@
             <table class="table">
               <thead>
                 <tr class="table-header-row">
-                  <th
-                    class="table-header-cell col-width-1"
-                    th:with="sortDirection=${validSortBy.equals('id') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
-                  >
-                    <a
-                      th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {{'sortBy': 'id', 'page': '1', 'sortDirection' : sortDirection }})}"
-                      th:href="${'/dashboard/product/discount' + newQuery}"
-                    >
-                      Mã
-                      <i
-                        th:if="${validSortBy.equals('id') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-                        class="fa-solid fa-arrow-down"
-                      ></i>
-
-                      <i
-                        th:if="${validSortBy.equals('id') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-                        class="fa-solid fa-arrow-up"
-                      ></i>
-                    </a>
-                  </th>
-
                   <th class="table-header-cell col-width-1">Hình ảnh</th>
 
                   <th
@@ -380,6 +359,27 @@
 
                   <th
                     class="table-header-cell col-width-2"
+                    th:with="sortDirection=${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
+                  >
+                    <a
+                      th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'updatedAt', 'page': '1', 'sortDirection': sortDirection})}"
+                      th:href="${'/dashboard/product/discount' + newQuery}"
+                    >
+                      Ngày tạo
+                      <i
+                        th:if="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                        class="fa-solid fa-arrow-down"
+                      ></i>
+
+                      <i
+                        th:if="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                        class="fa-solid fa-arrow-up"
+                      ></i>
+                    </a>
+                  </th>
+
+                  <th
+                    class="table-header-cell col-width-2"
                     th:with="sortDirection=${validSortBy.equals('updatedAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
                   >
                     <a
@@ -410,19 +410,12 @@
                   <td class="table-body-cell">
                     <span
                       class="cell-text"
-                      th:text="${product.id != null ? product.id : 'N/A'}"
-                    ></span>
-                  </td>
-
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:if="${product.productImage == null}"
+                      th:if="${product.productImage == null or #strings.isEmpty(product.productImage.imageName)}"
                       >N/A</span
                     >
                     <div
                       class="product-image"
-                      th:if="${product.productImage != null}"
+                      th:if="${product.productImage != null and !#strings.isEmpty(product.productImage.imageName)}"
                     >
                       <img
                         th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + product.productImage.imageName}"
@@ -442,6 +435,13 @@
                     <span
                       class="danger-badge"
                       th:text="${product.discount != null ? '-' + product.discount + '%' : 'N/A'}"
+                    ></span>
+                  </td>
+
+                  <td class="table-body-cell">
+                    <span
+                      class="cell-text"
+                      th:text="${product.createdAt != null ? #temporals.format(product.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
                     ></span>
                   </td>
 

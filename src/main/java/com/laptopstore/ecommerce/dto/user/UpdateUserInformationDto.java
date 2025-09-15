@@ -1,6 +1,6 @@
 package com.laptopstore.ecommerce.dto.user;
 
-import com.laptopstore.ecommerce.util.validation.user.UpdateAccountInfoConstraint;
+import com.laptopstore.ecommerce.validation.user.UpdateAccountInfoConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

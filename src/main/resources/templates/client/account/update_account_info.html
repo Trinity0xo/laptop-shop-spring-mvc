@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Account</title>
+    <title>Tài khoản</title>
   </head>
 
   <body>
@@ -17,7 +17,7 @@
         <!-- breadcrumb -->
         <ul class="breadcrumb">
           <li><a href="/">Trang chủ</a></li>
-          <li><a href="/account/information">Tàn khoản</a></li>
+          <li><a href="/account/information">Tài khoản</a></li>
           <li>Cập nhật</li>
         </ul>
 
@@ -30,10 +30,10 @@
           <!-- account information -->
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
             <form
-              class="update-account-form"
+              class="update-account-form card"
               method="post"
               th:action="@{/account/information/update}"
-              th:object="${updateAccountInfo}"
+              th:object="${updateUserInformationDto}"
               enctype="multipart/form-data"
             >
               <h1 class="form-title">Cập nhật thông tin tài khoản</h1>
@@ -46,7 +46,7 @@
                       <div class="image-upload-preview">
                         <div
                           class="image-preview"
-                          th:if="${updateAccountInfo.currentAvatarName == null or updateAccountInfo.currentAvatarName.isEmpty()}"
+                          th:if="${#strings.isEmpty(updateUserInformationDto.currentAvatarName)}"
                         >
                           <label class="image-preview-edit-button" for="image"
                             ><i class="fa-solid fa-pen-to-square"></i
@@ -59,14 +59,14 @@
                         </div>
                         <div
                           class="image-preview"
-                          th:if="${updateAccountInfo.currentAvatarName != null and !updateAccountInfo.currentAvatarName.isEmpty()}"
+                          th:if="${!#strings.isEmpty(updateUserInformationDto.currentAvatarName)}"
                         >
                           <label class="image-preview-edit-button" for="image"
                             ><i class="fa-solid fa-pen-to-square"></i
                           ></label>
                           <img
                             class="image-preview-image"
-                            th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + updateAccountInfo.currentAvatarName}"
+                            th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + updateUserInformationDto.currentAvatarName}"
                             alt="avatar"
                           />
                         </div>
@@ -83,25 +83,18 @@
                           id="image"
                           type="file"
                           th:classappend="${#fields.hasErrors('newAvatar') ? 'error' : ''}"
-                          th:field="${updateAccountInfo.newAvatar}"
+                          th:field="${updateUserInformationDto.newAvatar}"
                           accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"
                         />
                       </div>
-                      <input
-                        type="hidden"
-                        name="currentAvatarName"
-                        id="currentAvatarName"
-                        th:value="${updateAccountInfo.currentAvatarName != null and not updateAccountInfo.currentAvatarName.isEmpty() ? updateAccountInfo.currentAvatarName : ''}"
-                      />
                     </div>
                     <span
                       class="input-error-message"
                       th:if="${#fields.hasErrors('newAvatar')}"
-                      th:errors="${updateAccountInfo.newAvatar}"
+                      th:errors="${updateUserInformationDto.newAvatar}"
                     ></span>
                   </div>
                 </div>
-
                 <div class="input-group">
                   <label for="firstName">Họ: </label>
                   <div class="input-group-control">
@@ -111,14 +104,14 @@
                       id="firstName"
                       placeholder="Nhập họ"
                       required
-                      th:value="${updateAccountInfo.firstName}"
+                      th:value="${updateUserInformationDto.firstName}"
                       th:classappend="${#fields.hasErrors('firstName') ? 'error' : ''}"
-                      th:field="${updateAccountInfo.firstName}"
+                      th:field="${updateUserInformationDto.firstName}"
                     />
                     <span
                       class="input-error-message"
                       th:if="${#fields.hasErrors('firstName')}"
-                      th:errors="${updateAccountInfo.firstName}"
+                      th:errors="${updateUserInformationDto.firstName}"
                     ></span>
                   </div>
                 </div>
@@ -132,14 +125,14 @@
                       id="lastName"
                       placeholder="Nhập tên"
                       required
-                      th:value="${updateAccountInfo.lastName}"
+                      th:value="${updateUserInformationDto.lastName}"
                       th:classappend="${#fields.hasErrors('lastName') ? 'error' : ''}"
-                      th:field="${updateAccountInfo.lastName}"
+                      th:field="${updateUserInformationDto.lastName}"
                     />
                     <span
                       class="input-error-message"
                       th:if="${#fields.hasErrors('lastName')}"
-                      th:errors="${updateAccountInfo.lastName}"
+                      th:errors="${updateUserInformationDto.lastName}"
                     ></span>
                   </div>
                 </div>
@@ -152,14 +145,14 @@
                       name="phone"
                       id="phone"
                       placeholder="Nhập số điện thoại"
-                      th:value="${updateAccountInfo.phone}"
+                      th:value="${updateUserInformationDto.phone}"
                       th:classappend="${#fields.hasErrors('phone') ? 'error' : ''}"
-                      th:field="${updateAccountInfo.phone}"
+                      th:field="${updateUserInformationDto.phone}"
                     />
                     <span
                       class="input-error-message"
                       th:if="${#fields.hasErrors('phone')}"
-                      th:errors="${updateAccountInfo.phone}"
+                      th:errors="${updateUserInformationDto.phone}"
                     ></span>
                   </div>
                 </div>
@@ -171,15 +164,15 @@
                       name="address"
                       id="address"
                       placeholder="Nhập địa chỉ"
-                      th:value="${updateAccountInfo.address}"
+                      th:value="${updateUserInformationDto.address}"
                       th:classappend="${#fields.hasErrors('address') ? 'error' : ''}"
-                      th:field="${updateAccountInfo.address}"
+                      th:field="${updateUserInformationDto.address}"
                       rows="3"
                     ></textarea>
                     <span
                       class="input-error-message"
                       th:if="${#fields.hasErrors('address')}"
-                      th:errors="${updateAccountInfo.address}"
+                      th:errors="${updateUserInformationDto.address}"
                     ></span>
                   </div>
                 </div>
@@ -188,7 +181,7 @@
               <div class="form-actions">
                 <div class="spacer"></div>
                 <button class="save-button primary-button" type="submit">
-                  Lưu thay đổi
+                  Lưu
                 </button>
                 <a
                   class="back-button secondary-button"

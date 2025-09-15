@@ -30,10 +30,10 @@
             <form
               class="checkout-form"
               method="post"
-              th:action="@{/cart/checkout}"
+              th:action="@{/checkout}"
               th:object="${checkoutDto}"
             >
-              <div class="checkout-information">
+              <div class="checkout-information card">
                 <h2 class="checkout-information-title">Thông tin</h2>
                 <div class="shipping-information">
                   <div class="row">
@@ -218,7 +218,7 @@
 
           <!-- checkout items -->
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-            <div class="checkout-items">
+            <div class="checkout-items card">
               <h2 class="checkout-items-title">Sản phẩm</h2>
               <ul class="checkout-item-list">
                 <li
@@ -229,7 +229,7 @@
                     <div class="product-image">
                       <img
                         class="image"
-                        th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (checkoutProduct.imageName != null and not checkoutProduct.imageName.isEmpty() ? checkoutProduct.imageName : '')}"
+                        th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' +  checkoutProduct.imageName}"
                         alt="product"
                       />
                     </div>

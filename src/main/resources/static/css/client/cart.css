@@ -295,7 +295,7 @@
 .cart .container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.6rem;
 }
 .cart .container .cart-title {
   font-size: 2.5rem;
@@ -304,19 +304,12 @@
 .cart .container .cart-item-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-.cart .container .cart-item-list .cart-item {
-  padding: 16px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  transition: 0.3s;
+  gap: 2rem;
 }
 .cart .container .cart-item-list .cart-item .product {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 1.6rem;
 }
 @media (max-width: 576px) {
   .cart .container .cart-item-list .cart-item .product {
@@ -344,10 +337,10 @@
   }
 }
 .cart .container .cart-item-list .cart-item .product .product-image {
-  width: 120px;
-  height: 120px;
+  width: 12rem;
+  height: 12rem;
 }
-.cart .container .cart-item-list .cart-item .product .product-image .image {
+.cart .container .cart-item-list .cart-item .product .product-image img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -359,27 +352,27 @@
 }
 @media (max-width: 576px) {
   .cart .container .cart-item-list .cart-item .product .product-information {
-    gap: 10px;
+    gap: 1rem;
   }
 }
 @media (min-width: 576px) {
   .cart .container .cart-item-list .cart-item .product .product-information {
-    gap: 10px;
+    gap: 1rem;
   }
 }
 @media (min-width: 768px) {
   .cart .container .cart-item-list .cart-item .product .product-information {
-    gap: 6px;
+    gap: 0.6rem;
   }
 }
 @media (min-width: 992px) {
   .cart .container .cart-item-list .cart-item .product .product-information {
-    gap: 6px;
+    gap: 0.6rem;
   }
 }
 @media (min-width: 1200px) {
   .cart .container .cart-item-list .cart-item .product .product-information {
-    gap: 6px;
+    gap: 0.6rem;
   }
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-name {
@@ -393,7 +386,7 @@
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-pricing {
   display: flex;
-  gap: 10px;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-pricing .price {
@@ -403,7 +396,7 @@
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-pricing .discount-information {
   display: flex;
-  gap: 10px;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-pricing .discount-information .old-price {
@@ -415,7 +408,7 @@
 .cart .container .cart-item-list .cart-item .product .product-information .product-quantity {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-quantity .quantity-label {
@@ -424,18 +417,18 @@
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-quantity .quantity-control {
   display: flex;
-  gap: 6px;
+  gap: 0.6rem;
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-quantity .quantity-control .quantity-input {
   padding: 0;
   font-size: 1.6rem;
   border: 0.1rem solid rgba(51, 51, 51, 0.25);
   color: #333;
-  border-radius: 1rem;
+  border-radius: 0.4rem;
   text-align: center;
   align-self: stretch;
-  width: 30px;
-  height: 30px;
+  width: 3rem;
+  height: 3rem;
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-quantity .quantity-control .quantity-input.error {
   border: 0.1rem solid #dc4c64;
@@ -445,27 +438,27 @@
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-quantity .quantity-control .quantity-minus-button {
   display: flex;
-  height: 30px;
-  width: 30px;
+  height: 3rem;
+  width: 3rem;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  border-radius: 50px 0px 0px 50px;
+  padding: 1rem;
+  border-radius: 5rem 0 0 5rem;
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-quantity .quantity-control .quantity-plus-button {
   display: flex;
-  height: 30px;
-  width: 30px;
+  height: 3rem;
+  width: 3rem;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  border-radius: 0px 50px 50px 0px;
+  padding: 1rem;
+  border-radius: 0 5rem 5rem 0;
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-total-price {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 0.8rem;
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-total-price .total-price-label {
   font-size: 1.6rem;
@@ -481,20 +474,16 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 1rem;
 }
 .cart .container .cart-item-list .cart-item .product .product-information .product-status .product-stock-status {
   font-size: 1.6rem;
   color: #333;
 }
 .cart .container .cart-summary {
-  background-color: #fff;
-  padding: 16px;
-  border-radius: 10px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.6rem;
 }
 .cart .container .cart-summary .summary-title {
   font-size: 2rem;
@@ -516,5 +505,5 @@
 .cart .container .cart-summary .cart-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1.6rem;
 }

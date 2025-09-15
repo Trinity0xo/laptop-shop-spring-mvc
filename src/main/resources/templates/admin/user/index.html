@@ -31,7 +31,7 @@
 
         <!-- user list content -->
         <div
-          class="user-list-content user-content"
+          class="user-list-content user-content card"
           th:with="validSortBy=${paginationUtils.getValidSortBy(userClass, userFilterDto.sortBy, userClass.DEFAULT_SORT_FIELD)}"
         >
           <h1 class="content-title">Người dùng</h1>
@@ -112,7 +112,7 @@
           <!-- search summary -->
           <div
             class="search-summary"
-            th:if="${userFilterDto.search != null && !userFilterDto.search.isEmpty()}"
+            th:if="${!#strings.isEmpty(userFilterDto.search)}"
           >
             <p class="search-message">
               <span
@@ -140,31 +140,10 @@
             <table class="table">
               <thead>
                 <tr class="table-header-row">
-                  <th
-                    class="table-header-cell col-width-1"
-                    th:with="sortDirection=${validSortBy.equals('id') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
-                  >
-                    <a
-                      th:with="newQuery=${queryUtils.modifiedQuery(userFilterDto.toQuery(), {{'sortBy': 'id', 'page': '1', 'sortDirection' : sortDirection }})}"
-                      th:href="${'/dashboard/user' + newQuery}"
-                    >
-                      Mã
-                      <i
-                        th:if="${validSortBy.equals('id') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-                        class="fa-solid fa-arrow-down"
-                      ></i>
-
-                      <i
-                        th:if="${validSortBy.equals('id') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-                        class="fa-solid fa-arrow-up"
-                      ></i>
-                    </a>
-                  </th>
-
-                  <th class="table-header-cell col-width-2">Avatar</th>
+                  <th class="table-header-cell col-width-2">Ảnh đại diện</th>
 
                   <th
-                    class="table-header-cell col-width-4"
+                    class="table-header-cell col-width-5"
                     th:with="sortDirection=${validSortBy.equals('email') and userFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
                   >
                     <a
@@ -232,15 +211,9 @@
               <tbody>
                 <tr class="table-body-row" th:each="user: ${response.data}">
                   <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${user.id != null ? user.id : 'N/A'}"
-                    ></span>
-                  </td>
-                  <td class="table-body-cell">
                     <div
                       class="user-avatar"
-                      th:if="${user.avatar != null and !user.avatar.isEmpty()}"
+                      th:if="${!#strings.isEmpty(user.avatar)}"
                     >
                       <img
                         th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + user.avatar}"
@@ -249,7 +222,7 @@
                     </div>
                     <div
                       class="user-avatar"
-                      th:if="${user.avatar == null or user.avatar.isEmpty()}"
+                      th:if="${#strings.isEmpty(user.avatar)}"
                     >
                       <img src="/images/default-avatar.png" alt="user avatar" />
                     </div>

@@ -298,10 +298,6 @@
   gap: 1.6rem;
 }
 .account-info .container .account-info-content {
-  background-color: #fff;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border-radius: 1.6rem;
-  padding: 1.6rem;
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
@@ -317,8 +313,10 @@
 }
 .account-info .container .account-info-content .content-description-list .avatar img {
   width: 100%;
+  height: 100%;
   border-radius: 50%;
   overflow: hidden;
+  border: 0.3rem solid rgba(51, 51, 51, 0.25);
 }
 .account-info .container .account-info-content .content-actions {
   display: flex;

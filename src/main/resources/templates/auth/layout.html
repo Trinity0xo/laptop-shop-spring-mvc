@@ -56,27 +56,20 @@
 
   <body>
     <div class="layout">
-      <div class="authentication">
-        <!-- messages -->
-        <div class="messages" style="display: none">
-          <p
-            class="message success-message"
-            th:if="${successMessage != null and !successMessage.isEmpty()}"
-            th:text="${successMessage}"
-          ></p>
-          <p
-            class="message error-message"
-            th:if="${errorMessage != null and !errorMessage.isEmpty()}"
-            th:text="${errorMessage}"
-          ></p>
-        </div>
+      <!-- messages -->
+      <div class="messages" style="display: none">
+        <p
+          class="message success-message"
+          th:if="${successMessage != null and !successMessage.isEmpty()}"
+          th:text="${successMessage}"
+        ></p>
+      </div>
 
-        <div class="authentication-form">
-          <div class="logo">
-            <a class="site-logo" href="/">ShopLap</a>
-          </div>
-          <div layout:fragment="content"></div>
+      <div class="authentication-form card">
+        <div class="logo">
+          <a class="site-logo" href="/">ShopLap</a>
         </div>
+        <div layout:fragment="content"></div>
       </div>
     </div>
   </body>
@@ -98,5 +91,5 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  <script src="/js/client/main.js"></script>
+  <script src="/js/main.js"></script>
 </html>

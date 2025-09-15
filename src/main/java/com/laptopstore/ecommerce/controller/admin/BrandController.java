@@ -66,7 +66,7 @@ public class BrandController {
 
     @GetMapping("/update/{brandId}")
     public String showUpdatePage(
-            @PathVariable Long brandId,
+            @PathVariable long brandId,
             Model model
     ) {
         UpdateBrandDto updateBrandDto = this.brandService.getInformationForUpdateBrand(brandId);
@@ -82,6 +82,8 @@ public class BrandController {
             RedirectAttributes redirectAttributes
     ) {
         if (bindingResult.hasErrors()) {
+            UpdateBrandDto newUpdateBrandDto = this.brandService.getInformationForUpdateBrand(updateBrandDto.getId());
+            updateBrandDto.setOldName(newUpdateBrandDto.getOldName());
             return "/admin/brand/update";
         }
 
@@ -94,17 +96,18 @@ public class BrandController {
 
     @GetMapping("/delete/{brandId}")
     public String showDeleteBrandPage(
-            @PathVariable Long brandId,
+            @PathVariable long brandId,
             Model model
     ) {
-        model.addAttribute("brandId", brandId);
+        Brand brand = this.brandService.getBrandById(brandId);
+        model.addAttribute("brand", brand);
 
         return "/admin/brand/delete";
     }
 
     @PostMapping("/delete")
     public String deleteBrand(
-            Long brandId,
+            @RequestParam long brandId,
             RedirectAttributes redirectAttributes
     ) {
         this.brandService.deleteBrand(brandId);
@@ -115,7 +118,7 @@ public class BrandController {
 
     @GetMapping("/details/{brandId}")
     public String showBrandDetailsPage(
-            @PathVariable Long brandId,
+            @PathVariable long brandId,
             Model model
     ) {
         Brand brand = this.brandService.getBrandById(brandId);

@@ -1,3 +1,10 @@
+import {
+  formatCurrency,
+  setTypeNumberAndUnFormatCurrency,
+  setTypeTextAndFormatCurrency,
+  checkFileType,
+} from "/js/utils.js";
+
 // dropdown
 const dropDownToggle = $(".dropdown-toggle");
 const dropDownMenu = $(".dropdown-menu");
@@ -36,33 +43,7 @@ $(".overlay").click(function () {
   $(this).removeClass("show");
 });
 
-// price input format
-const formatCurrency = new Intl.NumberFormat("vi-VN", {
-  style: "currency",
-  currency: "VND",
-  minimumFractionDigits: 0,
-});
-
-function unFormatCurrency(currencyValue) {
-  const numericString = currencyValue.replace(/[^\d]/g, "");
-  return Number(numericString);
-}
-
-function setTypeNumberAndUnFormatCurrency(jqueryElement) {
-  const unFormattedValue = unFormatCurrency(jqueryElement.val());
-  jqueryElement.attr("type", "number");
-  jqueryElement.val(unFormattedValue);
-}
-
-function setTypeTextAndFormatCurrency(jqueryElement) {
-  const formattedValue = formatCurrency.format(jqueryElement.val());
-  jqueryElement.attr("type", "text");
-  jqueryElement.val(formattedValue);
-}
-
-const priceInputs = $(".price-input");
-
-priceInputs.each(function () {
+$(".price-input").each(function () {
   const input = $(this);
   input.val(formatCurrency.format(input.val()));
 
@@ -75,10 +56,8 @@ priceInputs.each(function () {
   });
 });
 
-const controlPanelForm = $(".control-panel-form");
-
-controlPanelForm.on("submit", function () {
-  priceInputs.each(function () {
+$(".control-panel-form").on("submit", function () {
+  $(".price-input").each(function () {
     setTypeNumberAndUnFormatCurrency($(this));
   });
 });
@@ -88,8 +67,6 @@ const imageUploadInput = $(".image-upload-input");
 const imageUploadPreview = $(".image-upload-preview");
 const imageUploadControl = $(".image-upload-control");
 const imagePreview = $(".image-preview");
-const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
-const deleteImageName = $("#deleteImageName");
 
 if (imagePreview.length > 0) {
   imageUploadControl.addClass("hide");
@@ -97,21 +74,10 @@ if (imagePreview.length > 0) {
   imageUploadPreview.addClass("hide");
 }
 
-function checkFileType(file, allowedExtensions) {
-  let isValid = true;
-
-  const fileExtension = file.name.split(".").pop().toLowerCase();
-  if (!allowedExtensions.includes(fileExtension)) {
-    isValid = false;
-  }
-
-  return isValid;
-}
-
 imageUploadInput.change(function () {
   const file = $(this)[0].files[0];
 
-  if (checkFileType(file, allowedExtensions)) {
+  if (checkFileType(file)) {
     const reader = new FileReader();
     reader.onload = function (e) {
       const imagePreview = $(`
@@ -142,15 +108,17 @@ imageUploadInput.change(function () {
   }
 });
 
-// show message
 function showMessage() {
   const successMessage = $(".success-message");
-  const errorMessage = $(".error-message");
 
-  let showMessage = false;
+  let successMessageText = successMessage.text();
 
-  if (successMessage.length > 0) {
-    const successMessageText = successMessage.text();
+  if (!successMessageText) {
+    successMessageText = localStorage.getItem("successMessage");
+    localStorage.removeItem("successMessage");
+  }
+
+  if (successMessageText) {
     $.toast({
       heading: "Success",
       text: successMessageText,
@@ -159,29 +127,9 @@ function showMessage() {
       hideAfter: 5000,
       position: "top-right",
     });
-
-    showMessage = true;
   }
 
-  if (errorMessage.length > 0) {
-    const errorMessageText = errorMessage.text();
-
-    $.toast({
-      heading: "Error",
-      text: errorMessageText,
-      showHideTransition: "slide",
-      icon: "error",
-      hideAfter: 5000,
-      position: "top-right",
-    });
-
-    showMessage = true;
-  }
-
-  if (showMessage) {
-    successMessage.text("");
-    errorMessage.text("");
-  }
+  successMessage.text("");
 }
 
 showMessage();

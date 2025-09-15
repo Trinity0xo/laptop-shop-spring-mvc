@@ -1,6 +1,6 @@
 package com.laptopstore.ecommerce.dto.cart;
 
-import com.laptopstore.ecommerce.util.validation.cart.CheckOutConstraint;
+import com.laptopstore.ecommerce.validation.cart.CheckOutConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

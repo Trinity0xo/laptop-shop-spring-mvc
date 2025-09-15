@@ -35,9 +35,7 @@ public class ReviewController {
     }
 
     @GetMapping("/details/{reviewId}")
-    public String showReviewDetailsPage(
-            @PathVariable Long reviewId,
-            Model model
+    public String showReviewDetailsPage(@PathVariable long reviewId, Model model
     ){
         Review review = this.reviewService.getReviewDetails(reviewId);
         model.addAttribute("review", review);

@@ -18,10 +18,6 @@
   }
 
   .checkout-information {
-    background-color: $bg-white;
-    border-radius: 1.6rem;
-    padding: 1.6rem;
-    box-shadow: $box-shadow-01;
     display: flex;
     flex-direction: column;
     gap: 1.6rem;
@@ -108,11 +104,6 @@
   }
 
   .checkout-items {
-    background-color: $bg-white;
-    border-radius: 1.6rem;
-    padding: 1.6rem;
-    box-shadow: $box-shadow-01;
-
     .checkout-items-title {
       font-size: 2rem;
       color: $text-primary;

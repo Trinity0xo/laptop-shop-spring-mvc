@@ -298,10 +298,6 @@
   gap: 1.6rem;
 }
 .order-history .container .order-history-content {
-  background-color: #fff;
-  padding: 1.6rem;
-  border-radius: 1.6rem;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
@@ -313,39 +309,39 @@
 .order-history .container .order-history-content .content-table {
   overflow-y: auto;
 }
-.order-history .container .order-history-content .content-table .table .col-width-1 {
+.order-history .container .order-history-content .content-table table .col-width-1 {
   min-width: 7.0833333333rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-2 {
+.order-history .container .order-history-content .content-table table .col-width-2 {
   min-width: 14.1666666667rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-3 {
+.order-history .container .order-history-content .content-table table .col-width-3 {
   min-width: 21.25rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-4 {
+.order-history .container .order-history-content .content-table table .col-width-4 {
   min-width: 28.3333333333rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-5 {
+.order-history .container .order-history-content .content-table table .col-width-5 {
   min-width: 35.4166666667rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-6 {
+.order-history .container .order-history-content .content-table table .col-width-6 {
   min-width: 42.5rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-7 {
+.order-history .container .order-history-content .content-table table .col-width-7 {
   min-width: 49.5833333333rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-8 {
+.order-history .container .order-history-content .content-table table .col-width-8 {
   min-width: 56.6666666667rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-9 {
+.order-history .container .order-history-content .content-table table .col-width-9 {
   min-width: 63.75rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-10 {
+.order-history .container .order-history-content .content-table table .col-width-10 {
   min-width: 70.8333333333rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-11 {
+.order-history .container .order-history-content .content-table table .col-width-11 {
   min-width: 77.9166666667rem;
 }
-.order-history .container .order-history-content .content-table .table .col-width-12 {
+.order-history .container .order-history-content .content-table table .col-width-12 {
   min-width: 85rem;
 }

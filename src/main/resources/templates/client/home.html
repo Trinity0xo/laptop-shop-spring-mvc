@@ -45,7 +45,7 @@
       <!-- categories -->
       <section
         class="categories"
-        th:if="${homeContent.categories != null and not homeContent.categories.isEmpty()}"
+        th:if="${!#lists.isEmpty(homeContent.categories)}"
       >
         <div class="container">
           <h2 class="categories-title">Danh mục sản phẩm</h2>
@@ -55,7 +55,7 @@
               th:each="category: ${homeContent.categories}"
             >
               <a
-                class="category-card"
+                class="category-card card"
                 th:href="${'/shop' + '?categories=' + category.slug}"
               >
                 <div class="category-image">
@@ -103,7 +103,7 @@
       <!-- top discount -->
       <section
         class="top-discount"
-        th:if="${homeContent.topDiscountProducts != null and not homeContent.topDiscountProducts.isEmpty()}"
+        th:if="${!#lists.isEmpty(homeContent.topDiscountProducts)}"
       >
         <div class="container">
           <div class="top-discount-header">
@@ -123,12 +123,11 @@
             >
               <a
                 th:href="@{/shop/product/{slug}(slug=${product.slug})}"
-                class="product-card"
+                class="product-card card"
               >
                 <div class="product-image">
                   <img
-                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' +
-                        (product.productImage != null ? product.productImage.imageName: '')}"
+                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (product.productImage != null ? product.productImage.imageName: '')}"
                     alt="product"
                   />
                 </div>
@@ -172,7 +171,7 @@
           <h2 class="reasons-title">Tại sao nên chọn chúng tôi</h2>
           <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-              <div class="reason-card">
+              <div class="reason-card card">
                 <div class="reason-image">
                   <img
                     src="/images/Delivery-Motorcycle.png"

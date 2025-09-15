@@ -12,11 +12,6 @@
     gap: 1.6rem;
 
     .product-details-header {
-      background-color: $bg-white;
-      padding: 1.6rem;
-      border-radius: 1.6rem;
-      box-shadow: $box-shadow-01;
-
       .product-summary {
         display: flex;
         flex-direction: column;
@@ -43,7 +38,7 @@
         .product-pricing {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 0.6rem;
 
           .price {
             font-size: 2.5rem;
@@ -53,7 +48,7 @@
 
           .discount-information {
             display: flex;
-            gap: 10px;
+            gap: 1rem;
             align-items: center;
 
             .old-price {
@@ -87,7 +82,7 @@
             align-items: center;
             width: 4rem;
             height: 4rem;
-            border-radius: 5rem 0px 0px 5rem;
+            border-radius: 5rem 0 0 5rem;
 
             i {
               font-size: 1.6rem;
@@ -101,7 +96,7 @@
             align-items: center;
             width: 4rem;
             height: 4rem;
-            border-radius: 0px 5rem 5rem 0px;
+            border-radius: 0 5rem 5rem 0;
 
             i {
               font-size: 1.6rem;
@@ -177,10 +172,6 @@
         display: flex;
         flex-direction: column;
         gap: 1.6rem;
-        border-radius: 1.6rem;
-        background-color: $bg-white;
-        box-shadow: $box-shadow-01;
-        padding: 1.6rem;
 
         .product-about {
           display: flex;
@@ -227,10 +218,6 @@
         }
 
         .user-reviews {
-          border-radius: 1.6rem;
-          background-color: $bg-white;
-          box-shadow: $box-shadow-01;
-          padding: 1.6rem;
           display: flex;
           flex-direction: column;
           gap: 2rem;
@@ -248,7 +235,7 @@
             .review-item {
               &:not(:last-child) {
                 padding: 0 0 1.6rem 0;
-                border-bottom: 1px solid rgba($text-primary, 0.25);
+                border-bottom: 0.1rem solid rgba($text-primary, 0.25);
               }
             }
           }

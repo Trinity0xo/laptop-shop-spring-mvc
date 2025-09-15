@@ -3,7 +3,6 @@ package com.laptopstore.ecommerce.configuration;
 import com.laptopstore.ecommerce.dto.auth.RegisterDto;
 import com.laptopstore.ecommerce.model.User;
 import com.laptopstore.ecommerce.service.UserService;
-import com.laptopstore.ecommerce.service.impl.UserServiceImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -19,7 +18,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     public CustomOAuth2UserService(UserService userService) {
         this.userService = userService;
-        ;
     }
 
     @Override

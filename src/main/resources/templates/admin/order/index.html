@@ -33,7 +33,7 @@
         </ul>
 
         <div
-          class="order-list-content order-content"
+          class="order-list-content order-content card"
           th:with="validSortBy=${paginationUtils.getValidSortBy(orderClass, orderFilterDto.sortBy, orderClass.DEFAULT_SORT_FIELD)}"
         >
           <div class="content-title">Đơn hàng</div>
@@ -262,7 +262,7 @@
           <!-- search summary -->
           <div
             class="search-summary"
-            th:if="${orderFilterDto.search != null && !orderFilterDto.search.isEmpty()}"
+            th:if="${!#strings.isEmpty(orderFilterDto.search)}"
           >
             <p class="search-message">
               <span
@@ -429,9 +429,7 @@
                   </td>
 
                   <td class="table-body-cell">
-                    <span
-                      th:text="${order.id != null ? order.id : 'N/A'}"
-                    ></span>
+                    <span th:text="${order.id}"></span>
                   </td>
 
                   <td class="table-body-cell">

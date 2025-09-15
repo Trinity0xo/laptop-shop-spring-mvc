@@ -18,10 +18,10 @@
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/category">Danh mục</a></li>
-          <li th:text="${category.id}"></li>
+          <li th:text="${category.name}"></li>
         </ul>
 
-        <div class="category-details-content category-content">
+        <div class="category-details-content category-content card">
           <h1 class="content-title">
             Danh mục "<span th:text="${category.name}"></span>"
           </h1>
@@ -37,6 +37,7 @@
                 class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
               >
                 <span th:if="${#strings.isEmpty(category.image)}">N/A</span>
+
                 <a
                   class="category-image"
                   target="_blank"
@@ -50,16 +51,6 @@
                   />
                 </a>
               </dd>
-
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Mã:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${category.id}"
-              ></dd>
 
               <dt
                 class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
@@ -79,16 +70,6 @@
               <dd
                 class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
                 th:text="${#strings.isEmpty(category.description) ? 'N/A' : category.description}"
-              ></dd>
-
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Slug hiển thị:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(category.slug) ? 'N/A' : category.slug}"
               ></dd>
 
               <dt

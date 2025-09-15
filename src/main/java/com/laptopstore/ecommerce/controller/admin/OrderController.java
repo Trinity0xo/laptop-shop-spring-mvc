@@ -6,8 +6,10 @@ import com.laptopstore.ecommerce.dto.order.OrderFilterDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.service.OrderService;
 import com.laptopstore.ecommerce.util.AuthenticationUtils;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.laptopstore.ecommerce.dto.order.UpdateOrderStatusDto;
@@ -41,7 +43,7 @@ public class OrderController {
 
     @GetMapping("/details/{orderId}")
     public String showOrderItemsPage(
-            @PathVariable Long orderId,
+            @PathVariable long orderId,
             Model model
     )  {
         Order order = this.orderService.getOrderItems(orderId);
@@ -52,7 +54,7 @@ public class OrderController {
 
     @GetMapping("/update/{orderId}")
     public String showUpdateOrderPage(
-            @PathVariable Long orderId,
+            @PathVariable long orderId,
             Model model
     )  {
         UpdateOrderStatusDto updateOrderStatusDto = this.orderService.getOrderStatusUpdateInformation(orderId);
@@ -63,9 +65,14 @@ public class OrderController {
 
     @PostMapping("/update")
     public String updateOrder(
-            UpdateOrderStatusDto updateOrderStatusDto,
+            @Valid UpdateOrderStatusDto updateOrderStatusDto,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     )  {
+        if(bindingResult.hasErrors()){
+            return "admin/order/update";
+        }
+
         String email = AuthenticationUtils.getAuthenticatedName();
 
         this.orderService.updateOrderStatus(email, updateOrderStatusDto);

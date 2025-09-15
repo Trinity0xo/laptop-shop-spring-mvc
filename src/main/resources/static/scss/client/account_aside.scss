@@ -3,11 +3,6 @@
 @import "../responsive_grid";
 
 .account-aside {
-  background-color: $bg-white;
-  padding: 1.6rem;
-  box-shadow: $box-shadow-01;
-  border-radius: 1.6rem;
-
   .aside-option-list {
     .item {
       &:not(:last-child) {
@@ -20,7 +15,7 @@
         width: 100%;
         font-size: 1.6rem;
         color: $text-primary;
-        border-radius: 1rem;
+        border-radius: 0.4rem;
 
         &:hover {
           background-color: $color-primary;

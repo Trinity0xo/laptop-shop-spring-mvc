@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cancel order</title>
+    <title>Hủy đơn</title>
   </head>
 
   <body>
@@ -35,7 +35,7 @@
 
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
             <form
-              class="cancel-order-form"
+              class="cancel-order-form card"
               th:action="@{/account/order-history/cancel}"
               th:object="${cancelOrderInfo}"
               method="post"

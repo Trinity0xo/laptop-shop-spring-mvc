@@ -20,6 +20,15 @@ public class DateTimeUtils {
         return ZonedDateTime.now().minusDays(numberOfDays).toInstant();
     }
 
+    public static Instant getEndOfDay(Instant instant) {
+        return instant.atZone(ZONE_ID)
+                .toLocalDate()
+                .plusDays(1)
+                .atStartOfDay(ZONE_ID)
+                .toInstant()
+                .minusNanos(1);
+    }
+
     public static Map<String, Instant> getValidInstantRange(Instant startDate, Instant endDate){
         if(startDate == null || endDate == null) {
             return Collections.emptyMap();
@@ -35,7 +44,7 @@ public class DateTimeUtils {
         Map<String, Instant> validDateRange = new HashMap<>();
 
         validDateRange.put("startDate", startDate);
-        validDateRange.put("endDate", endDate);
+        validDateRange.put("endDate", getEndOfDay(endDate));
 
         return validDateRange;
     }

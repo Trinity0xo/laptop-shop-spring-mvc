@@ -5,6 +5,7 @@ import com.laptopstore.ecommerce.dto.product.CustomProductDto;
 import com.laptopstore.ecommerce.dto.product.CustomProductListDto;
 import com.laptopstore.ecommerce.dto.product.ProductFilterDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
+import com.laptopstore.ecommerce.exception.NotImplementException;
 import com.laptopstore.ecommerce.service.ContentService;
 import com.laptopstore.ecommerce.service.ProductService;
 import org.springframework.stereotype.Controller;
@@ -40,5 +41,17 @@ public class HomeController {
         model.addAttribute("response", response);
 
         return "/client/top_discount";
+    }
+
+    @GetMapping("/contact")
+    public String showContactPage(Model model
+    ){
+        throw new NotImplementException();
+    }
+
+    @GetMapping("/about")
+    public String showAboutPage(Model model
+    ){
+        throw new NotImplementException();
     }
 }

@@ -18,26 +18,16 @@
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/brand">Thương hiệu</a></li>
-          <li th:text="${brand.id}"></li>
+          <li th:text="${brand.name}"></li>
         </ul>
 
-        <div class="brand-details-content brand-content">
+        <div class="brand-details-content brand-content card">
           <h1 class="content-title">
             Thương hiệu "<span th:text="${brand.name}"></span>"
           </h1>
 
           <div class="content-description-list">
             <dl class="description-list row">
-              <dt
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term"
-              >
-                Mã:
-              </dt>
-              <dd
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
-                th:text="${brand.id != null ? brand.id : 'N/A'}"
-              ></dd>
-
               <dt
                 class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term"
               >
@@ -56,16 +46,6 @@
               <dd
                 class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
                 th:text="${#strings.isEmpty(brand.description) ? 'N/A' : brand.description}"
-              ></dd>
-
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Slug hiển thị:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(brand.slug) ? 'N/A' : brand.slug}"
               ></dd>
 
               <dt

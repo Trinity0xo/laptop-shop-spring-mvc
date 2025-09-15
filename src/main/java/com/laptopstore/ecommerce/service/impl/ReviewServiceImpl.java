@@ -3,6 +3,7 @@ package com.laptopstore.ecommerce.service.impl;
 import com.laptopstore.ecommerce.dto.product.CustomProductDetailsDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.dto.review.*;
+import com.laptopstore.ecommerce.exception.*;
 import com.laptopstore.ecommerce.model.Product;
 import com.laptopstore.ecommerce.model.Review;
 import com.laptopstore.ecommerce.model.User;
@@ -14,7 +15,6 @@ import com.laptopstore.ecommerce.service.ReviewService;
 import com.laptopstore.ecommerce.specification.ReviewSpecifications;
 import com.laptopstore.ecommerce.util.PaginationUtils;
 import com.laptopstore.ecommerce.util.constant.OrderStatusEnum;
-import com.laptopstore.ecommerce.util.error.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -49,7 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Product product = this.productRepository.findBySlug(productSlug).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(productSlug);
         }
 
         Double averageRating = this.reviewRepository.findAverageRatingByProduct(product);
@@ -123,7 +123,7 @@ public class ReviewServiceImpl implements ReviewService {
     public PageResponse<CustomProductDetailsDto> getProductReviews(String productSlug, ReviewFilterDto reviewFilterDto){
         Product product = this.productRepository.findBySlug(productSlug).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(productSlug);
         }
 
         Double averageRating = this.reviewRepository.findAverageRatingByProduct(product);
@@ -208,7 +208,7 @@ public class ReviewServiceImpl implements ReviewService {
     public PageResponse<CustomProductDetailsDto> getProductReviews(long productId, ReviewFilterDto reviewFilterDto) {
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/dashboard/product");
+            throw new ProductNotFoundException(productId);
         }
 
         Pageable pageable = PaginationUtils.createPageable(
@@ -236,7 +236,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Review getReviewDetails(long reviewId) {
         Review review = this.reviewRepository.findById(reviewId).orElse(null);
         if(review == null){
-            throw new ReviewNotFoundException("/dashboard/review");
+            throw new ReviewNotFoundException(reviewId);
         }
 
         return review;
@@ -251,7 +251,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(productId);
         }
 
         boolean isUserBoughtProduct = this.orderItemsRepository.existsByOrderUserAndOrderStatusAndProduct(user, OrderStatusEnum.DELIVERED, product);
@@ -283,12 +283,12 @@ public class ReviewServiceImpl implements ReviewService {
 
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(productId);
         }
 
         Review review = this.reviewRepository.findByIdAndUserAndProduct(updateReviewDto.getReviewId(), user, product).orElse(null);
         if(review == null){
-            throw new ReviewNotFoundException("/shop/product/" + product.getSlug());
+            throw new ReviewNotFoundException(updateReviewDto.getReviewId());
         }
 
         review.setRating(updateReviewDto.getRating());
@@ -314,7 +314,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public DeleteReviewDto getInformationForDeleteReview(String email, long productId, long reviewId){
+    public Review getInformationForDeleteReview(String email, long productId, long reviewId){
         User user = userRepository.findByEmail(email).orElse(null);
         if(user == null){
             throw new AuthenticatedUserNotFoundException();
@@ -322,19 +322,15 @@ public class ReviewServiceImpl implements ReviewService {
 
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(productId);
         }
 
         Review review = this.reviewRepository.findByIdAndUserAndProduct(reviewId, user, product).orElse(null);
         if(review == null){
-            throw new ReviewNotFoundException("/shop/product/" + product.getSlug());
+            throw new ReviewNotFoundException(reviewId);
         }
 
-        return new DeleteReviewDto(
-                review.getId(),
-                review.getProduct().getId(),
-                review.getProduct().getName()
-        );
+        return review;
     }
 
     @Override
@@ -346,7 +342,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(productId);
         }
 
         boolean isUserBoughtProduct = this.orderItemsRepository.existsByOrderUserAndOrderStatusAndProduct(user, OrderStatusEnum.DELIVERED, product);
@@ -374,12 +370,12 @@ public class ReviewServiceImpl implements ReviewService {
 
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(productId);
         }
 
         Review review = this.reviewRepository.findByIdAndUserAndProduct(reviewId, user, product).orElse(null);
         if(review == null){
-            throw new ReviewNotFoundException();
+            throw new ReviewNotFoundException(reviewId);
         }
 
         return new UpdateReviewDto(

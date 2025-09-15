@@ -31,7 +31,7 @@
 
         <!-- brand list content -->
         <div
-          class="brand-list-content brand-content"
+          class="brand-list-content brand-content card"
           th:with="validSortBy=${paginationUtils.getValidSortBy(brandClass, brandFilterDto.sortBy, brandClass.DEFAULT_SORT_FIELD)}"
         >
           <h1 class="content-title">Thương hiệu</h1>
@@ -112,7 +112,7 @@
           <!-- search summary -->
           <div
             class="search-summary"
-            th:if="${brandFilterDto.search != null && !brandFilterDto.search.isEmpty()}"
+            th:if="${!#strings.isEmpty(brandFilterDto.search)}"
           >
             <p class="search-message">
               <span
@@ -140,27 +140,6 @@
             <table class="table">
               <thead>
                 <tr class="table-header-row">
-                  <th
-                    class="table-header-cell col-width-1"
-                    th:with="sortDirection=${validSortBy.equals('id') and brandFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
-                  >
-                    <a
-                      th:with="newQuery=${queryUtils.modifiedQuery(brandFilterDto.toQuery(), {{'sortBy': 'id', 'page': '1', 'sortDirection' : sortDirection }})}"
-                      th:href="${'/dashboard/brand' + newQuery}"
-                    >
-                      Mã
-                      <i
-                        th:if="${validSortBy.equals('id') and brandFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-                        class="fa-solid fa-arrow-down"
-                      ></i>
-
-                      <i
-                        th:if="${validSortBy.equals('id') and brandFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-                        class="fa-solid fa-arrow-up"
-                      ></i>
-                    </a>
-                  </th>
-
                   <th
                     class="table-header-cell col-width-5"
                     th:with="sortDirection=${validSortBy.equals('name') and brandFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
@@ -229,13 +208,6 @@
               </thead>
               <tbody>
                 <tr class="table-body-row" th:each="brand : ${response.data}">
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${brand.id != null ? brand.id : 'N/A'}"
-                    ></span>
-                  </td>
-
                   <td class="table-body-cell">
                     <span
                       class="cell-text"

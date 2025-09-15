@@ -295,7 +295,7 @@
 .home {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 3.2rem;
 }
 .home .banners {
   position: relative;
@@ -450,11 +450,7 @@
   color: #333;
 }
 .home .categories .container .category-card {
-  background-color: #fff;
-  border-radius: 1.6rem;
-  padding: 1.6rem;
   transition: 0.3s;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
@@ -793,7 +789,6 @@
 }
 .home .reasons-shop-here .container .reason-card {
   background-color: #fff;
-  border-radius: 3.2rem;
   padding: 3.2rem;
   transition: 0.3s;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;

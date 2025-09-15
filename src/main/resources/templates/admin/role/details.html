@@ -18,26 +18,16 @@
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/role">Vai trò</a></li>
-          <li th:text="${role.id}"></li>
+          <li th:text="${role.name}"></li>
         </ul>
 
-        <div class="role-details-content role-content">
+        <div class="role-details-content role-content card">
           <h1 class="content-title">
             Vai trò "<span th:text="${role.name}"></span>"
           </h1>
 
           <div class="content-description-list">
             <dl class="description-list row">
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Mã:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${role.id}"
-              ></dd>
-
               <dt
                 class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
               >
@@ -56,16 +46,6 @@
               <dd
                 class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
                 th:text="${#strings.isEmpty(role.description) ? 'N/A' : role.description}"
-              ></dd>
-
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Slug:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(role.slug) ? 'N/A' : role.slug}"
               ></dd>
 
               <dt

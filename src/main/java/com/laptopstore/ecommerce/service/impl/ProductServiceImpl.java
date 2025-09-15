@@ -13,8 +13,8 @@ import com.laptopstore.ecommerce.service.ProductService;
 import com.laptopstore.ecommerce.specification.ReviewSpecifications;
 import com.laptopstore.ecommerce.util.PaginationUtils;
 import com.laptopstore.ecommerce.util.constant.OrderStatusEnum;
-import com.laptopstore.ecommerce.util.error.AuthenticatedUserNotFoundException;
-import com.laptopstore.ecommerce.util.error.ProductNotFoundException;
+import com.laptopstore.ecommerce.exception.AuthenticatedUserNotFoundException;
+import com.laptopstore.ecommerce.exception.ProductNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductById(long productId) {
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/dashboard/product");
+            throw new ProductNotFoundException(productId);
         }
 
         return product;
@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductBySlug(String slug) {
         Product product = this.productRepository.findBySlug(slug).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(slug);
         }
 
         return product;
@@ -253,7 +253,7 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = PaginationUtils.createPageable(10);
 
         List<Review> userReviews = this.reviewRepository.findAll(specification, pageable).getContent();
-
+        List<CustomProductDto> relatedProducts = this.productRepository.findRelatedProducts(product, pageable).getContent();
 
         return new CustomProductDetailsDto(
                 product.getId(),
@@ -294,7 +294,8 @@ public class ProductServiceImpl implements ProductService {
                 averageRating,
                 ratingPercentagesMap,
                 ratingCountMap,
-                userReviews
+                userReviews,
+                relatedProducts
         );
     }
 
@@ -336,6 +337,7 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = PaginationUtils.createPageable(10);
 
         List<Review> userReviews = this.reviewRepository.findAll(specification, pageable).getContent();
+        List<CustomProductDto> relatedProducts = this.productRepository.findRelatedProducts(product, pageable).getContent();
 
         return new CustomProductDetailsDto(
                 product.getId(),
@@ -378,7 +380,8 @@ public class ProductServiceImpl implements ProductService {
                 ratingCountMap,
                 userReviews,
                 myReview,
-                purchased
+                purchased,
+                relatedProducts
         );
     }
 
@@ -508,6 +511,7 @@ public class ProductServiceImpl implements ProductService {
         return new UpdateProductDto(
                 product.getId(),
                 product.getName(),
+                product.getName(),
                 product.getPrice(),
                 product.getDiscount(),
                 product.getQuantity(),
@@ -619,7 +623,7 @@ public class ProductServiceImpl implements ProductService {
     public CustomProductDetailsDto getAdminProductDetailsById(long productId){
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/dashboard/product");
+            throw new ProductNotFoundException(productId);
         }
 
        long sold = this.orderItemsRepository.countSoldProductByProductId(product.getId());

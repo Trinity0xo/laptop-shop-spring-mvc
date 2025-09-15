@@ -32,7 +32,7 @@
 
         <!-- role list content -->
         <div
-          class="role-list-content role-content"
+          class="role-list-content role-content card"
           th:with="validSortBy=${paginationUtils.getValidSortBy(roleClass, roleFilterDto.sortBy, roleClass.DEFAULT_SORT_FIELD)}"
         >
           <h1 class="content-title">Vai trò</h1>
@@ -106,7 +106,7 @@
           <!-- search summary -->
           <div
             class="search-summary"
-            th:if="${roleFilterDto.search != null && !roleFilterDto.search.isEmpty()}"
+            th:if="${!#strings.isEmpty(roleFilterDto.search)}"
           >
             <p class="search-message">
               <span
@@ -135,28 +135,7 @@
               <thead>
                 <tr class="table-header-row">
                   <th
-                    class="table-header-cell col-width-1"
-                    th:with="sortDirection=${validSortBy.equals('id') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
-                  >
-                    <a
-                      th:with="newQuery=${queryUtils.modifiedQuery(roleFilterDto.toQuery(), {{'sortBy': 'id', 'page': '1', 'sortDirection' : sortDirection }})}"
-                      th:href="${'/dashboard/role' + newQuery}"
-                    >
-                      Mã
-                      <i
-                        th:if="${validSortBy.equals('id') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-                        class="fa-solid fa-arrow-down"
-                      ></i>
-
-                      <i
-                        th:if="${validSortBy.equals('id') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-                        class="fa-solid fa-arrow-up"
-                      ></i>
-                    </a>
-                  </th>
-
-                  <th
-                    class="table-header-cell col-width-4"
+                    class="table-header-cell col-width-5"
                     th:with="sortDirection=${validSortBy.equals('name') and roleFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
                   >
                     <a
@@ -223,12 +202,6 @@
               </thead>
               <tbody>
                 <tr class="table-body-row" th:each="role: ${response.data}">
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${role.id != null ? role.id : 'N/A'}"
-                    ></span>
-                  </td>
                   <td class="table-body-cell">
                     <span
                       class="cell-text"

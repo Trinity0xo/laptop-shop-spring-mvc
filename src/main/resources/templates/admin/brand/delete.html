@@ -24,8 +24,8 @@
           </li>
           <li>
             <a
-              th:href="@{/dashboard/brand/details/{id}(id=${brandId})}"
-              th:text="${brandId}"
+              th:href="@{/dashboard/brand/details/{id}(id=${brand.id})}"
+              th:text="${brand.name}"
             ></a>
           </li>
           <li>Xóa</li>
@@ -33,19 +33,21 @@
 
         <!-- delete brand form -->
         <form
-          class="brand-delete-form brand-form"
+          class="brand-delete-form brand-form card"
           method="post"
           th:action="@{/dashboard/brand/delete}"
         >
           <h1 class="form-title">
-            Xóa thương hiệu với "Mã: <span th:text="${brandId}"></span>"
+            Xóa thương hiệu với "<span th:text="${brand.name}"></span>"
           </h1>
 
           <div class="form-content">
-            <input type="hidden" name="brandId" th:value="${brandId}" />
+            <input type="hidden" name="brandId" th:value="${brand.id}" />
             <p class="warning-message">
-              Bạn có chắc chắn muốn xóa thương hiệu với "Mã:
-              <span th:text="${brandId}"></span>" không?
+              Bạn có chắc chắn muốn xóa thương hiệu với "<span
+                th:text="${brand.name}"
+              ></span
+              >" không?
             </p>
           </div>
 
@@ -53,7 +55,7 @@
             <button type="submit" class="confirm-button danger-button">
               Xác nhận
             </button>
-            <a href="/dashboard/brand" class="back-button success-button">
+            <a href="/dashboard/brand" class="back-button secondary-button">
               Quay lại
             </a>
           </div>

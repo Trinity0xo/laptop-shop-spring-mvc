@@ -20,8 +20,8 @@
           <li><a href="/dashboard/category">Danh mục</a></li>
           <li>
             <a
-              th:href="@{/dashboard/category/details/{id}(id=${categoryId})}"
-              th:text="${categoryId}"
+              th:href="@{/dashboard/category/details/{id}(id=${category.id})}"
+              th:text="${category.name}"
             ></a>
           </li>
           <li>Delete</li>
@@ -29,19 +29,21 @@
 
         <!-- delete category form -->
         <form
-          class="delete-category-form category-form"
+          class="delete-category-form category-form card"
           method="post"
           th:action="@{/dashboard/category/delete}"
         >
           <h1 class="form-title">
-            Xóa danh mục với "Mã: <span th:text="${categoryId}"></span>"
+            Xóa danh mục với "<span th:text="${category.name}"></span>"
           </h1>
 
           <div class="form-content">
             <input type="hidden" name="categoryId" th:value="${categoryId}" />
             <p class="warning-message">
-              Bạn có chắc chắn muốn xóa danh mục với "Mã:
-              <span th:text="${categoryId}"></span>" không?
+              Bạn có chắc chắn muốn xóa danh mục với "<span
+                th:text="${category.name}"
+              ></span
+              >" không?
             </p>
           </div>
 

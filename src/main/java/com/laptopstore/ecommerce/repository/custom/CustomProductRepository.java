@@ -1,6 +1,7 @@
 package com.laptopstore.ecommerce.repository.custom;
 
 import com.laptopstore.ecommerce.dto.product.*;
+import com.laptopstore.ecommerce.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +19,5 @@ public interface CustomProductRepository {
     Page<CustomProductStockDto> findLowStockProducts(Pageable pageable);
     Page<CustomProductStockDto> findLowStockProducts(ProductFilterDto productFilterDto, Pageable pageable);
     Page<CustomProductDiscountDto> findDiscountProducts(ProductFilterDto productFilterDto, Pageable pageable);
+    Page<CustomProductDto> findRelatedProducts(Product product, Pageable pageable);
 }

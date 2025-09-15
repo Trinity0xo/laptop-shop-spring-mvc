@@ -10,9 +10,9 @@ import com.laptopstore.ecommerce.model.Product;
 import com.laptopstore.ecommerce.repository.ProductRepository;
 import com.laptopstore.ecommerce.repository.UserRepository;
 import com.laptopstore.ecommerce.service.CartService;
-import com.laptopstore.ecommerce.util.error.BadRequestException;
-import com.laptopstore.ecommerce.util.error.ProductNotFoundException;
-import com.laptopstore.ecommerce.util.error.AuthenticatedUserNotFoundException;
+import com.laptopstore.ecommerce.exception.BadRequestException;
+import com.laptopstore.ecommerce.exception.ProductNotFoundException;
+import com.laptopstore.ecommerce.exception.AuthenticatedUserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.laptopstore.ecommerce.model.Cart;
@@ -39,7 +39,6 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart createNewUserCart(User user) {
         Cart cart = new Cart(user);
-
         return this.cartRepository.save(cart);
     }
 
@@ -52,13 +51,12 @@ public class CartServiceImpl implements CartService {
 
         Product product = this.productRepository.findById(productId).orElse(null);
         if(product == null){
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(productId);
         }
 
         if (quantity <= 0) {
             throw new BadRequestException("Số lượng phải lớn hơn 0");
         }
-
 
         double totalPrice = product.getDiscountPrice() * quantity;
 
@@ -108,8 +106,6 @@ public class CartServiceImpl implements CartService {
             throw new BadRequestException("Không thể thanh toán vì một số sản phẩm đã hết hàng");
         }
 
-//        double totalPrice = this.cartItemsRepository.calculateCartTotalPrice(userCart);
-
         double totalPrice = 0;
 
         List<CheckoutDto.CheckoutProduct> checkoutProducts = new ArrayList<>();
@@ -149,7 +145,7 @@ public class CartServiceImpl implements CartService {
 
         Product product = productRepository.findById(productId).orElse(null);
         if (product == null) {
-            throw new ProductNotFoundException("/shop");
+            throw new ProductNotFoundException(productId);
         }
 
         Cart userCart = user.getCart();
@@ -175,16 +171,11 @@ public class CartServiceImpl implements CartService {
                     break;
                 }
             }
-
-            this.cartItemsRepository.saveAll(cartItems);
         }
 
         if (!isProductAlreadyInCart) {
             CartItem cartItem = new CartItem(userCart, product, quantity);
-
             userCart.getCartItems().add(cartItem);
-
-            this.cartItemsRepository.save(cartItem);
         }
 
         this.cartRepository.save(userCart);
@@ -199,7 +190,7 @@ public class CartServiceImpl implements CartService {
 
         Product product = productRepository.findById(productId).orElse(null);
         if (product == null) {
-            throw new ProductNotFoundException("/cart");
+            throw new ProductNotFoundException(productId);
         }
 
         Cart userCart = user.getCart();
@@ -212,11 +203,12 @@ public class CartServiceImpl implements CartService {
                 int newQuantity = item.getQuantity() + quantityChange;
                 if(newQuantity > 0 && newQuantity <= 99) {
                     item.setQuantity(newQuantity);
-                    this.cartItemsRepository.save(item);
                 }
                 break;
             }
         }
+
+        this.cartRepository.save(userCart);
     }
 
     @Override
@@ -231,12 +223,20 @@ public class CartServiceImpl implements CartService {
             return;
         }
 
+        CartItem needRemove = null;
+
         for (CartItem item : userCart.getCartItems()) {
             if (item.getProduct().getId().equals(productId)) {
-                this.cartItemsRepository.delete(item);
+                needRemove = item;
                 break;
             }
         }
+
+        if(needRemove != null){
+            userCart.getCartItems().remove(needRemove);
+        }
+
+        this.cartRepository.save(userCart);
     }
 
     @Override

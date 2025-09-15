@@ -27,13 +27,18 @@
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/product">Sản phẩm</a></li>
-          <li th:text="${data.id}"></li>
+          <li>
+            <a
+              th:href="@{/dashboard/product/details/{id}(id=${data.id})}"
+              th:text="${data.name}"
+            ></a>
+          </li>
           <li>Đánh giá</li>
         </ul>
 
         <!-- review list content -->
         <div
-          class="review-list-content review-content"
+          class="review-list-content review-content card"
           th:with="validSortBy=${paginationUtils.getValidSortBy(customReviewDto.VALID_SORT_FIELDS, reviewFilterDto.sortBy, customReviewDto.DEFAULT_SORT_FIELD)}"
         >
           <h1 class="content-title">
@@ -208,7 +213,7 @@
           <!-- search summary -->
           <div
             class="search-summary"
-            th:if="${reviewFilterDto.search != null && !reviewFilterDto.search.isEmpty()}"
+            th:if="${!#strings.isEmpty(reviewFilterDto.search)}"
           >
             <p class="search-message">
               <span
@@ -257,7 +262,7 @@
                     </a>
                   </th>
 
-                  <th class="table-header-cell col-width-1">Avatar</th>
+                  <th class="table-header-cell col-width-1">Ảnh đại diện</th>
 
                   <th
                     class="table-header-cell col-width-3"
@@ -349,16 +354,13 @@
               <tbody>
                 <tr class="table-body-row" th:each="review: ${data.reviews}">
                   <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${review.id != null ? review.id : 'N/A'}"
-                    ></span>
+                    <span class="cell-text" th:text="${review.id}"></span>
                   </td>
 
                   <td class="table-body-cell">
                     <div
                       class="user-avatar"
-                      th:if="${review.userAvatar != null and !review.userAvatar.isEmpty()}"
+                      th:if="${!#strings.isEmpty(review.userAvatar)}"
                     >
                       <img
                         th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + review.userAvatar}"
@@ -367,7 +369,7 @@
                     </div>
                     <div
                       class="user-avatar"
-                      th:if="${review.userAvatar == null or review.userAvatar.isEmpty()}"
+                      th:if="${#strings.isEmpty(review.userAvatar)}"
                     >
                       <img src="/images/default-avatar.png" alt="avatar" />
                     </div>
@@ -407,7 +409,12 @@
 
                   <td class="table-body-cell">
                     <div class="table-row-actions">
-                      <a class="view-button primary-button">Xem</a>
+                      <a
+                        th:href="@{/dashboard/product/details/{productId}/review/details/{reviewId}
+                          (productId=${data.id}, reviewId=${review.id})}"
+                        class="view-button primary-button"
+                        >Xem</a
+                      >
                     </div>
                   </td>
                 </tr>

@@ -40,9 +40,9 @@ public class ShopController {
     )  {
         String email = AuthenticationUtils.getAuthenticatedName();
         if (email != null && !email.isEmpty()) {
-            model.addAttribute("productDetails", this.productService.getShopProductDetailsBySlug(productSlug, email));
+            model.addAttribute("productDetailsDto", this.productService.getShopProductDetailsBySlug(productSlug, email));
         }else{
-            model.addAttribute("productDetails", this.productService.getShopProductDetailsBySlug(productSlug));
+            model.addAttribute("productDetailsDto", this.productService.getShopProductDetailsBySlug(productSlug));
         }
 
         return "/client/product_details";

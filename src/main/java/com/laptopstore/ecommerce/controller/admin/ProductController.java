@@ -7,6 +7,8 @@ import com.laptopstore.ecommerce.dto.product.*;
 import com.laptopstore.ecommerce.dto.response.AjaxResponse;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.dto.review.ReviewFilterDto;
+import com.laptopstore.ecommerce.model.Product;
+import com.laptopstore.ecommerce.model.Review;
 import com.laptopstore.ecommerce.service.ProductService;
 import com.laptopstore.ecommerce.service.ReviewService;
 import org.springframework.http.HttpStatus;
@@ -80,7 +82,7 @@ public class ProductController {
 
     @GetMapping("/update/{productId}")
     public String showUpdateProductPage(
-            @PathVariable Long productId,
+            @PathVariable long productId,
             Model model
     ) {
         UpdateProductDto updateProductDto = this.productService.getInformationForUpdateProduct(productId);
@@ -115,17 +117,18 @@ public class ProductController {
 
     @GetMapping("/delete/{productId}")
     public String showDeleteProductPage(
-            @PathVariable Long productId,
+            @PathVariable long productId,
             Model model
     ) {
-        model.addAttribute("productId", productId);
+        Product product = this.productService.getProductById(productId);
+        model.addAttribute("product", product);
 
         return "/admin/product/delete";
     }
 
     @PostMapping("/delete")
     public String deleteProduct(
-            Long productId,
+            long productId,
             RedirectAttributes redirectAttributes
     ) {
         this.productService.deleteProduct(productId);
@@ -137,7 +140,7 @@ public class ProductController {
 
     @GetMapping("/details/{productId}")
     public String showDetailsProductPage(
-            @PathVariable Long productId,
+            @PathVariable long productId,
             Model model
     ) {
         CustomProductDetailsDto customProductDetailsDto = this.productService.getAdminProductDetailsById(productId);
@@ -172,7 +175,7 @@ public class ProductController {
 
     @GetMapping("/details/{productId}/review")
     public String showProductReviewsPage(
-            @PathVariable Long productId,
+            @PathVariable long productId,
             ReviewFilterDto reviewFilterDto,
             Model model
     )  {
@@ -182,5 +185,17 @@ public class ProductController {
 
 
         return "/admin/product/product_reviews";
+    }
+
+    @GetMapping("/details/{productId}/review/details/{reviewId}")
+    public String showProductReviewDetailsPage(
+            @PathVariable long reviewId,
+            @PathVariable long productId,
+            Model model
+    ){
+        Review review = this.reviewService.getReviewDetails(reviewId);
+        model.addAttribute("review", review);
+
+        return "/admin/product/product_review_details";
     }
 }

@@ -298,13 +298,9 @@
   gap: 1.6rem;
 }
 .order-details .container .order-details-content {
-  background-color: #fff;
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  padding: 1.6rem;
-  border-radius: 1.6rem;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .order-details .container .order-details-content .content-title {
   font-size: 2rem;
@@ -335,46 +331,46 @@
   color: #333;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-1 {
-  min-width: 62.5px;
+  min-width: 6.25rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-2 {
-  min-width: 125px;
+  min-width: 12.5rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-3 {
-  min-width: 187.5px;
+  min-width: 18.75rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-4 {
-  min-width: 250px;
+  min-width: 25rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-5 {
-  min-width: 312.5px;
+  min-width: 31.25rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-6 {
-  min-width: 375px;
+  min-width: 37.5rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-7 {
-  min-width: 437.5px;
+  min-width: 43.75rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-8 {
-  min-width: 500px;
+  min-width: 50rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-9 {
-  min-width: 562.5px;
+  min-width: 56.25rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-10 {
-  min-width: 625px;
+  min-width: 62.5rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-11 {
-  min-width: 687.5px;
+  min-width: 68.75rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .col-width-12 {
-  min-width: 750px;
+  min-width: 75rem;
 }
 .order-details .container .order-details-content .content-info .info.products-info .products-info-table .product-image {
   width: 6.4rem;
   height: 6.4rem;
 }
-.order-details .container .order-details-content .content-info .info.products-info .products-info-table .product-image .image {
+.order-details .container .order-details-content .content-info .info.products-info .products-info-table .product-image img {
   width: 100%;
   height: 100%;
   object-fit: contain;

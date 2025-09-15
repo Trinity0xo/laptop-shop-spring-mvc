@@ -43,7 +43,7 @@
         <h1 class="product-reviews-title">Đánh giá</h1>
 
         <!-- product information -->
-        <div class="product-reviews-product">
+        <div class="product-reviews-product card">
           <div class="product-image">
             <img
               th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + product.productImage.imageName}"
@@ -72,7 +72,7 @@
         </div>
 
         <!-- review summary -->
-        <div class="review-summary">
+        <div class="review-summary card">
           <div class="reviews-summary-header">
             <div class="review-average">
               <span
@@ -95,6 +95,7 @@
               lượt đánh giá
             </div>
             <button
+              type="button"
               id="createReviewBtn"
               class="create-review-button primary-button"
               th:if="${product.myReview == null and product.isPurchased == true}"
@@ -204,7 +205,7 @@
         </div>
 
         <!-- my review -->
-        <div class="my-review" th:if="${product.myReview != null}">
+        <div class="my-review card" th:if="${product.myReview != null}">
           <h2 class="my-review-title">Đánh giá của bạn</h2>
           <div class="my-review-content">
             <div class="review-stars">
@@ -223,6 +224,7 @@
           </div>
           <div class="my-review-actions">
             <button
+              type="button"
               id="updateReviewBtn"
               class="update-review-button warning-button"
               th:attr="data-product-id=${product.id}, data-review-id=${product.myReview.id}"
@@ -230,6 +232,7 @@
               Sửa
             </button>
             <button
+              type="button"
               id="deleteReviewBtn"
               class="delete-review-button danger-button"
               th:attr="data-product-id=${product.id}, data-review-id=${product.myReview.id}"
@@ -240,7 +243,7 @@
         </div>
 
         <!-- user reviews -->
-        <div class="user-reviews">
+        <div class="user-reviews card">
           <h3 class="user-reviews-title">Đánh giá của người mua</h3>
 
           <!-- header -->
@@ -334,6 +337,7 @@
             <!-- sort -->
             <div class="sort-dropdown dropdown">
               <button
+                type="button"
                 class="sort-dropdown-toggle dropdown-toggle primary-button"
               >
                 <i class="fa-solid fa-arrow-up-wide-short"></i>Sắp xếp:
@@ -417,7 +421,7 @@
           <!-- review list -->
           <ul
             class="review-list"
-            th:if="${product.userReviews != null and not product.userReviews.isEmpty()}"
+            th:if="${!#lists.isEmpty(product.userReviews)}"
           >
             <li class="review-item" th:each="review : ${product.userReviews}">
               <div class="review-card">

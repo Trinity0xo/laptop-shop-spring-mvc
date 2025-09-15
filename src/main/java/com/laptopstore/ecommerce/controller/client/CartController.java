@@ -7,10 +7,8 @@ import com.laptopstore.ecommerce.service.OrderService;
 import com.laptopstore.ecommerce.util.AuthenticationUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,11 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cart")
 public class CartController {
     private final CartService cartService;
-    private final OrderService orderService;
 
-    public CartController(CartService cartService, OrderService orderService) {
+    public CartController(CartService cartService) {
         this.cartService = cartService;
-        this.orderService = orderService;
     }
 
     @GetMapping("")
@@ -70,7 +66,6 @@ public class CartController {
             @PathVariable long productId
     )  {
         String email = AuthenticationUtils.getAuthenticatedName();
-
         this.cartService.removeUserCartProduct(email, productId);
 
         return "redirect:/cart";
@@ -90,48 +85,5 @@ public class CartController {
         session.setAttribute("checkoutDto", checkoutDto);
 
         return "client/checkout";
-    }
-
-    @GetMapping("/checkout")
-    public String showCheckOutPage(
-            Model model,
-            HttpSession session
-    )  {
-        String email = AuthenticationUtils.getAuthenticatedName();
-
-        CheckoutDto checkoutDto = this.cartService.getUserCheckoutInformation(email);
-        model.addAttribute("checkoutDto", checkoutDto);
-        session.setAttribute("checkoutDto", checkoutDto);
-
-        return "/client/checkout";
-    }
-
-    @PostMapping("/checkout")
-    public String checkOut(
-            @Valid CheckoutDto checkoutDto,
-            BindingResult bindingResult,
-            RedirectAttributes redirectAttributes,
-            Model model,
-            HttpSession session
-    )  {
-        CheckoutDto savedCheckoutDto = (CheckoutDto) session.getAttribute("checkoutDto");
-        if(savedCheckoutDto == null){
-            String email = AuthenticationUtils.getAuthenticatedName();
-            savedCheckoutDto = this.cartService.getUserCheckoutInformation(email);
-        }
-
-        checkoutDto.setCheckoutProducts(savedCheckoutDto.getCheckoutProducts());
-        checkoutDto.setTotalPrice(savedCheckoutDto.getTotalPrice());
-
-        if(bindingResult.hasErrors()){
-            model.addAttribute("checkoutDto", checkoutDto);
-            return "/client/checkout";
-        }
-
-        this.orderService.createNewOrder(checkoutDto);
-
-        redirectAttributes.addFlashAttribute("successMessage", "Tạo đơn hàng thành công");
-
-        return "redirect:/";
     }
 }

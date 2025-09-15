@@ -22,13 +22,13 @@
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/user">Người dùng</a></li>
-          <li th:text="${updateUserRoleDto.id}"></li>
+          <li th:text="${updateUserRoleDto.email}"></li>
           <li>Cập nhật</li>
         </ul>
 
         <!-- update user form -->
         <form
-          class="update-user-form user-form"
+          class="update-user-form user-form card"
           method="post"
           th:action="@{/dashboard/user/update-role}"
           th:object="${updateUserRoleDto}"
@@ -47,6 +47,8 @@
               <label for="role">Vai trò:</label>
               <div class="input-group-control">
                 <select name="role" id="role">
+                  <option value="">Chọn vài trò</option>
+                  <option value="error">Trigger error</option>
                   <option
                     th:each="role : ${roleEnum.values()}"
                     th:value="${role}"

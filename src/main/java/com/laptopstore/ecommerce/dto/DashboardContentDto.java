@@ -10,6 +10,7 @@ import com.laptopstore.ecommerce.model.Product;
 import com.laptopstore.ecommerce.model.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class DashboardContentDto {
     List<Order> recentOrders;
     List<CustomProductSoldDto> topSellingProducts;

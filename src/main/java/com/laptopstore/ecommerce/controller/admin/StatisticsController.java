@@ -1,6 +1,6 @@
 package com.laptopstore.ecommerce.controller.admin;
 
-import com.laptopstore.ecommerce.util.error.NotImplementException;
+import com.laptopstore.ecommerce.exception.NotImplementException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class StatisticsController {
 
     @GetMapping("")
-    public String showStatisticsPage(
-            Model model
+    public String showStatisticsPage(Model model
     ){
-        throw new NotImplementException("/dashboard");
+        throw new NotImplementException();
     }
 }

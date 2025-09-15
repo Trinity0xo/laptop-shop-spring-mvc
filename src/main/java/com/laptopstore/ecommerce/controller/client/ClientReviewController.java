@@ -2,6 +2,7 @@ package com.laptopstore.ecommerce.controller.client;
 
 import com.laptopstore.ecommerce.dto.response.AjaxResponse;
 import com.laptopstore.ecommerce.dto.review.*;
+import com.laptopstore.ecommerce.model.Review;
 import com.laptopstore.ecommerce.service.ReviewService;
 import com.laptopstore.ecommerce.util.AuthenticationUtils;
 import jakarta.validation.Valid;
@@ -41,7 +42,7 @@ public class ClientReviewController {
     @PostMapping("/{productId}/create")
     @ResponseBody
     public ResponseEntity<AjaxResponse<Object>> createNewReview(
-            @PathVariable Long productId,
+            @PathVariable long productId,
             @Valid CreateReviewDto createReviewDto,
             BindingResult bindingResult
     )  {
@@ -108,14 +109,14 @@ public class ClientReviewController {
 
     @GetMapping("/{productId}/delete/{reviewId}")
     public String showDeleteProductReviewModal(
-            @PathVariable Long productId,
-            @PathVariable Long reviewId,
+            @PathVariable long productId,
+            @PathVariable long reviewId,
             Model model
     )  {
         String email = AuthenticationUtils.getAuthenticatedName();
 
-        DeleteReviewDto deleteReviewDto = this.reviewService.getInformationForDeleteReview(email, productId, reviewId);
-        model.addAttribute("deleteReviewDto", deleteReviewDto);
+        Review review = this.reviewService.getInformationForDeleteReview(email, productId, reviewId);
+        model.addAttribute("review", review);
 
         return "/client/review/delete_review_modal";
     }
@@ -130,7 +131,6 @@ public class ClientReviewController {
         this.reviewService.UserDeleteReview(reviewId, productId, email);
 
         AjaxResponse<Object> ajaxResponse = new AjaxResponse<>("Xóa đánh giá thành công", null);
-
 
         return ResponseEntity.status(HttpStatus.OK).body(ajaxResponse);
     }

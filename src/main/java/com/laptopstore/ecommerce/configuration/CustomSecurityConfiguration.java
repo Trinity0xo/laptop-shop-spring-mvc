@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
 @Configuration
@@ -50,11 +49,6 @@ public class CustomSecurityConfiguration {
         rememberMeServices.setValiditySeconds(86400);
         return rememberMeServices;
     }
-
-//    @Bean
-//    public AccessDeniedHandler accessDeniedHandler(){
-//        return new CustomAccessDeniedHandler();
-//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, CustomFailureHandler customFailureHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomSuccessHandler customSuccessHandler, CustomOAuth2SuccessHandler customOAuth2SuccessHandler,  CustomAccessDeniedHandler customAccessDeniedHandler)

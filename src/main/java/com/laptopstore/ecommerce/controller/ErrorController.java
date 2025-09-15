@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ErrorController {
     @GetMapping("/forbidden")
-    public String forbidden() {
-        return "/error";
+    public String showForbiddenPage() {
+        return "error";
     }
 }

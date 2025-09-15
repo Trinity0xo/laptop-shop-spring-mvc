@@ -2,8 +2,9 @@ package com.laptopstore.ecommerce.dto.product;
 
 import com.laptopstore.ecommerce.model.Brand;
 import com.laptopstore.ecommerce.model.Category;
-import com.laptopstore.ecommerce.util.validation.product.UpdateProductConstraint;
+import com.laptopstore.ecommerce.validation.product.UpdateProductConstraint;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,10 +12,12 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @UpdateProductConstraint
 public class UpdateProductDto extends BaseProductDto {
     private Long id;
-    protected List<MultipartFile> newImages;
+    private String oldName;
+    private List<MultipartFile> newImages;
     private List<String> currentImageNames;
     private List<String> deleteImageNames;
     private ProductMetaDataDto productMetaData;
@@ -22,6 +25,7 @@ public class UpdateProductDto extends BaseProductDto {
     public UpdateProductDto(
             Long id,
             String name,
+            String oldName,
             double price,
             float discount,
             long quantity,
@@ -55,6 +59,7 @@ public class UpdateProductDto extends BaseProductDto {
             List<String> currentImageNames
     ) {
         this.id = id;
+        this.oldName = oldName;
         this.name = name;
         this.price = price;
         this.discount = discount;

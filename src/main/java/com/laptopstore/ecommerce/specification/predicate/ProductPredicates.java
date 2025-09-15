@@ -14,6 +14,10 @@ public class ProductPredicates {
     public static final String OTHER_NAME = "other";
     public static final Number LOW_STOCK_QUANTITY = 10;
 
+    public static Predicate notEqualId(Root<Product> root, CriteriaBuilder cb, long id){
+        return cb.notEqual(root.get("id"), id);
+    }
+
     public static Predicate similarCpuPredicate(Root<Product> root, CriteriaBuilder cb, String cpu) {
         String[] splitCpu = cpu.split(" ");
 

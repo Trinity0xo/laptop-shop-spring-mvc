@@ -6,7 +6,7 @@ import com.laptopstore.ecommerce.dto.brand.BrandFilterDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.service.BrandService;
 import com.laptopstore.ecommerce.util.PaginationUtils;
-import com.laptopstore.ecommerce.util.error.BrandNotFoundException;
+import com.laptopstore.ecommerce.exception.BrandNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -72,6 +72,7 @@ public class BrandServiceImpl implements BrandService {
         return new UpdateBrandDto(
                 brand.getId(),
                 brand.getName(),
+                brand.getName(),
                 brand.getDescription()
         );
     }
@@ -96,7 +97,7 @@ public class BrandServiceImpl implements BrandService {
     public Brand getBrandById(long brandId){
         Brand brand = this.brandRepository.findById(brandId).orElse(null);
         if(brand == null){
-            throw new BrandNotFoundException("/dashboard/brand");
+            throw new BrandNotFoundException(brandId);
         }
 
         return brand;

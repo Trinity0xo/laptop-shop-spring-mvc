@@ -17,7 +17,7 @@ public class CustomProductDto extends BaseProductDto {
     private double discountPrice;
     private ProductImage productImage;
 
-    public CustomProductDto(Long id, ProductImage productImage, String name, String slug, long quantity, Instant createdAt, Instant updatedAt){
+    public CustomProductDto(long id, ProductImage productImage, String name, String slug, long quantity, Instant createdAt, Instant updatedAt){
         this.id = id;
         this.name =  name;
         this.slug =  slug;

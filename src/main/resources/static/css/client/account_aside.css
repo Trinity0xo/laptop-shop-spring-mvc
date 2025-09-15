@@ -292,12 +292,6 @@
   }
 }
 
-.account-aside {
-  background-color: #fff;
-  padding: 1.6rem;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border-radius: 1.6rem;
-}
 .account-aside .aside-option-list .item:not(:last-child) {
   margin-bottom: 0.4rem;
 }
@@ -307,7 +301,7 @@
   width: 100%;
   font-size: 1.6rem;
   color: #333;
-  border-radius: 1rem;
+  border-radius: 0.4rem;
 }
 .account-aside .aside-option-list .item .link:hover {
   background-color: #3b71ca;

@@ -35,7 +35,7 @@ public class RoleController {
 
     @GetMapping("/details/{roleId}")
     public String showRoleDetailsPage(
-            @PathVariable Long roleId,
+            @PathVariable long roleId,
             Model model
     )  {
         Role role = this.roleService.getRoleById(roleId);

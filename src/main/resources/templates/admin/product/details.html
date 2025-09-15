@@ -18,10 +18,10 @@
         <ul class="breadcrumb">
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/dashboard/product">Sản phẩm</a></li>
-          <li th:text="${customProductDetailsDto.id}"></li>
+          <li th:text="${customProductDetailsDto.name}"></li>
         </ul>
 
-        <div class="product-details-content product-content">
+        <div class="product-details-content product-content card">
           <h1 class="content-title">
             Sản phẩm "<span th:text="${customProductDetailsDto.name}"></span>"
           </h1>
@@ -31,12 +31,25 @@
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <a
+                  th:if="${!#lists.isEmpty(customProductDetailsDto.productImages.?[isMain])}"
                   target="_blank"
-                  th:href="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (customProductDetailsDto.productImages != null and customProductDetailsDto.productImages.size() > 0 ? customProductDetailsDto.productImages[0].imageName : '')}"
+                  th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + customProductDetailsDto.productImages.?[isMain][0].imageName}"
                   class="main-image"
                 >
                   <img
-                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (customProductDetailsDto.productImages != null and customProductDetailsDto.productImages.size() > 0 ? customProductDetailsDto.productImages[0].imageName : '')}"
+                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + customProductDetailsDto.productImages.?[isMain][0].imageName}"
+                    alt="product"
+                  />
+                </a>
+
+                <a
+                  th:if="${#lists.isEmpty(customProductDetailsDto.productImages.?[isMain])}"
+                  target="_blank"
+                  th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + customProductDetailsDto.productImages[0].imageName}"
+                  class="main-image"
+                >
+                  <img
+                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + customProductDetailsDto.productImages[0].imageName}"
                     alt="product"
                 /></a>
               </div>
@@ -63,16 +76,6 @@
             <div class="content-description-list">
               <h2 class="title">Thông tin chung:</h2>
               <dl class="row description-list">
-                <dt
-                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-                >
-                  Mã:
-                </dt>
-                <dd
-                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                  th:text="${customProductDetailsDto.id != null ? customProductDetailsDto.id : 'N/A' }"
-                ></dd>
-
                 <dt
                   class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
                 >
@@ -121,16 +124,6 @@
                 <dd
                   class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
                   th:text="${#strings.isEmpty(customProductDetailsDto.description) ? 'N/A' : customProductDetailsDto.description}"
-                ></dd>
-
-                <dt
-                  class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-                >
-                  Slug hiển thị:
-                </dt>
-                <dd
-                  class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                  th:text="${#strings.isEmpty(customProductDetailsDto.slug) ? 'N/A' : customProductDetailsDto.slug}"
                 ></dd>
 
                 <dt

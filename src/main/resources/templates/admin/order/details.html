@@ -25,7 +25,7 @@
           <li th:text="${order.id}"></li>
         </ul>
 
-        <div class="order-details-content order-content">
+        <div class="order-details-content order-content card">
           <h1 class="content-title">
             Đơn hàng với "Mã: <span th:text="${order.id}"></span>"
           </h1>
@@ -70,26 +70,6 @@
               <dd
                 class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
                 th:text="${#strings.isEmpty(order.phone) ? 'N/A' : order.phone}"
-              ></dd>
-
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Tên:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(order.firstName) ? 'N/A' : order.firstName}"
-              ></dd>
-
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Họ:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(order.lastName) ? 'N/A' : order.lastName}"
               ></dd>
 
               <dt
@@ -222,7 +202,7 @@
         </div>
 
         <!-- order products -->
-        <div class="order-details-products">
+        <div class="order-details-products card">
           <h2 class="products-title">Danh sách sản phẩm</h2>
           <table class="table">
             <thead>
@@ -248,25 +228,34 @@
                 </td>
 
                 <td class="table-body-cell">
+                  <span class="cell-text" th:if="${orderItem.product == null}"
+                    >N/A</span
+                  >
+
                   <div
                     class="product-image"
-                    th:if="${orderItem.product != null}"
+                    th:if="${orderItem.product != null and !#lists.isEmpty(orderItem.product.productImages)}"
                   >
                     <img
-                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + (orderItem.product.productImages != null and orderItem.product.productImages.size() > 0 ? orderItem.product.productImages[0].imageName : '')}"
+                      th:if="${!#lists.isEmpty(orderItem.product.productImages.?[isMain])}"
+                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + orderItem.product.productImages.?[isMain][0].imageName}"
                       alt="product"
                     />
-                  </div>
-                  <div th:if="${orderItem.product == null}">
-                    <span class="cell-text">N/A</span>
+
+                    <img
+                      th:if="${#lists.isEmpty(orderItem.product.productImages.?[isMain])}"
+                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + orderItem.product.productImages[0].imageName}"
+                      alt="product"
+                    />
                   </div>
                 </td>
 
                 <td class="table-body-cell">
+                  <span th:if="${orderItem.product == null}">N/A</span>
+
                   <a th:if="${orderItem.product != null}">
                     <span th:text="${orderItem.product.name}"></span>
                   </a>
-                  <span th:if="${orderItem.product == null}">N/A</span>
                 </td>
 
                 <td class="table-body-cell">

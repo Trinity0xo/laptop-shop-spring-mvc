@@ -77,7 +77,11 @@
 
         <div class="header-right">
           <!-- sidebar toggle -->
-          <button class="toggle-sidebar-button" id="btnToggleSideBar">
+          <button
+            type="button"
+            class="toggle-sidebar-button"
+            id="btnToggleSideBar"
+          >
             <i class="fa-solid fa-bars"></i>
           </button>
 
@@ -89,14 +93,14 @@
             >
               <img
                 class="account-avatar"
-                th:if="${authenticatedInformation.avatar == null or authenticatedInformation.avatar.isEmpty()}"
+                th:if="${#strings.isEmpty(authenticatedInformation.avatar)}"
                 src="/images/default-avatar.png"
                 alt="avatar"
               />
 
               <img
                 class="account-avatar"
-                th:if="${authenticatedInformation.avatar != null and not authenticatedInformation.avatar.isEmpty()}"
+                th:if="${!#strings.isEmpty(authenticatedInformation.avatar)}"
                 th:src="${'/' + resourcesMappingFolder + '/' + avatarsFolder + '/' + authenticatedInformation.avatar}"
                 alt="avatar"
               />
@@ -262,11 +266,6 @@
           th:if="${successMessage != null and !successMessage.isEmpty()}"
           th:text="${successMessage}"
         ></p>
-        <p
-          class="message error-message"
-          th:if="${errorMessage != null and !errorMessage.isEmpty()}"
-          th:text="${errorMessage}"
-        ></p>
       </div>
 
       <!-- main -->
@@ -280,7 +279,7 @@
             <!-- copyright -->
             <div class="copyright">
               <p class="text">
-                Copyright &copy; 2025 ShopLap. Design by
+                &copy; 2025 ShopLap. Design by
                 <a class="link" href="#">Trinity0xo</a>
               </p>
             </div>
@@ -313,8 +312,8 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  <script src="/js/main.js"></script>
-  <script src="/js/admin.js"></script>
+  <script type="modue" src="/js/utils.js"></script>
+  <script type="module" src="/js/main.js"></script>
   <script layout:fragment="scripts"></script>
   <script>
     // sidebar

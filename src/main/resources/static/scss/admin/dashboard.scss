@@ -13,22 +13,14 @@
     gap: 1.6rem;
 
     section {
-      background-color: $bg-white;
-      padding: 1.6rem;
-      box-shadow: $box-shadow-01;
-
       &.dashboard-cards {
-        background-color: transparent;
-        padding: 0;
-        box-shadow: none;
-
         .dashboard-card {
           display: flex;
           flex-direction: column;
           gap: 0.8rem;
-          background-color: $bg-white;
-          box-shadow: $box-shadow-01;
-          padding: 1.6rem 3.2rem;
+          // background-color: $bg-white;
+          // box-shadow: $box-shadow-01;
+          // padding: 1.6rem 3.2rem;
           text-align: center;
 
           i {
@@ -112,10 +104,11 @@
           overflow-x: auto;
 
           table {
-            @include generate-col-widths(120rem);
+            @include generate-col-widths(110rem);
 
             .table-row-actions {
               display: flex;
+              justify-content: end;
               gap: 0.8rem;
             }
           }
@@ -155,7 +148,7 @@
           overflow-x: auto;
 
           table {
-            @include generate-col-widths(120rem);
+            @include generate-col-widths(110rem);
 
             .product-image {
               display: flex;
@@ -170,6 +163,7 @@
 
             .table-row-actions {
               display: flex;
+              justify-content: end;
               gap: 0.8rem;
             }
           }
@@ -209,7 +203,7 @@
           overflow-x: auto;
 
           table {
-            @include generate-col-widths(120rem);
+            @include generate-col-widths(110rem);
 
             .product-image {
               display: flex;
@@ -234,6 +228,7 @@
 
             .table-row-actions {
               display: flex;
+              justify-content: end;
               gap: 0.8rem;
             }
           }
@@ -273,7 +268,7 @@
           overflow-x: auto;
 
           table {
-            @include generate-col-widths(120rem);
+            @include generate-col-widths(110rem);
 
             .user-avatar {
               display: flex;
@@ -300,6 +295,7 @@
 
             .table-row-actions {
               display: flex;
+              justify-content: end;
               gap: 0.8rem;
             }
           }

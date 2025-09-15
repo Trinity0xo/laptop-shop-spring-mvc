@@ -31,7 +31,7 @@
           <li>Được đánh cao</li>
         </ul>
 
-        <div class="product-list-content product-content">
+        <div class="product-list-content product-content card">
           <div class="content-title">Đánh giá cao</div>
 
           <!-- header -->
@@ -354,7 +354,7 @@
           <!-- search summary -->
           <div
             class="search-summary"
-            th:if="${productFilterDto.search != null && !productFilterDto.search.isEmpty()}"
+            th:if="${!#strings.isEmpty(productFilterDto.search)}"
           >
             <p class="search-message">
               <span
@@ -382,9 +382,7 @@
             <table class="table">
               <thead>
                 <tr class="table-header-row">
-                  <th class="table-header-cell col-width-1">Mã</th>
-
-                  <th class="table-header-cell col-width-1">Hình ảnh</th>
+                  <th class="table-header-cell col-width-2">Hình ảnh</th>
 
                   <th class="table-header-cell col-width-3">Tên</th>
 
@@ -402,16 +400,12 @@
                 >
                   <td class="table-body-cell">
                     <span
-                      class="cell-text"
-                      th:text="${product.id != null ? product.id : 'N/A'}"
-                    ></span>
-                  </td>
-
-                  <td class="table-body-cell">
-                    <span th:if="${product.productImage == null}">N/A</span>
+                      th:if="${product.productImage == null or #strings.isEmpty(product.productImage.imageName)}"
+                      >N/A</span
+                    >
                     <div
                       class="product-image"
-                      th:if="${product.productImage != null}"
+                      th:if="${product.productImage != null and !#strings.isEmpty(product.productImage.imageName)}"
                     >
                       <img
                         th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + product.productImage.imageName}"
