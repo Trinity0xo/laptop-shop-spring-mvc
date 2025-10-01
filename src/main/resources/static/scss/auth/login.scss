@@ -3,32 +3,6 @@
 @import "../variables";
 
 .login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  .login-form-title {
-    font-size: 2rem;
-    color: $text-primary;
-  }
-
-  .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-
-    label {
-      display: inline-block;
-      font-size: 1.6rem;
-      color: $text-primary;
-    }
-
-    input {
-      @include input();
-      width: 100%;
-    }
-  }
-
   .remember-me {
     display: flex;
     gap: 0.8rem;
@@ -65,10 +39,5 @@
 
   .forgot-password-link {
     font-size: 1.6rem;
-  }
-
-  .register-text {
-    font-size: 1.6rem;
-    text-align: center;
   }
 }

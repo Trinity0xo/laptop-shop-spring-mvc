@@ -1,61 +1,34 @@
 <!DOCTYPE html>
-<form
-  id="createReviewModal"
-  class="review-form modal"
-  th:attr="data-product-id=${createReviewDto.productId}"
->
-  <div class="modal-header">
-    <div class="header-title">Viết đánh giá</div>
-    <button
-      type="button"
-      class="hide-modal-button"
-      data-hide="createReviewModal"
-    >
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-  </div>
-  <div class="form-data modal-body">
-    <h4 class="form-data-title">
-      Viết đánh giá cho
-      <span th:text="${createReviewDto.productName}"></span>
-    </h4>
-    <div class="form-data-rating">
-      <div class="rating">
-        <i class="fa-solid fa-star active"></i>
-        <i class="fa-solid fa-star active"></i>
-        <i class="fa-solid fa-star active"></i>
-        <i class="fa-solid fa-star active"></i>
-        <i class="fa-solid fa-star active"></i>
-      </div>
-      <input
-        type="hidden"
-        name="rating"
-        id="rating"
-        class="form-rating"
-        value="5"
-        required
-      />
-      <span id="ratingError" class="input-error-message"></span>
+<form id="createReviewModal" class="review-form modal" th:attr="data-product-id=${createReviewDto.productId}">
+    <div class="modal-header">
+        <div class="header-title">Viết đánh giá</div>
+        <button type="button" class="hide-modal-button" data-hide="createReviewModal"><i class="fa-solid fa-xmark"></i>
+        </button>
     </div>
-    <div class="form-data-message">
-      <textarea
-        class="message"
-        name="message"
-        rows="5"
-        required
-        placeholder="Nội dung đánh giá"
-      ></textarea>
-      <span id="messageError" class="input-error-message"></span>
+    <div class="form-data modal-body">
+        <h4 class="form-data-title">Viết đánh giá cho<span th:text="${createReviewDto.productName}"></span></h4>
+        <div class="form-data-rating">
+            <div class="rating">
+                <i class="fa-solid fa-star active"></i>
+                <i class="fa-solid fa-star active"></i>
+                <i class="fa-solid fa-star active"></i>
+                <i class="fa-solid fa-star active"></i>
+                <i class="fa-solid fa-star active"></i>
+            </div>
+            <input type="hidden" name="rating" id="rating" class="form-rating" value="5" required/>
+            <span id="ratingError" class="input-error-message"></span>
+        </div>
+        <div class="form-data-message">
+            <label for="message" style="display: none"></label>
+            <textarea class="message" id="message" name="message" rows="5" required
+                      placeholder="Nội dung đánh giá"></textarea>
+            <span id="messageError" class="input-error-message"></span>
+        </div>
     </div>
-  </div>
-  <div class="form-actions modal-footer">
-    <button class="form-submit-button primary-button" type="submit">Lưu</button>
-    <button
-      type="button"
-      data-hide="createReviewModal"
-      class="cancel-create-button hide-modal-button secondary-button"
-    >
-      Hủy
-    </button>
-  </div>
+    <div class="form-actions modal-footer">
+        <button class="form-submit-button primary-button" type="submit">Lưu</button>
+        <button type="button" data-hide="createReviewModal"
+                class="cancel-create-button hide-modal-button secondary-button">Hủy
+        </button>
+    </div>
 </form>

@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,7 +35,7 @@ public class AuthoritiesRefreshFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if(auth != null){
@@ -62,21 +63,7 @@ public class AuthoritiesRefreshFilter extends OncePerRequestFilter {
 
                 if(user != null){
                     int cartItemCount = cartService.getTotalCartItem(email);
-                    CustomOAuth2User updatedPrincipal = new CustomOAuth2User(
-                            user.getFullName(),
-                            user.getAvatar(),
-                            cartItemCount,
-                            Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getSlug())),
-                            oAuth2User.getAttributes(),
-                            "email"
-                    );
-
-                    UsernamePasswordAuthenticationToken newAuth =
-                            new UsernamePasswordAuthenticationToken(
-                                    updatedPrincipal,
-                                    null,
-                                    updatedPrincipal.getAuthorities()
-                            );
+                    UsernamePasswordAuthenticationToken newAuth = getUsernamePasswordAuthenticationToken(oAuth2User, user, cartItemCount);
                     newAuth.setDetails(auth.getDetails());
                     SecurityContextHolder.getContext().setAuthentication(newAuth);
                 }else{
@@ -86,5 +73,22 @@ public class AuthoritiesRefreshFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private static UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(OAuth2User oAuth2User, User user, int cartItemCount) {
+        CustomOAuth2User updatedPrincipal = new CustomOAuth2User(
+                user.getFullName(),
+                user.getAvatar(),
+                cartItemCount,
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getSlug())),
+                oAuth2User.getAttributes(),
+                "email"
+        );
+
+        return new UsernamePasswordAuthenticationToken(
+                updatedPrincipal,
+                null,
+                updatedPrincipal.getAuthorities()
+        );
     }
 }

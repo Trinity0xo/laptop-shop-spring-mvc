@@ -1,0 +1,41 @@
+@import "../../variables";
+@import "../../media_advanced";
+@import "../../responsive_grid";
+@import "../../table_col_width";
+@import "../../button";
+
+.order-details {
+  .container {
+    .order-details-content {
+      .content-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2.4rem;
+
+        .info {
+          display: flex;
+          flex-direction: column;
+          gap: 1.6rem;
+
+          .info-title {
+            font-size: 1.8rem;
+            color: $text-primary;
+          }
+
+          &.order-info {
+            .description-list-actions {
+              margin-top: 1.6rem;
+            }
+          }
+
+          &.products-info {
+            .products-info-title {
+              font-size: 1.8rem;
+              color: $text-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+}

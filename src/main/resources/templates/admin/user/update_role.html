@@ -1,81 +1,61 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Người dùng</title>
-  </head>
+</head>
 
-  <body>
-    <div
-      class="user user-update"
-      layout:fragment="content"
-      th:with="roleEnum=${T(com.laptopstore.ecommerce.util.constant.RoleEnum)}"
-    >
-      <div class="container-fluid">
+<body>
+<div class="user user-update" layout:fragment="content">
+    <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/dashboard/user">Người dùng</a></li>
-          <li th:text="${updateUserRoleDto.email}"></li>
-          <li>Cập nhật</li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/user">Người dùng</a></li>
+            <li><a th:text="${updateUserRoleDto.email}"
+                   th:href="@{/dashboard/user/details/{userId}(userId=${updateUserRoleDto.id})}"></a></li>
+            <li>Cập nhật</li>
         </ul>
 
         <!-- update user form -->
-        <form
-          class="update-user-form user-form card"
-          method="post"
-          th:action="@{/dashboard/user/update-role}"
-          th:object="${updateUserRoleDto}"
-        >
-          <h1 class="form-title">
-            Cập nhật người dùng "<span
-              th:text="${updateUserRoleDto.email}"
-            ></span
-            >"
-          </h1>
+        <form class="update-user-form user-form form card" method="post" th:action="@{/dashboard/user/update-role}"
+              th:object="${updateUserRoleDto}">
+            <h1 class="form-title">Cập nhật người dùng "<span th:text="${updateUserRoleDto.email}"></span>"</h1>
 
-          <input type="hidden" name="id" th:value="${updateUserRoleDto.id}" />
+            <input type="hidden" name="id" th:value="${updateUserRoleDto.id}"/>
 
-          <div class="form-content">
-            <div class="input-group">
-              <label for="role">Vai trò:</label>
-              <div class="input-group-control">
-                <select name="role" id="role">
-                  <option value="">Chọn vài trò</option>
-                  <option value="error">Trigger error</option>
-                  <option
-                    th:each="role : ${roleEnum.values()}"
-                    th:value="${role}"
-                    th:text="${role.displayName}"
-                    th:selected="${role.equals(updateUserRoleDto.role)}"
-                  ></option>
-                </select>
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('role')}"
-                  th:errors="${updateUserRoleDto.role}"
-                ></span>
-              </div>
+            <div class="form-content">
+                <div class="input-group">
+                    <label for="newRole">Vai trò:</label>
+                    <div class="input-group-control">
+                        <select name="newRole" id="newRole">
+                            <option value="">Chọn vài trò</option>
+                            <option th:each="role : ${updateUserRoleDto.roles}" th:value="${role.id}"
+                                    th:text="${role.name}"
+                                    th:selected="${updateUserRoleDto.currentRole != null and role.id == updateUserRoleDto.currentRole.id}"></option>
+                        </select>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('newRole')}"
+                              th:errors="${updateUserRoleDto.newRole}"></span>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div class="form-actions">
-            <div class="spacer"></div>
-            <button type="submit" class="save-button primary-button">
-              Lưu
-            </button>
-            <a href="/dashboard/user" class="back-button secondary-button"
-              >Quay lại</a
-            >
-          </div>
+            <div class="form-actions">
+                <div class="spacer"></div>
+                <div class="buttons">
+                    <button type="submit" class="save-button primary-button">Lưu</button>
+                    <a th:href="@{/dashboard/user/details/{userId}(userId=${updateUserRoleDto.id})}"
+                       class="back-button secondary-button">Quay lại</a>
+                </div>
+            </div>
         </form>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

@@ -485,20 +485,20 @@
   flex-direction: column;
   gap: 1.6rem;
 }
-.cart .container .cart-summary .summary-title {
+.cart .container .cart-summary .cart-summary-title {
   font-size: 2rem;
   color: #333;
 }
-.cart .container .cart-summary .price-group {
+.cart .container .cart-summary .cart-price-group {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.cart .container .cart-summary .price-group .label {
+.cart .container .cart-summary .cart-price-group .label {
   font-size: 1.6rem;
   color: #333;
 }
-.cart .container .cart-summary .price-group .price {
+.cart .container .cart-summary .cart-price-group .price {
   font-size: 1.6rem;
   color: #333;
 }

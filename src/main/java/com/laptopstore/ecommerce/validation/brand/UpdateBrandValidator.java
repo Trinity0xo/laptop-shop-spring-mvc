@@ -3,6 +3,7 @@ package com.laptopstore.ecommerce.validation.brand;
 import com.laptopstore.ecommerce.dto.brand.UpdateBrandDto;
 import com.laptopstore.ecommerce.model.Brand;
 import com.laptopstore.ecommerce.service.impl.BrandServiceImpl;
+import com.laptopstore.ecommerce.util.SlugUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -27,7 +28,7 @@ public class UpdateBrandValidator extends BaseBrandValidator<UpdateBrandDto> imp
     public boolean isValid(UpdateBrandDto value, ConstraintValidatorContext context) {
         boolean isValid = validate(value, context);
 
-        Brand exists = this.brandServiceImpl.getBrandByName(value.getName());
+        Brand exists = this.brandServiceImpl.getBrandBySlug(SlugUtils.toSlug(value.getName()));
         if (exists != null && !exists.getId().equals(value.getId())) {
             context.buildConstraintViolationWithTemplate("Thương hiệu với tên này đã tồn tại")
                     .addPropertyNode("name")

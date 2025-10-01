@@ -3,6 +3,7 @@ package com.laptopstore.ecommerce.validation.category;
 import com.laptopstore.ecommerce.dto.category.CreateCategoryDto;
 import com.laptopstore.ecommerce.model.Category;
 import com.laptopstore.ecommerce.service.CategoryService;
+import com.laptopstore.ecommerce.util.SlugUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +41,7 @@ public class CreateCategoryValidator extends BaseCategoryValidator<CreateCategor
             isValid = false;
         }
 
-        Category exists = this.categoryService.getCategoryByName(value.getName());
+        Category exists = this.categoryService.getCategoryBySlug(SlugUtils.toSlug(value.getName()));
         if (exists != null) {
             context.buildConstraintViolationWithTemplate("Danh mục với tên này đã tồn tại")
                     .addPropertyNode("name")

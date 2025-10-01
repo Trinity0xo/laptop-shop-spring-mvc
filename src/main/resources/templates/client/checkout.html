@@ -1,259 +1,175 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/client/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/client/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Thanh toán</title>
-  </head>
+</head>
 
-  <body>
-    <main class="checkout" layout:fragment="content">
-      <div class="container">
+<body>
+<main class="checkout" layout:fragment="content">
+    <div class="container">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/">Trang chủ</a></li>
-          <li><a href="/shop">Cửa hàng</a></li>
-          <li><a href="/cart">Giỏ hàng</a></li>
-          <li>Thanh toán</li>
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/shop">Cửa hàng</a></li>
+            <li><a href="/cart">Giỏ hàng</a></li>
+            <li>Thanh toán</li>
         </ul>
 
         <h1 class="checkout-title">Thanh toán</h1>
 
         <div class="row">
-          <!-- checkout information -->
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-            <form
-              class="checkout-form"
-              method="post"
-              th:action="@{/checkout}"
-              th:object="${checkoutDto}"
-            >
-              <div class="checkout-information card">
-                <h2 class="checkout-information-title">Thông tin</h2>
-                <div class="shipping-information">
-                  <div class="row">
-                    <div
-                      class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6"
-                    >
-                      <div class="input-group">
-                        <label for="firstName">Họ:</label>
-                        <div class="input-group-control">
-                          <input
-                            type="text"
-                            name="firstName"
-                            id="firstName"
-                            th:value="${checkoutDto.firstName}"
-                            placeholder="Họ"
-                            th:classappend="${#fields.hasErrors('firstName') ? 'error' : ''}"
-                            th:field="${checkoutDto.firstName}"
-                          />
-                          <span
-                            class="input-error-message"
-                            th:if="${#fields.hasErrors('firstName')}"
-                            th:errors="${checkoutDto.firstName}"
-                          ></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6"
-                    >
-                      <div class="input-group">
-                        <label for="lastName">Tên:</label>
-                        <div class="input-group-control">
-                          <input
-                            type="text"
-                            name="lastName"
-                            id="lastName"
-                            th:value="${checkoutDto.lastName}"
-                            placeholder="Tên"
-                            th:classappend="${#fields.hasErrors('lastName') ? 'error' : ''}"
-                            th:field="${checkoutDto.lastName}"
-                          />
-                          <span
-                            class="input-error-message"
-                            th:if="${#fields.hasErrors('lastName')}"
-                            th:errors="${checkoutDto.lastName}"
-                          ></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
-                    >
-                      <div class="input-group">
-                        <label for="email">Email:</label>
-                        <div class="input-group-control">
-                          <input
-                            type="text"
-                            name="email"
-                            id="email"
-                            th:value="${checkoutDto.email}"
-                            placeholder="Email"
-                            th:classappend="${#fields.hasErrors('email') ? 'error' : ''}"
-                            th:field="${checkoutDto.email}"
-                          />
-                          <span
-                            class="input-error-message"
-                            th:if="${#fields.hasErrors('email')}"
-                            th:errors="${checkoutDto.email}"
-                          ></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
-                    >
-                      <div class="input-group">
-                        <label for="phone">Số điện thoại:</label>
-                        <div class="input-group-control">
-                          <input
-                            type="text"
-                            name="phone"
-                            id="phone"
-                            th:value="${checkoutDto.phone}"
-                            placeholder="Số điện thoại"
-                            th:classappend="${#fields.hasErrors('phone') ? 'error' : ''}"
-                            th:field="${checkoutDto.phone}"
-                          />
-                          <span
-                            class="input-error-message"
-                            th:if="${#fields.hasErrors('phone')}"
-                            th:errors="${checkoutDto.phone}"
-                          ></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
-                    >
-                      <div class="input-group">
-                        <label for="address">Địa chỉ:</label>
-                        <div class="input-group-control">
-                          <input
-                            type="text"
-                            name="address"
-                            id="address"
-                            th:value="${checkoutDto.address}"
-                            placeholder="Địa chỉ"
-                            th:classappend="${#fields.hasErrors('address') ? 'error' : ''}"
-                            th:field="${checkoutDto.address}"
-                          />
-                          <span
-                            class="input-error-message"
-                            th:if="${#fields.hasErrors('address')}"
-                            th:errors="${checkoutDto.address}"
-                          ></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
-                    >
-                      <div class="input-group">
-                        <label for="note">Ghi chú:</label>
-                        <div class="input-group-control">
-                          <textarea
-                            name="note"
-                            id="note"
-                            rows="4"
-                            th:value="${checkoutDto.note}"
-                            placeholder="Ghi chú"
-                            th:classappend="${#fields.hasErrors('note') ? 'error' : ''}"
-                            th:field="${checkoutDto.note}"
-                          ></textarea>
-                          <span
-                            class="input-error-message"
-                            th:if="${#fields.hasErrors('note')}"
-                            th:errors="${checkoutDto.note}"
-                          ></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="checkout-summary">
-                  <h2 class="summary-title">Tóm tắt</h2>
-                  <div class="total-price-group price-group">
-                    <p class="label total-price-label">Tổng:</p>
-                    <p
-                      class="price total-price"
-                      th:text="${#numbers.formatDecimal(checkoutDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"
-                    ></p>
-                  </div>
-                  <div class="shipping-price-group price-group">
-                    <p class="label shipping-label">Vận chuyển:</p>
-                    <p class="price shipping-price">Miễn phí</p>
-                  </div>
-                  <div class="divider"></div>
-                  <div class="grand-total-group price-group">
-                    <p class="label grand-total-label">Tổng thanh toán:</p>
-                    <p
-                      class="price grand-total-price"
-                      th:text="${#numbers.formatDecimal(checkoutDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"
-                    ></p>
-                  </div>
-                </div>
-
-                <div class="checkout-actions">
-                  <button
-                    class="confirm-checkout-button primary-button"
-                    type="submit"
-                  >
-                    Xác nhận thanh toán
-                  </button>
-                  <a class="back-to-cart-button secondary-button" href="/cart"
-                    >Quay lại giỏ hàng</a
-                  >
-                </div>
-              </div>
-            </form>
-          </div>
-
-          <!-- checkout items -->
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-            <div class="checkout-items card">
-              <h2 class="checkout-items-title">Sản phẩm</h2>
-              <ul class="checkout-item-list">
-                <li
-                  class="checkout-item"
-                  th:each="checkoutProduct : ${checkoutDto.checkoutProducts}"
+            <!-- checkout information -->
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                <form
+                        class="checkout-form"
+                        method="post"
+                        th:action="@{/checkout}"
+                        th:object="${checkoutDto}"
                 >
-                  <div class="product">
-                    <div class="product-image">
-                      <img
-                        class="image"
-                        th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' +  checkoutProduct.imageName}"
-                        alt="product"
-                      />
+                    <div class="checkout-information card">
+                        <h2 class="checkout-information-title">Thông tin</h2>
+                        <div class="shipping-information">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                    <div class="input-group">
+                                        <label for="firstName">Họ:</label>
+                                        <div class="input-group-control">
+                                            <input type="text" name="firstName" id="firstName"
+                                                   th:value="${checkoutDto.firstName}" placeholder="Họ"
+                                                   th:classappend="${#fields.hasErrors('firstName') ? 'error' : ''}"
+                                                   th:field="${checkoutDto.firstName}"/>
+                                            <span class="input-error-message" th:if="${#fields.hasErrors('firstName')}"
+                                                  th:errors="${checkoutDto.firstName}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                    <div class="input-group">
+                                        <label for="lastName">Tên:</label>
+                                        <div class="input-group-control">
+                                            <input type="text" name="lastName" id="lastName"
+                                                   th:value="${checkoutDto.lastName}" placeholder="Tên"
+                                                   th:classappend="${#fields.hasErrors('lastName') ? 'error' : ''}"
+                                                   th:field="${checkoutDto.lastName}"/>
+                                            <span class="input-error-message" th:if="${#fields.hasErrors('lastName')}"
+                                                  th:errors="${checkoutDto.lastName}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="input-group">
+                                        <label for="email">Email:</label>
+                                        <div class="input-group-control">
+                                            <input type="text" name="email" id="email" th:value="${checkoutDto.email}"
+                                                   placeholder="Email"
+                                                   th:classappend="${#fields.hasErrors('email') ? 'error' : ''}"
+                                                   th:field="${checkoutDto.email}"/>
+                                            <span class="input-error-message" th:if="${#fields.hasErrors('email')}"
+                                                  th:errors="${checkoutDto.email}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="input-group">
+                                        <label for="phone">Số điện thoại:</label>
+                                        <div class="input-group-control">
+                                            <input type="text" name="phone" id="phone" th:value="${checkoutDto.phone}"
+                                                   placeholder="Số điện thoại"
+                                                   th:classappend="${#fields.hasErrors('phone') ? 'error' : ''}"
+                                                   th:field="${checkoutDto.phone}"/>
+                                            <span class="input-error-message" th:if="${#fields.hasErrors('phone')}"
+                                                  th:errors="${checkoutDto.phone}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="input-group">
+                                        <label for="address">Địa chỉ:</label>
+                                        <div class="input-group-control">
+                                            <input type="text" name="address" id="address"
+                                                   th:value="${checkoutDto.address}" placeholder="Địa chỉ"
+                                                   th:classappend="${#fields.hasErrors('address') ? 'error' : ''}"
+                                                   th:field="${checkoutDto.address}"/>
+                                            <span class="input-error-message" th:if="${#fields.hasErrors('address')}"
+                                                  th:errors="${checkoutDto.address}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="input-group">
+                                        <label for="note">Ghi chú:</label>
+                                        <div class="input-group-control">
+                                            <textarea name="note" id="note" rows="4" th:value="${checkoutDto.note}"
+                                                      placeholder="Ghi chú"
+                                                      th:classappend="${#fields.hasErrors('note') ? 'error' : ''}"
+                                                      th:field="${checkoutDto.note}"></textarea>
+                                            <span class="input-error-message" th:if="${#fields.hasErrors('note')}"
+                                                  th:errors="${checkoutDto.note}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkout-summary">
+                            <h2 class="checkout-summary-title">Tóm tắt</h2>
+                            <div class="total-price-group checkout-price-group">
+                                <p class="label total-price-label">Tổng:</p>
+                                <p class="price total-price"
+                                   th:text="${#numbers.formatDecimal(checkoutDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                            </div>
+                            <div class="shipping-price-group checkout-price-group">
+                                <p class="label shipping-label">Vận chuyển:</p>
+                                <p class="price shipping-price">Miễn phí</p>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="grand-total-group checkout-price-group">
+                                <p class="label grand-total-label">Tổng thanh toán:</p>
+                                <p class="price grand-total-price"
+                                   th:text="${#numbers.formatDecimal(checkoutDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                            </div>
+                        </div>
+
+                        <div class="checkout-actions">
+                            <button class="confirm-checkout-button primary-button" type="submit">Xác nhận thanh toán
+                            </button>
+                            <a class="back-to-cart-button secondary-button" href="/cart">Quay lại giỏ hàng</a>
+                        </div>
                     </div>
-                    <div class="product-information">
-                      <p
-                        class="product-name"
-                        th:text="${checkoutProduct.name}"
-                      ></p>
-                      <p
-                        class="product-quantity"
-                        th:text="'x' + ${checkoutProduct.quantity}"
-                      ></p>
-                      <p
-                        class="product-price"
-                        th:text="${#numbers.formatDecimal(checkoutProduct.price, 0, 'COMMA', 0, 'POINT')} + '₫'"
-                      ></p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
+                </form>
             </div>
-          </div>
+
+            <!-- checkout items -->
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                <div class="checkout-items card">
+                    <h2 class="checkout-items-title">Sản phẩm</h2>
+                    <ul class="checkout-item-list">
+                        <li class="checkout-item" th:each="checkoutProduct : ${checkoutDto.checkoutProducts}">
+                            <div class="product">
+                                <div class="product-image">
+                                    <img th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' +  checkoutProduct.imageName}"
+                                         th:alt="${checkoutProduct.imageName}"/>
+                                </div>
+                                <div class="product-information">
+                                    <p class="product-name" th:text="${checkoutProduct.name}"></p>
+                                    <p class="product-quantity" th:text="'x' + ${checkoutProduct.quantity}"></p>
+                                    <p class="product-price"
+                                       th:text="${#numbers.formatDecimal(checkoutProduct.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
-    </main>
-  </body>
+    </div>
+</main>
+</body>
 </html>

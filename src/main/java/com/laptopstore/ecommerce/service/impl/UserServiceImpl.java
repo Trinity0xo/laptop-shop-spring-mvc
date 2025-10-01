@@ -1,11 +1,8 @@
 package com.laptopstore.ecommerce.service.impl;
 
-import com.laptopstore.ecommerce.dto.auth.AuthenticatedInformationDto;
-import com.laptopstore.ecommerce.dto.auth.ForgotPasswordDto;
-import com.laptopstore.ecommerce.dto.auth.ResetPasswordDto;
+import com.laptopstore.ecommerce.dto.auth.*;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.dto.user.*;
-import com.laptopstore.ecommerce.dto.auth.RegisterDto;
 import com.laptopstore.ecommerce.exception.AuthUserNotFoundException;
 import com.laptopstore.ecommerce.exception.BadRequestException;
 import com.laptopstore.ecommerce.exception.RoleNotFoundException;
@@ -52,15 +49,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserRole(UpdateUserRoleDto updateUserRoleDto) {
+    public void changePassword(String email, ChangePasswordDto changePasswordDto) {
+        User user = this.getUserByEmail(email);
+        if(user == null){
+            throw new AuthUserNotFoundException(email);
+        }
+
+        String newHashedPassword = passwordEncoder.encode(changePasswordDto.getNewPassword());
+        user.setPassword(newHashedPassword);
+        userRepository.save(user);
+    }
+
+    @Override
+    public CreateUserDto getInformationForCreateUser() {
+        List<Role> roles = this.roleRepository.findAll();
+
+        return new CreateUserDto(
+                roles
+        );
+    }
+
+    @Override
+    public void updateUserRole(String email, UpdateUserRoleDto updateUserRoleDto) {
         User user = this.userRepository.findById(updateUserRoleDto.getId()).orElse(null);
         if(user == null){
             throw new UserNotFoundException(updateUserRoleDto.getId());
         }
 
-        Role role = this.roleRepository.findBySlug(updateUserRoleDto.getRole().name()).orElse(null);
+        if(user.getEmail().equalsIgnoreCase(email)){
+            throw new UserNotFoundException(updateUserRoleDto.getId());
+        }
+
+        Role role = this.roleRepository.findById(updateUserRoleDto.getNewRole().getId()).orElse(null);
         if(role == null){
-            throw new RoleNotFoundException(updateUserRoleDto.getRole().name());
+            throw new RoleNotFoundException(updateUserRoleDto.getNewRole().getId());
         }
 
         user.setRole(role);
@@ -68,16 +90,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UpdateUserRoleDto getUserInformationForRoleUpdate(long userId) {
+    public UpdateUserRoleDto getUserInformationForRoleUpdate(String email,long userId) {
         User user = this.userRepository.findById(userId).orElse(null);
         if(user == null){
             throw new UserNotFoundException(userId);
         }
 
-        RoleEnum role = RoleEnum.valueOf(user.getRole().getSlug());
+        if(user.getEmail().equalsIgnoreCase(email)){
+            throw new UserNotFoundException(userId);
+        }
+
+        Role userRole = user.getRole();
+        List<Role> roles = this.roleRepository.findAll();
 
         return new UpdateUserRoleDto(
-                user.getId(), user.getEmail(), role
+                user.getId(),
+                user.getEmail(),
+                userRole,
+                roles
         );
     }
 
@@ -156,9 +186,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createNewUser(CreateUserDto createUserDto) {
-        Role role = this.roleRepository.findBySlug(createUserDto.getRole().name()).orElse(null);
+        Role role = this.roleRepository.findById(createUserDto.getRole().getId()).orElse(null);
         if(role == null){
-            throw new RoleNotFoundException(createUserDto.getRole().name());
+            throw new RoleNotFoundException(createUserDto.getRole().getId());
         }
 
         String hashedPassword = this.passwordEncoder.encode(createUserDto.getPassword());
@@ -235,7 +265,6 @@ public class UserServiceImpl implements UserService {
                 user.getAvatar(),
                 user.getFullName(),
                 user.getEmail(),
-                user.getRole().getName(),
                 user.getRole().getSlug(),
                 cartItemCount
         );

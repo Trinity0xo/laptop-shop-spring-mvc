@@ -3,7 +3,7 @@
 @import "../responsive_grid";
 @import "../button";
 @import "../input";
-@import "../lines_base_overflow";
+@import "../text_truncate";
 
 .product-reviews {
   .container {
@@ -49,7 +49,7 @@
         .name {
           color: $text-primary;
           font-size: 1.6rem;
-          @include linesBaseOverflow();
+          @include textTruncate();
         }
 
         .pricing {
@@ -90,7 +90,6 @@
         justify-content: space-between;
         flex-wrap: wrap;
         gap: 1.6rem;
-        margin-bottom: 1.6rem;
       }
 
       .review-list {

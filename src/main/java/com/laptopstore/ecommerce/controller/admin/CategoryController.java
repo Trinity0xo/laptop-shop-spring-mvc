@@ -3,7 +3,6 @@ package com.laptopstore.ecommerce.controller.admin;
 import com.laptopstore.ecommerce.dto.category.CategoryFilterDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.service.CategoryService;
-import com.laptopstore.ecommerce.exception.CategoryNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,7 +34,7 @@ public class CategoryController {
     )  {
         PageResponse<List<Category>> response = this.categoryService.getAllCategories(categoryFilterDto);
         model.addAttribute("response", response);
-        model.addAttribute("categoryCriteriaDto", categoryFilterDto);
+        model.addAttribute("categoryFilterDto", categoryFilterDto);
         return "/admin/category/index";
     }
 

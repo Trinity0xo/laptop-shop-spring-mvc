@@ -23,7 +23,7 @@ public class PageableDto {
     }
 
     public Integer getIntegerLimit(){
-       return TypeParseUtils.parseStringIntegerOrDefault(limit, 10);
+       return TypeParseUtils.parseStringIntegerOrDefault(limit, 15);
     }
 
     public SortDirectionEnum getEnumSortDirection(){

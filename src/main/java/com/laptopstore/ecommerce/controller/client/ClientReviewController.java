@@ -5,17 +5,14 @@ import com.laptopstore.ecommerce.dto.review.*;
 import com.laptopstore.ecommerce.model.Review;
 import com.laptopstore.ecommerce.service.ReviewService;
 import com.laptopstore.ecommerce.util.AuthenticationUtils;
+import com.laptopstore.ecommerce.util.ResponseUtils;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/review")
@@ -48,16 +45,8 @@ public class ClientReviewController {
     )  {
         String email = AuthenticationUtils.getAuthenticatedName();
 
-        if(bindingResult.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
-
-            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>(null, errors);
-
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ajaxResponse);
-        }
+        ResponseEntity<AjaxResponse<Object>> ajaxErrorResponse = ResponseUtils.getAjaxErrorResponseResponseEntity(bindingResult);
+        if (ajaxErrorResponse != null) return ajaxErrorResponse;
 
         this.reviewService.UserCreateReview(productId, email, createReviewDto);
 
@@ -89,16 +78,8 @@ public class ClientReviewController {
     )  {
         String email = AuthenticationUtils.getAuthenticatedName();
 
-        if(bindingResult.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
-
-            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>(null, errors);
-
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ajaxResponse);
-        }
+        ResponseEntity<AjaxResponse<Object>> ajaxErrorResponse = ResponseUtils.getAjaxErrorResponseResponseEntity(bindingResult);
+        if (ajaxErrorResponse != null) return ajaxErrorResponse;
 
         this.reviewService.UserUpdateReview(productId, email, updateReviewDto);
 

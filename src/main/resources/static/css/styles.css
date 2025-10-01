@@ -7,26 +7,26 @@
 
 .container {
   max-width: 120rem;
-  margin: 0rem auto;
+  margin: 0 auto;
 }
 @media (max-width: 576px) {
   .container {
-    padding: 0rem 1.6rem;
+    padding: 0 1.6rem;
   }
 }
 @media (min-width: 576px) {
   .container {
-    padding: 0rem 1.6rem;
+    padding: 0 1.6rem;
   }
 }
 @media (min-width: 768px) {
   .container {
-    padding: 0rem 1.6rem;
+    padding: 0 1.6rem;
   }
 }
 @media (min-width: 992px) {
   .container {
-    padding: 0rem 1.6rem;
+    padding: 0 1.6rem;
   }
 }
 @media (min-width: 1200px) {
@@ -36,7 +36,7 @@
 }
 
 .container-fluid {
-  margin: 0rem 1.6rem;
+  margin: 0 1.6rem;
 }
 
 .primary-button {
@@ -382,14 +382,7 @@
   color: #9fa6b2;
 }
 .product-card .review-stars {
-  margin-top: auto;
-  display: flex;
-  gap: 0.6rem;
   margin-top: 1rem;
-}
-.product-card .review-stars .fa-star,
-.product-card .review-stars .fa-star-half-stroke {
-  font-size: 2rem;
 }
 
 .dropdown {
@@ -406,7 +399,6 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 20px 0px;
   background-color: #fff;
   border-radius: 0.4rem;
-  overflow: hidden;
 }
 
 .modal {
@@ -471,7 +463,7 @@
   cursor: pointer;
 }
 .modal .modal-body {
-  padding: 0.8rem 1.6rem 0rem 1.6rem;
+  padding: 0.8rem 1.6rem 0 1.6rem;
   max-height: 100%;
   overflow-y: auto;
 }
@@ -1003,11 +995,42 @@
 .description-list .description-detail {
   display: flex;
   align-items: start;
-  padding: 1.2rem 0rem;
+  padding: 1.2rem 0;
   font-size: 1.6rem;
   text-align: start;
   color: #333;
   border-bottom: 0.1rem solid rgba(87, 88, 100, 0.2);
+}
+.description-list .description-term .category-image,
+.description-list .description-detail .category-image {
+  display: block;
+  width: 20rem;
+  height: 20rem;
+}
+.description-list .description-term .category-image img,
+.description-list .description-detail .category-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.description-list .description-term .avatar,
+.description-list .description-detail .avatar {
+  display: block;
+  width: 20rem;
+  height: 20rem;
+}
+.description-list .description-term .avatar img,
+.description-list .description-detail .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 0.3rem solid rgba(51, 51, 51, 0.25);
+  overflow: hidden;
+}
+
+.table-container {
+  overflow-x: auto;
 }
 
 .table {
@@ -1016,10 +1039,45 @@
 }
 .table .table-header-cell,
 .table .table-body-cell {
-  padding: 1.2rem 0rem;
+  padding: 1.2rem 1.2rem;
   font-size: 1.6rem;
   color: #333;
   text-align: start;
+}
+.table .table-header-cell .avatar,
+.table .table-body-cell .avatar {
+  display: flex;
+  align-items: center;
+}
+.table .table-header-cell .avatar img,
+.table .table-body-cell .avatar img {
+  width: 5rem;
+  height: 5rem;
+  object-fit: contain;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.table .table-header-cell .category-image,
+.table .table-body-cell .category-image {
+  display: flex;
+  align-items: center;
+}
+.table .table-header-cell .category-image img,
+.table .table-body-cell .category-image img {
+  width: 6.4rem;
+  height: 6.4rem;
+  object-fit: contain;
+}
+.table .table-header-cell .product-image,
+.table .table-body-cell .product-image {
+  display: flex;
+  align-items: center;
+}
+.table .table-header-cell .product-image img,
+.table .table-body-cell .product-image img {
+  width: 6.4rem;
+  height: 6.4rem;
+  object-fit: contain;
 }
 .table .table-header-cell .cell-text,
 .table .table-body-cell .cell-text {
@@ -1029,11 +1087,28 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.table .table-body-cell .table-row-actions {
+  display: flex;
+  justify-content: end;
+  gap: 0.8rem;
+}
 .table .table-header-row {
   border-bottom: 0.1rem solid rgba(87, 88, 100, 0.25);
 }
 .table .table-body-row:not(:last-child) {
   border-bottom: 0.1rem solid rgba(87, 88, 100, 0.25);
+}
+
+.no-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6.4rem;
+}
+.no-result p {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #666;
 }
 
 .sort-dropdown .sort-dropdown-toggle {
@@ -1217,4 +1292,13 @@
   background-color: #fff;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   padding: 1.6rem;
+}
+
+.review-stars {
+  display: flex;
+  gap: 0.6rem;
+}
+.review-stars .fa-star,
+.review-stars .fa-star-half-stroke {
+  font-size: 1.5rem;
 }

@@ -1,4 +1,4 @@
-@mixin linesBaseOverflow($number: 1) {
+@mixin textTruncate($number: 1) {
   display: -webkit-box;
   -webkit-line-clamp: $number;
   -webkit-box-orient: vertical;

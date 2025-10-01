@@ -2,7 +2,6 @@ package com.laptopstore.ecommerce.configuration;
 
 import com.laptopstore.ecommerce.dto.auth.AuthenticatedInformationDto;
 import com.laptopstore.ecommerce.service.FolderService;
-import com.laptopstore.ecommerce.service.UserService;
 import com.laptopstore.ecommerce.util.AuthenticationUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,12 +14,10 @@ public class GlobalModelAttributes {
     private String resourcesMappingFolder;
 
     private final FolderService folderService;
-    private final UserService userService;
 
 
-    public GlobalModelAttributes(FolderService folderService, UserService userService) {
+    public GlobalModelAttributes(FolderService folderService) {
         this.folderService = folderService;
-        this.userService = userService;
     }
 
     @ModelAttribute("productImagesFolder")

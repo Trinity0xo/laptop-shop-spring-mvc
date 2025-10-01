@@ -151,52 +151,6 @@
     }
   }
 
-  .top-selling {
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
-      flex-wrap: wrap;
-
-      .top-selling-header {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-
-        @include media(xs) {
-          flex-direction: column;
-          align-items: start;
-
-          .view-all-button {
-            width: 100%;
-          }
-        }
-
-        @include media(sm, md, lg, xl) {
-          flex-direction: row;
-          align-items: center;
-
-          .view-all-button {
-            width: auto;
-          }
-        }
-
-        .header-title {
-          font-size: 4rem;
-          font-weight: 500;
-          color: $text-primary;
-        }
-
-        .view-all-button {
-          display: flex;
-          gap: 0.8rem;
-          justify-content: center;
-          align-items: center;
-        }
-      }
-    }
-  }
-
   .ideal-laptop {
     .container {
       display: flex;
@@ -296,52 +250,6 @@
           flex-direction: row;
           align-items: center;
           gap: 0;
-
-          .view-all-button {
-            width: auto;
-          }
-        }
-
-        .header-title {
-          font-size: 4rem;
-          font-weight: 500;
-          color: $text-primary;
-        }
-
-        .view-all-button {
-          display: flex;
-          gap: 0.8rem;
-          justify-content: center;
-          align-items: center;
-        }
-      }
-    }
-  }
-
-  .top-rating {
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
-      flex-wrap: wrap;
-
-      .top-rating-header {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-
-        @include media(xs) {
-          flex-direction: column;
-          align-items: start;
-
-          .view-all-button {
-            width: 100%;
-          }
-        }
-
-        @include media(sm, md, lg, xl) {
-          flex-direction: row;
-          align-items: center;
 
           .view-all-button {
             width: auto;

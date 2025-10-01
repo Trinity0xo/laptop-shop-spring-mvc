@@ -1,608 +1,485 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Sản phẩm</title>
-  </head>
+</head>
 
-  <body>
-    <div class="product product-create" layout:fragment="content">
-      <div class="container-fluid">
+<body>
+<div class="product product-create" layout:fragment="content">
+    <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/dashboard/product">Sản phẩm</a></li>
-          <li>Tạo</li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/product">Sản phẩm</a></li>
+            <li>Tạo</li>
         </ul>
 
         <!-- create product form -->
-        <form
-          id="createProductForm"
-          class="create-product-form product-form card"
-        >
-          <h1 class="form-title">Tạo sản phẩm mới</h1>
+        <form id="createProductForm" class="create-product-form product-form form card">
+            <h1 class="form-title">Tạo sản phẩm mới</h1>
 
-          <div class="form-content">
-            <div class="content images">
-              <h2 class="content-title">Hình ảnh:</h2>
-              <div class="input-group">
-                <label class="image-add-new-button">Hình ảnh:</label>
-                <div class="images-input-group">
-                  <!-- images upload group -->
-                  <div class="images-upload-group">
-                    <!-- images upload preview -->
-                    <div class="images-upload-preview"></div>
+            <div class="form-content">
+                <div class="content images">
+                    <h2 class="content-title">Hình ảnh:</h2>
+                    <div class="input-group">
+                        <label class="image-add-new-button">Hình ảnh:</label>
+                        <div class="images-input-group">
+                            <!-- images upload group -->
+                            <div class="images-upload-group">
+                                <!-- images upload preview -->
+                                <div class="images-upload-preview"></div>
 
-                    <!-- images upload control -->
-                    <div class="images-upload-control">
-                      <label for="images" class="add-image-button"
-                        ><i class="fa-solid fa-plus"></i
-                      ></label>
-                      <input
-                        class="images-upload-input"
-                        name="newImages"
-                        id="images"
-                        type="file"
-                        multiple
-                        accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"
-                      />
+                                <!-- images upload control -->
+                                <div class="images-upload-control">
+                                    <label for="images" class="add-image-button"><i
+                                            class="fa-solid fa-plus"></i></label>
+                                    <input class="images-upload-input" name="newImages" id="images" type="file" multiple
+                                           accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"/>
+                                </div>
+                            </div>
+                            <span id="newImagesError" class="input-error-message"></span>
+                        </div>
                     </div>
-                  </div>
-                  <span id="newImagesError" class="input-error-message"></span>
                 </div>
-              </div>
+
+                <div class="content general-content">
+                    <h2 class="content-title">Thông tin chung:</h2>
+
+                    <div class="input-group">
+                        <label for="name">Tên: </label>
+                        <div class="input-group-control">
+                            <input type="text" name="name" id="name" placeholder="Tên sản phẩm" required/>
+                            <span id="nameError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="brand">Thương hiệu: </label>
+                        <div class="input-group-control">
+                            <select name="brand" id="brand">
+                                <option selected value="">Chọn thương hiệu</option>
+                                <option th:each="brand : ${createProductDto.productMetaData.brands}"
+                                        th:value="${brand.id}" th:text="${brand.name}"></option>
+                            </select>
+                            <span id="brandError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="category">Danh mục: </label>
+                        <div class="input-group-control">
+                            <select name="category" id="category">
+                                <option selected value="">Chọn danh mục</option>
+                                <option th:each="category : ${createProductDto.productMetaData.categories}"
+                                        th:value="${category.id}" th:text="${category.name}"></option>
+                            </select>
+                            <span id="categoryError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="shortDescription">Mô tả ngắn: </label>
+                        <div class="input-group-control">
+                            <textarea name="shortDescription" id="shortDescription" rows="3"
+                                      placeholder="Mô tả ngắn sản phẩm"></textarea>
+                            <span id="shortDescriptionError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="description">Mô tả: </label>
+                        <div class="input-group-control">
+                            <textarea name="description" id="description" rows="5"
+                                      placeholder="Mô tả sản phẩm"></textarea>
+                            <span id="descriptionError" class="input-error-message"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content pricing-content">
+                    <h2 class="content-title">Giá bán:</h2>
+
+                    <div class="input-group">
+                        <label for="price">Giá:</label>
+                        <div class="input-group-control">
+                            <input class="price-input" type="text" name="price" id="price" value="0" required/>
+                            <span id="priceError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="discount">Giảm giá (%): </label>
+                        <div class="input-group-control">
+                            <input class="discount-input" type="text" name="discount" id="discount" value="0" required/>
+                            <span id="discountError" class="input-error-message"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content stock-content">
+                    <h2 class="content-title">Tồn kho:</h2>
+
+                    <div class="input-group">
+                        <label for="quantity">Số lượng: </label>
+                        <div class="input-group-control">
+                            <input type="number" name="quantity" id="quantity" value="0" required/>
+                            <span id="quantityError" class="input-error-message"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content specification-content">
+                    <h2 class="content-title">Thông số kỹ thuật:</h2>
+
+                    <div class="input-group">
+                        <label for="cpu">CPU: </label>
+                        <div class="input-group-control">
+                            <textarea name="cpu" id="cpu" placeholder="Cpu"></textarea>
+                            <span id="cpuError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="gpu">GPU: </label>
+                        <div class="input-group-control">
+                            <textarea name="gpu" id="gpu" placeholder="Gpu"></textarea>
+                            <span id="gpuError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="ram">Ram: </label>
+                        <div class="input-group-control">
+                            <textarea name="ram" id="ram" placeholder="Ram"></textarea>
+                            <span id="ramError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="storage">Bộ nhớ: </label>
+                        <div class="input-group-control">
+                            <textarea name="storage" id="storage" placeholder="Bộ nhớ"></textarea>
+                            <span id="storageError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="cooling">Tản nhiệt: </label>
+                        <div class="input-group-control">
+                            <textarea name="cooling" id="cooling" placeholder="Tản nhiệt"></textarea>
+                            <span id="coolingError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="io">Cổng kết nối: </label>
+                        <div class="input-group-control">
+                            <textarea name="io" id="io" placeholder="Cổng kết nối"></textarea>
+                            <span id="ioError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="screen">Màn hình: </label>
+                        <div class="input-group-control">
+                            <textarea name="screen" id="screen" placeholder="Màn hình"></textarea>
+                            <span id="screenError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="keyboard">Bàn phím: </label>
+                        <div class="input-group-control">
+                            <textarea name="keyboard" id="keyboard" placeholder="Bàn phím"></textarea>
+                            <span id="keyboardError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="audio">Âm thanh: </label>
+                        <div class="input-group-control">
+                            <textarea name="audio" id="audio" placeholder="Âm thanh"></textarea>
+                            <span id="audioError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="sdCard">Thẻ nhớ: </label>
+                        <div class="input-group-control">
+                            <textarea name="sdCard" id="sdCard" placeholder="thẻ nhớ"></textarea>
+                            <span id="sdCardError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="lan">Lan: </label>
+                        <div class="input-group-control">
+                            <textarea name="lan" id="lan" placeholder="Lan"></textarea>
+                            <span id="lanError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="wifi">Wifi: </label>
+                        <div class="input-group-control">
+                            <textarea name="wifi" id="wifi" placeholder="Wifi"></textarea>
+                            <span id="wifiError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="bluetooth">Bluetooth: </label>
+                        <div class="input-group-control">
+                            <textarea name="bluetooth" id="bluetooth" placeholder="Bluetooth"></textarea>
+                            <span id="bluetoothError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="webCam">Webcam: </label>
+                        <div class="input-group-control">
+                            <textarea name="webCam" id="webCam" placeholder="Webcam"></textarea>
+                            <span id="webCamError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="os">Hệ điều hành: </label>
+                        <div class="input-group-control">
+                            <textarea name="os" id="os" placeholder="Hệ điều hành"></textarea>
+                            <span id="osError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="battery">Pin: </label>
+                        <div class="input-group-control">
+                            <textarea name="battery" id="battery" placeholder="Pin"></textarea>
+                            <span id="batteryError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="weight">Khối lượng: </label>
+                        <div class="input-group-control">
+                            <textarea name="weight" id="weight" placeholder="Khối lượng"></textarea>
+                            <span id="weightError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="material">Chất liệu: </label>
+                        <div class="input-group-control">
+                            <textarea name="material" id="material" placeholder="Chất liệu"></textarea>
+                            <span id="materialError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="color">Màu sắc: </label>
+                        <div class="input-group-control">
+                            <textarea name="color" id="color" placeholder="Màu sắc"></textarea>
+                            <span id="colorError" class="input-error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="size">Kích thước: </label>
+                        <div class="input-group-control">
+                            <textarea name="size" id="size" placeholder="Kích thước"></textarea>
+                            <span id="sizeError" class="input-error-message"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="content general-content">
-              <h2 class="content-title">Thông tin chung:</h2>
-
-              <div class="input-group">
-                <label for="name">Tên: </label>
-                <div class="input-group-control">
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Tên sản phẩm"
-                    required
-                  />
-                  <span id="nameError" class="input-error-message"></span>
+            <div class="form-actions">
+                <div class="spacer"></div>
+                <div class="buttons">
+                    <button type="submit" class="save-button primary-button">Lưu</button>
+                    <a href="/dashboard/product" class="back-button secondary-button">Quay lại</a>
                 </div>
-              </div>
-
-              <div class="input-group">
-                <label for="brand">Thương hiệu: </label>
-                <div class="input-group-control">
-                  <select name="brand" id="brand">
-                    <option selected value="">Chọn thương hiệu</option>
-                    <option
-                      th:each="brand : ${createProductDto.productMetaData.brands}"
-                      th:value="${brand.id}"
-                      th:text="${brand.name}"
-                    ></option>
-                  </select>
-                  <span id="brandError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="category">Danh mục: </label>
-                <div class="input-group-control">
-                  <select name="category" id="category">
-                    <option selected value="">Chọn danh mục</option>
-                    <option
-                      th:each="category : ${createProductDto.productMetaData.categories}"
-                      th:value="${category.id}"
-                      th:text="${category.name}"
-                    ></option>
-                  </select>
-                  <span id="categoryError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="shortDescription">Mô tả ngắn: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="shortDescription"
-                    id="shortDescription"
-                    rows="3"
-                    placeholder="Mô tả ngắn sản phẩm"
-                  ></textarea>
-                  <span
-                    id="shortDescriptionError"
-                    class="input-error-message"
-                  ></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="description">Mô tả: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="description"
-                    id="description"
-                    rows="5"
-                    placeholder="Mô tả sản phẩm"
-                  ></textarea>
-                  <span
-                    id="descriptionError"
-                    class="input-error-message"
-                  ></span>
-                </div>
-              </div>
             </div>
-
-            <div class="content pricing-content">
-              <h2 class="content-title">Giá bán:</h2>
-
-              <div class="input-group">
-                <label for="price">Giá:</label>
-                <div class="input-group-control">
-                  <input
-                    class="price-input"
-                    type="text"
-                    name="price"
-                    id="price"
-                    value="0"
-                    required
-                  />
-                  <span id="priceError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="discount">Giảm giá (%): </label>
-                <div class="input-group-control">
-                  <input
-                    class="discount-input"
-                    type="text"
-                    name="discount"
-                    id="discount"
-                    value="0"
-                    required
-                  />
-                  <span id="discountError" class="input-error-message"></span>
-                </div>
-              </div>
-            </div>
-
-            <div class="content stock-content">
-              <h2 class="content-title">Tồn kho:</h2>
-
-              <div class="input-group">
-                <label for="quantity">Số lượng: </label>
-                <div class="input-group-control">
-                  <input
-                    type="number"
-                    name="quantity"
-                    id="quantity"
-                    value="0"
-                    required
-                  />
-                  <span id="quantityError" class="input-error-message"></span>
-                </div>
-              </div>
-            </div>
-
-            <div class="content specification-content">
-              <h2 class="content-title">Thông số kỹ thuật:</h2>
-
-              <div class="input-group">
-                <label for="cpu">CPU: </label>
-                <div class="input-group-control">
-                  <textarea name="cpu" id="cpu" placeholder="Cpu"></textarea>
-                  <span id="cpuError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="gpu">GPU: </label>
-                <div class="input-group-control">
-                  <textarea name="gpu" id="gpu" placeholder="Gpu"></textarea>
-                  <span id="gpuError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="ram">Ram: </label>
-                <div class="input-group-control">
-                  <textarea name="ram" id="ram" placeholder="Ram"></textarea>
-                  <span id="ramError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="storage">Bộ nhớ: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="storage"
-                    id="storage"
-                    placeholder="Bộ nhớ"
-                  ></textarea>
-                  <span id="storageError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="cooling">Tản nhiệt: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="cooling"
-                    id="cooling"
-                    placeholder="Tản nhiệt"
-                  ></textarea>
-                  <span id="coolingError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="io">Cổng kết nối: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="io"
-                    id="io"
-                    placeholder="Cổng kết nối"
-                  ></textarea>
-                  <span id="ioError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="screen">Màn hình: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="screen"
-                    id="screen"
-                    placeholder="Màn hình"
-                  ></textarea>
-                  <span id="screenError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="keyboard">Bàn phím: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="keyboard"
-                    id="keyboard"
-                    placeholder="Bàn phím"
-                  ></textarea>
-                  <span id="keyboardError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="audio">Âm thanh: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="audio"
-                    id="audio"
-                    placeholder="Âm thanh"
-                  ></textarea>
-                  <span id="audioError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="sdCard">Thẻ nhớ: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="sdCard"
-                    id="sdCard"
-                    placeholder="thẻ nhớ"
-                  ></textarea>
-                  <span id="sdCardError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="lan">Lan: </label>
-                <div class="input-group-control">
-                  <textarea name="lan" id="lan" placeholder="Lan"></textarea>
-                  <span id="lanError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="wifi">Wifi: </label>
-                <div class="input-group-control">
-                  <textarea name="wifi" id="wifi" placeholder="Wifi"></textarea>
-                  <span id="wifiError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="bluetooth">Bluetooth: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="bluetooth"
-                    id="bluetooth"
-                    placeholder="Bluetooth"
-                  ></textarea>
-                  <span id="bluetoothError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="webCam">Webcam: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="webCam"
-                    id="webCam"
-                    placeholder="Webcam"
-                  ></textarea>
-                  <span id="webCamError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="os">Hệ điều hành: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="os"
-                    id="os"
-                    placeholder="Hệ điều hành"
-                  ></textarea>
-                  <span id="osError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="battery">Pin: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="battery"
-                    id="battery"
-                    placeholder="Pin"
-                  ></textarea>
-                  <span id="batteryError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="weight">Khối lượng: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="weight"
-                    id="weight"
-                    placeholder="Khối lượng"
-                  ></textarea>
-                  <span id="weightError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="material">Chất liệu: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="material"
-                    id="material"
-                    placeholder="Chất liệu"
-                  ></textarea>
-                  <span id="materialError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="color">Màu sắc: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="color"
-                    id="color"
-                    placeholder="Màu sắc"
-                  ></textarea>
-                  <span id="colorError" class="input-error-message"></span>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="size">Kích thước: </label>
-                <div class="input-group-control">
-                  <textarea
-                    name="size"
-                    id="size"
-                    placeholder="Kích thước"
-                  ></textarea>
-                  <span id="sizeError" class="input-error-message"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <div class="spacer"></div>
-            <button type="submit" class="save-button primary-button">
-              Lưu
-            </button>
-            <a href="/dashboard/product" class="back-button secondary-button"
-              >Quay lại</a
-            >
-          </div>
         </form>
-      </div>
     </div>
-  </body>
-  <script type="module" layout:fragment="scripts" th:inline="javascript">
+</div>
+</body>
+<script type="module" layout:fragment="scripts" th:inline="javascript">
     import {
-      checkFileType,
-      unFormatDiscount,
-      formatDiscount,
-      setTypeNumberAndUnFormatDiscount,
-      setTypeTextAndFormatDiscount,
-      formatCurrency,
-      setTypeNumberAndUnFormatCurrency,
-      setTypeTextAndFormatCurrency,
+        checkFileType,
+        formatDiscount,
+        setTypeNumberAndUnFormatDiscount,
+        setTypeTextAndFormatDiscount,
+        setTypeNumberAndUnFormatCurrency,
     } from "/js/utils.js";
 
     // multiple images upload
-    const imagesUploadInput = $(".images-upload-input");
-    const imagesUploadPreview = $(".images-upload-preview");
-    const imagesUploadControl = $(".images-upload-control");
+    const $imagesUploadInput = $(".images-upload-input");
+    const $imagesUploadPreview = $(".images-upload-preview");
 
     let newImages = [];
     let deleteImageNames = [];
 
     // convert FileReader into a Promise
     function readFileAsDataURL(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = (e) => reject(e);
-        reader.readAsDataURL(file);
-      });
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = (e) => reject(e);
+            reader.readAsDataURL(file);
+        });
     }
 
-    imagesUploadInput.change(async function () {
-      const files = $(this)[0].files;
+    $imagesUploadInput.change(async function () {
+        const files = $(this)[0].files;
 
-      for (let i = 0; i < files.length; i++) {
-        if (checkFileType(files[i])) {
-          const index = newImages.length;
-          newImages.push(files[i]);
+        for (let i = 0; i < files.length; i++) {
+            if (checkFileType(files[i])) {
+                const index = newImages.length;
+                newImages.push(files[i]);
 
-          try {
-            const result = await readFileAsDataURL(files[i]);
+                try {
+                    const result = await readFileAsDataURL(files[i]);
 
-            const img = $("<img alt='product image'>");
-            img.attr("src", result);
+                    const $img = $("<img src='' alt='product image'>");
+                    $img.attr("src", result);
 
-            const previewImage = $(`<div class="preview-image"></div>`);
+                    const $previewImage = $(`<div class="preview-image"></div>`);
 
-            const imageRemoveButton = $(`
-          <button type="button" class="image-remove-button" data-index="${index}">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        `);
+                    const $imageRemoveButton = $(`
+                      <button type="button" class="image-remove-button" data-index="${index}">
+                        <i class="fa-solid fa-xmark"></i>
+                      </button>
+                    `);
 
-            previewImage.append(img);
-            previewImage.append(imageRemoveButton);
-            imagesUploadPreview.append(previewImage);
-          } catch (err) {
-            console.error("File read error", err);
-          }
+                    $previewImage.append($img);
+                    $previewImage.append($imageRemoveButton);
+                    $imagesUploadPreview.append($previewImage);
+                } catch (err) {
+                    console.error("File read error", err);
+                }
+            }
         }
-      }
 
-      $(this).val("");
+        $(this).val("");
     });
 
     $(document).on("click", function (e) {
-      const imageRemoveButton = e.target.closest(".image-remove-button");
-      if (imageRemoveButton) {
-        const currentImage = $(imageRemoveButton).next("img");
-        const currentImageUrl = currentImage.attr("src");
-        if (currentImageUrl) {
-          const currentImageUrlArray = currentImageUrl.split("/");
-          const currentImageName =
-            currentImageUrlArray[currentImageUrlArray.length - 1];
-          deleteImageNames.push(currentImageName);
+        const $imageRemoveButton = $(e.target).closest(".image-remove-button");
+        if ($imageRemoveButton.length) {
+            const $currentImage = $imageRemoveButton.next("img");
+            const currentImageUrl = $currentImage.attr("src");
+            if (currentImageUrl) {
+                const currentImageUrlArray = currentImageUrl.split("/");
+                const currentImageName =
+                    currentImageUrlArray[currentImageUrlArray.length - 1];
+                deleteImageNames.push(currentImageName);
+            }
+
+            const imageIndex = $imageRemoveButton.data("index");
+            if (imageIndex !== undefined) {
+                newImages.splice(imageIndex, 1);
+            }
+
+            $imagesUploadInput.val("");
+
+            const $imagesPreviewItem = $imageRemoveButton.closest(".preview-image");
+            $imagesPreviewItem.remove();
         }
-
-        const imageIndex = $(imageRemoveButton).data("index");
-        if (imageIndex) {
-          newImages.splice(imageIndex, 1);
-        }
-
-        imagesUploadInput.val("");
-
-        const imagesPreviewItem =
-          $(imageRemoveButton).closest(".preview-image");
-        imagesPreviewItem.remove();
-      }
     });
 
     $(".discount-input").each(function () {
-      const input = $(this);
+        const $input = $(this);
 
-      input.val(formatDiscount(input.val()));
+        $input.val(formatDiscount($input.val()));
 
-      input.on("focus", function () {
-        setTypeNumberAndUnFormatDiscount(input);
-      });
+        $input.on("focus", function () {
+            setTypeNumberAndUnFormatDiscount($input);
+        });
 
-      input.on("blur", function () {
-        setTypeTextAndFormatDiscount(input);
-      });
+        $input.on("blur", function () {
+            setTypeTextAndFormatDiscount($input);
+        });
     });
 
-    $("#createProductForm").on("submit", function () {
-      $(".discount-input").each(function () {
-        setTypeNumberAndUnFormatDiscount($(this));
-      });
+    const $createProductForm = $("#createProductForm");
 
-      $(".price-input").each(function () {
-        setTypeNumberAndUnFormatCurrency($(this));
-      });
+    $createProductForm.on("submit", function () {
+        $(".discount-input").each(function () {
+            setTypeNumberAndUnFormatDiscount($(this));
+        });
+
+        $(".price-input").each(function () {
+            setTypeNumberAndUnFormatCurrency($(this));
+        });
     });
 
     // ajax product request url
     const REQUEST_URL = "/dashboard/product";
 
     // create product
-    $("#createProductForm").submit(function (e) {
-      e.preventDefault();
+    $createProductForm.submit(function (e) {
+        e.preventDefault();
 
-      const formData = new FormData(this);
-      formData.delete("newImages");
-      newImages.forEach((image) => {
-        formData.append("newImages", image);
-      });
+        const formData = new FormData(this);
+        formData.delete("newImages");
+        newImages.forEach((image) => {
+            formData.append("newImages", image);
+        });
 
-      const token = $("meta[name='_csrf']").attr("content");
-      const header = $("meta[name='_csrf_header']").attr("content");
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
 
-      $.ajax({
-        type: "post",
-        url: `${REQUEST_URL}/create`,
-        beforeSend: function (request) {
-          request.setRequestHeader(header, token);
-        },
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response, status, xhr) {
-          if (xhr.status === 201) {
-            newImages.length = 0;
-            window.location.href = `${REQUEST_URL}`;
-            localStorage.setItem(
-              "successMessage",
-              `${xhr.responseJSON.message}`
-            );
-          }
-        },
-        error: function (xhr) {
-          let response = null;
-          try {
-            response = JSON.parse(xhr.responseText);
-          } catch (e) {
-            // ignore
-          }
+        $.ajax({
+            type: "post",
+            url: `${REQUEST_URL}/create`,
+            beforeSend: function (request) {
+                request.setRequestHeader(header, token);
+            },
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response, status, xhr) {
+                if (xhr.status === 201) {
+                    newImages.length = 0;
+                    window.location.href = `${REQUEST_URL}`;
+                    localStorage.setItem("successMessage", `${xhr.responseJSON.message}`
+                    );
+                }
+            },
+            error: function (xhr) {
+                let response = null;
+                try {
+                    response = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    // ignore
+                }
 
-          if (response && response.data && xhr.status == 422) {
-            const errors = response.data;
-            $(".input-error-message").text("");
-            $("input").removeClass("error");
-            for (const field in errors) {
-              if (errors.hasOwnProperty(field)) {
-                $("#" + field + "Error").text(errors[field]);
-                $("#" + field).addClass("error");
-              }
-            }
-          }
-          if (xhr.status === 401) {
-            window.location.href = "/auth/login";
-          } else {
-            $("html").html(xhr.responseText);
-          }
-        },
-      });
+                if (response && response.data && xhr.status === 422) {
+                    const errors = response.data;
+                    $(".input-error-message").text("");
+                    $("input").removeClass("error");
+                    for (const field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            $("#" + field + "Error").text(errors[field]);
+                            $("#" + field).addClass("error");
+                        }
+                    }
+                }
+                if (xhr.status === 401) {
+                    window.location.href = "/auth/login";
+                } else {
+                    $("html").html(xhr.responseText);
+                }
+            },
+        });
     });
-  </script>
+</script>
 </html>

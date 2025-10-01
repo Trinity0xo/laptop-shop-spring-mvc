@@ -1,122 +1,87 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Danh mục</title>
-  </head>
+</head>
 
-  <body>
-    <div class="category category-create" layout:fragment="content">
-      <div class="container-fluid">
+<body>
+<div class="category category-create" layout:fragment="content">
+    <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/dashboard/category">Danh mục</a></li>
-          <li>Tạo</li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/category">Danh mục</a></li>
+            <li>Tạo</li>
         </ul>
 
         <!-- create category form -->
-        <form
-          class="create-category-form category-form card"
-          method="post"
-          th:action="@{/dashboard/category/create}"
-          th:object="${createCategoryDto}"
-          enctype="multipart/form-data"
-        >
-          <h1 class="form-title">Tạo danh mục mới</h1>
+        <form class="create-category-form category-form form card" method="post" th:action="@{/dashboard/category/create}"
+              th:object="${createCategoryDto}" enctype="multipart/form-data">
+            <h1 class="form-title">Tạo danh mục mới</h1>
 
-          <div class="form-content">
-            <div class="input-group">
-              <label>Hình ảnh:</label>
+            <div class="form-content">
+                <div class="input-group">
+                    <label>Hình ảnh:</label>
 
-              <!-- image input group -->
-              <div class="image-input-group">
-                <div class="image-upload-group">
-                  <!-- image upload preview -->
-                  <div class="image-upload-preview"></div>
+                    <!-- image input group -->
+                    <div class="image-input-group">
+                        <div class="image-upload-group">
+                            <!-- image upload preview -->
+                            <div class="image-upload-preview"></div>
 
-                  <!-- image upload control -->
-                  <div class="image-upload-control">
-                    <label class="image-upload-label" for="image">
-                      <i class="fa-solid fa-plus"></i>
-                    </label>
-
-                    <input
-                      class="image-upload-input"
-                      name="newImage"
-                      id="image"
-                      type="file"
-                      th:classappend="${#fields.hasErrors('newImage') ? 'error' : ''}"
-                      th:field="${createCategoryDto.newImage}"
-                      accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"
-                    />
-                  </div>
+                            <!-- image upload control -->
+                            <div class="image-upload-control">
+                                <label class="image-upload-label" for="image"><i class="fa-solid fa-plus"></i></label>
+                                <input class="image-upload-input" name="newImage" id="image" type="file"
+                                       th:classappend="${#fields.hasErrors('newImage') ? 'error' : ''}"
+                                       th:field="${createCategoryDto.newImage}"
+                                       accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"/>
+                            </div>
+                        </div>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('newImage')}"
+                              th:errors="${createCategoryDto.newImage}"></span>
+                    </div>
                 </div>
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('newImage')}"
-                  th:errors="${createCategoryDto.newImage}"
-                ></span>
-              </div>
+
+                <div class="input-group">
+                    <label for="name">Tên:</label>
+                    <div class="input-group-control">
+                        <input type="text" name="name" id="name" placeholder="Tên danh mục" required
+                               th:classappend="${#fields.hasErrors('name') ? 'error' : ''}"
+                               th:field="${createCategoryDto.name}"/>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('name')}"
+                              th:errors="${createCategoryDto.name}"></span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="description">Mô tả:</label>
+                    <div class="input-group-control">
+                        <textarea name="description" id="description" rows="5" placeholder="Mô tả danh mục"
+                                  th:classappend="${#fields.hasErrors('description') ? 'error' : ''}"
+                                  th:field="${createCategoryDto.description}"></textarea>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('description')}"
+                              th:errors="${createCategoryDto.description}"></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="input-group">
-              <label for="name">Tên:</label>
-              <div class="input-group-control">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Tên danh mục"
-                  required
-                  th:classappend="${#fields.hasErrors('name') ? 'error' : ''}"
-                  th:field="${createCategoryDto.name}"
-                />
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('name')}"
-                  th:errors="${createCategoryDto.name}"
-                ></span>
-              </div>
+            <div class="form-actions">
+                <div class="spacer"></div>
+                <div class="buttons">
+                    <button type="submit" class="save-button primary-button">Lưu</button>
+                    <a href="/dashboard/category" class="back-button secondary-button">Quay lại</a>
+                </div>
             </div>
-
-            <div class="input-group">
-              <label for="description">Mô tả:</label>
-              <div class="input-group-control">
-                <textarea
-                  name="description"
-                  id="description"
-                  rows="5"
-                  placeholder="Mô tả danh mục"
-                  th:classappend="${#fields.hasErrors('description') ? 'error' : ''}"
-                  th:field="${createCategoryDto.description}"
-                ></textarea>
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('description')}"
-                  th:errors="${createCategoryDto.description}"
-                ></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <div class="spacer"></div>
-            <button type="submit" class="save-button primary-button">
-              Lưu
-            </button>
-            <a href="/dashboard/category" class="back-button secondary-button"
-              >Quay lại</a
-            >
-          </div>
         </form>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

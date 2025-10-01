@@ -2,17 +2,14 @@ package com.laptopstore.ecommerce.validation.user;
 
 import com.laptopstore.ecommerce.dto.user.CreateUserDto;
 import com.laptopstore.ecommerce.model.User;
-import com.laptopstore.ecommerce.service.RoleService;
 import com.laptopstore.ecommerce.service.UserService;
-import com.laptopstore.ecommerce.util.EnumUtils;
-import com.laptopstore.ecommerce.util.constant.RoleEnum;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class CreateUserValidator extends BaseCreateUserValidator<CreateUserDto> implements ConstraintValidator<CreateUserConstraint, CreateUserDto> {
     private final UserService userService;
 
-    public CreateUserValidator(UserService userService, RoleService roleService) {
+    public CreateUserValidator(UserService userService) {
         this.userService = userService;
     }
 
@@ -29,7 +26,7 @@ public class CreateUserValidator extends BaseCreateUserValidator<CreateUserDto> 
             isValid = false;
         }
 
-        if(value.getRole() == null || !EnumUtils.isInEnum(value.getRole(), RoleEnum.class)){
+        if(value.getRole() == null){
                 context.buildConstraintViolationWithTemplate("Vui lòng chọn vai trò")
                     .addPropertyNode("role")
                     .addConstraintViolation();

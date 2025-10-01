@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CategoryService {
     Category getCategoryById(long categoryId);
-    Category getCategoryByName(String categoryName);
+    Category getCategoryBySlug(String categorySlug);
     PageResponse<List<Category>> getAllCategories(CategoryFilterDto categoryFilterDto);
     void createCategory(CreateCategoryDto createCategoryDto);
     UpdateCategoryDto getInformationForUpdateCategory(long categoryId);

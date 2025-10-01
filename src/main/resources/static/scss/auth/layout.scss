@@ -24,4 +24,58 @@
     display: flex;
     justify-content: center;
   }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    .form-title{
+      font-size: 2rem;
+      color: $text-primary;
+    }
+
+    .form-description{
+      font-size: 1.6rem;
+      color: $text-primary;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+
+      label {
+        display: inline-block;
+        font-size: 1.6rem;
+        color: $text-primary;
+      }
+
+      input {
+        @include input();
+        width: 100%;
+      }
+    }
+
+    .text{
+      font-size: 1.6rem;
+      text-align: center;
+    }
+  }
+
+  .confirmation{
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    .confirmation-title {
+      font-size: 2rem;
+      color: $text-primary;
+    }
+
+    .confirmation-description {
+      font-size: 1.6rem;
+      color: $text-primary;
+    }
+  }
 }

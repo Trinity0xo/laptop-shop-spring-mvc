@@ -1,299 +1,201 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Đơn hàng</title>
-  </head>
+</head>
 
-  <body>
-    <div
-      class="order order-details"
-      layout:fragment="content"
-      th:with=" orderStatusEnum=${T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum)}"
-    >
-      <div class="container-fluid">
+<body>
+<div class="order order-details" layout:fragment="content"
+     th:with=" orderStatusEnum=${T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum)}">
+    <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/dashboard/order">Đơn hàng</a></li>
-          <li th:text="${order.id}"></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/order">Đơn hàng</a></li>
+            <li th:text="${order.id}"></li>
         </ul>
 
-        <div class="order-details-content order-content card">
-          <h1 class="content-title">
-            Đơn hàng với "Mã: <span th:text="${order.id}"></span>"
-          </h1>
+        <div class="order-details-content order-content content card">
+            <h1 class="content-title">Đơn hàng với "Mã: <span th:text="${order.id}"></span>"</h1>
 
-          <div class="content-description-list">
-            <dl class="description-list row">
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Tạo lúc:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${order.createdAt != null ? #temporals.format(order.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-              ></dd>
+            <div class="content-description-list">
+                <dl class="description-list row">
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        Tạo lúc:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${order.createdAt != null ? #temporals.format(order.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Mã đơn hàng:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${order.id}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">Mã đơn hàng:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${order.id}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Email:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(order.email) ? 'N/A' : order.email}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        Email:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${#strings.isEmpty(order.email) ? 'N/A' : order.email}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Số điện thoại:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(order.phone) ? 'N/A' : order.phone}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">Số điện thoại:</dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${#strings.isEmpty(order.phone) ? 'N/A' : order.phone}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
-              >
-                Họ và tên:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
-                th:text="${!#strings.isEmpty(order.firstName) or !#strings.isEmpty(order.lastName) ? (order.firstName ?: '') + ' ' + (order.lastName ?: '') : 'N/A'}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        Họ và tên:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
+                        th:text="${!#strings.isEmpty(order.firstName) or !#strings.isEmpty(order.lastName) ? (order.firstName ?: '') + ' ' + (order.lastName ?: '') : 'N/A'}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Địa chỉ:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(order.address) ? 'N/A' : order.address}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        Địa chỉ:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${#strings.isEmpty(order.address) ? 'N/A' : order.address}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Tổng giá trị:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${order.totalPrice != null ? #numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        Tổng giá trị:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${order.totalPrice != null ? #numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Thanh toán:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${order.paymentMethod != null ? order.paymentMethod : 'N/A'}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        Thanh toán:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${order.paymentMethod != null ? order.paymentMethod : 'N/A'}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
-              >
-                Ghi chú:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
-                th:text="${!#strings.isEmpty(order.note) ? order.note : 'N/A'}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        Ghi chú:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
+                        th:text="${!#strings.isEmpty(order.note) ? order.note : 'N/A'}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
-              >
-                Trạng thái:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
-              >
-                <span
-                  th:classappend="${
-                        order.status == null ? '' :
-                        order.status.equals(orderStatusEnum.PENDING) ? 'secondary-badge' :
-                        order.status.equals(orderStatusEnum.CONFIRMED) ? 'primary-badge' :
-                        order.status.equals(orderStatusEnum.DELIVERED) ? 'success-badge' :
-                        order.status.equals(orderStatusEnum.CANCELLED) ? 'danger-badge' : ''
-                      }"
-                  th:text="${order.status != null ? order.status.displayName : 'N/A'}"
-                ></span>
-              </dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        Trạng thái:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
+                        th:switch="${order.status}">
+                         <span th:case="${orderStatusEnum.PENDING}" class="secondary-badge"
+                               th:text="${order.status.displayName}"></span>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
-                th:if="${order.deliveredAt != null}"
-              >
-                Giao lúc:
-              </dt>
-              <dd
-                th:if="${order.deliveredAt != null}"
-                class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
-                th:text="${#temporals.format(order.deliveredAt, 'dd-MM-yyyy HH:mm')}"
-              ></dd>
+                        <span th:case="${orderStatusEnum.CONFIRMED}" class="primary-badge"
+                              th:text="${order.status.displayName}"></span>
 
-              <th:block
-                th:if="${order.status.equals(orderStatusEnum.CANCELLED)}"
-              >
-                <dt
-                  class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
-                >
-                  Hủy lúc:
-                </dt>
-                <dd
-                  class="description-detail order-status col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
-                  th:text="${order.cancelledAt != null ? #temporals.format(order.cancelledAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-                ></dd>
-                <dt
-                  class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
-                >
-                  Lý do hủy:
-                </dt>
-                <dd
-                  class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
-                  th:text="${!#strings.isEmpty(order.cancelledReason) ? order.cancelledReason : 'N/A'}"
-                ></dd>
+                        <span th:case="${orderStatusEnum.DELIVERED}" class="success-badge"
+                              th:text="${order.status.displayName}"></span>
 
-                <dt
-                  class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
-                >
-                  Hủy bởi:
-                </dt>
-                <dd
-                  class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
-                  th:text="${!#strings.isEmpty(order.cancelledBy?.role?.name) ? order.cancelledBy.role.name : 'N/A'}"
-                ></dd>
-              </th:block>
-            </dl>
-          </div>
+                        <span th:case="${orderStatusEnum.CANCELLED}" class="danger-badge"
+                              th:text="${order.status.displayName}"></span>
 
-          <div class="content-actions">
-            <a
-              th:href="@{/dashboard/order/update/{id}(id=${order.id})}"
-              class="update-button warning-button"
-              >Sửa</a
-            >
-            <a href="/dashboard/order" class="back-button secondary-button"
-              >Quay lại</a
-            >
-          </div>
+                        <span th:case="*" th:text="'N/A'"></span>
+                    </dd>
+
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
+                        th:if="${order.deliveredAt != null}">
+                        Giao lúc:
+                    </dt>
+                    <dd th:if="${order.deliveredAt != null}"
+                        class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
+                        th:text="${#temporals.format(order.deliveredAt, 'dd-MM-yyyy HH:mm')}"></dd>
+
+                    <th:block th:if="${order.status.equals(orderStatusEnum.CANCELLED)}">
+                        <dt class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            Hủy lúc:
+                        </dt>
+                        <dd class="description-detail order-status col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
+                            th:text="${order.cancelledAt != null ? #temporals.format(order.cancelledAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"></dd>
+                        <dt class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            Lý do hủy:
+                        </dt>
+                        <dd class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
+                            th:text="${!#strings.isEmpty(order.cancelledReason) ? order.cancelledReason : 'N/A'}"></dd>
+
+                        <dt class="description-term col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            Hủy bởi:
+                        </dt>
+                        <dd class="description-detail col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8"
+                            th:text="${!#strings.isEmpty(order.cancelledBy?.role?.name) ? order.cancelledBy.role.name : 'N/A'}"></dd>
+                    </th:block>
+                </dl>
+            </div>
+
+            <div class="content-actions">
+                <a th:href="@{/dashboard/order/update/{orderId}(orderId=${order.id})}"
+                   class="update-button warning-button">Sửa</a>
+                <a href="/dashboard/order" class="back-button secondary-button">Quay lại</a>
+            </div>
         </div>
 
         <!-- order products -->
-        <div class="order-details-products card">
-          <h2 class="products-title">Danh sách sản phẩm</h2>
-          <table class="table">
-            <thead>
-              <tr class="table-header-row">
-                <th class="table-header-cell col-width-1">Mã</th>
-                <th class="table-header-cell col-width-1">Hình ảnh</th>
-                <th class="table-header-cell col-width-3">Tên</th>
-                <th class="table-header-cell col-width-2">Số lượng</th>
-                <th class="table-header-cell col-width-2">Giá tiền</th>
-                <th class="table-header-cell col-width-2">Tổng tiền</th>
-                <th class="table-header-cell col-width-1"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                class="table-body-row"
-                th:each="orderItem: ${order.orderItems}"
-              >
-                <td class="table-body-cell">
-                  <span
-                    th:text="${orderItem.product != null ? orderItem.product.id : 'N/A'}"
-                  ></span>
-                </td>
+        <div class="order-details-products table-container card">
+            <h2 class="products-title">Danh sách sản phẩm</h2>
+            <table class="table">
+                <thead>
+                <tr class="table-header-row">
+                    <th class="table-header-cell col-width-1">Mã</th>
+                    <th class="table-header-cell col-width-1">Hình ảnh</th>
+                    <th class="table-header-cell col-width-3">Tên</th>
+                    <th class="table-header-cell col-width-2">Số lượng</th>
+                    <th class="table-header-cell col-width-2">Giá tiền</th>
+                    <th class="table-header-cell col-width-2">Tổng tiền</th>
+                    <th class="table-header-cell col-width-1"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-body-row" th:each="orderItem: ${order.orderItems}">
+                    <td class="table-body-cell">
+                        <span th:text="${orderItem.product != null ? orderItem.product.id : 'N/A'}"></span>
+                    </td>
 
-                <td class="table-body-cell">
-                  <span class="cell-text" th:if="${orderItem.product == null}"
-                    >N/A</span
-                  >
+                    <td class="table-body-cell">
+                        <span class="cell-text" th:if="${orderItem.product == null}">N/A</span>
+                        <div class="product-image"
+                             th:if="${orderItem.product != null and !#lists.isEmpty(orderItem.product.productImages)}">
+                            <img th:each="img : ${orderItem.product.productImages}"
+                                 th:if="${img.isMain()}"
+                                 th:src="@{'/' + ${resourcesMappingFolder} + '/' + ${productImagesFolder} + '/' + ${img.imageName}}"
+                                 th:alt="${img.imageName}"
+                            />
+                        </div>
+                    </td>
 
-                  <div
-                    class="product-image"
-                    th:if="${orderItem.product != null and !#lists.isEmpty(orderItem.product.productImages)}"
-                  >
-                    <img
-                      th:if="${!#lists.isEmpty(orderItem.product.productImages.?[isMain])}"
-                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + orderItem.product.productImages.?[isMain][0].imageName}"
-                      alt="product"
-                    />
+                    <td class="table-body-cell">
+                        <span th:text="${orderItem.product != null ? orderItem.product.name : 'N/A'}"></span>
+                    </td>
 
-                    <img
-                      th:if="${#lists.isEmpty(orderItem.product.productImages.?[isMain])}"
-                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + orderItem.product.productImages[0].imageName}"
-                      alt="product"
-                    />
-                  </div>
-                </td>
+                    <td class="table-body-cell">
+                        <span th:text="${orderItem.quantity != null ? orderItem.quantity : 'N/A'}"></span>
+                    </td>
 
-                <td class="table-body-cell">
-                  <span th:if="${orderItem.product == null}">N/A</span>
+                    <td class="table-body-cell">
+                        <span th:text="${orderItem.price != null ? #numbers.formatDecimal(orderItem.price, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"></span>
+                    </td>
 
-                  <a th:if="${orderItem.product != null}">
-                    <span th:text="${orderItem.product.name}"></span>
-                  </a>
-                </td>
+                    <td class="table-body-cell">
+                        <span th:text="${orderItem.price != null and orderItem.quantity != null ? #numbers.formatDecimal(orderItem.price * orderItem.quantity, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"></span>
+                    </td>
 
-                <td class="table-body-cell">
-                  <span
-                    th:text="${orderItem.quantity != null ? orderItem.quantity : 'N/A'}"
-                  ></span>
-                </td>
-
-                <td class="table-body-cell">
-                  <span
-                    th:text="${orderItem.price != null ? #numbers.formatDecimal(orderItem.price, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"
-                  ></span>
-                </td>
-
-                <td class="table-body-cell">
-                  <span
-                    th:text="${orderItem.price != null and orderItem.quantity != null ?
-                                    #numbers.formatDecimal(orderItem.price * orderItem.quantity, 0, 'COMMA', 0, 'POINT') + '₫' : 
-                                    'N/A'}"
-                  ></span>
-                </td>
-
-                <td class="table-body-cell">
-                  <div class="table-row-actions">
-                    <a
-                      th:if="${orderItem.product != null}"
-                      th:href="@{/dashboard/product/details/{id}(id=${orderItem.product.id})}"
-                      class="view-button primary-button"
-                      >Xem</a
-                    >
-                    <span th:if="${orderItem.product == null}">N/A</span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    <td class="table-body-cell">
+                        <div class="table-row-actions">
+                            <a th:if="${orderItem.product != null}"
+                               th:href="@{/dashboard/product/details/{productId}(productId=${orderItem.product.id})}"
+                               class="view-button primary-button">Xem</a>
+                            <span th:if="${orderItem.product == null}">N/A</span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

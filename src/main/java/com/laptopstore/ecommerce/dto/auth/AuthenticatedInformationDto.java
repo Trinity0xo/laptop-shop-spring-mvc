@@ -13,7 +13,6 @@ public class AuthenticatedInformationDto {
     private String avatar;
     private String fullName;
     private String email;
-    private String roleName;
     private String roleSlug;
     private int cartItemCount;
 }

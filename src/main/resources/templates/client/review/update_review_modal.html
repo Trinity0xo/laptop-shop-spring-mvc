@@ -1,68 +1,33 @@
 <!DOCTYPE html>
-<form
-  id="updateReviewModal"
-  class="review-form modal"
-  th:attr="data-product-id=${updateReviewDto.productId}"
->
-  <div class="modal-header">
-    <div class="header-title">Cập nhật đánh giá của bạn</div>
-    <button
-      type="button"
-      class="hide-modal-button"
-      data-hide="updateReviewModal"
-    >
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-  </div>
-  <div class="form-data modal-body">
-    <h4 class="form-data-title">
-      Cập nhật đánh giá
-      <span th:text="${updateReviewDto.productName}"></span>
-    </h4>
-    <input
-      type="hidden"
-      name="reviewId"
-      th:value="${updateReviewDto.reviewId}"
-    />
-    <div class="form-data-rating">
-      <div class="rating">
-        <i
-          class="fa-solid fa-star"
-          th:each="i : ${#numbers.sequence(1, 5)}"
-          th:classappend="${i <= updateReviewDto.rating} ? 'active' : ''"
-        >
-        </i>
-      </div>
-      <input
-        type="hidden"
-        name="rating"
-        id="rating"
-        class="form-rating"
-        th:value="${updateReviewDto.rating}"
-        required
-      />
-      <span id="ratingError" class="input-error-message"></span>
+<form id="updateReviewModal" class="review-form modal" th:attr="data-product-id=${updateReviewDto.productId}">
+    <div class="modal-header">
+        <div class="header-title">Cập nhật đánh giá của bạn</div>
+        <button type="button" class="hide-modal-button" data-hide="updateReviewModal"><i class="fa-solid fa-xmark"></i>
+        </button>
     </div>
-    <div class="form-data-message">
-      <textarea
-        class="message"
-        name="message"
-        rows="5"
-        required
-        placeholder="Nội dung đánh giá"
-        th:text="${updateReviewDto.message}"
-      ></textarea>
-      <span id="messageError" class="input-error-message"></span>
+    <div class="form-data modal-body">
+        <h4 class="form-data-title">Cập nhật đánh giá <span th:text="${updateReviewDto.productName}"></span></h4>
+        <input type="hidden" name="reviewId" th:value="${updateReviewDto.reviewId}"/>
+        <div class="form-data-rating">
+            <div class="rating">
+                <i class="fa-solid fa-star" th:each="i : ${#numbers.sequence(1, 5)}"
+                   th:classappend="${i <= updateReviewDto.rating} ? 'active' : ''"></i>
+            </div>
+            <input type="hidden" name="rating" id="rating" class="form-rating" th:value="${updateReviewDto.rating}"
+                   required/>
+            <span id="ratingError" class="input-error-message"></span>
+        </div>
+        <div class="form-data-message">
+            <label for="message" style="display: none"></label>
+            <textarea class="message" id="message" name="message" rows="5" required placeholder="Nội dung đánh giá"
+                      th:text="${updateReviewDto.message}"></textarea>
+            <span id="messageError" class="input-error-message"></span>
+        </div>
     </div>
-  </div>
-  <div class="form-actions modal-footer">
-    <button class="form-submit-button primary-button" type="submit">Lưu</button>
-    <button
-      type="button"
-      data-hide="updateReviewModal"
-      class="cancel-update-button hide-modal-button secondary-button"
-    >
-      Hủy
-    </button>
-  </div>
+    <div class="form-actions modal-footer">
+        <button class="form-submit-button primary-button" type="submit">Lưu</button>
+        <button type="button" data-hide="updateReviewModal"
+                class="cancel-update-button hide-modal-button secondary-button">Hủy
+        </button>
+    </div>
 </form>

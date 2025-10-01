@@ -2,6 +2,8 @@
 @import "../variables";
 @import "../responsive_grid";
 @import "../button";
+@import "../table_col_width";
+@import "../input";
 
 // layout
 .layout {
@@ -275,6 +277,137 @@
     @include media(xl) {
       margin-left: 26rem;
     }
+
+    .container-fluid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+
+        .content-title {
+          font-size: 3rem;
+          color: $text-primary;
+        }
+
+        .create-button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 0.4rem;
+
+          i {
+            color: $text-inverse;
+            font-size: 1.6rem;
+          }
+        }
+
+        .content-actions {
+          display: flex;
+          gap: 1rem;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+          }
+        }
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        gap: 2.4rem;
+
+        .form-title {
+          font-size: 2rem;
+          color: $text-primary;
+        }
+
+        .form-content {
+          display: flex;
+          flex-direction: column;
+          gap: 2.4rem;
+
+          .warning-message {
+            font-size: 2.5rem;
+            color: $text-primary;
+          }
+
+          .input-group {
+            display: flex;
+
+            @include media(xs, sm) {
+              flex-wrap: wrap;
+              gap: 1rem;
+            }
+
+            @include media(md, lg, xl) {
+              flex-wrap: nowrap;
+              gap: 0;
+            }
+
+            .input-group-control {
+              width: 100%;
+            }
+
+            label {
+              font-size: 1.6rem;
+              color: $text-primary;
+              width: 100%;
+              max-width: 30rem;
+            }
+
+            input:not([type="file"]), select, textarea {
+              @include input();
+              width: 100%;
+            }
+          }
+
+        }
+
+        .form-actions {
+          display: flex;
+          justify-content: start;
+
+          @include media(xs, sm) {
+            flex-direction: column;
+          }
+
+          @include media(md, lg, xl) {
+            flex-direction: row;
+          }
+
+          .spacer {
+            width: 100%;
+            max-width: 30rem;
+          }
+
+          .buttons {
+            display: flex;
+            gap: 1rem;
+
+            @include media(xs, sm) {
+              flex-direction: column;
+            }
+
+            @include media(md, lg, xl) {
+              flex-direction: row;
+            }
+          }
+        }
+      }
+
+      table {
+        @include generate-col-widths(110rem);
+      }
+    }
+
   }
 
   // footer

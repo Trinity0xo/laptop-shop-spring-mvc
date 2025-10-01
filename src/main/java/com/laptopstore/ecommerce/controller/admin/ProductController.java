@@ -6,11 +6,9 @@ import java.util.Map;
 import com.laptopstore.ecommerce.dto.product.*;
 import com.laptopstore.ecommerce.dto.response.AjaxResponse;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
-import com.laptopstore.ecommerce.dto.review.ReviewFilterDto;
 import com.laptopstore.ecommerce.model.Product;
-import com.laptopstore.ecommerce.model.Review;
 import com.laptopstore.ecommerce.service.ProductService;
-import com.laptopstore.ecommerce.service.ReviewService;
+import com.laptopstore.ecommerce.util.ResponseUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,11 +25,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/dashboard/product")
 public class ProductController {
     private final ProductService productService;
-    private final ReviewService reviewService;
 
-    public ProductController(ProductService productService, ReviewService reviewService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.reviewService = reviewService;
     }
 
     @GetMapping("")
@@ -41,7 +37,7 @@ public class ProductController {
     ) {
         PageResponse<CustomProductListDto<CustomProductDto>> response = this.productService.getAdminProducts(productFilterDto);
         model.addAttribute("response", response);
-        model.addAttribute("productCriteriaDto", productFilterDto);
+        model.addAttribute("productFilterDto", productFilterDto);
 
         return "/admin/product/index";
     }
@@ -62,16 +58,8 @@ public class ProductController {
             @Valid CreateProductDto createProductDto,
             BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
-
-            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>(null, errors);
-
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ajaxResponse);
-        }
+        ResponseEntity<AjaxResponse<Object>> ajaxErrorResponse = ResponseUtils.getAjaxErrorResponseResponseEntity(bindingResult);
+        if (ajaxErrorResponse != null) return ajaxErrorResponse;
 
         this.productService.createProduct(createProductDto);
 
@@ -97,16 +85,8 @@ public class ProductController {
             @Valid UpdateProductDto updateProductDto,
             BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
-
-            AjaxResponse<Object> ajaxResponse = new AjaxResponse<>(null, errors);
-
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ajaxResponse);
-        }
+        ResponseEntity<AjaxResponse<Object>> ajaxErrorResponse = ResponseUtils.getAjaxErrorResponseResponseEntity(bindingResult);
+        if (ajaxErrorResponse != null) return ajaxErrorResponse;
 
         this.productService.updateProduct(updateProductDto);
 
@@ -171,31 +151,5 @@ public class ProductController {
         model.addAttribute("productFilterDto", productFilterDto);
 
         return "/admin/product/discount";
-    }
-
-    @GetMapping("/details/{productId}/review")
-    public String showProductReviewsPage(
-            @PathVariable long productId,
-            ReviewFilterDto reviewFilterDto,
-            Model model
-    )  {
-        PageResponse<CustomProductDetailsDto> response = this.reviewService.getProductReviews(productId, reviewFilterDto);
-        model.addAttribute("response", response);
-        model.addAttribute("reviewFilterDto", reviewFilterDto);
-
-
-        return "/admin/product/product_reviews";
-    }
-
-    @GetMapping("/details/{productId}/review/details/{reviewId}")
-    public String showProductReviewDetailsPage(
-            @PathVariable long reviewId,
-            @PathVariable long productId,
-            Model model
-    ){
-        Review review = this.reviewService.getReviewDetails(reviewId);
-        model.addAttribute("review", review);
-
-        return "/admin/product/product_review_details";
     }
 }

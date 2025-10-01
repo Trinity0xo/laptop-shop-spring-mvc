@@ -1,133 +1,96 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Order</title>
-  </head>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Đơn hàng</title>
+</head>
 
-  <body>
-    <div
-      class="order order-update"
-      layout:fragment="content"
-      th:with="orderStatusEnum=${T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum)}"
-    >
-      <div class="order-update__container container-fluid">
+<body>
+<div class="order order-update" layout:fragment="content"
+     th:with="orderStatusEnum=${T(com.laptopstore.ecommerce.util.constant.OrderStatusEnum)}">
+    <div class="order-update__container container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li>
-            <a href="/dashboard">Dashboard</a>
-          </li>
-          <li>
-            <a href="/dashboard/order">Đơn hàng</a>
-          </li>
-          <li>
-            <a
-              th:href="@{/dashboard/order/details/{id}(id=${updateOrderStatusDto.id})}"
-              th:text="${updateOrderStatusDto.id}"
-            ></a>
-          </li>
-          <li>Cập nhật</li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/order">Đơn hàng</a>
+            </li>
+            <li><a th:href="@{/dashboard/order/details/{orderId}(orderId=${updateOrderStatusDto.id})}"
+                   th:text="${updateOrderStatusDto.id}"></a></li>
+            <li>Cập nhật</li>
         </ul>
 
         <!-- update order form -->
-        <form
-          class="order-update-form order-form card"
-          method="post"
-          th:action="@{/dashboard/order/update}"
-          th:object="${updateOrderStatusDto}"
-        >
-          <h1 class="form-title">
-            Cập nhật đơn hàng với Mã:
-            <span th:text="${updateOrderStatusDto.id}"></span>
-          </h1>
+        <form class="order-update-form order-form form card" method="post" th:action="@{/dashboard/order/update}"
+              th:object="${updateOrderStatusDto}">
+            <h1 class="form-title">Cập nhật đơn hàng với Mã: <span th:text="${updateOrderStatusDto.id}"></span></h1>
 
-          <div class="form-content">
-            <input
-              type="hidden"
-              name="id"
-              th:value="${updateOrderStatusDto.id}"
-            />
+            <div class="form-content">
+                <input type="hidden" name="id" th:value="${updateOrderStatusDto.id}"/>
 
-            <div class="input-group">
-              <label for="status">Trạng thái đơn hàng:</label>
-              <div class="input-group-control">
-                <select name="status" id="status">
-                  <option
-                    th:each="orderStatus : ${orderStatusEnum.values()}"
-                    th:value="${orderStatus}"
-                    th:text="${orderStatus.displayName}"
-                    th:selected="${orderStatus.equals(updateOrderStatusDto.status)}"
-                  ></option>
-                </select>
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('status')}"
-                  th:errors="${updateOrderStatusDto.status}"
-                ></span>
-              </div>
+                <div class="input-group">
+                    <label for="status">Trạng thái đơn hàng:</label>
+                    <div class="input-group-control">
+                        <select name="status" id="status">
+                            <option th:each="orderStatus : ${orderStatusEnum.values()}" th:value="${orderStatus}"
+                                    th:text="${orderStatus.displayName}"
+                                    th:selected="${orderStatus.equals(updateOrderStatusDto.status)}"></option>
+                        </select>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('status')}"
+                              th:errors="${updateOrderStatusDto.status}"></span>
+                    </div>
+                </div>
+
+                <div class="input-group" id="cancelReasonInput">
+                    <label for="cancelledReason">Lý do hủy:</label>
+                    <div class="input-group-control">
+                        <textarea name="cancelledReason" id="cancelledReason" rows="5" placeholder="Lý do hủy đơn"
+                                  th:text="${updateOrderStatusDto.cancelledReason}"
+                                  th:classappend="${#fields.hasErrors('cancelledReason') ? 'error' : ''}"
+                                  th:field="${updateOrderStatusDto.cancelledReason}"></textarea>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('cancelledReason')}"
+                              th:errors="${updateOrderStatusDto.cancelledReason}"></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="input-group" id="cancelReasonInput">
-              <label for="cancelledReason">Lý do hủy:</label>
-              <div class="input-group-control">
-                <textarea
-                  name="cancelledReason"
-                  id="cancelledReason"
-                  rows="5"
-                  placeholder="Lý do hủy đơn"
-                  th:text="${updateOrderStatusDto.cancelledReason}"
-                  th:classappend="${#fields.hasErrors('cancelledReason') ? 'error' : ''}"
-                  th:field="${updateOrderStatusDto.cancelledReason}"
-                ></textarea>
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('cancelledReason')}"
-                  th:errors="${updateOrderStatusDto.cancelledReason}"
-                ></span>
-              </div>
+            <div class="form-actions">
+                <div class="spacer"></div>
+                <div class="buttons">
+                    <button type="submit" class="save-button primary-button">Lưu</button>
+                    <a th:href="@{/dashboard/order/details/{orderId}(orderId=${updateOrderStatusDto.id})}"
+                       class="back-button secondary-button">Quay lại</a>
+                </div>
             </div>
-          </div>
-
-          <div class="form-actions">
-            <div class="spacer"></div>
-            <button type="submit" class="save-button primary-button">
-              Lưu
-            </button>
-            <a href="/dashboard/order" class="back-button secondary-button">
-              Quay lại
-            </a>
-          </div>
         </form>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 
-  <script layout:fragment="scripts">
+<script layout:fragment="scripts">
     $(document).ready(function () {
-      const cancelReasonInput = $("#cancelReasonInput");
-      const orderStatus = $("#status");
+        const $cancelReasonInput = $("#cancelReasonInput");
+        const $orderStatus = $("#status");
 
-      function showCancelReasonInput(statusValue) {
-        if (statusValue === "CANCELLED") {
-          cancelReasonInput.css("display", "flex");
-        } else {
-          cancelReasonInput.css("display", "none");
+        function showCancelReasonInput(statusValue) {
+            if (statusValue === "CANCELLED") {
+                $cancelReasonInput.css("display", "flex");
+            } else {
+                $cancelReasonInput.css("display", "none");
+            }
         }
-      }
 
-      $(document).ready(function () {
-        showCancelReasonInput(orderStatus.val());
-      });
+        showCancelReasonInput($orderStatus.val());
 
-      orderStatus.change(function () {
-        showCancelReasonInput($(this).val());
-      });
+        $orderStatus.change(function () {
+            showCancelReasonInput($(this).val());
+        });
     });
-  </script>
+
+</script>
 </html>

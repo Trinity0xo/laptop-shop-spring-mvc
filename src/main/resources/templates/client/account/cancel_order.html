@@ -1,93 +1,43 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/client/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/client/account/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Hủy đơn</title>
-  </head>
+</head>
 
-  <body>
-    <main class="cancel-order" layout:fragment="content">
-      <div class="container">
-        <!-- breadcrumb -->
-        <ul class="breadcrumb">
-          <li><a href="/">Trang chủ</a></li>
-          <li><a href="/account/order-history">Lịch sử đơn hàng</a></li>
-          <li>
-            <a
-              th:href="@{/account/order-history/details/{id}(id=${cancelOrderInfo.id})}"
-              ><span th:text="${cancelOrderInfo.id}"></span
-            ></a>
-          </li>
-          <li>Hủy đơn hàng</li>
-        </ul>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
-            <!-- account aside -->
-            <div th:replace="/client/account/account_aside"></div>
-          </div>
-
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
-            <form
-              class="cancel-order-form card"
-              th:action="@{/account/order-history/cancel}"
-              th:object="${cancelOrderInfo}"
-              method="post"
-            >
-              <h1 class="form-title">
-                Hủy đơn hàng với mã "<span
-                  th:text="${cancelOrderInfo.id}"
-                ></span
-                >"
-              </h1>
-              <div class="form-content">
-                <input
-                  type="hidden"
-                  name="id"
-                  th:value="${cancelOrderInfo.id}"
-                />
-                <div class="input-group">
-                  <label for="cancelledReason">Lý do hủy: </label>
-                  <div class="input-group-control">
-                    <textarea
-                      name="cancelledReason"
-                      id="cancelledReason"
-                      placeholder="Nhập lý do hủy đơn hàng"
-                      rows="5"
-                      required
-                      th:classappend="${#fields.hasErrors('cancelledReason') ? 'error' : ''}"
-                      th:field="${cancelOrderInfo.cancelledReason}"
-                    ></textarea>
-                    <span
-                      class="input-error-message"
-                      th:if="${#fields.hasErrors('cancelledReason')}"
-                      th:errors="${cancelOrderInfo.cancelledReason}"
-                    ></span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-actions">
-                <div class="spacer"></div>
-                <button class="confirm-button danger-button" type="submit">
-                  Xác nhận hủy
-                </button>
-                <a
-                  class="back-button secondary-button"
-                  th:href="@{/account/order-history/details/{id}(id=${cancelOrderInfo.id})}"
-                >
-                  Quay lại
-                </a>
-              </div>
-            </form>
-          </div>
+<body>
+<form class="cancel-order-form form card" layout:fragment="account-content" th:action="@{/account/order-history/cancel}"
+      th:object="${cancelOrderInfo}" method="post">
+    <h1 class="form-title">Hủy đơn hàng với mã "<span th:text="${cancelOrderInfo.id}"></span>"
+    </h1>
+    <div class="form-content">
+        <input type="hidden" name="id" th:value="${cancelOrderInfo.id}"/>
+        <div class="input-group">
+            <label for="cancelledReason">Lý do hủy: </label>
+            <div class="input-group-control">
+                                <textarea name="cancelledReason" id="cancelledReason"
+                                          placeholder="Nhập lý do hủy đơn hàng" rows="5" required
+                                          th:classappend="${#fields.hasErrors('cancelledReason') ? 'error' : ''}"
+                                          th:field="${cancelOrderInfo.cancelledReason}"></textarea>
+                <span class="input-error-message" th:if="${#fields.hasErrors('cancelledReason')}"
+                      th:errors="${cancelOrderInfo.cancelledReason}"></span>
+            </div>
         </div>
-      </div>
-    </main>
-  </body>
+    </div>
+    <div class="form-actions">
+        <div class="spacer"></div>
+        <button class="confirm-button danger-button" type="submit">Xác nhận hủy
+        </button>
+        <a class="back-button secondary-button"
+           th:href="@{/account/order-history/details/{orderId}(orderId=${cancelOrderInfo.id})}">Quay lại
+        </a>
+    </div>
+</form>
+</body>
 </html>

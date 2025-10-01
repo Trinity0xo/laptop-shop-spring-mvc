@@ -1,87 +1,64 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Thương hiệu</title>
-  </head>
+</head>
 
-  <body>
-    <div class="brand brand-details" layout:fragment="content">
-      <div class="container-fluid">
+<body>
+<div class="brand brand-details" layout:fragment="content">
+    <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/dashboard/brand">Thương hiệu</a></li>
-          <li th:text="${brand.name}"></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/brand">Thương hiệu</a></li>
+            <li th:text="${brand.name}"></li>
         </ul>
 
-        <div class="brand-details-content brand-content card">
-          <h1 class="content-title">
-            Thương hiệu "<span th:text="${brand.name}"></span>"
-          </h1>
+        <div class="brand-details-content brand-content content card">
+            <h1 class="content-title">Thương hiệu "<span th:text="${brand.name}"></span>"</h1>
 
-          <div class="content-description-list">
-            <dl class="description-list row">
-              <dt
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term"
-              >
-                Tên:
-              </dt>
-              <dd
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
-                th:text="${#strings.isEmpty(brand.name) ? 'N/A' : brand.name}"
-              ></dd>
+            <div class="content-description-list">
+                <dl class="description-list row">
+                    <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term">
+                        Tên:
+                    </dt>
+                    <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
+                        th:text="${#strings.isEmpty(brand.name) ? 'N/A' : brand.name}"></dd>
 
-              <dt
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term"
-              >
-                Mô tả:
-              </dt>
-              <dd
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
-                th:text="${#strings.isEmpty(brand.description) ? 'N/A' : brand.description}"
-              ></dd>
+                    <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term">
+                        Mô tả:
+                    </dt>
+                    <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
+                        th:text="${#strings.isEmpty(brand.description) ? 'N/A' : brand.description}"></dd>
 
-              <dt
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term"
-              >
-                Ngày tạo:
-              </dt>
-              <dd
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
-                th:text="${brand.createdAt != null ? #temporals.format(brand.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-              ></dd>
+                    <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term">
+                        Tạo lúc:
+                    </dt>
+                    <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
+                        th:text="${brand.createdAt != null ? #temporals.format(brand.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"></dd>
 
-              <dt
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term"
-              >
-                Cập nhật lần cuối:
-              </dt>
-              <dd
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
-                th:text="${brand.updatedAt != null ? #temporals.format(brand.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-              ></dd>
-            </dl>
-          </div>
+                    <dt class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 description-term">
+                        Cập nhật lúc:
+                    </dt>
+                    <dd class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 description-detail"
+                        th:text="${brand.updatedAt != null ? #temporals.format(brand.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"></dd>
+                </dl>
+            </div>
 
-          <div class="content-actions">
-            <a
-              th:href="@{/dashboard/brand/update/{id}(id=${brand.id})}"
-              class="update-button warning-button"
-              >Sửa</a
-            >
-            <a href="/dashboard/brand" class="back-button secondary-button"
-              >Quay lại</a
-            >
-          </div>
+            <div class="content-actions">
+                <a th:href="@{/dashboard/brand/update/{brandId}(brandId=${brand.id})}"
+                   class="update-button warning-button">Sửa</a>
+                <a href="/dashboard/brand" class="back-button secondary-button">Quay lại</a>
+            </div>
         </div>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

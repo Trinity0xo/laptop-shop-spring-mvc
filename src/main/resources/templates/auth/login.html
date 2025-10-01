@@ -1,88 +1,51 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/auth/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/auth/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Đăng nhập</title>
-  </head>
+</head>
 
-  <body>
-    <form
-      class="login-form"
-      th:action="@{/login}"
-      method="post"
-      layout:fragment="content"
-    >
-      <h2 class="login-form-title">Đăng nhập</h2>
+<body>
+<form class="login-form form" th:action="@{/login}" method="post" layout:fragment="content">
+    <h2 class="login-form-title form-title">Đăng nhập</h2>
 
-      <span
-        class="input-error-message"
-        th:if="${loginErrorMessage != null}"
-        th:text="${loginErrorMessage}"
-      ></span>
+    <span class="input-error-message" th:if="${loginErrorMessage != null}" th:text="${loginErrorMessage}"></span>
 
-      <div class="input-group">
+    <div class="input-group">
         <label for="username">Email:</label>
         <div class="input-group-control">
-          <input
-            type="email"
-            name="username"
-            id="username"
-            placeholder="Email"
-            required
-          />
+            <input type="email" name="username" id="username" placeholder="Email" required/>
         </div>
-      </div>
+    </div>
 
-      <div class="input-group">
+    <div class="input-group">
         <label for="password">Mật khẩu:</label>
         <div class="input-group-control">
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Mật khẩu"
-            required
-          />
+            <input type="password" name="password" id="password" placeholder="Mật khẩu" required/>
         </div>
-      </div>
+    </div>
 
-      <div class="remember-me">
-        <input
-          class="remember-me-checkbox"
-          type="checkbox"
-          name="rememberMe"
-          id="rememberMe"
-        />
+    <div class="remember-me">
+        <input class="remember-me-checkbox" type="checkbox" name="rememberMe" id="rememberMe"/>
         <label class="remember-me-label" for="rememberMe">Ghi nhớ</label>
-      </div>
+    </div>
 
-      <button class="login-button primary-button" type="submit">
-        Đăng nhập
-      </button>
+    <button class="login-button primary-button" type="submit">Đăng nhập</button>
 
-      <span class="or-divider">or</span>
+    <span class="or-divider">or</span>
 
-      <a
-        class="login-with-google-button dark-button"
-        href="/oauth2/authorization/google"
-      >
-        <i class="fa-brands fa-google"></i>Đăng nhập với Google
-      </a>
+    <a class="login-with-google-button dark-button" href="/oauth2/authorization/google"><i
+            class="fa-brands fa-google"></i>Đăng nhập với Google</a>
 
-      <a class="forgot-password-link" href="/auth/forgot-password"
-        >Quên mật khẩu ?</a
-      >
+    <a class="forgot-password-link" href="/auth/forgot-password">Quên mật khẩu ?</a>
 
-      <p class="register-text">
-        Chưa có tài khoản ?
-        <a class="register-link" href="/auth/register">Đăng ký</a>
-      </p>
-    </form>
-  </body>
+    <p class="text">Chưa có tài khoản ? <a class="register-link" href="/auth/register">Đăng ký</a></p>
+</form>
+</body>
 </html>

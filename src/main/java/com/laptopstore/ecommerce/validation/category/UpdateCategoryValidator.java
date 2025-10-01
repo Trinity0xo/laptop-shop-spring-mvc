@@ -3,6 +3,7 @@ package com.laptopstore.ecommerce.validation.category;
 import com.laptopstore.ecommerce.dto.category.UpdateCategoryDto;
 import com.laptopstore.ecommerce.model.Category;
 import com.laptopstore.ecommerce.service.CategoryService;
+import com.laptopstore.ecommerce.util.SlugUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +34,7 @@ public class UpdateCategoryValidator extends BaseCategoryValidator<UpdateCategor
     public boolean isValid(UpdateCategoryDto value, ConstraintValidatorContext context) {
         boolean isValid = validate(value,context);
 
-        Category exists = this.categoryService.getCategoryByName(value.getName());
+        Category exists = this.categoryService.getCategoryBySlug(SlugUtils.toSlug(value.getName()));
         if (exists != null && !exists.getId().equals(value.getId())) {
             context.buildConstraintViolationWithTemplate("Đã tồn tại một danh mục với tên này")
                     .addPropertyNode("name")

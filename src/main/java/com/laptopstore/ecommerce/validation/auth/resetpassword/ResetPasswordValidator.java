@@ -18,9 +18,9 @@ public class ResetPasswordValidator implements ConstraintValidator<ResetPassword
             isValid = false;
         }
 
-        if (value.getConfirmPassword() == null || !value.getConfirmPassword().equals(value.getNewPassword())) {
+        if (value.getConfirmNewPassword() == null || !value.getConfirmNewPassword().equals(value.getNewPassword())) {
             context.buildConstraintViolationWithTemplate("Mật khẩu xác nhận không khớp")
-                    .addPropertyNode("confirmPassword")
+                    .addPropertyNode("confirmNewPassword")
                     .addConstraintViolation();
             isValid = false;
         }

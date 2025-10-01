@@ -5,6 +5,7 @@ import com.laptopstore.ecommerce.configuration.CustomUserPrincipal;
 import com.laptopstore.ecommerce.dto.auth.AuthenticatedInformationDto;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AuthenticationUtils {
@@ -28,32 +29,27 @@ public class AuthenticationUtils {
 
             if (principal instanceof CustomUserPrincipal customUserPrincipal) {
                 dto.setEmail(customUserPrincipal.getUsername());
-                dto.setFullName(customUserPrincipal.getFullName());
-                dto.setAvatar(customUserPrincipal.getAvatar());
-                dto.setCartItemCount(customUserPrincipal.getCartItemCount());
-
-                if (!customUserPrincipal.getAuthorities().isEmpty()) {
-                    String role = customUserPrincipal.getAuthorities().iterator().next().getAuthority();
-                    dto.setRoleName(role);
-                    dto.setRoleSlug(role.replace("ROLE_", "").toUpperCase());
-                }
-
-                return dto;
+                return getAuthenticatedInformationDto(dto, customUserPrincipal.getFullName(), customUserPrincipal.getAvatar(), customUserPrincipal.getCartItemCount(), customUserPrincipal.getAuthorities().isEmpty(), customUserPrincipal.getAuthorities().iterator().next());
             }else if (principal instanceof CustomOAuth2User customOAuth2User){
                 dto.setEmail(customOAuth2User.getAttribute("email"));
-                dto.setFullName(customOAuth2User.getFullName());
-                dto.setAvatar(customOAuth2User.getAvatar());
-                dto.setCartItemCount(customOAuth2User.getCartItemCount());
-
-                if (!customOAuth2User.getAuthorities().isEmpty()) {
-                    String role = customOAuth2User.getAuthorities().iterator().next().getAuthority();
-                    dto.setRoleName(role);
-                    dto.setRoleSlug(role.replace("ROLE_", "").toUpperCase());
-                }
-
-                return dto;
+                return getAuthenticatedInformationDto(dto, customOAuth2User.getFullName(), customOAuth2User.getAvatar(), customOAuth2User.getCartItemCount(), customOAuth2User.getAuthorities().isEmpty(), customOAuth2User.getAuthorities().iterator().next());
             }
         }
         return null;
     }
+
+    private static AuthenticatedInformationDto getAuthenticatedInformationDto(AuthenticatedInformationDto dto, String fullName, String avatar, int cartItemCount, boolean empty, GrantedAuthority next) {
+        dto.setFullName(fullName);
+        dto.setAvatar(avatar);
+        dto.setCartItemCount(cartItemCount);
+
+        if (!empty) {
+            String role = next.getAuthority();
+            dto.setRoleSlug(role.replace("ROLE_", "").toUpperCase());
+        }
+
+        return dto;
+    }
+
+
 }

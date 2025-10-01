@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long>, JpaSpecificationExecutor<Brand> {
-    Optional<Brand> findByName(String name);
+    Optional<Brand> findBySlug(String slug);
 }

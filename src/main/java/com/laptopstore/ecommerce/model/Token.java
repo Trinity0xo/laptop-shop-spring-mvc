@@ -4,6 +4,7 @@ import com.laptopstore.ecommerce.util.constant.TokenTypeEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -15,6 +16,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "tokens")
+@NoArgsConstructor
 public class Token {
     private static final int EXPIRATION_HOURS = 24;
 

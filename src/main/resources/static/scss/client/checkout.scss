@@ -3,7 +3,7 @@
 @import "../responsive_grid";
 @import "../input";
 @import "../button";
-@import "../lines_base_overflow";
+@import "../text_truncate";
 
 .checkout {
   .container {
@@ -74,12 +74,12 @@
       flex-direction: column;
       gap: 1.6rem;
 
-      .summary-title {
+      .checkout-summary-title {
         font-size: 2rem;
         color: $text-primary;
       }
 
-      .price-group {
+      .checkout-price-group {
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
@@ -127,7 +127,7 @@
             width: 10rem;
             height: 10rem;
 
-            .image {
+            img {
               width: 100%;
               height: 100%;
               object-fit: contain;
@@ -138,7 +138,7 @@
             flex: 1;
 
             .product-name {
-              @include linesBaseOverflow($number: 2);
+              @include textTruncate($number: 2);
               font-size: 1.6rem;
               color: $text-primary;
               font-weight: 450;

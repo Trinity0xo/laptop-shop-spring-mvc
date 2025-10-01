@@ -104,7 +104,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Brand getBrandByName(String brandName){
-        return this.brandRepository.findByName(brandName).orElse(null);
+    public Brand getBrandBySlug(String brandSlug){
+        return this.brandRepository.findBySlug(brandSlug).orElse(null);
     }
 }

@@ -33,7 +33,7 @@ public class BrandController {
     ) {
         PageResponse<List<Brand>> response = this.brandService.getAllBrands(brandFilterDto);
         model.addAttribute("response", response);
-        model.addAttribute("brandCriteriaDto", brandFilterDto);
+        model.addAttribute("brandFilterDto", brandFilterDto);
 
         return "/admin/brand/index";
     }

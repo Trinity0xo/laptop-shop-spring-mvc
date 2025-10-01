@@ -6,7 +6,6 @@ import com.laptopstore.ecommerce.model.Product;
 
 public interface ProductService {
     Product getProductById(long productId);
-    Product getProductByName(String name);
     Product getProductBySlug(String slug);
     PageResponse<CustomProductListDto<CustomProductDto>> getShopProducts(ProductFilterDto productFilterDto);
     PageResponse<CustomProductListDto<CustomProductDto>> getAdminProducts(ProductFilterDto productFilterDto);

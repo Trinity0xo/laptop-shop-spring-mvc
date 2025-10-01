@@ -1,101 +1,70 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Thương hiệu</title>
-  </head>
+</head>
 
-  <body>
-    <div class="brand brand-update" layout:fragment="content">
-      <div class="brand-update__container container-fluid">
+<body>
+<div class="brand brand-update" layout:fragment="content">
+    <div class="brand-update__container container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li>
-            <a href="/dashboard">Dashboard</a>
-          </li>
-          <li>
-            <a href="/dashboard/brand">Thương hiệu</a>
-          </li>
-          <li>
-            <a
-              th:href="@{/dashboard/brand/details/{id}(id=${updateBrandDto.id})}"
-              th:text="${updateBrandDto.oldName}"
-            ></a>
-          </li>
-          <li>Sửa</li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/brand">Thương hiệu</a></li>
+            <li><a th:href="@{/dashboard/brand/details/{brandId}(brandId=${updateBrandDto.id})}"
+                   th:text="${updateBrandDto.oldName}"></a>
+            </li>
+            <li>Sửa</li>
         </ul>
 
         <!-- update brand form -->
-        <form
-          class="brand-update-form brand-form card"
-          method="post"
-          th:action="@{/dashboard/brand/update}"
-          th:object="${updateBrandDto}"
-        >
-          <h1 class="form-title">
-            Sửa thương hiệu "<span th:text="${updateBrandDto.oldName}"></span>"
-          </h1>
+        <form class="brand-update-form brand-form form card" method="post" th:action="@{/dashboard/brand/update}"
+              th:object="${updateBrandDto}">
+            <h1 class="form-title">Sửa thương hiệu "<span th:text="${updateBrandDto.oldName}"></span>"</h1>
 
-          <div class="form-content">
-            <input type="hidden" name="id" th:value="${updateBrandDto.id}" />
-            <div class="input-group">
-              <label for="name">Tên:</label>
-              <div class="input-group-control">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Tên thương hiệu"
-                  required
-                  th:classappend="${#fields.hasErrors('name') ? 'error' : ''}"
-                  th:field="${updateBrandDto.name}"
-                />
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('name')}"
-                  th:errors="${updateBrandDto.name}"
-                ></span>
-              </div>
+            <div class="form-content">
+                <input type="hidden" name="id" th:value="${updateBrandDto.id}"/>
+                <div class="input-group">
+                    <label for="name">Tên:</label>
+                    <div class="input-group-control">
+                        <input type="text" name="name" id="name" placeholder="Tên thương hiệu" required
+                               th:classappend="${#fields.hasErrors('name') ? 'error' : ''}"
+                               th:field="${updateBrandDto.name}"/>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('name')}"
+                              th:errors="${updateBrandDto.name}"></span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="description">Mô tả:</label>
+                    <div class="input-group-control">
+                        <textarea name="description" id="description" rows="5" placeholder="Mô tả thương hiệu"
+                                  th:text="${updateBrandDto.description}"
+                                  th:classappend="${#fields.hasErrors('description') ? 'error' : ''}"
+                                  th:field="${updateBrandDto.description}"></textarea>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('description')}"
+                              th:errors="${updateBrandDto.description}"></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="input-group">
-              <label for="description">Mô tả:</label>
-              <div class="input-group-control">
-                <textarea
-                  name="description"
-                  id="description"
-                  rows="5"
-                  placeholder="Mô tả thương hiệu"
-                  th:text="${updateBrandDto.description}"
-                  th:classappend="${#fields.hasErrors('description') ? 'error' : ''}"
-                  th:field="${updateBrandDto.description}"
-                ></textarea>
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('description')}"
-                  th:errors="${updateBrandDto.description}"
-                ></span>
-              </div>
+            <div class="form-actions">
+                <div class="spacer"></div>
+                <div class="buttons">
+                    <button type="submit" class="save-button primary-button">Lưu</button>
+                    <a th:href="@{/dashboard/brand/details/{brandId}(brandId=${updateBrandDto.id})}"
+                       class="back-button secondary-button">Quay lại</a>
+                </div>
             </div>
-          </div>
-
-          <div class="form-actions">
-            <div class="spacer"></div>
-            <button type="submit" class="save-button primary-button">
-              Lưu
-            </button>
-            <a href="/dashboard/brand" class="back-button secondary-button"
-              >Quay lại</a
-            >
-          </div>
         </form>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

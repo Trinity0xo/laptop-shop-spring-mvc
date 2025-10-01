@@ -1,5 +1,6 @@
 package com.laptopstore.ecommerce.controller.client;
 
+import com.laptopstore.ecommerce.dto.auth.ChangePasswordDto;
 import com.laptopstore.ecommerce.dto.order.UserCancelOrderDto;
 import com.laptopstore.ecommerce.dto.order.OrderFilterDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
@@ -83,7 +84,7 @@ public class AccountController {
 
         PageResponse<List<Order>> response = this.orderService.getUserOrderHistory(email, orderFilterDto);
         model.addAttribute("response", response);
-        model.addAttribute("orderCriteriaDto", orderFilterDto);
+        model.addAttribute("orderFilterDto", orderFilterDto);
 
         return "/client/account/order_history";
     }
@@ -134,7 +135,27 @@ public class AccountController {
 
     @GetMapping("/change-password")
     public String showChangePasswordPage(
+            Model model
     )  {
-        throw new NotImplementException();
+        model.addAttribute("changePasswordDto", new ChangePasswordDto());
+        return "/client/account/change_password";
+    }
+
+    @PostMapping("/change-password")
+    public String changePassword(
+            @Valid ChangePasswordDto changePasswordDto,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
+    ){
+        String email = AuthenticationUtils.getAuthenticatedName();
+        this.userService.changePassword(email, changePasswordDto);
+
+        if(bindingResult.hasErrors()){
+            return "/client/account/change_password";
+        }
+
+        redirectAttributes.addFlashAttribute("successMessage", "Đổi mật khẩu thành công");
+
+        return "redirect:/account/information";
     }
 }

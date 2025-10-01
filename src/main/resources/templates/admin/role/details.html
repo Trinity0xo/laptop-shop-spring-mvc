@@ -1,82 +1,56 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Vai trò</title>
-  </head>
+</head>
 
-  <body>
-    <div class="role role-details" layout:fragment="content">
-      <div class="container-fluid">
+<body>
+<div class="role role-details" layout:fragment="content">
+    <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/dashboard/role">Vai trò</a></li>
-          <li th:text="${role.name}"></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/role">Vai trò</a></li>
+            <li th:text="${role.name}"></li>
         </ul>
 
-        <div class="role-details-content role-content card">
-          <h1 class="content-title">
-            Vai trò "<span th:text="${role.name}"></span>"
-          </h1>
+        <div class="role-details-content role-content content card">
+            <h1 class="content-title">Vai trò "<span th:text="${role.name}"></span>"</h1>
 
-          <div class="content-description-list">
-            <dl class="description-list row">
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Tên:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(role.name) ? 'N/A' : role.name}"
-              ></dd>
+            <div class="content-description-list">
+                <dl class="description-list row">
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        Tên:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${#strings.isEmpty(role.name) ? 'N/A' : role.name}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Mô tả:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${#strings.isEmpty(role.description) ? 'N/A' : role.description}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        Tạo lúc:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${role.createdAt != null ? #temporals.format(role.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"></dd>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Ngày tạo:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${role.createdAt != null ? #temporals.format(role.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-              ></dd>
+                    <dt class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        Cập nhật lúc:
+                    </dt>
+                    <dd class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                        th:text="${role.updatedAt != null ? #temporals.format(role.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"></dd>
+                </dl>
+            </div>
 
-              <dt
-                class="description-term col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"
-              >
-                Ngày cập nhật:
-              </dt>
-              <dd
-                class="description-detail col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
-                th:text="${role.updatedAt != null ? #temporals.format(role.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-              ></dd>
-            </dl>
-          </div>
-
-          <div class="content-actions">
-            <a href="/dashboard/role" class="back-button secondary-button"
-              >Quay lại</a
-            >
-          </div>
+            <div class="content-actions">
+                <a href="/dashboard/role" class="back-button secondary-button">Quay lại</a>
+            </div>
         </div>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

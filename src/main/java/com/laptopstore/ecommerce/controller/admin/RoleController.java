@@ -28,7 +28,7 @@ public class RoleController {
     )  {
         PageResponse<List<Role>> response = this.roleService.getAllRoles(roleFilterDto);
         model.addAttribute("response", response);
-        model.addAttribute("roleCriteriaDto", roleFilterDto);
+        model.addAttribute("roleFilterDto", roleFilterDto);
 
         return "/admin/role/index";
     }

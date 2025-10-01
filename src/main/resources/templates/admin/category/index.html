@@ -1,318 +1,241 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Danh mục</title>
-  </head>
+</head>
 
-  <body>
-    <div
-      class="category category-list"
-      layout:fragment="content"
-      th:with="queryUtils=${T(com.laptopstore.ecommerce.util.QueryUtils)},
-               sortDirectionEnum=${T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum)},
+<body>
+<div
+        class="category category-list"
+        layout:fragment="content"
+        th:with="sortDirectionEnum=${T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum)},
                categoryClass=${T(com.laptopstore.ecommerce.model.Category)},
                paginationUtils=${T(com.laptopstore.ecommerce.util.PaginationUtils)}
                "
-    >
-      <div class="container-fluid">
+>
+    <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li>Dạnh mục</li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li>Dạnh mục</li>
         </ul>
 
         <!-- category list content -->
-        <div
-          class="category-list-content category-content card"
-          th:with="validSortBy=${paginationUtils.getValidSortBy(categoryClass, categoryFilterDto.sortBy, categoryClass.DEFAULT_SORT_FIELD)}"
-        >
-          <h1 class="content-title">Danh mục</h1>
+        <div class="category-list-content category-content content card"
+             th:with="validSortBy=${paginationUtils.getValidSortBy(categoryClass, categoryFilterDto.sortBy, categoryClass.DEFAULT_SORT_FIELD)}">
+            <h1 class="content-title">Danh mục</h1>
 
-          <!-- control panel -->
-          <form
-            class="control-panel-form"
-            th:action="@{/dashboard/category}"
-            method="get"
-          >
-            <input type="hidden" name="sortBy" th:value="${validSortBy}" />
+            <!-- control panel -->
+            <form class="control-panel-form" th:action="@{/dashboard/category}" method="get">
+                <input type="hidden" name="sortBy" th:value="${validSortBy}"/>
 
-            <input
-              type="hidden"
-              name="sortDirection"
-              th:value="${categoryFilterDto.getEnumSortDirection()}"
-            />
+                <input type="hidden" name="sortDirection" th:value="${categoryFilterDto.getEnumSortDirection()}"/>
 
-            <!-- limit -->
-            <div class="limit">
-              <label class="limit-label" for="limit">Giới hạn:</label>
-              <select
-                class="limit-select"
-                name="limit"
-                id="limit"
-                onchange="this.form.submit()"
-              >
-                <option
-                  th:value="10"
-                  th:selected="${categoryFilterDto.getIntegerLimit() == 10}"
-                >
-                  10
-                </option>
-                <option
-                  th:value="20"
-                  th:selected="${categoryFilterDto.getIntegerLimit() == 20}"
-                >
-                  20
-                </option>
-                <option
-                  th:value="40"
-                  th:selected="${categoryFilterDto.getIntegerLimit() == 40}"
-                >
-                  40
-                </option>
-                <option
-                  th:value="80"
-                  th:selected="${categoryFilterDto.getIntegerLimit() == 80}"
-                >
-                  80
-                </option>
-              </select>
+                <!-- limit -->
+                <div class="limit">
+                    <label class="limit-label" for="limit">Giới hạn:</label>
+                    <select class="limit-select" name="limit" id="limit" onchange="this.form.submit()">
+                        <option th:value="10" th:selected="${categoryFilterDto.getIntegerLimit() == 10}">10</option>
+                        <option th:value="20" th:selected="${categoryFilterDto.getIntegerLimit() == 20}">20</option>
+                        <option th:value="40" th:selected="${categoryFilterDto.getIntegerLimit() == 40}">40</option>
+                        <option th:value="80" th:selected="${categoryFilterDto.getIntegerLimit() == 80}">80</option>
+                    </select>
+                </div>
+
+                <!-- search -->
+                <div class="search">
+                    <label style="display: none" for="search"></label>
+                    <input class="search-input" type="text" name="search" id="search"
+                           th:value="${categoryFilterDto.search}" placeholder="Tên danh mục..."/>
+                    <button type="submit" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+
+                <a class="create-button primary-button" href="/dashboard/category/create"><i
+                        class="fa-solid fa-plus"></i>Thêm</a>
+            </form>
+
+            <!-- search summary -->
+            <div class="search-summary" th:if="${!#strings.isEmpty(categoryFilterDto.search)}">
+                <p class="search-message">
+                    <span class="search-result-count" th:text="${response.totalItem}">
+                    </span> Kết qua cho "<span class="search-value" th:text="${categoryFilterDto.search}"></span>"
+                </p>
+                <a class="search-reset-link"
+                   th:href="@{/dashboard/category(
+                        page=1,
+                        sortBy=${validSortBy},
+                        sortDirection=${categoryFilterDto.sortDirection},
+                        limit=${categoryFilterDto.getLimit()},
+                        search=''
+                    )}">
+                    Đặt lại
+                </a>
             </div>
 
-            <!-- search -->
-            <div class="search">
-              <input
-                class="search-input"
-                type="text"
-                name="search"
-                id="search"
-                th:value="${categoryFilterDto.search}"
-                placeholder="Tên danh mục..."
-              />
-              <button type="submit" class="search-button">
-                <i class="fa-solid fa-magnifying-glass"></i>
-              </button>
+            <div class="no-result" th:if="${response.data == null or #lists.isEmpty(response.data)}">
+                <p>Không có danh mục nào</p>
             </div>
 
-            <a
-              class="create-button primary-button"
-              href="/dashboard/category/create"
-              ><i class="fa-solid fa-plus"></i>Thêm</a
-            >
-          </form>
+            <!-- table -->
+            <div class="content-table table-container" th:if="${response.data != null and !#lists.isEmpty(response.data)}">
+                <table class="table">
+                    <thead>
+                    <tr class="table-header-row">
+                        <th class="table-header-cell col-width-2">Hình ảnh</th>
 
-          <!-- search summary -->
-          <div
-            class="search-summary"
-            th:if="${!#strings.isEmpty(categoryFilterDto.search)}"
-          >
-            <p class="search-message">
-              <span
-                class="search-result-count"
-                th:text="${response.totalItem}"
-              ></span>
-              Kết qua cho "
-              <span
-                class="search-value"
-                th:text="${categoryFilterDto.search}"
-              ></span
-              >"
-            </p>
-            <a
-              class="search-reset-link"
-              th:with="newQuery=${queryUtils.modifiedQuery(categoryFilterDto.toQuery(), {{'search': null, 'page': '1'}})}"
-              th:href="${'/dashboard/category' + newQuery}"
-            >
-              Đặt lại
-            </a>
-          </div>
 
-          <!-- table -->
-          <div class="content-table">
-            <table class="table">
-              <thead>
-                <tr class="table-header-row">
-                  <th class="table-header-cell col-width-2">Hình ảnh</th>
+                        <th class="table-header-cell col-width-4"
+                            th:with="sortDirection=${validSortBy.equals('name') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}">
+                            <a th:href="@{/dashboard/category(
+                                page=1,
+                                sortBy='name',
+                                sortDirection=${sortDirection},
+                                limit=${categoryFilterDto.getLimit()},
+                                search=${categoryFilterDto.search}
+                            )}">
+                                Tên
+                                <i th:if="${validSortBy.equals('name') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                                   class="fa-solid fa-arrow-down"></i>
+                                <i th:if="${validSortBy.equals('name') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                                   class="fa-solid fa-arrow-up"></i>
+                            </a>
+                        </th>
 
-                  <th
-                    class="table-header-cell col-width-3"
-                    th:with="sortDirection=${validSortBy.equals('name') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
-                  >
-                    <a
-                      th:with="newQuery=${queryUtils.modifiedQuery(categoryFilterDto.toQuery(), {'sortBy': 'name', 'page': '1', 'sortDirection': sortDirection})}"
-                      th:href="${'/dashboard/category' + newQuery}"
+                        <th class="table-header-cell col-width-2"
+                            th:with="sortDirection=${validSortBy.equals('createdAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}">
+                            <a th:href="@{/dashboard/category(
+                                page=1,
+                                sortBy='createdAt',
+                                sortDirection=${sortDirection},
+                                limit=${categoryFilterDto.getLimit()},
+                                search=${categoryFilterDto.search}
+                            )}">
+                                Tạo lúc
+                                <i th:if="${validSortBy.equals('createdAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                                   class="fa-solid fa-arrow-down"></i>
+                                <i th:if="${validSortBy.equals('createdAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                                   class="fa-solid fa-arrow-up"></i>
+                            </a>
+                        </th>
+
+                        <th class="table-header-cell col-width-2"
+                            th:with="sortDirection=${validSortBy.equals('updatedAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}">
+                            <a th:href="@{/dashboard/category(
+                                page=1,
+                                sortBy='updatedAt',
+                                sortDirection=${sortDirection},
+                                limit=${categoryFilterDto.getLimit()},
+                                search=${categoryFilterDto.search}
+                            )}">
+                                Cập nhật lúc
+                                <i th:if="${validSortBy.equals('updatedAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
+                                   class="fa-solid fa-arrow-down"></i>
+                                <i th:if="${validSortBy.equals('updatedAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
+                                   class="fa-solid fa-arrow-up"></i>
+                            </a>
+                        </th>
+
+                        <th class="table-header-cell col-width-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-body-row" th:each="category: ${response.data}">
+                        <td class="table-body-cell">
+                            <span class="cell-text" th:if="${#strings.isEmpty(category.image)}">N/A</span>
+                            <div class="category-image" th:if="${!#strings.isEmpty(category.image)}">
+                                <img th:src="${'/' + resourcesMappingFolder + '/' + categoryImagesFolder + '/' + category.image}"
+                                     th:alt="${category.image}"/>
+                            </div>
+                        </td>
+
+                        <td class="table-body-cell">
+                            <span class="cell-text"
+                                  th:text="${(!#strings.isEmpty(category.name)) ? category.name : 'N/A'}"></span>
+                        </td>
+
+                        <td class="table-body-cell">
+                            <span class="cell-text"
+                                  th:text="${category.createdAt != null ? #temporals.format(category.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"></span>
+                        </td>
+
+                        <td class="table-body-cell">
+                            <span class="cell-text"
+                                  th:text="${category.updatedAt != null ? #temporals.format(category.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"></span>
+                        </td>
+
+                        <td class="table-body-cell">
+                            <div class="table-row-actions">
+                                <a class="view-button primary-button"
+                                   th:href="@{/dashboard/category/details/{categoryId}(categoryId=${category.id})}">Xem</a>
+                                <a class="update-button warning-button"
+                                   th:href="@{/dashboard/category/update/{categoryId}(categoryId=${category.id})}">Sửa</a>
+                                <a class="delete-button danger-button"
+                                   th:href="@{/dashboard/category/delete/{categoryId}(categoryId=${category.id})}">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- pagination -->
+            <ul class="pagination" th:if="${response.totalPages > 1}">
+                <!-- Previous Page -->
+                <li class="pagination-item">
+                    <a class="button previous-page-button"
+                       th:href="@{/dashboard/category(
+                            page=${response.currentPage - 1},
+                            sortBy=${validSortBy},
+                            sortDirection=${categoryFilterDto.getSortDirection()},
+                            limit=${categoryFilterDto.getLimit()},
+                            search=${categoryFilterDto.search}
+                        )}"
+                       th:classappend="${response.currentPage <= 1 ? 'disabled' : ''}"
                     >
-                      Tên
-                      <i
-                        th:if="${validSortBy.equals('name') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-                        class="fa-solid fa-arrow-down"
-                      ></i>
-
-                      <i
-                        th:if="${validSortBy.equals('name') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-                        class="fa-solid fa-arrow-up"
-                      ></i>
+                        <i class="fa-solid fa-chevron-left"></i>
                     </a>
-                  </th>
+                </li>
 
-                  <th
-                    class="table-header-cell col-width-2"
-                    th:with="sortDirection=${validSortBy.equals('createdAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
-                  >
-                    <a
-                      th:with="newQuery=${queryUtils.modifiedQuery(categoryFilterDto.toQuery(), {'sortBy': 'createdAt', 'page': '1', 'sortDirection': sortDirection})}"
-                      th:href="${'/dashboard/category' + newQuery}"
-                    >
-                      Ngày tạo
-                      <i
-                        th:if="${validSortBy.equals('createdAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-                        class="fa-solid fa-arrow-down"
-                      ></i>
-
-                      <i
-                        th:if="${validSortBy.equals('createdAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-                        class="fa-solid fa-arrow-up"
-                      ></i>
+                <!-- Page Numbers -->
+                <li class="pagination-item"
+                    th:each="pageNumber : ${#numbers.sequence(1, response.totalPages)}">
+                    <a class="button page-number-button"
+                       th:href="@{/dashboard/category(
+                            page=${pageNumber},
+                            sortBy=${validSortBy},
+                            sortDirection=${categoryFilterDto.getSortDirection()},
+                            limit=${categoryFilterDto.getLimit()},
+                            search=${categoryFilterDto.search}
+                         )}"
+                       th:classappend="${response.currentPage == pageNumber ? 'active' : ''}"
+                       th:text="${pageNumber}">
                     </a>
-                  </th>
+                </li>
 
-                  <th
-                    class="table-header-cell col-width-2"
-                    th:with="sortDirection=${validSortBy.equals('updatedAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'ASC' : 'DESC'}"
-                  >
-                    <a
-                      th:with="newQuery=${queryUtils.modifiedQuery(categoryFilterDto.toQuery(), {'sortBy': 'updatedAt', 'page': '1', 'sortDirection': sortDirection})}"
-                      th:href="${'/dashboard/category' + newQuery}"
-                    >
-                      Ngày cập nhật
-                      <i
-                        th:if="${validSortBy.equals('updatedAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-                        class="fa-solid fa-arrow-down"
-                      ></i>
-
-                      <i
-                        th:if="${validSortBy.equals('updatedAt') and categoryFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-                        class="fa-solid fa-arrow-up"
-                      ></i>
+                <!-- Next Page -->
+                <li class="pagination-item">
+                    <a class="button next-page-button"
+                       th:href="@{/dashboard/category(
+                            page=${response.currentPage + 1},
+                            sortBy=${validSortBy},
+                            sortDirection=${categoryFilterDto.getSortDirection()},
+                            limit=${categoryFilterDto.getLimit()},
+                            search=${categoryFilterDto.search}
+                         )}"
+                       th:classappend="${response.currentPage >= response.totalPages ? 'disabled' : ''}">
+                        <i class="fa-solid fa-chevron-right"></i>
                     </a>
-                  </th>
-
-                  <th class="table-header-cell col-width-2"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="table-body-row" th:each="category: ${response.data}">
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:if="${#strings.isEmpty(category.image)}"
-                      >N/A</span
-                    >
-                    <div
-                      class="category-image"
-                      th:if="${!#strings.isEmpty(category.image)}"
-                    >
-                      <img
-                        th:src="${'/' + resourcesMappingFolder + '/' + categoryImagesFolder + '/' + category.image}"
-                        alt="category"
-                      />
-                    </div>
-                  </td>
-
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${(!#strings.isEmpty(category.name)) ? category.name : 'N/A'}"
-                    ></span>
-                  </td>
-
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${category.createdAt != null ? #temporals.format(category.createdAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-                    ></span>
-                  </td>
-
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${category.updatedAt != null ? #temporals.format(category.updatedAt, 'dd-MM-yyyy HH:mm') : 'N/A'}"
-                    ></span>
-                  </td>
-
-                  <td class="table-body-cell">
-                    <div class="table-row-actions">
-                      <a
-                        class="view-button primary-button"
-                        th:href="@{/dashboard/category/details/{id}(id=${category.id})}"
-                        >Xem</a
-                      >
-                      <a
-                        class="update-button warning-button"
-                        th:href="@{/dashboard/category/update/{id}(id=${category.id})}"
-                        >Sửa</a
-                      >
-                      <a
-                        class="delete-button danger-button"
-                        th:href="@{/dashboard/category/delete/{id}(id=${category.id})}"
-                        >Xóa</a
-                      >
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- pagination -->
-          <ul class="pagination" th:if="${response.totalPages > 1}">
-            <!-- Previous Page -->
-            <li class="pagination-item">
-              <a
-                class="button previous-page-button"
-                th:with="newQuery=${queryUtils.modifiedQuery(categoryFilterDto.toQuery(),{{'page': (response.currentPage - 1)}})}"
-                th:href="${'/dashboard/category' + newQuery}"
-                th:classappend="${response.currentPage <= 1 ? 'disabled' : ''}"
-              >
-                <i class="fa-solid fa-chevron-left"></i>
-              </a>
-            </li>
-
-            <!-- Page Numbers -->
-            <li
-              class="pagination-item"
-              th:each="pageNumber : ${#numbers.sequence(1, response.totalPages)}"
-            >
-              <a
-                class="button page-number-button"
-                th:with="newQuery=${queryUtils.modifiedQuery(categoryFilterDto.toQuery(),{{'page': pageNumber}})}"
-                th:href="${'/dashboard/category' + newQuery}"
-                th:classappend="${response.currentPage == pageNumber ? 'active' : ''}"
-                th:text="${pageNumber}"
-              >
-              </a>
-            </li>
-
-            <!-- Next Page -->
-            <li class="pagination-item">
-              <a
-                class="button next-page-button"
-                th:with="newQuery=${queryUtils.modifiedQuery(categoryFilterDto.toQuery(),{{'page': (response.currentPage + 1)}})}"
-                th:href="${'/dashboard/category' + newQuery}"
-                th:classappend="${response.currentPage >= response.totalPages ? 'disabled' : ''}"
-              >
-                <i class="fa-solid fa-chevron-right"></i>
-              </a>
-            </li>
-          </ul>
+                </li>
+            </ul>
         </div>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

@@ -36,9 +36,6 @@ public class Role {
     @NotNull
     private String slug;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String description;
-
     @CreationTimestamp
     @Column(nullable = false)
     private Instant createdAt;
@@ -47,9 +44,8 @@ public class Role {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    public Role(String name, String slug, String description) {
+    public Role(String name, String slug) {
         this.name = name;
         this.slug = slug;
-        this.description = description;
     }
 }

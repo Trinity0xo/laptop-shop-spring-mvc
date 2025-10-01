@@ -33,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         String password = (user.getPassword() != null && !user.getPassword().isEmpty())
                 ? user.getPassword()
-                : "{noop}N/A"; // dummy password nếu đăng nhập bằng google
+                : "{noop}N/A"; // dummy password
 
         return new CustomUserPrincipal(
                 user.getEmail(),

@@ -3,7 +3,8 @@
 @import "../responsive_grid";
 @import "../input";
 @import "../button";
-@import "../lines_base_overflow";
+@import "../text_truncate";
+
 .cart {
   .container {
     display: flex;
@@ -61,7 +62,7 @@
             .product-name {
               font-size: 1.6rem;
               font-weight: 500;
-              @include linesBaseOverflow($number: 2);
+              @include textTruncate($number: 2);
             }
 
             .product-pricing {
@@ -173,12 +174,12 @@
       flex-direction: column;
       gap: 1.6rem;
 
-      .summary-title {
+      .cart-summary-title {
         font-size: 2rem;
         color: $text-primary;
       }
 
-      .price-group {
+      .cart-price-group {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;

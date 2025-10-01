@@ -11,10 +11,6 @@ import com.laptopstore.ecommerce.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class HomeController {
@@ -43,19 +39,18 @@ public class HomeController {
     )  {
         PageResponse<CustomProductListDto<CustomProductDto>> response = this.productService.getTopDiscountProducts(productFilterDto);
         model.addAttribute("response", response);
+        model.addAttribute("productFilterDto", productFilterDto);
 
         return "/client/top_discount";
     }
 
     @GetMapping("/contact")
-    public String showContactPage(Model model
-    ){
+    public String showContactPage(){
         throw new NotImplementException();
     }
 
     @GetMapping("/about")
-    public String showAboutPage(Model model
-    ){
+    public String showAboutPage(){
         throw new NotImplementException();
     }
 }

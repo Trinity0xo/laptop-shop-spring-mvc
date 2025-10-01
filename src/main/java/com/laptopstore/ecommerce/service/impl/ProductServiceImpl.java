@@ -64,18 +64,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductByName(String name) {
-        return productRepository.findByName(name).orElse(null);
-    }
-
-    @Override
     public Product getProductBySlug(String slug) {
-        Product product = this.productRepository.findBySlug(slug).orElse(null);
-        if(product == null){
-            throw new ProductNotFoundException(slug);
-        }
-
-        return product;
+        return this.productRepository.findBySlug(slug).orElse(null);
     }
 
     @Override
@@ -226,7 +216,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public CustomProductDetailsDto getShopProductDetailsBySlug(String productSlug){
-        Product product = this.getProductBySlug(productSlug);
+        Product product = this.productRepository.findBySlug(productSlug).orElse(null);
+        if(product == null){
+            throw new ProductNotFoundException(productSlug);
+        }
 
         Double averageRating = this.reviewRepository.findAverageRatingByProduct(product);
         averageRating = (averageRating == null) ? 0D : roundToNearestHalf(averageRating);
@@ -306,7 +299,10 @@ public class ProductServiceImpl implements ProductService {
             throw new AuthUserNotFoundException(email);
         }
 
-        Product product = this.getProductBySlug(productSlug);
+        Product product = this.productRepository.findBySlug(productSlug).orElse(null);
+        if(product == null){
+            throw new ProductNotFoundException(productSlug);
+        }
 
         boolean purchased = this.orderItemsRepository.existsByOrderUserAndOrderStatusAndProduct(user, OrderStatusEnum.DELIVERED, product);
 

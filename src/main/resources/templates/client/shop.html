@@ -1,716 +1,656 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/client/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/client/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Cửa hàng</title>
-  </head>
+</head>
 
-  <body>
-    <main
-      class="shop"
-      layout:fragment="content"
-      th:with="queryUtils=${T(com.laptopstore.ecommerce.util.QueryUtils)},
-               sortDirectionEnum=${T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum)},
+<body>
+<main
+        class="shop"
+        layout:fragment="content"
+        th:with="sortDirectionEnum=${T(com.laptopstore.ecommerce.util.constant.SortDirectionEnum)},
                customProductDto=${T(com.laptopstore.ecommerce.dto.product.CustomProductDto)},
                priceUtils=${T(com.laptopstore.ecommerce.util.PriceUtils)},
                paginationUtils=${T(com.laptopstore.ecommerce.util.PaginationUtils)},
                productPredicates=${T(com.laptopstore.ecommerce.specification.predicate.ProductPredicates)}
-               "
-    >
-      <div
-        class="container"
-        th:with="validSortBy=${paginationUtils.getValidSortBy(customProductDto.VALID_SORT_FIELDS, productFilterDto.sortBy, customProductDto.DEFAULT_SORT_FIELD)}"
-      >
+      "
+>
+    <div class="container"
+         th:with="validSortBy=${paginationUtils.getValidSortBy(customProductDto.VALID_SORT_FIELDS, productFilterDto.sortBy, customProductDto.DEFAULT_SORT_FIELD)}">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/">Trang chủ</a></li>
-          <li>Cửa hàng</li>
+            <li><a href="/">Trang chủ</a></li>
+            <li>Cửa hàng</li>
         </ul>
 
         <h1 class="shop-title">Cửa hàng</h1>
 
         <!-- search summary -->
-        <div
-          class="search-summary"
-          th:if="${!#strings.isEmpty(productFilterDto.search)}"
-        >
-          <p class="search-message">
-            <span
-              class="search-result-count"
-              th:text="${response.totalItem}"
-            ></span>
-            kết quả cho "
-            <span
-              class="search-value"
-              th:text="${productFilterDto.search}"
-            ></span
-            >"
-          </p>
-          <a
-            class="search-reset-link"
-            th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {{'search': null, 'page': '1'}})}"
-            th:href="${'/shop' + newQuery}"
-          >
-            đặt lại
-          </a>
+        <div class="search-summary" th:if="${!#strings.isEmpty(productFilterDto.search)}">
+            <p class="search-message">
+                <span class="search-result-count" th:text="${response.totalItem}"></span> kết quả cho "<span
+                    class="search-value" th:text="${productFilterDto.search}"></span>"
+            </p>
+            <a class="search-reset-link"
+               th:href="@{/shop(
+                        page=1,
+                        sortBy=${validSortBy},
+                        sortDirection=${productFilterDto.sortDirection},
+                        limit=${productFilterDto.limit},
+                        search='',
+                        brands=${productFilterDto.brands},
+                        categories=${productFilterDto.categories},
+                        cpuBrands=${productFilterDto.cpuBrands},
+                        gpuBrands=${productFilterDto.gpuBrands},
+                        ramSizes=${productFilterDto.ramSizes},
+                        storageSizes=${productFilterDto.storageSizes},
+                        maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                        minDiscountPrice=${productFilterDto.minDiscountPrice}
+               )}"
+            >
+                đặt lại
+            </a>
         </div>
 
         <!-- header -->
         <div class="header">
-          <!-- control panel -->
-          <form class="control-panel-form" method="get" th:action="@{/shop}">
-            <div class="filters">
-              <button
-                class="show-modal-button show-filters-button primary-button"
-                data-show="filtersModal"
-                type="button"
-              >
-                <i class="fa-solid fa-filter"></i>
-                Bộ lọc
-                <span
-                  class="filter-number warning-badge"
-                  th:if="${productFilterDto.getFilterCount() > 0}"
-                  th:text="${productFilterDto.getFilterCount()}"
-                >
+            <!-- control panel -->
+            <form class="control-panel-form" method="get" th:action="@{/shop}">
+                <div class="filters">
+                    <button class="show-modal-button show-filters-button primary-button" data-show="filtersModal"
+                            type="button"><i class="fa-solid fa-filter"></i>Bộ lọc
+                        <span class="filter-number warning-badge" th:if="${productFilterDto.getFilterCount() > 0}"
+                              th:text="${productFilterDto.getFilterCount()}">
                 </span>
-              </button>
+                    </button>
 
-              <div id="filtersModal" class="filters-modal modal">
-                <div class="filters-modal-header modal-header">
-                  <div class="header-title">Bộ lọc</div>
-                  <button
-                    type="button"
-                    class="hide-modal-button"
-                    data-hide="filtersModal"
-                  >
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
+                    <div id="filtersModal" class="filters-modal modal">
+                        <div class="filters-modal-header modal-header">
+                            <div class="header-title">Bộ lọc</div>
+                            <button type="button" class="hide-modal-button" data-hide="filtersModal"><i
+                                    class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <div class="filters-modal-body modal-body">
+                            <div class="filter-section">
+                                <h2 class="filter-label">Danh mục:</h2>
+                                <div class="filter-options">
+                                    <div class="filter-check-group" th:each="category: ${response.data.categories}">
+                                        <input type="checkbox" name="categories" th:id="${'category#' + category.slug}"
+                                               th:value="${category.slug}"
+                                               th:checked="${productFilterDto?.categories?.contains(category.slug)}"/>
+                                        <label th:for="${'category#' + category.slug}"
+                                               th:text="${category.name}"></label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="categories" id="category#other"
+                                               th:value="${productPredicates.OTHER_NAME}"
+                                               th:checked="${productFilterDto?.categories?.contains(productPredicates.OTHER_NAME)}"/>
+                                        <label for="category#other">Khác</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter-section">
+                                <h2 class="filter-label">Thương hiệu:</h2>
+                                <div class="filter-options">
+                                    <div class="filter-check-group" th:each="brand: ${response.data.brands}">
+                                        <input type="checkbox" name="brands" th:id="${'brand#' + brand.slug}"
+                                               th:value="${brand.slug}"
+                                               th:checked="${productFilterDto?.brands?.contains(brand.slug)}"/>
+                                        <label th:for="${'brand#' + brand.slug}" th:text="${brand.name}"></label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="brands" id="brand#other"
+                                               th:value="${productPredicates.OTHER_NAME}"
+                                               th:checked="${productFilterDto?.brands?.contains(productPredicates.OTHER_NAME)}"/>
+                                        <label for="brand#other">Khác</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter-section"
+                                 th:with="discountPriceRange=${priceUtils.getValidPriceRange(productFilterDto.getDoubleMinDiscountPrice, productFilterDto.getDoubleMaxDiscountPrice, productFilterDto.MIN_PRICE, productFilterDto.MAX_PRICE)}">
+                                <h2 class="filter-label">Giá tiền:</h2>
+                                <div class="filter-options">
+                                    <div class="filter-input-group">
+                                        <label for="minDiscountPrice">Từ: </label>
+                                        <input type="text" name="minDiscountPrice" class="price-input"
+                                               id="minDiscountPrice"
+                                               th:value="${!discountPriceRange.isEmpty() ? discountPriceRange.get('min') : productFilterDto.MIN_PRICE}"/>
+                                    </div>
+
+                                    <div class="filter-input-group">
+                                        <label for="maxDiscountPrice">Đến: </label>
+                                        <input type="text" name="maxDiscountPrice" class="price-input"
+                                               id="maxDiscountPrice"
+                                               th:value="${!discountPriceRange.isEmpty() ? discountPriceRange.get('max') : productFilterDto.MAX_PRICE}"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter-section">
+                                <h2 class="filter-label">Thương hiệu CPU:</h2>
+                                <div class="filter-options">
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="cpuBrands" id="cpuBrand#Intel" value="Intel"
+                                               th:checked="${productFilterDto?.cpuBrands?.contains('Intel')}"/>
+                                        <label for="cpuBrand#Intel">Intel</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="cpuBrands" id="cpuBrand#AMD" value="AMD"
+                                               th:checked="${productFilterDto?.cpuBrands?.contains('AMD')}"/>
+                                        <label for="cpuBrand#AMD">AMD</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="cpuBrands" id="cpuBrand#Apple" value="Apple"
+                                               th:checked="${productFilterDto?.cpuBrands?.contains('Apple')}"/>
+                                        <label for="cpuBrand#Apple">Apple</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="cpuBrands" id="cpuBrand#Qualcomm" value="Qualcomm"
+                                               th:checked="${productFilterDto?.cpuBrands?.contains('Qualcomm')}"/>
+                                        <label for="cpuBrand#Qualcomm">Qualcomm</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter-section">
+                                <h2 class="filter-label">Thương hiệu GPU:</h2>
+                                <div class="filter-options">
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="gpuBrands" id="gpuBrand#Intel" value="Intel"
+                                               th:checked="${productFilterDto?.gpuBrands?.contains('Intel')}"/>
+                                        <label for="gpuBrand#Intel">Intel</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="gpuBrands" id="gpuBrand#AMD" value="AMD"
+                                               th:checked="${productFilterDto?.gpuBrands?.contains('AMD')}"/>
+                                        <label for="gpuBrand#AMD">AMD</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="gpuBrands" id="gpuBrand#Nvidia" value="Nvidia"
+                                               th:checked="${productFilterDto?.gpuBrands?.contains('Nvidia')}"/>
+                                        <label for="gpuBrand#Nvidia">Nvidia</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter-section">
+                                <h2 class="filter-label">Dung lượng RAM:</h2>
+                                <div class="filter-options">
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="ramSizes" id="ramSize#4GB" value="4GB"
+                                               th:checked="${productFilterDto?.ramSizes?.contains('4GB')}"/>
+                                        <label for="ramSize#4GB">4GB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="ramSizes" id="ramSize#8GB" value="8GB"
+                                               th:checked="${productFilterDto?.ramSizes?.contains('8GB')}"/>
+                                        <label for="ramSize#8GB">8GB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="ramSizes" id="ramSize#16GB" value="16GB"
+                                               th:checked="${productFilterDto?.ramSizes?.contains('16GB')}"/>
+                                        <label for="ramSize#16GB">16GB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="ramSizes" id="ramSize#32GB" value="32GB"
+                                               th:checked="${productFilterDto?.ramSizes?.contains('32GB')}"/>
+                                        <label for="ramSize#32GB">32GB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="ramSizes" id="ramSize#64GB" value="64GB"
+                                               th:checked="${productFilterDto?.ramSizes?.contains('64GB')}"/>
+                                        <label for="ramSize#64GB">64GB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="ramSizes" id="ramSize#128GB" value="128GB"
+                                               th:checked="${productFilterDto?.ramSizes?.contains('128GB')}"/>
+                                        <label for="ramSize#128GB">128GB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="ramSizes" id="ramSize#256GB" value="256GB"
+                                               th:checked="${productFilterDto?.ramSizes?.contains('256GB')}"/>
+                                        <label for="ramSize#256GB">256GB</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter-section">
+                                <h2 class="filter-label">Dung lượng bộ nhớ:</h2>
+                                <div class="filter-options">
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="storageSizes" id="storageSize#128GB" value="128GB"
+                                               th:checked="${productFilterDto?.storageSizes?.contains('128GB')}"/>
+                                        <label for="storageSize#128GB">128GB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="storageSizes" id="storageSize#256GB" value="256GB"
+                                               th:checked="${productFilterDto?.storageSizes?.contains('256GB')}"/>
+                                        <label for="storageSize#256GB">256GB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="storageSizes" id="storageSize#512GB" value="512GB"
+                                               th:checked="${productFilterDto?.storageSizes?.contains('512GB')}"/>
+                                        <label for="storageSize#512GB">512GB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="storageSizes" id="storageSize#1TB" value="1TB"
+                                               th:checked="${productFilterDto?.storageSizes?.contains('1TB')}"/>
+                                        <label for="storageSize#1TB">1TB</label>
+                                    </div>
+                                    <div class="filter-check-group">
+                                        <input type="checkbox" name="storageSizes" id="storageSize#2TB" value="2TB"
+                                               th:checked="${productFilterDto?.storageSizes?.contains('2TB')}"/>
+                                        <label for="storageSize#2TB">2TB</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filters-modal-footer modal-footer">
+                            <button type="submit" class="filters-apply-button primary-button">Áp dụng</button>
+                            <a class="filters-reset-button secondary-button"
+                               th:href="@{/shop(
+                                        page=1,
+                                        sortBy=${validSortBy},
+                                        sortDirection=${productFilterDto.sortDirection},
+                                        limit=${productFilterDto.limit},
+                                        search=${productFilterDto.search}
+                               )}"
+                            >
+                                Đặt lại
+                            </a>
+                        </div>
+                    </div>
                 </div>
+            </form>
 
-                <div class="filters-modal-body modal-body">
-                  <div class="filter-section">
-                    <h2 class="filter-label">Danh mục:</h2>
-                    <div class="filter-options">
-                      <div
-                        class="filter-check-group"
-                        th:each="category: ${response.data.categories}"
-                      >
-                        <input
-                          type="checkbox"
-                          name="categories"
-                          th:id="${'category#' + category.slug}"
-                          th:value="${category.slug}"
-                          th:checked="${productFilterDto?.categories?.contains(category.slug)}"
-                        />
-                        <label
-                          th:for="${'category#' + category.slug}"
-                          th:text="${category.name}"
+            <!-- sort -->
+            <div class="sort-dropdown dropdown">
+                <button type="button" class="sort-dropdown-toggle dropdown-toggle primary-button"><i
+                        class="fa-solid fa-arrow-up-wide-short"></i>Sắp xếp:
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}">Mới nhất</span>
+
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}">Cũ nhất</span>
+
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('discount') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}">Ưu đãi cao - thấp</span>
+
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('discount') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}">Ưu đãi thấp - cao</span>
+
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('name') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}">Tên A–Z</span>
+
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('name') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}">Tên Z–A</span>
+
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('discountPrice') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}">Giá thấp - cao</span>
+
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('discountPrice') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}">Giá cao - thấp</span>
+
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('averageRating') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}">Đánh giá cao - thấp</span>
+
+                    <span class="sort-selected"
+                          th:if="${validSortBy.equals('averageRating') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}">Đánh giá thấp - cao</span>
+                </button>
+                <ul class="sort-dropdown-menu dropdown-menu">
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='createdAt',
+                                sortDirection='DESC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
                         >
-                        </label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="categories"
-                          id="category#other"
-                          th:value="${productPredicates.OTHER_NAME}"
-                          th:checked="${productFilterDto?.categories?.contains(productPredicates.OTHER_NAME)}"
-                        />
-                        <label for="category#other">Khác</label>
-                      </div>
-                    </div>
-                  </div>
+                            Mới nhất
+                        </a>
+                    </li>
 
-                  <div class="filter-section">
-                    <h2 class="filter-label">Thương hiệu:</h2>
-                    <div class="filter-options">
-                      <div
-                        class="filter-check-group"
-                        th:each="brand: ${response.data.brands}"
-                      >
-                        <input
-                          type="checkbox"
-                          name="brands"
-                          th:id="${'brand#' + brand.slug}"
-                          th:value="${brand.slug}"
-                          th:checked="${productFilterDto?.brands?.contains(brand.slug)}"
-                        />
-                        <label
-                          th:for="${'brand#' + brand.slug}"
-                          th:text="${brand.name}"
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='createdAt',
+                                sortDirection='ASC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
                         >
-                        </label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="brands"
-                          id="brand#other"
-                          th:value="${productPredicates.OTHER_NAME}"
-                          th:checked="${productFilterDto?.brands?.contains(productPredicates.OTHER_NAME)}"
-                        />
-                        <label for="brand#other">Khác</label>
-                      </div>
-                    </div>
-                  </div>
+                            Cũ nhất
+                        </a>
+                    </li>
 
-                  <div
-                    class="filter-section"
-                    th:with="discountPriceRange=${priceUtils.getValidPriceRange(productFilterDto.getDoubleMinDiscountPrice, productFilterDto.getDoubleMaxDiscountPrice, productFilterDto.MIN_PRICE, productFilterDto.MAX_PRICE)}"
-                  >
-                    <h2 class="filter-label">Giá tiền:</h2>
-                    <div class="filter-options">
-                      <div class="filter-input-group">
-                        <label for="minDiscountPrice">Từ: </label>
-                        <input
-                          type="text"
-                          name="minDiscountPrice"
-                          class="price-input"
-                          id="minDiscountPrice"
-                          th:value="${!discountPriceRange.isEmpty() ? discountPriceRange.get('min') : productFilterDto.MIN_PRICE}"
-                        />
-                      </div>
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='discount',
+                                sortDirection='DESC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('discount') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
+                        >
+                            Ưu đãi cao - thấp
+                        </a>
+                    </li>
 
-                      <div class="filter-input-group">
-                        <label for="maxDiscountPrice">Đến: </label>
-                        <input
-                          type="text"
-                          name="maxDiscountPrice"
-                          class="price-input"
-                          id="maxDiscountPrice"
-                          th:value="${!discountPriceRange.isEmpty() ? discountPriceRange.get('max') : productFilterDto.MAX_PRICE}"
-                        />
-                      </div>
-                    </div>
-                  </div>
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='discount',
+                                sortDirection='ASC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('discount') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
+                        >
+                            Ưu đãi thấp - cao
+                        </a>
+                    </li>
 
-                  <div class="filter-section">
-                    <h2 class="filter-label">Thương hiệu CPU:</h2>
-                    <div class="filter-options">
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="cpuBrands"
-                          id="cpuBrand#Intel"
-                          value="Intel"
-                          th:checked="${productFilterDto?.cpuBrands?.contains('Intel')}"
-                        />
-                        <label for="cpuBrand#Intel">Intel</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="cpuBrands"
-                          id="cpuBrand#AMD"
-                          value="AMD"
-                          th:checked="${productFilterDto?.cpuBrands?.contains('AMD')}"
-                        />
-                        <label for="cpuBrand#AMD">AMD</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="cpuBrands"
-                          id="cpuBrand#Apple"
-                          value="Apple"
-                          th:checked="${productFilterDto?.cpuBrands?.contains('Apple')}"
-                        />
-                        <label for="cpuBrand#Apple">Apple</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="cpuBrands"
-                          id="cpuBrand#Qualcomm"
-                          value="Qualcomm"
-                          th:checked="${productFilterDto?.cpuBrands?.contains('Qualcomm')}"
-                        />
-                        <label for="cpuBrand#Qualcomm">Qualcomm</label>
-                      </div>
-                    </div>
-                  </div>
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='name',
+                                sortDirection='DESC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('name') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
+                        >
+                            Tên A–Z
+                        </a>
+                    </li>
 
-                  <div class="filter-section">
-                    <h2 class="filter-label">Thương hiệu GPU:</h2>
-                    <div class="filter-options">
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="gpuBrands"
-                          id="gpuBrand#Intel"
-                          value="Intel"
-                          th:checked="${productFilterDto?.gpuBrands?.contains('Intel')}"
-                        />
-                        <label for="gpuBrand#Intel">Intel</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="gpuBrands"
-                          id="gpuBrand#AMD"
-                          value="AMD"
-                          th:checked="${productFilterDto?.gpuBrands?.contains('AMD')}"
-                        />
-                        <label for="gpuBrand#AMD">AMD</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="gpuBrands"
-                          id="gpuBrand#Nvidia"
-                          value="Nvidia"
-                          th:checked="${productFilterDto?.gpuBrands?.contains('Nvidia')}"
-                        />
-                        <label for="gpuBrand#Nvidia">Nvidia</label>
-                      </div>
-                    </div>
-                  </div>
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='name',
+                                sortDirection='ASC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('name') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
+                        >
+                            Tên Z–A
+                        </a>
+                    </li>
 
-                  <div class="filter-section">
-                    <h2 class="filter-label">Dung lượng RAM:</h2>
-                    <div class="filter-options">
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="ramSizes"
-                          id="ramSize#4GB"
-                          value="4GB"
-                          th:checked="${productFilterDto?.ramSizes?.contains('4GB')}"
-                        />
-                        <label for="ramSize#4GB">4GB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="ramSizes"
-                          id="ramSize#8GB"
-                          value="8GB"
-                          th:checked="${productFilterDto?.ramSizes?.contains('8GB')}"
-                        />
-                        <label for="ramSize#8GB">8GB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="ramSizes"
-                          id="ramSize#16GB"
-                          value="16GB"
-                          th:checked="${productFilterDto?.ramSizes?.contains('16GB')}"
-                        />
-                        <label for="ramSize#16GB">16GB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="ramSizes"
-                          id="ramSize#32GB"
-                          value="32GB"
-                          th:checked="${productFilterDto?.ramSizes?.contains('32GB')}"
-                        />
-                        <label for="ramSize#32GB">32GB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="ramSizes"
-                          id="ramSize#64GB"
-                          value="64GB"
-                          th:checked="${productFilterDto?.ramSizes?.contains('64GB')}"
-                        />
-                        <label for="ramSize#64GB">64GB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="ramSizes"
-                          id="ramSize#128GB"
-                          value="128GB"
-                          th:checked="${productFilterDto?.ramSizes?.contains('128GB')}"
-                        />
-                        <label for="ramSize#128GB">128GB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="ramSizes"
-                          id="ramSize#256GB"
-                          value="256GB"
-                          th:checked="${productFilterDto?.ramSizes?.contains('256GB')}"
-                        />
-                        <label for="ramSize#256GB">256GB</label>
-                      </div>
-                    </div>
-                  </div>
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='discountPrice',
+                                sortDirection='ASC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('discountPrice') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
+                        >
+                            Giá thấp - cao
+                        </a>
+                    </li>
 
-                  <div class="filter-section">
-                    <h2 class="filter-label">Dung lượng bộ nhớ:</h2>
-                    <div class="filter-options">
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="storageSizes"
-                          id="storageSize#128GB"
-                          value="128GB"
-                          th:checked="${productFilterDto?.storageSizes?.contains('128GB')}"
-                        />
-                        <label for="storageSize#128GB">128GB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="storageSizes"
-                          id="storageSize#256GB"
-                          value="256GB"
-                          th:checked="${productFilterDto?.storageSizes?.contains('256GB')}"
-                        />
-                        <label for="storageSize#256GB">256GB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="storageSizes"
-                          id="storageSize#512GB"
-                          value="512GB"
-                          th:checked="${productFilterDto?.storageSizes?.contains('512GB')}"
-                        />
-                        <label for="storageSize#512GB">512GB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="storageSizes"
-                          id="storageSize#1TB"
-                          value="1TB"
-                          th:checked="${productFilterDto?.storageSizes?.contains('1TB')}"
-                        />
-                        <label for="storageSize#1TB">1TB</label>
-                      </div>
-                      <div class="filter-check-group">
-                        <input
-                          type="checkbox"
-                          name="storageSizes"
-                          id="storageSize#2TB"
-                          value="2TB"
-                          th:checked="${productFilterDto?.storageSizes?.contains('2TB')}"
-                        />
-                        <label for="storageSize#2TB">2TB</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='discountPrice',
+                                sortDirection='DESC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('discountPrice') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
+                        >
+                            Giá cao - thấp
+                        </a>
+                    </li>
 
-                <div class="filters-modal-footer modal-footer">
-                  <button
-                    type="submit"
-                    class="filters-apply-button primary-button"
-                  >
-                    Áp dụng
-                  </button>
-                  <a
-                    class="filters-reset-button secondary-button"
-                    th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {{'categories': null, 'brands': null,
-                          'minDiscountPrice': null, 'maxDiscountPrice': null, 'cpuBrands': null, 'gpuBrands': null,
-                          'ramSizes': null, 'storageSizes': null, 'page': '1'}})}"
-                    th:href="${'/shop' + newQuery}"
-                  >
-                    Đặt lại
-                  </a>
-                </div>
-              </div>
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='averageRating',
+                                sortDirection='ASC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('averageRating') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
+                        >
+                            Đánh giá thấp - cao
+                        </a>
+                    </li>
+
+                    <li class="sort-dropdown-item dropdown-item">
+                        <a class="sort-link"
+                           th:href="@{/shop(
+                                page=1,
+                                sortBy='averageRating',
+                                sortDirection='DESC',
+                                limit=${productFilterDto.limit},
+                                search=${productFilterDto.search},
+                                brands=${productFilterDto.brands},
+                                categories=${productFilterDto.categories},
+                                cpuBrands=${productFilterDto.cpuBrands},
+                                gpuBrands=${productFilterDto.gpuBrands},
+                                ramSizes=${productFilterDto.ramSizes},
+                                storageSizes=${productFilterDto.storageSizes},
+                                maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                                minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                           th:classappend="${validSortBy.equals('averageRating') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
+                        >
+                            Đánh giá cao - thấp
+                        </a>
+                    </li>
+                </ul>
             </div>
-          </form>
-
-          <!-- sort -->
-          <div class="sort-dropdown dropdown">
-            <button
-              type="button"
-              class="sort-dropdown-toggle dropdown-toggle primary-button"
-            >
-              <i class="fa-solid fa-arrow-up-wide-short"></i>Sắp xếp:
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-              >
-                Mới nhất
-              </span>
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-              >
-                Cũ nhất
-              </span>
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('discount') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-              >
-                Ưu đãi cao - thấp
-              </span>
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('discount') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-              >
-                Ưu đãi thấp - cao
-              </span>
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('name') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-              >
-                Tên A–Z
-              </span>
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('name') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-              >
-                Tên Z–A
-              </span>
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('discountPrice') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-              >
-                Giá thấp - cao
-              </span>
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('discountPrice') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-              >
-                Giá cao - thấp
-              </span>
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('averageRating') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC)}"
-              >
-                Đánh giá cao - thấp
-              </span>
-
-              <span
-                class="sort-selected"
-                th:if="${validSortBy.equals('averageRating') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC)}"
-              >
-                Đánh giá thấp - cao
-              </span>
-            </button>
-            <ul class="sort-dropdown-menu dropdown-menu">
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'createdAt', 'sortDirection': 'DESC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
-                >
-                  Mới nhất
-                </a>
-              </li>
-
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'createdAt', 'sortDirection': 'ASC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('createdAt') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
-                >
-                  Cũ nhất
-                </a>
-              </li>
-
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'discount', 'sortDirection': 'DESC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('discount') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
-                >
-                  Ưu đãi cao - thấp
-                </a>
-              </li>
-
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'discount', 'sortDirection': 'ASC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('discount') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
-                >
-                  Ưu đãi thấp - cao
-                </a>
-              </li>
-
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'name', 'sortDirection': 'DESC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('name') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
-                >
-                  Tên A–Z
-                </a>
-              </li>
-
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'name', 'sortDirection': 'ASC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('name') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
-                >
-                  Tên Z–A
-                </a>
-              </li>
-
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'discountPrice', 'sortDirection': 'ASC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('discountPrice') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
-                >
-                  Giá thấp - cao
-                </a>
-              </li>
-
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'discountPrice', 'sortDirection': 'DESC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('discountPrice') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
-                >
-                  Giá cao - thấp
-                </a>
-              </li>
-
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'averageRating', 'sortDirection': 'ASC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('averageRating') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.ASC) ? 'active' : ''}"
-                >
-                  Đánh giá thấp - cao
-                </a>
-              </li>
-
-              <li class="sort-dropdown-item dropdown-item">
-                <a
-                  class="sort-link"
-                  th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {'sortBy': 'averageRating', 'sortDirection': 'DESC', 'page': '1'})}"
-                  th:href="${'/shop' + newQuery}"
-                  th:classappend="${validSortBy.equals('averageRating') and productFilterDto.getEnumSortDirection().equals(sortDirectionEnum.DESC) ? 'active' : ''}"
-                >
-                  Đánh giá cao - thấp
-                </a>
-              </li>
-            </ul>
-          </div>
         </div>
 
         <!-- products -->
         <div class="products">
-          <div class="row">
-            <div
-              class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"
-              th:each="product : ${response.data.customProducts}"
-            >
-              <a
-                th:href="@{/shop/product/{slug}(slug=${product.slug})}"
-                class="product-card card"
-              >
-                <div class="product-image">
-                  <img
-                    th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + product.productImage.imageName}"
-                    alt="product"
-                  />
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"
+                     th:each="product : ${response.data.customProducts}">
+                    <a th:href="@{/shop/product/{productSlug}(productSlug=${product.slug})}" class="product-card card">
+                        <div class="product-image">
+                            <img th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + product.productImage.imageName}"
+                                 th:alt="${product.productImage.imageName}"/>
+                        </div>
+                        <p class="product-name" th:text="${product.name}"></p>
+                        <div class="product-pricing">
+                            <p class="price"
+                               th:text="${#numbers.formatDecimal(product.discountPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                            <div class="discount-information" th:if="${product.discount > 0}">
+                                <span class="old-price"
+                                      th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                                <span class="discount-value danger-badge"
+                                      th:text="'-' + ${product.discount} + '%'"></span>
+                            </div>
+                        </div>
+                        <div class="review-stars" th:if="${product.averageRating > 0}">
+                            <i class="fa-solid" th:with="score=${product.averageRating}"
+                               th:each="i : ${#numbers.sequence(1, 5)}" th:classappend="${i <= T(java.lang.Math).floor(score)
+                                   ? 'fa-star active'
+                                   : (i - 1 < score
+                                       ? 'fa-star-half-stroke active'
+                                       : 'fa-star')}">
+                            </i>
+                        </div>
+                    </a>
                 </div>
-                <p class="product-name" th:text="${product.name}"></p>
-                <div class="product-pricing">
-                  <p
-                    class="price"
-                    th:text="${#numbers.formatDecimal(product.discountPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"
-                  ></p>
-                  <div
-                    class="discount-information"
-                    th:if="${product.discount > 0}"
-                  >
-                    <span
-                      class="old-price"
-                      th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"
-                    ></span>
-                    <span
-                      class="discount-value danger-badge"
-                      th:text="'-' + ${product.discount} + '%'"
-                    ></span>
-                  </div>
-                </div>
-                <div class="review-stars" th:if="${product.averageRating > 0}">
-                  <i
-                    th:with="score=${product.averageRating}"
-                    class="fa-solid"
-                    th:each="i : ${#numbers.sequence(1, 5)}"
-                    th:classappend="${i <= T(java.lang.Math).floor(score) ? 'fa-star active' : i - 1 < score ? 'fa-star-half-stroke active' : 'fa-star'}"
-                  >
-                  </i>
-                </div>
-              </a>
             </div>
-          </div>
         </div>
 
         <!-- pagination -->
         <ul class="pagination" th:if="${response.totalPages > 1}">
-          <!-- Previous Page -->
-          <li class="pagination-item">
-            <a
-              class="button previous-page-button"
-              th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {{'page': (response.currentPage - 1)}})}"
-              th:href="${'/shop' + newQuery}"
-              th:classappend="${response.currentPage <= 1 ? 'disabled' : ''}"
-            >
-              <i class="fa-solid fa-chevron-left"></i>
-            </a>
-          </li>
+            <!-- Previous Page -->
+            <li class="pagination-item">
+                <a class="button previous-page-button"
+                   th:href="@{/shop(
+                            page=${response.currentPage - 1},
+                            sortBy=${validSortBy},
+                            sortDirection=${productFilterDto.sortDirection},
+                            limit=${productFilterDto.limit},
+                            search=${productFilterDto.search},
+                            brands=${productFilterDto.brands},
+                            categories=${productFilterDto.categories},
+                            cpuBrands=${productFilterDto.cpuBrands},
+                            gpuBrands=${productFilterDto.gpuBrands},
+                            ramSizes=${productFilterDto.ramSizes},
+                            storageSizes=${productFilterDto.storageSizes},
+                            maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                            minDiscountPrice=${productFilterDto.minDiscountPrice}
+                        )}"
+                   th:classappend="${response.currentPage <= 1 ? 'disabled' : ''}"
+                >
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </li>
 
-          <!-- Page Numbers -->
-          <li
-            class="pagination-item"
-            th:each="pageNumber : ${#numbers.sequence(1, response.totalPages)}"
-          >
-            <a
-              class="button page-number-button"
-              th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {{'page': pageNumber}})}"
-              th:href="${'/shop' + newQuery}"
-              th:classappend="${response.currentPage == pageNumber ? 'active' : ''}"
-              th:text="${pageNumber}"
-            >
-            </a>
-          </li>
+            <!-- Page Numbers -->
+            <li class="pagination-item"
+                th:each="pageNumber : ${#numbers.sequence(1, response.totalPages)}">
+                <a class="button page-number-button"
+                   th:href="@{/shop(
+                            page=${pageNumber},
+                            sortBy=${validSortBy},
+                            sortDirection=${productFilterDto.sortDirection},
+                            limit=${productFilterDto.limit},
+                            search=${productFilterDto.search},
+                            brands=${productFilterDto.brands},
+                            categories=${productFilterDto.categories},
+                            cpuBrands=${productFilterDto.cpuBrands},
+                            gpuBrands=${productFilterDto.gpuBrands},
+                            ramSizes=${productFilterDto.ramSizes},
+                            storageSizes=${productFilterDto.storageSizes},
+                            maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                            minDiscountPrice=${productFilterDto.minDiscountPrice}
+                         )}"
+                   th:classappend="${response.currentPage == pageNumber ? 'active' : ''}"
+                   th:text="${pageNumber}">
+                </a>
+            </li>
 
-          <!-- Next Page -->
-          <li class="pagination-item">
-            <a
-              class="button next-page-button"
-              th:with="newQuery=${queryUtils.modifiedQuery(productFilterDto.toQuery(), {{'page': (response.currentPage + 1)}})}"
-              th:href="${'/shop' + newQuery}"
-              th:classappend="${response.currentPage >= response.totalPages ? 'disabled' : ''}"
-            >
-              <i class="fa-solid fa-chevron-right"></i>
-            </a>
-          </li>
+            <!-- Next Page -->
+            <li class="pagination-item">
+                <a class="button next-page-button"
+                   th:href="@{/shop(
+                            page=${response.currentPage + 1},
+                            sortBy=${validSortBy},
+                            sortDirection=${productFilterDto.sortDirection},
+                            limit=${productFilterDto.limit},
+                            search=${productFilterDto.search},
+                            brands=${productFilterDto.brands},
+                            categories=${productFilterDto.categories},
+                            cpuBrands=${productFilterDto.cpuBrands},
+                            gpuBrands=${productFilterDto.gpuBrands},
+                            ramSizes=${productFilterDto.ramSizes},
+                            storageSizes=${productFilterDto.storageSizes},
+                            maxDiscountPrice=${productFilterDto.maxDiscountPrice},
+                            minDiscountPrice=${productFilterDto.minDiscountPrice}
+                         )}"
+                   th:classappend="${response.currentPage >= response.totalPages ? 'disabled' : ''}">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </li>
         </ul>
-      </div>
-    </main>
-  </body>
+    </div>
+</main>
+</body>
 </html>

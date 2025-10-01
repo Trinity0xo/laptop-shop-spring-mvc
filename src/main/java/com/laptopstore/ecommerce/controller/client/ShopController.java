@@ -28,7 +28,7 @@ public class ShopController {
     )  {
         PageResponse<CustomProductListDto<CustomProductDto>> response = this.productService.getShopProducts(productFilterDto);
         model.addAttribute("response", response);
-        model.addAttribute("productCriteriaDto", productFilterDto);
+        model.addAttribute("productFilterDto", productFilterDto);
 
         return "/client/shop";
     }

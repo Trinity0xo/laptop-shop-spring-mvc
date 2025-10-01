@@ -4,7 +4,7 @@
 @import "../table_col_width";
 @import "../button";
 @import "../input";
-@import "../lines_base_overflow";
+@import "../text_truncate";
 
 .dashboard {
   .container-fluid {
@@ -13,14 +13,35 @@
     gap: 1.6rem;
 
     section {
+      .header {
+        display: flex;
+        gap: 1.6rem;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        .title {
+          font-size: 2rem;
+          color: $text-primary;
+        }
+
+        .view-all-button {
+          display: flex;
+          gap: 0.8rem;
+          align-items: center;
+          font-size: 1.6rem;
+
+          i {
+            font-size: 1.6rem;
+            color: $text-inverse;
+          }
+        }
+      }
+
       &.dashboard-cards {
         .dashboard-card {
           display: flex;
           flex-direction: column;
           gap: 0.8rem;
-          // background-color: $bg-white;
-          // box-shadow: $box-shadow-01;
-          // padding: 1.6rem 3.2rem;
           text-align: center;
 
           i {
@@ -36,7 +57,7 @@
           .dashboard-card-value {
             font-size: 2.5rem;
             color: $text-primary;
-            @include linesBaseOverflow();
+            @include textTruncate();
           }
 
           .dashboard-card-link {
@@ -45,262 +66,9 @@
         }
       }
 
-      &.statistics-overview {
-        .statistics-overview-header {
-          display: flex;
-          gap: 1.6rem;
-          justify-content: space-between;
-          flex-wrap: wrap;
-
-          .title {
-            font-size: 2rem;
-            color: $text-primary;
-          }
-
-          .view-all-button {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-            font-size: 1.6rem;
-
-            i {
-              font-size: 1.6rem;
-              color: $text-inverse;
-            }
-          }
-        }
-      }
-
-      &.recent-orders {
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem;
-
-        .recent-orders-header {
-          display: flex;
-          gap: 1.6rem;
-          justify-content: space-between;
-          flex-wrap: wrap;
-
-          .title {
-            font-size: 2rem;
-            color: $text-primary;
-          }
-
-          .view-all-button {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-            font-size: 1.6rem;
-
-            i {
-              font-size: 1.6rem;
-              color: $text-inverse;
-            }
-          }
-        }
-
-        .recent-orders-table {
-          overflow-x: auto;
-
-          table {
-            @include generate-col-widths(110rem);
-
-            .table-row-actions {
-              display: flex;
-              justify-content: end;
-              gap: 0.8rem;
-            }
-          }
-        }
-      }
-
-      &.top-selling {
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem;
-
-        .top-selling-header {
-          display: flex;
-          gap: 1.6rem;
-          justify-content: space-between;
-          flex-wrap: wrap;
-
-          .title {
-            font-size: 2rem;
-            color: $text-primary;
-          }
-
-          .view-all-button {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-            font-size: 1.6rem;
-
-            i {
-              font-size: 1.6rem;
-              color: $text-inverse;
-            }
-          }
-        }
-
-        .top-selling-table {
-          overflow-x: auto;
-
-          table {
-            @include generate-col-widths(110rem);
-
-            .product-image {
-              display: flex;
-              align-items: center;
-
-              img {
-                width: 6.4rem;
-                height: 6.4rem;
-                object-fit: contain;
-              }
-            }
-
-            .table-row-actions {
-              display: flex;
-              justify-content: end;
-              gap: 0.8rem;
-            }
-          }
-        }
-      }
-
-      &.top-rated {
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem;
-
-        .top-rated-header {
-          display: flex;
-          gap: 1.6rem;
-          justify-content: space-between;
-          flex-wrap: wrap;
-
-          .title {
-            font-size: 2rem;
-            color: $text-primary;
-          }
-
-          .view-all-button {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-            font-size: 1.6rem;
-
-            i {
-              font-size: 1.6rem;
-              color: $text-inverse;
-            }
-          }
-        }
-
-        .top-rated-table {
-          overflow-x: auto;
-
-          table {
-            @include generate-col-widths(110rem);
-
-            .product-image {
-              display: flex;
-              align-items: center;
-
-              img {
-                width: 6.4rem;
-                height: 6.4rem;
-                object-fit: contain;
-              }
-            }
-
-            .review-stars {
-              display: flex;
-              gap: 0.6rem;
-
-              .fa-star,
-              .fa-star-half-stroke {
-                font-size: 1.5rem;
-              }
-            }
-
-            .table-row-actions {
-              display: flex;
-              justify-content: end;
-              gap: 0.8rem;
-            }
-          }
-        }
-      }
-
-      &.recent-reviews {
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem;
-
-        .recent-reviews-header {
-          display: flex;
-          gap: 1.6rem;
-          justify-content: space-between;
-          flex-wrap: wrap;
-
-          .title {
-            font-size: 2rem;
-            color: $text-primary;
-          }
-
-          .view-all-button {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-            font-size: 1.6rem;
-
-            i {
-              font-size: 1.6rem;
-              color: $text-inverse;
-            }
-          }
-        }
-
-        .recent-reviews-table {
-          overflow-x: auto;
-
-          table {
-            @include generate-col-widths(110rem);
-
-            .user-avatar {
-              display: flex;
-              align-items: center;
-
-              img {
-                width: 5rem;
-                height: 5rem;
-                object-fit: contain;
-                border-radius: 50%;
-                overflow: hidden;
-              }
-            }
-
-            .review-stars {
-              display: flex;
-              gap: 0.6rem;
-
-              .fa-star,
-              .fa-star-half-stroke {
-                font-size: 1.5rem;
-              }
-            }
-
-            .table-row-actions {
-              display: flex;
-              justify-content: end;
-              gap: 0.8rem;
-            }
-          }
-        }
-      }
+      //table {
+      //  @include generate-col-widths(110rem);
+      //}
     }
   }
 }

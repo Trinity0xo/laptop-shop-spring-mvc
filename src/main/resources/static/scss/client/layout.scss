@@ -2,7 +2,7 @@
 @import "../media_advanced";
 @import "../button";
 @import "../input";
-@import "../lines_base_overflow";
+@import "../text_truncate";
 
 // layout
 .layout {
@@ -400,14 +400,14 @@
           .name {
             font-size: 1.6rem;
             font-weight: 500;
-            @include linesBaseOverflow();
+            @include textTruncate();
             max-width: 100%;
           }
 
           .email {
             font-size: 1.25rem;
             color: $text-primary;
-            @include linesBaseOverflow();
+            @include textTruncate();
             max-width: 100%;
           }
         }

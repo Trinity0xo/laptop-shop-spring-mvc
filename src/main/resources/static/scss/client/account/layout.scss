@@ -1,0 +1,147 @@
+@import "../../variables";
+@import "../../media_advanced";
+@import "../../responsive_grid";
+@import "../../input";
+@import "../../table_col_width";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  .account-aside {
+    .aside-option-list {
+      .item {
+        &:not(:last-child) {
+          margin-bottom: 0.4rem;
+        }
+
+        .link {
+          display: inline-block;
+          padding: 1rem 1.6rem;
+          width: 100%;
+          font-size: 1.6rem;
+          color: $text-primary;
+          border-radius: 0.4rem;
+
+          &:hover {
+            background-color: $color-primary;
+            color: $text-inverse;
+          }
+
+          &.active {
+            background-color: $color-primary;
+            color: $text-inverse;
+          }
+        }
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    .content-title {
+      font-size: 2rem;
+      color: $text-primary;
+    }
+
+    .content-actions {
+      display: flex;
+      gap: 1rem;
+
+      @include media(xs, sm) {
+        flex-direction: column;
+      }
+
+      @include media(md, lg, xl) {
+        flex-direction: row;
+      }
+    }
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+
+    .form-title {
+      font-size: 2rem;
+      color: $text-primary;
+    }
+
+    .form-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2.4rem;
+
+      .input-group {
+        display: flex;
+
+        @include media(xs, sm) {
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        @include media(md, lg, xl) {
+          flex-wrap: nowrap;
+          gap: 0;
+        }
+
+        .input-group-control {
+          width: 100%;
+        }
+
+        label {
+          font-size: 1.6rem;
+          color: $text-primary;
+          width: 100%;
+          max-width: 30rem;
+        }
+
+        input:not([type="file"]), select, textarea {
+          @include input();
+          width: 100%;
+        }
+      }
+
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: start;
+
+      @include media(xs, sm) {
+        flex-direction: column;
+      }
+
+      @include media(md, lg, xl) {
+        flex-direction: row;
+      }
+
+      .spacer {
+        width: 100%;
+        max-width: 30rem;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 1rem;
+
+        @include media(xs, sm) {
+          flex-direction: column;
+        }
+
+        @include media(md, lg, xl) {
+          flex-direction: row;
+        }
+      }
+    }
+
+    table {
+      @include generate-col-widths(80rem);
+    }
+  }
+}

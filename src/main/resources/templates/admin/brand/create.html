@@ -1,91 +1,64 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Thương hiệu</title>
-  </head>
+</head>
 
-  <body>
-    <div class="brand brand-create" layout:fragment="content">
-      <div class="container-fluid">
+<body>
+<div class="brand brand-create" layout:fragment="content">
+    <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li>
-            <a href="/dashboard">Dashboard</a>
-          </li>
-          <li>
-            <a href="/dashboard/brand">Thương hiệu</a>
-          </li>
-          <li>Tạo mới</li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/brand">Thương hiệu</a></li>
+            <li>Tạo mới</li>
         </ul>
 
         <!-- create brand form -->
-        <form
-          class="brand-create-form brand-form card"
-          method="post"
-          th:action="@{/dashboard/brand/create}"
-          th:object="${createBrandDto}"
-        >
-          <h1 class="form-title">Tạo thương hiệu mới</h1>
+        <form class="brand-create-form brand-form form card" method="post" th:action="@{/dashboard/brand/create}"
+              th:object="${createBrandDto}">
+            <h1 class="form-title">Tạo thương hiệu mới</h1>
 
-          <div class="form-content">
-            <div class="input-group">
-              <label for="name">Tên:</label>
-              <div class="input-group-control">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Tên thương hiệu"
-                  required
-                  th:classappend="${#fields.hasErrors('name') ? 'error' : ''}"
-                  th:field="${createBrandDto.name}"
-                />
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('name')}"
-                  th:errors="${createBrandDto.name}"
-                ></span>
-              </div>
+            <div class="form-content">
+                <div class="input-group">
+                    <label for="name">Tên:</label>
+                    <div class="input-group-control">
+                        <input type="text" name="name" id="name" placeholder="Tên thương hiệu" required
+                               th:classappend="${#fields.hasErrors('name') ? 'error' : ''}"
+                               th:field="${createBrandDto.name}"/>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('name')}"
+                              th:errors="${createBrandDto.name}"></span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="description">Mô tả:</label>
+                    <div class="input-group-control">
+                        <textarea name="description" id="description" rows="5" placeholder="Mô tả thương hiệu"
+                                  th:classappend="${#fields.hasErrors('description') ? 'error' : ''}"
+                                  th:field="${createBrandDto.description}"></textarea>
+                        <span class="input-error-message" th:if="${#fields.hasErrors('description')}"
+                              th:errors="${createBrandDto.description}"></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="input-group">
-              <label for="description">Mô tả:</label>
-              <div class="input-group-control">
-                <textarea
-                  name="description"
-                  id="description"
-                  rows="5"
-                  placeholder="Mô tả thương hiệu"
-                  th:classappend="${#fields.hasErrors('description') ? 'error' : ''}"
-                  th:field="${createBrandDto.description}"
-                ></textarea>
-                <span
-                  class="input-error-message"
-                  th:if="${#fields.hasErrors('description')}"
-                  th:errors="${createBrandDto.description}"
-                ></span>
-              </div>
+            <div class="form-actions">
+                <div class="spacer"></div>
+                <div class="buttons">
+                    <button type="submit" class="save-button primary-button">Lưu</button>
+                    <a href="/dashboard/brand" class="back-button secondary-button">Quay lại</a>
+                </div>
             </div>
-          </div>
-
-          <div class="form-actions">
-            <div class="spacer"></div>
-            <button type="submit" class="save-button primary-button">
-              Lưu
-            </button>
-            <a href="/dashboard/brand" class="back-button secondary-button"
-              >Quay lại</a
-            >
-          </div>
         </form>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

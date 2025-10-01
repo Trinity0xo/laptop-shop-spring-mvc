@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BrandService {
     Brand getBrandById(long brandId);
-    Brand getBrandByName(String brandName);
+    Brand getBrandBySlug(String brandSlug);
     PageResponse<List<Brand>> getAllBrands(BrandFilterDto brandFilterDto);
     void createBrand(CreateBrandDto createBrandDto);
     UpdateBrandDto getInformationForUpdateBrand(long brandId);

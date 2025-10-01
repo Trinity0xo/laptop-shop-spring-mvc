@@ -126,7 +126,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategoryByName(String categoryName){
-        return this.categoryRepository.findByName(categoryName).orElse(null);
+    public Category getCategoryBySlug(String categorySlug){
+        return this.categoryRepository.findBySlug(categorySlug).orElse(null);
     }
 }

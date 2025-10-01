@@ -4,6 +4,7 @@ import com.laptopstore.ecommerce.dto.product.CreateProductDto;
 import com.laptopstore.ecommerce.model.Product;
 import com.laptopstore.ecommerce.service.ProductService;
 import com.laptopstore.ecommerce.util.ImageUtils;
+import com.laptopstore.ecommerce.util.SlugUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.web.multipart.MultipartFile;
@@ -151,7 +152,7 @@ public class CreateProductValidator extends BaseProductValidator<CreateProductDt
     public boolean isValid(CreateProductDto value, ConstraintValidatorContext context) {
         boolean isValid = validate(value, context);
 
-        Product exists = this.productService.getProductByName(value.getName());
+        Product exists = this.productService.getProductBySlug(SlugUtils.toSlug(value.getName()));
         if(exists != null){
             context.buildConstraintViolationWithTemplate("Sản phẩm với tên này đã tồn tại")
                     .addPropertyNode("name")

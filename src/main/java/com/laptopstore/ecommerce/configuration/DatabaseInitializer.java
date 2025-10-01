@@ -33,8 +33,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             for (RoleEnum roleEnum : RoleEnum.values()) {
                 roles.add(new Role(
                         roleEnum.getDisplayName(),
-                        roleEnum.name(),
-                        getRoleDescription(roleEnum)
+                        roleEnum.name()
                 ));
             }
 
@@ -43,14 +42,5 @@ public class DatabaseInitializer implements CommandLineRunner {
         } else {
             log.info(">>> DATABASE ALREADY EXISTS, SKIP INITIALIZATION");
         }
-    }
-
-    private String getRoleDescription(RoleEnum roleEnum) {
-        return switch (roleEnum) {
-            case SUPER_ADMIN -> "Có mọi quyền hạn trong hệ thống";
-            case OWNER -> "Quản lý tài nguyên thuộc sở hữu và giám sát một số nhiệm vụ quản trị";
-            case USER -> "Người dùng thông thường với quyền truy cập các chức năng cơ bản";
-            default -> "";
-        };
     }
 }

@@ -1,5 +1,6 @@
 package com.laptopstore.ecommerce.controller.admin;
 
+import com.laptopstore.ecommerce.dto.product.CustomProductDetailsDto;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.dto.review.CustomReviewDto;
 import com.laptopstore.ecommerce.dto.review.ReviewFilterDto;
@@ -41,5 +42,19 @@ public class ReviewController {
         model.addAttribute("review", review);
 
         return "/admin/review/details";
+    }
+
+    @GetMapping("/{productId}")
+    public String showProductReviewsPage(
+            @PathVariable long productId,
+            ReviewFilterDto reviewFilterDto,
+            Model model
+    )  {
+        PageResponse<CustomProductDetailsDto> response = this.reviewService.getProductReviews(productId, reviewFilterDto);
+        model.addAttribute("response", response);
+        model.addAttribute("reviewFilterDto", reviewFilterDto);
+
+
+        return "/admin/review/product_reviews";
     }
 }

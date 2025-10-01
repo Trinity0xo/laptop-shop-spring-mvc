@@ -311,3 +311,58 @@
   display: flex;
   justify-content: center;
 }
+.layout .form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.layout .form .form-title {
+  font-size: 2rem;
+  color: #333;
+}
+.layout .form .form-description {
+  font-size: 1.6rem;
+  color: #333;
+}
+.layout .form .input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.layout .form .input-group label {
+  display: inline-block;
+  font-size: 1.6rem;
+  color: #333;
+}
+.layout .form .input-group input {
+  padding: 0.8rem 1.6rem;
+  font-size: 1.6rem;
+  border: 0.1rem solid rgba(51, 51, 51, 0.25);
+  color: #333;
+  border-radius: 0.4rem;
+  text-align: start;
+  width: 100%;
+}
+.layout .form .input-group input.error {
+  border: 0.1rem solid #dc4c64;
+}
+.layout .form .input-group input:focus {
+  border: 0.1rem solid #3b71ca;
+}
+.layout .form .text {
+  font-size: 1.6rem;
+  text-align: center;
+}
+.layout .confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.layout .confirmation .confirmation-title {
+  font-size: 2rem;
+  color: #333;
+}
+.layout .confirmation .confirmation-description {
+  font-size: 1.6rem;
+  color: #333;
+}

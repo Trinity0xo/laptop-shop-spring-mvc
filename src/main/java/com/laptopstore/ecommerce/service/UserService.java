@@ -1,9 +1,6 @@
 package com.laptopstore.ecommerce.service;
 
-import com.laptopstore.ecommerce.dto.auth.AuthenticatedInformationDto;
-import com.laptopstore.ecommerce.dto.auth.ForgotPasswordDto;
-import com.laptopstore.ecommerce.dto.auth.RegisterDto;
-import com.laptopstore.ecommerce.dto.auth.ResetPasswordDto;
+import com.laptopstore.ecommerce.dto.auth.*;
 import com.laptopstore.ecommerce.dto.response.PageResponse;
 import com.laptopstore.ecommerce.dto.user.*;
 import com.laptopstore.ecommerce.model.User;
@@ -11,8 +8,10 @@ import com.laptopstore.ecommerce.model.User;
 import java.util.List;
 
 public interface UserService {
-    void updateUserRole(UpdateUserRoleDto updateUserRoleDto);
-    UpdateUserRoleDto getUserInformationForRoleUpdate(long userId);
+    void changePassword(String email, ChangePasswordDto changePasswordDto);
+    CreateUserDto getInformationForCreateUser();
+    void updateUserRole(String email, UpdateUserRoleDto updateUserRoleDto);
+    UpdateUserRoleDto getUserInformationForRoleUpdate(String email, long userId);
     void resetPassword(ResetPasswordDto resetPasswordDto);
     ResetPasswordDto getResetPasswordInformation(String tokenValue);
     String forgotPassword(ForgotPasswordDto forgotPasswordDto);

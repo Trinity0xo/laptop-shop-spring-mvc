@@ -59,7 +59,8 @@ public class UserController {
     public String showCreateUserPage(
             Model model
     ){
-        model.addAttribute("createUserDto", new CreateUserDto());
+        CreateUserDto createUserDto = this.userService.getInformationForCreateUser();
+        model.addAttribute("createUserDto", createUserDto);
 
         return "/admin/user/create";
     }
@@ -71,6 +72,8 @@ public class UserController {
             RedirectAttributes redirectAttributes
     ){
         if(bindingResult.hasErrors()){
+            CreateUserDto newCreateUserDto = this.userService.getInformationForCreateUser();
+            createUserDto.setRoles(newCreateUserDto.getRoles());
             return "/admin/user/create";
         }
 
@@ -87,7 +90,7 @@ public class UserController {
     )  {
         String email = AuthenticationUtils.getAuthenticatedName();
 
-        UpdateUserRoleDto updateUserRoleDto = this.userService.getUserInformationForRoleUpdate(userId);
+        UpdateUserRoleDto updateUserRoleDto = this.userService.getUserInformationForRoleUpdate(email, userId);
         model.addAttribute("updateUserRoleDto", updateUserRoleDto);
 
         return "/admin/user/update_role";
@@ -102,12 +105,13 @@ public class UserController {
         String email = AuthenticationUtils.getAuthenticatedName();
 
         if(bindingResult.hasErrors()){
-            UpdateUserRoleDto newUpdateUserRoleDto = this.userService.getUserInformationForRoleUpdate(updateUserRoleDto.getId());
+            UpdateUserRoleDto newUpdateUserRoleDto = this.userService.getUserInformationForRoleUpdate(email, updateUserRoleDto.getId());
             updateUserRoleDto.setEmail(newUpdateUserRoleDto.getEmail());
+            updateUserRoleDto.setRoles(newUpdateUserRoleDto.getRoles());
             return "/admin/user/update_role";
         }
 
-        this.userService.updateUserRole(updateUserRoleDto);
+        this.userService.updateUserRole(email, updateUserRoleDto);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật vai trò người dùng thành công");
 
         return "redirect:/dashboard/user/details/" + updateUserRoleDto.getId();

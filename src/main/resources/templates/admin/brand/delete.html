@@ -1,66 +1,47 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/admin/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/admin/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Brand</title>
-  </head>
+</head>
 
-  <body>
-    <div class="brand brand-delete" layout:fragment="content">
-      <div class="container-fluid">
+<body>
+<div class="brand brand-delete" layout:fragment="content">
+    <div class="container-fluid">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li>
-            <a href="/dashboard">Dashboard</a>
-          </li>
-          <li>
-            <a href="/dashboard/brand">Thương hiệu</a>
-          </li>
-          <li>
-            <a
-              th:href="@{/dashboard/brand/details/{id}(id=${brand.id})}"
-              th:text="${brand.name}"
-            ></a>
-          </li>
-          <li>Xóa</li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/brand">Thương hiệu</a></li>
+            <li><a th:href="@{/dashboard/brand/details/{brandId}(brandId=${brand.id})}" th:text="${brand.name}"></a>
+            </li>
+            <li>Xóa</li>
         </ul>
 
         <!-- delete brand form -->
-        <form
-          class="brand-delete-form brand-form card"
-          method="post"
-          th:action="@{/dashboard/brand/delete}"
-        >
-          <h1 class="form-title">
-            Xóa thương hiệu với "<span th:text="${brand.name}"></span>"
-          </h1>
+        <form class="brand-delete-form brand-form form card" method="post" th:action="@{/dashboard/brand/delete}">
+            <h1 class="form-title">Xóa thương hiệu với "<span th:text="${brand.name}"></span>"</h1>
 
-          <div class="form-content">
-            <input type="hidden" name="brandId" th:value="${brand.id}" />
-            <p class="warning-message">
-              Bạn có chắc chắn muốn xóa thương hiệu với "<span
-                th:text="${brand.name}"
-              ></span
-              >" không?
-            </p>
-          </div>
+            <div class="form-content">
+                <input type="hidden" name="brandId" th:value="${brand.id}"/>
+                <p class="warning-message">Bạn có chắc chắn muốn xóa thương hiệu với "<span
+                        th:text="${brand.name}"></span>" không?</p>
+            </div>
 
-          <div class="form-actions">
-            <button type="submit" class="confirm-button danger-button">
-              Xác nhận
-            </button>
-            <a href="/dashboard/brand" class="back-button secondary-button">
-              Quay lại
-            </a>
-          </div>
+            <div class="form-actions">
+                <div class="buttons">
+                    <button type="submit" class="confirm-button danger-button">Xác nhận</button>
+                    <a th:href="@{/dashboard/brand/details/{brandId}(brandId=${brand.id})}"
+                       class="back-button secondary-button">Quay lại</a>
+                </div>
+            </div>
         </form>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

@@ -1,186 +1,136 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/client/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/client/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Cảm ơn</title>
-    <link rel="stylesheet" href="/css/reset.css" />
-    <link rel="stylesheet" href="/css/share.css" />
-    <link rel="stylesheet" href="/css/client/checkout_confirmation.css" />
-  </head>
-  <body>
-    <div class="checkout-confirmation" layout:fragment="content">
-      <div class="container">
+    <link rel="stylesheet" href="/css/reset.css"/>
+    <link rel="stylesheet" href="/css/share.css"/>
+    <link rel="stylesheet" href="/css/client/checkout_confirmation.css"/>
+</head>
+<body>
+<div class="checkout-confirmation" layout:fragment="content">
+    <div class="container">
         <div class="checkout-content card">
-          <div class="order-header">
-            <h1 class="title">Cảm ơn bạn đã đặt hàng</h1>
-
-            <h2 class="sub-title">
-              Đơn hàng của bạn đã được ghi nhận và chúng tôi sẽ xử lý trong thời
-              gian sớm nhất
-            </h2>
-          </div>
-
-          <!-- order summary -->
-          <div class="order-summary">
-            <div class="order-summary-content row">
-              <div
-                class="order-summary-section col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"
-              >
-                <p class="order-summary-item">
-                  <span class="order-summary-label">Mã đơn hàng:</span>
-                  <span
-                    class="order-summary-value"
-                    th:text="${order.id}"
-                  ></span>
-                </p>
-
-                <p class="order-summary-item">
-                  <span class="order-summary-label">Ngày đặt:</span>
-                  <span
-                    class="order-summary-value"
-                    th:text="${#temporals.format(order.createdAt, 'dd-MM-yyyy')}"
-                  ></span>
-                </p>
-
-                <p class="order-summary-item">
-                  <span class="order-summary-label">Thanh toán:</span>
-                  <span
-                    class="order-summary-value"
-                    th:text="${order.paymentMethod}"
-                  ></span>
-                </p>
-
-                <p class="order-summary-item">
-                  <span class="order-summary-label">Tổng tiền:</span>
-                  <span
-                    class="order-summary-value"
-                    th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT') + '₫'}"
-                  ></span>
-                </p>
-              </div>
-
-              <div
-                class="order-summary-section col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"
-              >
-                <p class="order-summary-item">
-                  <span class="order-summary-label">Người nhận:</span>
-                  <span
-                    class="order-summary-value"
-                    th:text="${order.user.firstName + ' ' + order.user.lastName}"
-                  ></span>
-                </p>
-
-                <p class="order-summary-item">
-                  <span class="order-summary-label">Email:</span>
-                  <span
-                    class="order-summary-value"
-                    th:text="${order.user.email}"
-                  ></span>
-                </p>
-
-                <p class="order-summary-item">
-                  <span class="order-summary-label">Số điện thoại:</span>
-                  <span
-                    class="order-summary-value"
-                    th:text="${order.phone}"
-                  ></span>
-                </p>
-
-                <p class="order-summary-item">
-                  <span class="order-summary-label">Địa chỉ:</span>
-                  <span
-                    class="order-summary-value"
-                    th:text="${order.address}"
-                  ></span>
-                </p>
-              </div>
+            <div class="order-header">
+                <h1 class="title">Cảm ơn bạn đã đặt hàng</h1>
+                <h2 class="sub-title">Đơn hàng của bạn đã được ghi nhận và chúng tôi sẽ xử lý trong thời gian sớm
+                    nhất</h2>
             </div>
-          </div>
 
-          <!-- order items -->
-          <div class="order-items">
-            <table class="table">
-              <thead>
-                <tr class="table-header-row">
-                  <th class="table-header-cell col-width-2">Hình ảnh</th>
-                  <th class="table-header-cell col-width-4">Tên</th>
-                  <th class="table-header-cell col-width-2">Số lượng</th>
-                  <th class="table-header-cell col-width-2">Đơn giá</th>
-                  <th class="table-header-cell col-width-2">Thành tiền</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  class="table-body-row"
-                  th:each="orderItem: ${order.orderItems}"
-                >
-                  <td class="table-body-cell">
-                    <span class="cell-text" th:if="${orderItem.product == null}"
-                      >N/A</span
-                    >
+            <!-- order summary -->
+            <div class="order-summary">
+                <div class="order-summary-content row">
+                    <div class="order-summary-section col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                        <p class="order-summary-item">
+                            <span class="order-summary-label">Mã đơn hàng:</span>
+                            <span class="order-summary-value" th:text="${order.id}"></span>
+                        </p>
 
-                    <div
-                      class="product-image"
-                      th:if="${orderItem.product != null and !#lists.isEmpty(orderItem.product.productImages)}"
-                    >
-                      <img
-                        th:if="${!#lists.isEmpty(orderItem.product.productImages.?[isMain])}"
-                        th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + orderItem.product.productImages.?[isMain][0].imageName}"
-                        alt="product"
-                      />
+                        <p class="order-summary-item">
+                            <span class="order-summary-label">Ngày đặt:</span>
+                            <span class="order-summary-value"
+                                  th:text="${#temporals.format(order.createdAt, 'dd-MM-yyyy')}"></span>
+                        </p>
 
-                      <img
-                        th:if="${#lists.isEmpty(orderItem.product.productImages.?[isMain])}"
-                        th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + orderItem.product.productImages[0].imageName}"
-                        alt="product"
-                      />
+                        <p class="order-summary-item">
+                            <span class="order-summary-label">Thanh toán:</span>
+                            <span class="order-summary-value" th:text="${order.paymentMethod}"></span>
+                        </p>
+
+                        <p class="order-summary-item">
+                            <span class="order-summary-label">Tổng tiền:</span>
+                            <span class="order-summary-value"
+                                  th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                        </p>
                     </div>
-                  </td>
 
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${!#strings.isEmpty(orderItem.product?.name) ? orderItem.product.name : 'N/A'}"
-                    >
-                    </span>
-                  </td>
+                    <div class="order-summary-section col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                        <p class="order-summary-item">
+                            <span class="order-summary-label">Người nhận:</span>
+                            <span class="order-summary-value"
+                                  th:text="${order.user.firstName + ' ' + order.user.lastName}"></span>
+                        </p>
 
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${orderItem.quantity != null ? orderItem.quantity : 'N/A'}"
-                    ></span>
-                  </td>
+                        <p class="order-summary-item">
+                            <span class="order-summary-label">Email:</span>
+                            <span class="order-summary-value" th:text="${order.user.email}"></span>
+                        </p>
 
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${orderItem.price != null ? #numbers.formatDecimal(orderItem.price, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"
-                    ></span>
-                  </td>
+                        <p class="order-summary-item">
+                            <span class="order-summary-label">Số điện thoại:</span>
+                            <span class="order-summary-value" th:text="${order.phone}"></span>
+                        </p>
 
-                  <td class="table-body-cell">
-                    <span
-                      class="cell-text"
-                      th:text="${orderItem.price != null and orderItem.quantity != null ? #numbers.formatDecimal(orderItem.price * orderItem.quantity, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"
-                    ></span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                        <p class="order-summary-item">
+                            <span class="order-summary-label">Địa chỉ:</span>
+                            <span class="order-summary-value" th:text="${order.address}"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-          <div class="actions">
-            <a href="/shop" class="primary-button">Tiếp tục mua sắm</a>
-          </div>
+            <!-- order items -->
+            <div class="order-items">
+                <table class="table">
+                    <thead>
+                    <tr class="table-header-row">
+                        <th class="table-header-cell col-width-2">Hình ảnh</th>
+                        <th class="table-header-cell col-width-4">Tên</th>
+                        <th class="table-header-cell col-width-2">Số lượng</th>
+                        <th class="table-header-cell col-width-2">Đơn giá</th>
+                        <th class="table-header-cell col-width-2">Thành tiền</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-body-row" th:each="orderItem: ${order.orderItems}">
+                        <td class="table-body-cell">
+                            <span class="cell-text" th:if="${orderItem.product == null}">N/A</span>
+
+                            <div class="product-image"
+                                 th:if="${orderItem.product != null and !#lists.isEmpty(orderItem.product.productImages)}">
+                                <img th:each="img : ${orderItem.product.productImages}"
+                                     th:if="${img.isMain()}"
+                                     th:src="@{'/' + ${resourcesMappingFolder} + '/' + ${productImagesFolder} + '/' + ${img.imageName}}"
+                                     th:alt="${img.imageName}"
+                                />
+                            </div>
+                        </td>
+
+                        <td class="table-body-cell">
+                            <span class="cell-text"
+                                  th:text="${!#strings.isEmpty(orderItem.product?.name) ? orderItem.product.name : 'N/A'}"></span>
+                        </td>
+
+                        <td class="table-body-cell">
+                            <span class="cell-text"
+                                  th:text="${orderItem.quantity != null ? orderItem.quantity : 'N/A'}"></span>
+                        </td>
+
+                        <td class="table-body-cell">
+                            <span class="cell-text"
+                                  th:text="${orderItem.price != null ? #numbers.formatDecimal(orderItem.price, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"></span>
+                        </td>
+
+                        <td class="table-body-cell">
+                            <span class="cell-text"
+                                  th:text="${orderItem.price != null and orderItem.quantity != null ? #numbers.formatDecimal(orderItem.price * orderItem.quantity, 0, 'COMMA', 0, 'POINT') + '₫' : 'N/A'}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="actions">
+                <a href="/shop" class="primary-button">Tiếp tục mua sắm</a>
+            </div>
         </div>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

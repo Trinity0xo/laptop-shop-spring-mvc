@@ -1,201 +1,128 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="/client/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="/client/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Giỏ hàng</title>
-  </head>
+</head>
 
-  <body>
-    <main class="cart" layout:fragment="content">
-      <div class="container">
+<body>
+<main class="cart" layout:fragment="content">
+    <div class="container">
         <!-- breadcrumb -->
         <ul class="breadcrumb">
-          <li><a href="/">Trang chủ</a></li>
-          <li><a href="/shop">Cửa hàng</a></li>
-          <li>Giỏ hàng</li>
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/shop">Cửa hàng</a></li>
+            <li>Giỏ hàng</li>
         </ul>
 
-        <h1 class="cart-title">
-          Giỏ hàng (<span
-            class="item-count"
-            th:text="${cartItemsDto.cartItems.size()}"
-          ></span>
-          sản phẩm)
-        </h1>
+        <h1 class="cart-title">Giỏ hàng (<span class="item-count" th:text="${cartItemsDto.cartItems.size()}"></span>sản
+            phẩm)</h1>
 
         <div class="row" th:if="${!#lists.isEmpty(cartItemsDto.cartItems)}">
-          <!-- cart items -->
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-            <ul class="cart-item-list">
-              <li
-                class="cart-item card"
-                th:each="cartItem : ${cartItemsDto.cartItems}"
-              >
-                <div class="product">
-                  <div class="product-image">
-                    <img
-                      th:if="${!#lists.isEmpty(cartItem.product.productImages.?[isMain])}"
-                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + cartItem.product.productImages.?[isMain][0].imageName}"
-                      alt="product"
-                    />
+            <!-- cart items -->
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                <ul class="cart-item-list">
+                    <li class="cart-item card" th:each="cartItem : ${cartItemsDto.cartItems}">
+                        <div class="product">
+                            <div class="product-image">
+                                <img th:each="img : ${cartItem.product.productImages}"
+                                     th:if="${img.isMain()}"
+                                     th:src="@{'/' + ${resourcesMappingFolder} + '/' + ${productImagesFolder} + '/' + ${img.imageName}}"
+                                     th:alt="${img.imageName}"
+                                />
+                            </div>
+                            <div class="product-information">
+                                <a th:href="@{/shop/product/{productId}(productId=${cartItem.product.id})}"
+                                   class="product-name"
+                                   th:text="${cartItem.product.name}"></a>
 
-                    <img
-                      th:if="${#lists.isEmpty(cartItem.product.productImages.?[isMain])}"
-                      th:src="${'/' + resourcesMappingFolder + '/' + productImagesFolder + '/' + cartItem.product.productImages[0].imageName}"
-                      alt="product"
-                    />
-                  </div>
-                  <div class="product-information">
-                    <a
-                      th:href="@{/shop/product/{id}(id=${cartItem.product.id})}"
-                      class="product-name"
-                      th:text="${cartItem.product.name}"
-                    ></a>
+                                <div class="product-pricing">
+                                    <p class="price"
+                                       th:text="${#numbers.formatDecimal(cartItem.product.price - (cartItem.product.price * (cartItem.product.discount / 100)), 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                                    <div class="discount-information" th:if="${cartItem.product.discount > 0}">
+                                        <span class="old-price"
+                                              th:text="${#numbers.formatDecimal(cartItem.product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                                        <span class="discount-value danger-badge"
+                                              th:text="'-' + ${cartItem.product.discount} + '%'"></span>
+                                    </div>
+                                </div>
 
-                    <div class="product-pricing">
-                      <p
-                        class="price"
-                        th:text="${#numbers.formatDecimal(cartItem.product.price - (cartItem.product.price * (cartItem.product.discount / 100)), 0, 'COMMA', 0, 'POINT')} + '₫'"
-                      ></p>
-                      <div
-                        class="discount-information"
-                        th:if="${cartItem.product.discount > 0}"
-                      >
-                        <span
-                          class="old-price"
-                          th:text="${#numbers.formatDecimal(cartItem.product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"
-                        ></span>
-                        <span
-                          class="discount-value danger-badge"
-                          th:text="'-' + ${cartItem.product.discount} + '%'"
-                        ></span>
-                      </div>
-                    </div>
+                                <form class="update-product-quantity-form" method="post"
+                                      th:action="@{/cart/update/{productId}(productId=${cartItem.product.id})}">
+                                    <div class="product-quantity">
+                                        <label class="quantity-label" for="quantity">Số lượng:</label>
+                                        <div class="quantity-control">
+                                            <button id="btnQuantityMinus" class="quantity-minus-button primary-button"
+                                                    type="submit" name="quantityChange" value="-1"><i
+                                                    class="fa-solid fa-minus"></i></button>
+                                            <input id="quantity" class="quantity-input" type="number" name="quantity"
+                                                   th:value="${cartItem.quantity}" min="1" max="99" disabled required/>
+                                            <button id="btnQuantityPlus" class="quantity-plus-button primary-button"
+                                                    type="submit" name="quantityChange" value="1"><i
+                                                    class="fa-solid fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
 
-                    <form
-                      class="update-product-quantity-form"
-                      method="post"
-                      th:action="@{/cart/update/{id}(id=${cartItem.product.id})}"
-                    >
-                      <div class="product-quantity">
-                        <label class="quantity-label" for="quantity"
-                          >Số lượng:</label
-                        >
-                        <div class="quantity-control">
-                          <button
-                            id="btnQuantityMinus"
-                            class="quantity-minus-button primary-button"
-                            type="submit"
-                            name="quantityChange"
-                            value="-1"
-                          >
-                            <i class="fa-solid fa-minus"></i>
-                          </button>
-                          <input
-                            id="quantity"
-                            class="quantity-input"
-                            type="number"
-                            name="quantity"
-                            th:value="${cartItem.quantity}"
-                            min="1"
-                            max="99"
-                            disabled
-                            required
-                          />
-                          <button
-                            id="btnQuantityPlus"
-                            class="quantity-plus-button primary-button"
-                            type="submit"
-                            name="quantityChange"
-                            value="1"
-                          >
-                            <i class="fa-solid fa-plus"></i>
-                          </button>
+                                <div class="product-total-price">
+                                    <p class="total-price-label">Thành tiền:</p>
+                                    <p class="total-price-value"
+                                       th:text="${#numbers.formatDecimal(cartItem.product.discountPrice * cartItem.quantity, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                                </div>
+
+                                <div class="product-status">
+                                    <p class="product-stock-status">
+                                        Tình trạng:
+                                        <span class="stock-status"
+                                              th:classappend="${cartItem.product.quantity > 0  and cartItem.product.quantity >= cartItem.quantity ? 'in-stock' : 'out-stock'}"
+                                              th:text="${cartItem.product.quantity == 0 ? 'Hết hàng' : (cartItem.product.quantity >= cartItem.quantity ? 'Còn hàng' : 'Không đủ hàng, chỉ còn ' + cartItem.product.quantity + ' sản phẩm')}"></span>
+                                    </p>
+                                    <form class="remove-cart-product-form" method="post"
+                                          th:action="@{/cart/remove/{productId}(productId=${cartItem.product.id})}">
+                                        <button class="remove-cart-product-button danger-button" type="submit">Xóa
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </form>
-
-                    <div class="product-total-price">
-                      <p class="total-price-label">Thành tiền:</p>
-                      <p
-                        class="total-price-value"
-                        th:text="${#numbers.formatDecimal(cartItem.product.discountPrice * cartItem.quantity, 0, 'COMMA', 0, 'POINT')} + '₫'"
-                      ></p>
-                    </div>
-
-                    <div class="product-status">
-                      <p class="product-stock-status">
-                        Tình trạng:
-                        <span
-                          class="stock-status"
-                          th:classappend="${cartItem.product.quantity > 0  and cartItem.product.quantity >= cartItem.quantity ? 'in-stock' : 'out-stock'}"
-                          th:text="${cartItem.product.quantity == 0 ? 'Hết hàng' : (cartItem.product.quantity >= cartItem.quantity ? 'Còn hàng' : 'Không đủ hàng, chỉ còn ' + cartItem.product.quantity + ' sản phẩm')}"
-                        >
-                        </span>
-                      </p>
-                      <form
-                        class="remove-cart-product-form"
-                        method="post"
-                        th:action="@{/cart/remove/{id}(id=${cartItem.product.id})}"
-                      >
-                        <button
-                          class="remove-cart-product-button danger-button"
-                          type="submit"
-                        >
-                          Xóa
-                        </button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <!-- cart summary -->
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <div class="cart-summary card">
-              <h2 class="summary-title">Tóm tắt giỏ hàng</h2>
-              <div class="total-price-group price-group">
-                <p class="label total-price-label">Tổng cộng:</p>
-                <p
-                  class="price total-price"
-                  th:text="${#numbers.formatDecimal(cartItemsDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"
-                ></p>
-              </div>
-              <div class="shipping-price-group price-group">
-                <p class="label shipping-label">Phí vận chuyển:</p>
-                <p class="price shipping-price">Miễn phí</p>
-              </div>
-              <div class="divider"></div>
-              <div class="grand-total-group price-group">
-                <p class="label grand-total-label">Tổng thanh toán:</p>
-                <p
-                  class="price grand-total-price"
-                  th:text="${#numbers.formatDecimal(cartItemsDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"
-                ></p>
-              </div>
-              <div class="cart-actions">
-                <a
-                  class="check-out-button primary-button"
-                  href="/checkout"
-                  th:if="${cartItemsDto.validProductsExist}"
-                  >Tiến hành thanh toán</a
-                >
-                <a class="go-back-button secondary-button" href="/shop"
-                  >Tiếp tục mua sắm</a
-                >
-              </div>
+                    </li>
+                </ul>
             </div>
-          </div>
+
+            <!-- cart summary -->
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                <div class="cart-summary card">
+                    <h2 class="cart-summary-title">Tóm tắt giỏ hàng</h2>
+                    <div class="total-price-group cart-price-group">
+                        <p class="label total-price-label">Tổng cộng:</p>
+                        <p class="price total-price"
+                           th:text="${#numbers.formatDecimal(cartItemsDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                    </div>
+                    <div class="shipping-price-group cart-price-group">
+                        <p class="label shipping-label">Phí vận chuyển:</p>
+                        <p class="price shipping-price">Miễn phí</p>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="grand-total-group cart-price-group">
+                        <p class="label grand-total-label">Tổng thanh toán:</p>
+                        <p class="price grand-total-price"
+                           th:text="${#numbers.formatDecimal(cartItemsDto.totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                    </div>
+                    <div class="cart-actions">
+                        <a class="check-out-button primary-button" href="/checkout"
+                           th:if="${cartItemsDto.validProductsExist}">Tiến hành thanh toán</a>
+                        <a class="go-back-button secondary-button" href="/shop">Tiếp tục mua sắm</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </main>
-  </body>
+    </div>
+</main>
+</body>
 </html>
